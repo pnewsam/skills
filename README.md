@@ -7,18 +7,42 @@ Collected agent skills for Claude Code.
 Clone this repo, then run the install script from the repo root:
 
 ```bash
-# Interactive — toggle skills on/off, then press Enter to install
+# Interactive — choose destination, toggle skills, then press Enter to install
 ./install.sh
 
-# Install everything without prompting
-./install.sh -y
+# Install to your global ~/.claude/skills
+./install.sh -g
 
-# Install to a custom directory (e.g. a project-local .claude/skills)
-./install.sh -d /path/to/project/.claude/skills
-./install.sh -d /path/to/project/.claude/skills -y
+# Install to the current project's .claude/skills
+./install.sh -p
+
+# Install to a custom directory
+./install.sh -d /path/to/.claude/skills
+
+# Skip prompts and install all skills (defaults to global)
+./install.sh -y
 ```
 
-Skills are copied to `~/.claude/skills/` by default. The script is safe to re-run — it updates existing skills in place.
+### Run from anywhere
+
+Register `skills` as a CLI command so you can run it from any project directory:
+
+```bash
+./install.sh --setup
+```
+
+This symlinks `install.sh` to `~/.local/bin/skills`. After that:
+
+```bash
+# From any project directory — installs to that project's .claude/skills
+cd ~/dev/my-project
+skills -p
+
+# Or interactively choose global vs project vs custom
+skills
+```
+
+The script is safe to re-run — it updates existing skills in place.
 
 ## Skills
 
