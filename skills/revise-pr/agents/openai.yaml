@@ -1,0 +1,3 @@
+interface:
+  display_name: "Revise PR"
+  short_description: "Audit an existing PR description against the latest branch changes and update it to be accurate."

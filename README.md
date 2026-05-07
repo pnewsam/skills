@@ -16,7 +16,7 @@ Source
 <tbody>
 <tr>
 <td>
-<a href="/svg_animations.md">
+<a href="/skills/svg-animations/SKILL.md">
 SVG Animations
 </a>
 </td>

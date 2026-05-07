@@ -1,0 +1,3 @@
+interface:
+  display_name: "Prepare PR"
+  short_description: "Summarize branch changes, commit them safely, and push for PR review."
