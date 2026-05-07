@@ -115,6 +115,12 @@ Compare the current PR body (from Step 2) against the real diff (from Step 3). F
 - Are the correct boxes checked? Are any wrong boxes checked?
 - Note: preserve any boxes the author has already checked (`[x]`) unless the diff clearly contradicts the selection.
 
+#### Testing / Verification section
+- Is the section present? If the PR body predates this template, it may be missing entirely — add it.
+- Do the verification steps described match what the diff actually does? Update any steps that are stale or missing.
+- If test files are present in the diff, ensure the section references the relevant test command or test files.
+- If the section is empty or only contains placeholder comments, flag it as needing content and propose concrete steps based on the diff.
+
 #### Checklist section
 - Do not change items the author has already checked.
 - If unchecked items are clearly satisfied by the diff (e.g. tests are present, no new warnings visible in changed files), you may note this to the user but do not auto-check them.
@@ -126,6 +132,7 @@ Produce a plain-English gap analysis before drafting any edits. List:
 - **Missing from description** — changes in the diff that the body does not mention
 - **Stale or inaccurate** — claims in the body that are not supported by the diff
 - **Wrong type of change** — checkboxes that do not match what the diff shows
+- **Missing or empty Testing / Verification** — section is absent, placeholder-only, or describes steps that don't match the diff
 - **Title mismatch** — if the title no longer reflects the scope of changes
 - **No issues found** — explicitly state this if the description is already accurate
 
@@ -161,6 +168,18 @@ Please delete options that are not relevant.
 - [ ] 📢 Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] 📄 This change requires a documentation update
 
+## Testing / Verification
+
+<!-- Describe how this change was tested or how reviewers can verify it. -->
+
+Steps to verify:
+
+1.
+2.
+
+<!-- If automated tests cover this change, list the relevant test files or commands. -->
+<!-- If no tests exist, explain why or note what manual verification was done. -->
+
 ## Checklist:
 
 - [ ] My code follows the style guidelines of this project
@@ -168,6 +187,7 @@ Please delete options that are not relevant.
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
 - [ ] I have checked my code and corrected any misspellings
+- [ ] I have added or updated tests that cover my changes
 ```
 
 Also draft a revised title if the current title is inaccurate or too vague.

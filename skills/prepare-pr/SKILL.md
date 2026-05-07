@@ -272,6 +272,18 @@ Please delete options that are not relevant.
 - [ ] 📢 Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] 📄 This change requires a documentation update
 
+## Testing / Verification
+
+<!-- Describe how this change was tested or how reviewers can verify it. -->
+
+Steps to verify:
+
+1.
+2.
+
+<!-- If automated tests cover this change, list the relevant test files or commands. -->
+<!-- If no tests exist, explain why or note what manual verification was done. -->
+
 ## Checklist:
 
 - [ ] My code follows the style guidelines of this project
@@ -279,6 +291,7 @@ Please delete options that are not relevant.
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
 - [ ] I have checked my code and corrected any misspellings
+- [ ] I have added or updated tests that cover my changes
 ```
 
 After the PR is created, `gh` will return a URL. Share that URL with the user.
@@ -318,4 +331,13 @@ Stop and report the exact problem. Do not attempt risky repair commands. Suggest
 
 ### Tests
 
-If the repository indicates a clear test command in README, package scripts, Makefile, pyproject, or similar, suggest running it before committing or before the final PR summary. Do not invent expensive test commands. If tests were not run, state that clearly in the final response.
+Before committing or creating the PR, look for a test command in the repository (README, `package.json` scripts, `Makefile`, `pyproject.toml`, `Cargo.toml`, or similar). If one exists, suggest running it and show the result. Do not invent expensive or destructive test commands.
+
+Use the test results to populate the **Testing / Verification** section of the PR body:
+
+- If automated tests were run and passed, list the command used and note that they passed.
+- If automated tests were run and failed, flag it to the user before pushing and do not proceed until the issue is addressed or the user explicitly overrides.
+- If no automated tests exist, describe the manual verification steps taken (e.g. "Ran the app locally and confirmed the login flow works end-to-end").
+- If tests were not run at all (e.g. the user skipped this step), state that clearly in both the PR body and the final response.
+
+Always fill in the **Testing / Verification** section with something concrete — never leave it empty. At minimum, describe how a reviewer could verify the change themselves.

@@ -18,6 +18,9 @@ Present this before proposing any edits.
 **Type of change:**
 - <current selection> → <correct selection based on diff>
 
+**Testing / Verification:**
+- <missing / placeholder-only / steps don't match diff — describe what needs to change>
+
 **Title:**
 - Current: `<current title>`
 - Proposed: `<proposed title>` (omit row if unchanged)
@@ -90,6 +93,18 @@ Please delete options that are not relevant.
 - [ ] 📢 Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] 📄 This change requires a documentation update
 
+## Testing / Verification
+
+<!-- Describe how this change was tested or how reviewers can verify it. -->
+
+Steps to verify:
+
+1.
+2.
+
+<!-- If automated tests cover this change, list the relevant test files or commands. -->
+<!-- If no tests exist, explain why or note what manual verification was done. -->
+
 ## Checklist:
 
 - [ ] My code follows the style guidelines of this project
@@ -97,4 +112,5 @@ Please delete options that are not relevant.
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
 - [ ] I have checked my code and corrected any misspellings
+- [ ] I have added or updated tests that cover my changes
 ```
