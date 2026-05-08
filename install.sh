@@ -7,6 +7,8 @@ INVOKED_FROM="$PWD"
 TARGET_DIR=""
 AUTO_YES=0
 
+REGISTRY_FILE="${HOME}/.local/share/skills/registry"
+
 # --- --setup: install this script as 'skills' in ~/.local/bin ---
 if [[ "${1:-}" == "--setup" ]]; then
   INSTALL_BIN="${HOME}/.local/bin"
@@ -25,9 +27,100 @@ if [[ "${1:-}" == "--setup" ]]; then
   exit 0
 fi
 
+# --- --sync: propagate newest version of each skill across all known locations ---
+if [[ "${1:-}" == "--sync" ]]; then
+  shift
+
+  # Collect available skills from repo
+  ALL_SKILLS=()
+  for d in "$SKILLS_SRC"/*/; do
+    [[ -f "$d/SKILL.md" ]] && ALL_SKILLS+=("$(basename "$d")")
+  done
+  IFS=$'\n' ALL_SKILLS=($(printf '%s\n' "${ALL_SKILLS[@]}" | sort)); unset IFS
+
+  # Build list of all known skill locations (repo always first)
+  LOCATIONS=("$SKILLS_SRC")
+
+  # Always include global if it exists
+  [[ -d "${HOME}/.claude/skills" ]] && LOCATIONS+=("${HOME}/.claude/skills")
+
+  # Add registry entries
+  if [[ -f "$REGISTRY_FILE" ]]; then
+    while IFS= read -r loc; do
+      [[ -n "$loc" && -d "$loc" ]] && LOCATIONS+=("$loc")
+    done < "$REGISTRY_FILE"
+  fi
+
+  # Deduplicate while preserving order (bash 3 compatible)
+  UNIQUE_LOCS=()
+  for loc in "${LOCATIONS[@]}"; do
+    loc="$(cd "$loc" 2>/dev/null && pwd || echo "$loc")"
+    already=0
+    for seen in "${UNIQUE_LOCS[@]+"${UNIQUE_LOCS[@]}"}"; do
+      [[ "$seen" == "$loc" ]] && { already=1; break; }
+    done
+    [[ $already -eq 0 ]] && UNIQUE_LOCS+=("$loc")
+  done
+
+  # Determine which skills to sync
+  if [[ $# -gt 0 ]]; then
+    SYNC_SKILLS=("$@")
+  else
+    SYNC_SKILLS=("${ALL_SKILLS[@]}")
+  fi
+
+  echo ""
+  echo "Syncing ${#SYNC_SKILLS[@]} skill(s) across ${#UNIQUE_LOCS[@]} location(s):"
+  for loc in "${UNIQUE_LOCS[@]}"; do echo "  $loc"; done
+  echo ""
+
+  _mtime() {
+    stat -f %m "$1" 2>/dev/null || stat -c %Y "$1" 2>/dev/null || echo 0
+  }
+
+  for skill in "${SYNC_SKILLS[@]}"; do
+    newest_time=0
+    newest_src=""
+    for loc in "${UNIQUE_LOCS[@]}"; do
+      skill_file="$loc/$skill/SKILL.md"
+      if [[ -f "$skill_file" ]]; then
+        mtime=$(_mtime "$skill_file")
+        if [[ "$mtime" -gt "$newest_time" ]]; then
+          newest_time=$mtime
+          newest_src="$loc/$skill"
+        fi
+      fi
+    done
+
+    if [[ -z "$newest_src" ]]; then
+      echo "  $skill: not found in any location — skipping"
+      continue
+    fi
+
+    src_real="$(cd "$newest_src" && pwd)"
+    updated=0
+    for loc in "${UNIQUE_LOCS[@]}"; do
+      dst="$loc/$skill"
+      [[ ! -d "$dst" ]] && continue
+      dst_real="$(cd "$dst" && pwd)"
+      [[ "$dst_real" == "$src_real" ]] && continue
+      rsync -a --exclude='.DS_Store' "$newest_src/" "$dst/"
+      echo "  $skill  →  $dst"
+      updated=$((updated + 1))
+    done
+
+    [[ $updated -eq 0 ]] && echo "  $skill: up to date everywhere"
+  done
+
+  echo ""
+  echo "Done."
+  exit 0
+fi
+
 usage() {
   echo "Usage: $(basename "$0") [-g | -p | -d <dir>] [-y] [-h]"
   echo "       $(basename "$0") --setup"
+  echo "       $(basename "$0") --sync [skill...]"
   echo ""
   echo "  -g           Install to ~/.claude/skills (global)"
   echo "  -p           Install to <cwd>/.claude/skills (project)"
@@ -35,6 +128,8 @@ usage() {
   echo "  -y           Skip prompts; install all skills to global"
   echo "  -h           Show this help"
   echo "  --setup      Install this script as 'skills' in ~/.local/bin"
+  echo "  --sync       Propagate the newest version of each skill across all"
+  echo "               known install locations. Optionally name specific skills."
   exit 1
 }
 
@@ -239,6 +334,13 @@ for skill in "${INSTALL[@]}"; do
   fi
   rsync -a --exclude='.DS_Store' "$src/" "$dst/"
 done
+
+# Record TARGET_DIR in the registry for future syncs
+mkdir -p "$(dirname "$REGISTRY_FILE")"
+touch "$REGISTRY_FILE"
+if ! grep -qxF "$TARGET_DIR" "$REGISTRY_FILE" 2>/dev/null; then
+  echo "$TARGET_DIR" >> "$REGISTRY_FILE"
+fi
 
 echo ""
 echo "Done."

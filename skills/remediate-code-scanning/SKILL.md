@@ -56,6 +56,7 @@ Prefer a remediation group with:
 - `code_changes` description
 - `verification` commands
 - `risk_notes`
+- `alert_html_urls`: mapping of alert numbers to their GitHub URLs (for PR body links)
 
 If no plan exists and there are multiple unrelated alerts, ask the user to run `plan-code-scanning-remediation` first.
 
@@ -94,7 +95,17 @@ git fetch origin
 gh repo view --json defaultBranchRef
 ```
 
-### 3. Read the flagged source code
+### 3. Fetch alert URLs for PR links
+
+If the tracker or group input does not include `html_url` for each alert, fetch them:
+
+```bash
+gh api "repos/{owner}/{repo}/code-scanning/alerts/{alert_number}" --jq '.html_url'
+```
+
+Store these URLs so the PR body can link directly to each CodeQL alert on GitHub.
+
+### 4. Read the flagged source code
 
 For each alert in the group, read the affected file and understand the context:
 
@@ -102,7 +113,7 @@ For each alert in the group, read the affected file and understand the context:
 - Understand what the code does and why CodeQL flagged it.
 - Determine the correct fix pattern.
 
-### 4. Check for existing remediation PRs
+### 5. Check for existing remediation PRs
 
 ```bash
 gh pr list --state open --limit 100 --json number,title,headRefName,baseRefName,body,labels,url,updatedAt
@@ -110,7 +121,7 @@ gh pr list --state open --limit 100 --json number,title,headRefName,baseRefName,
 
 If an open PR already fixes the alerts, update the tracker to `Status: covered-by-existing-pr` and stop.
 
-### 5. Prepare the deterministic branch
+### 6. Prepare the deterministic branch
 
 ```bash
 git branch --list <branch_name>
@@ -118,7 +129,7 @@ git ls-remote --heads origin <branch_name>
 git checkout -b <branch_name> origin/<base_branch>
 ```
 
-### 6. Apply the code fix
+### 7. Apply the code fix
 
 Apply source code fixes based on the rule type. Common patterns:
 
@@ -167,12 +178,16 @@ Electron `webPreferences.webSecurity` set to `false`. Fix by:
 - Removing the `webSecurity: false` setting (defaults to `true`).
 - If needed for development only, gate behind an environment variable check.
 
+If no fix is applicable, use a suppression comment — see **Alert is a false positive or the pattern is intentional** below.
+
 #### `js/disabling-certificate-validation`
 
 TLS certificate validation disabled via `NODE_TLS_REJECT_UNAUTHORIZED=0` or `rejectUnauthorized: false`. Fix by:
 - Removing the override entirely if possible.
 - If needed for specific self-signed certs, configure a custom CA bundle instead.
 - If needed for development only, gate behind an environment variable.
+
+If no fix is applicable, use a suppression comment — see **Alert is a false positive or the pattern is intentional** below.
 
 #### `actions/missing-workflow-permissions`
 
@@ -194,7 +209,7 @@ For rules not listed above:
 - Apply the minimal change that eliminates the taint flow or unsafe pattern.
 - If the fix pattern is unclear, mark the group as `needs-verification` and describe the vulnerability and proposed fix in the PR body.
 
-### 7. Inspect the diff
+### 8. Inspect the diff
 
 ```bash
 git status --short
@@ -209,7 +224,7 @@ Confirm:
 - No unrelated changes are included.
 - The fix does not introduce new issues.
 
-### 8. Verify remediation
+### 9. Verify remediation
 
 CodeQL cannot be run locally in most environments, so verification is different from dependency fixes:
 
@@ -231,7 +246,7 @@ After the PR is pushed, alert status can be checked via:
 gh api "repos/{owner}/{repo}/code-scanning/alerts/{alert_number}" --jq '{state, most_recent_instance: .most_recent_instance.state}'
 ```
 
-### 9. Commit the remediation
+### 10. Commit the remediation
 
 Stage only intended files:
 
@@ -245,7 +260,7 @@ Use a conventional security commit message:
 git commit -m "fix(security): resolve CodeQL <rule_id> alerts" -m "Fix <rule_description> in <file paths>. Alerts: <alert numbers>."
 ```
 
-### 10. Push and create or update the PR
+### 11. Push and create or update the PR
 
 ```bash
 git push -u origin <branch_name>
@@ -255,7 +270,7 @@ gh pr list --state open --head <branch_name> --json number,title,url,body
 If no PR exists, create it:
 
 ```bash
-gh pr create --title "<pr_title>" --body "<pr_body>" --base <base_branch> --head <branch_name>
+gh pr create --draft --title "<pr_title>" --body "<pr_body>" --base <base_branch> --head <branch_name>
 ```
 
 Use this PR body structure:
@@ -270,7 +285,7 @@ Use this PR body structure:
 
 ## Code scanning alerts addressed
 
-- Alert #`<number>` — `<rule_id>` in `<file_path>:<line>` — `<description of fix applied>`
+- [Alert #`<number>`](<html_url>) — `<rule_id>` in `<file_path>:<line>` — `<description of fix applied>`
 
 ## Verification
 
@@ -283,7 +298,7 @@ Use this PR body structure:
 - `<behavioral changes, edge cases, or "Minimal change, no behavioral impact expected.">`
 ```
 
-### 11. Update the progress tracker
+### 12. Update the progress tracker
 
 If `docs/tmp/code-scanning-remediation.md` exists, update the group's section:
 
@@ -293,7 +308,7 @@ If `docs/tmp/code-scanning-remediation.md` exists, update the group's section:
 - Set `PR: <url>` when a PR exists.
 - Append progress notes.
 
-### 12. Final response
+### 13. Final response
 
 Report:
 
@@ -312,9 +327,21 @@ Report:
 
 Some alerts (e.g. `py/path-injection`) require understanding what paths are valid and what the intended access scope is. Read the surrounding code, route definitions, and any existing validation. If the intended scope is unclear, describe the vulnerability and the candidate fix in the PR body and mark as `needs-verification`.
 
-### Alert is a false positive
+### Alert is a false positive or the pattern is intentional
 
-If after reading the code you determine the alert is a false positive (e.g. the input is already validated upstream, or the flagged code is unreachable), do not change the code. Mark the group as `needs-verification` with a note explaining why. The user can then dismiss the alert on GitHub.
+If after reading the code you determine the alert is a false positive or the flagged pattern is intentional and no code fix is applicable (e.g. the input is already validated upstream, or the flagged code is unreachable):
+
+1. Ensure there is a comment in the code explaining why the flagged pattern is safe and intentional. If one already exists, no additional prose is needed.
+2. Add a CodeQL suppression comment on the **line immediately before** the flagged line:
+   - JavaScript/TypeScript: `// codeql[rule-id]`
+   - Python: `# codeql[rule-id]`
+   - YAML: `# codeql[rule-id]`
+
+   **Important**: the suppression comment must be on its own dedicated line immediately preceding the flagged line. Appending it at the end of the flagged line itself does **not** work.
+
+3. Commit and open a PR as normal. The suppression prevents future scans from re-flagging the line without requiring GitHub UI dismissals each time.
+
+If the code is entirely dead/unreachable, removing it is preferable to suppressing it.
 
 ### Multiple rules in one file
 

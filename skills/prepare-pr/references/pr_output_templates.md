@@ -65,5 +65,4 @@ Steps to verify:
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
 - [ ] I have checked my code and corrected any misspellings
-- [ ] I have added or updated tests that cover my changes
 ```
