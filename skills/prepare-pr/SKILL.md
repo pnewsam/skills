@@ -239,12 +239,14 @@ gh pr create \
   --title "<PR title>" \
   --body "<populated PR description>" \
   --base <base-branch> \
-  --head <current-branch>
+  --head <current-branch> \
+  --draft
 ```
+
+Always open PRs in draft mode using `--draft`. This allows the author to review the PR before requesting review from others.
 
 Optional flags to include when relevant:
 
-- `--draft` — open as a draft PR when the work is not yet ready for review
 - `--reviewer <handle>` — request specific reviewers if the user mentions them
 - `--assignee @me` — self-assign the PR
 - `--label <label>` — apply a label if one clearly matches (e.g. `bug`, `enhancement`)
