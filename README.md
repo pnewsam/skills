@@ -63,6 +63,7 @@ skills --sync prepare-pr   # sync a specific skill
 | [revise-pr](skills/revise-pr/SKILL.md) | Revise an existing PR to ensure the title, description, type of change, and checklist accurately reflect the latest commits. | Original |
 | [plan-vulnerability-remediation](skills/plan-vulnerability-remediation/SKILL.md) | Triage CVEs, Dependabot alerts, and audit findings, then group them into safe, idempotent remediation PR plans before touching any code. | Original |
 | [remediate-vulnerability](skills/remediate-vulnerability/SKILL.md) | Execute a vulnerability remediation plan — update dependencies or apply mitigations, verify the fix, commit, push, and open or update a PR. | Original |
+| [review-pr](skills/review-pr/SKILL.md) | Review a pull request and post inline code review comments on specific lines, with an overall verdict (approve, request changes, or comment), via the GitHub CLI. | Original |
 | [svg-animations](skills/svg-animations/SKILL.md) | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai/skills](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
 
 ## Roadmap
