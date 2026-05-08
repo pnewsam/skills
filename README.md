@@ -61,9 +61,11 @@ skills --sync prepare-pr   # sync a specific skill
 |---|---|---|
 | [prepare-pr](skills/prepare-pr/SKILL.md) | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR via the GitHub CLI. | Original |
 | [revise-pr](skills/revise-pr/SKILL.md) | Revise an existing PR to ensure the title, description, type of change, and checklist accurately reflect the latest commits. | Original |
+| [review-pr](skills/review-pr/SKILL.md) | Review a pull request and post inline code review comments on specific lines, with an overall verdict (approve, request changes, or comment), via the GitHub CLI. | Original |
 | [plan-vulnerability-remediation](skills/plan-vulnerability-remediation/SKILL.md) | Triage CVEs, Dependabot alerts, and audit findings, then group them into safe, idempotent remediation PR plans before touching any code. | Original |
 | [remediate-vulnerability](skills/remediate-vulnerability/SKILL.md) | Execute a vulnerability remediation plan — update dependencies or apply mitigations, verify the fix, commit, push, and open or update a PR. | Original |
-| [review-pr](skills/review-pr/SKILL.md) | Review a pull request and post inline code review comments on specific lines, with an overall verdict (approve, request changes, or comment), via the GitHub CLI. | Original |
+| [plan-code-scanning-remediation](skills/plan-code-scanning-remediation/SKILL.md) | Triage CodeQL and SAST alerts, then group them into safe, idempotent remediation PR plans before touching any code. | Original |
+| [remediate-code-scanning](skills/remediate-code-scanning/SKILL.md) | Apply source code fixes for CodeQL/SAST alerts, verify the fix, commit, push, and create or update a pull request. | Original |
 | [svg-animations](skills/svg-animations/SKILL.md) | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai/skills](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
 
 ## Roadmap
