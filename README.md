@@ -7,21 +7,38 @@ Collected agent skills for Claude Code.
 Clone this repo, then run the install script from the repo root:
 
 ```bash
-# Interactive — choose destination, toggle skills, then press Enter to install
+# Interactive — choose harnesses and skills, then press Enter to install
 ./install.sh
 
-# Install to your global ~/.claude/skills
-./install.sh -g
+# Install to all known harnesses (symlinks)
+./install.sh -a -y
 
-# Install to the current project's .claude/skills
+# Install to a specific harness
+./install.sh -t claude -y
+./install.sh -t codex -y
+
+# Project install (copies into <cwd>/.claude/skills)
 ./install.sh -p
 
-# Install to a custom directory
-./install.sh -d /path/to/.claude/skills
+# Custom directory (copies)
+./install.sh -d /path/to/skills
 
-# Skip prompts and install all skills (defaults to global)
-./install.sh -y
+# Force copy mode instead of symlinks
+./install.sh -a -y --copy
 ```
+
+By default, the script creates **symlinks** from each harness's skills directory back to this repo. Edits to skills in the repo are instantly available everywhere — no sync step needed.
+
+Project installs (`-p`) and custom directory installs (`-d`) use copies, since the repo may not be available on other machines.
+
+### Supported harnesses
+
+| Harness | Skills directory |
+|---------|-----------------|
+| Claude Code | `~/.claude/skills` |
+| Codex | `~/.agents/skills` |
+
+Adding a new harness is a one-line addition to the `HARNESS_DEFS` array at the top of `install.sh`.
 
 ### Run from anywhere
 
@@ -34,26 +51,22 @@ Register `skills` as a CLI command so you can run it from any project directory:
 This symlinks `install.sh` to `~/.local/bin/skills`. After that:
 
 ```bash
-# From any project directory — installs to that project's .claude/skills
-cd ~/dev/my-project
-skills -p
-
-# Or interactively choose global vs project vs custom
-skills
+skills -a -y          # symlink all skills into all harnesses
+skills -t claude -y   # just Claude Code
+skills -p             # copy into current project
+skills --status       # see what's installed where
+skills --unlink codex # remove symlinks from a harness
 ```
 
-The script is safe to re-run — it updates existing skills in place.
-
-### Syncing across locations
-
-If you edit a skill in one location (e.g. the repo) and want to propagate it everywhere it's installed, use the sync command:
+### Status and cleanup
 
 ```bash
-skills --sync              # sync all skills across all known locations
-skills --sync prepare-pr   # sync a specific skill
-```
+# See what's installed in each harness (symlink vs copy)
+./install.sh --status
 
-`--sync` finds the most recently modified copy of each skill and copies it to every other location where that skill already exists. Install locations are tracked automatically in `~/.local/share/skills/registry`.
+# Remove all symlinked skills from a harness
+./install.sh --unlink codex
+```
 
 ## Skills
 
@@ -70,4 +83,5 @@ skills --sync prepare-pr   # sync a specific skill
 
 ## Roadmap
 
-- **Smarter sync:** The current `--sync` uses file mtime to determine the authoritative version. This is fragile — editing a stale installed copy bumps its mtime and can cause it to overwrite a more complete repo version. A better approach would use content-aware diff resolution (similar to a three-way merge), treating the git-tracked repo version as the base and merging divergent edits from installed copies rather than blindly picking the newest file.
+- **Additional harnesses:** Cursor (`.cursor/rules/`), Copilot (`.github/copilot-instructions.md`), and others as their skill formats stabilize.
+- **Content adaptation:** Some harnesses may need skill content rewritten (e.g., tool-specific references). A transformation layer could handle this while keeping the canonical source unchanged.
