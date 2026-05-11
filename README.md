@@ -84,10 +84,6 @@ skills status
 skills unlink codex
 ```
 
-### Legacy script
-
-The original `install.sh` is still available but deprecated in favor of the Go CLI.
-
 ## Skills
 
 | Skill | Description | Source |
@@ -113,7 +109,6 @@ cli/                # Go CLI tool for installing skills
   internal/         # skill discovery, harness config, installer, TUI
   Makefile
   .goreleaser.yaml
-install.sh          # legacy bash installer (deprecated)
 ```
 
 ## Roadmap
