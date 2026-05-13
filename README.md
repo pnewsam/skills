@@ -60,6 +60,13 @@ Run `./skills-cli setup` to register `skills` as a global command in `~/.local/b
 | [audit-browser-tests](registry/audit-browser-tests/SKILL.md) | Audit an existing browser test suite to identify stale tests, missing coverage, flaky patterns, and quality issues. |
 | [fix-browser-test](registry/fix-browser-test/SKILL.md) | Repair a broken or flaky browser test — diagnoses the root cause, applies a targeted fix, and re-runs to confirm. |
 
+### Bug Bash
+
+| Skill | Description |
+|---|---|
+| [plan-bug-bash](registry/plan-bug-bash/SKILL.md) | Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
+| [fix-bug-bash-item](registry/fix-bug-bash-item/SKILL.md) | Execute one fix from a bug bash plan — investigate, apply a targeted fix, verify, commit, push, and open a PR. |
+
 ### Design
 
 | Skill | Description |
