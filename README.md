@@ -67,8 +67,25 @@ Run `./skills-cli setup` to register `skills` as a global command in `~/.local/b
 | [plan-bug-bash](registry/plan-bug-bash/SKILL.md) | Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
 | [fix-bug-bash-item](registry/fix-bug-bash-item/SKILL.md) | Execute one fix from a bug bash plan — investigate, apply a targeted fix, verify, commit, push, and open a PR. |
 
-### Design
+### Frontend / Design
 
-| Skill | Description |
+| Skill | Description | Origin |
+|---|---|---|
+| [audit-component-size](registry/audit-component-size/SKILL.md) | Scan a codebase to find React components that have grown too large and are good candidates for decomposition. | |
+| [decompose-component](registry/decompose-component/SKILL.md) | Break a large React component into smaller, well-named sub-components in separate files. | |
+| [redesign-component](registry/redesign-component/SKILL.md) | Redesign a UI component that has outgrown its original layout — audit what it displays and does, then propose and implement a better layout. | |
+| [redesign-screen](registry/redesign-screen/SKILL.md) | Redesign a screen or page that has become cluttered or poorly organized as features accumulated. | |
+| [svg-animations](registry/svg-animations/SKILL.md) | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
+| [color-expert](https://github.com/meodai/skill.color-expert) | Color science expert — color theory, accessibility standards, palette generation, and practical color tools. | [meodai](https://github.com/meodai/skill.color-expert) |
+| [emil-design-eng](https://github.com/emilkowalski/skill/blob/main/skills/emil-design-eng/SKILL.md) | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great. | [emilkowalski](https://github.com/emilkowalski/skill) |
+
+**References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
+
+## Other Skill Collections
+
+| Collection | Author |
 |---|---|
-| [svg-animations](registry/svg-animations/SKILL.md) | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. |
+| [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) | multica-ai |
+| [agent-skills](https://github.com/addyosmani/agent-skills) | addyosmani |
+| [skills](https://github.com/mattpocock/skills) | mattpocock |
+| [gstack](https://github.com/garrytan/gstack) | garrytan |
