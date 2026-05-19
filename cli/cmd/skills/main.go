@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -12,6 +13,9 @@ import (
 	"github.com/paulnewsam/skills/cli/internal/tui"
 	"github.com/spf13/cobra"
 )
+
+// Set via -ldflags at build time.
+var buildCommit = "dev"
 
 var (
 	flagTargets []string
@@ -55,9 +59,23 @@ var unlinkCmd = &cobra.Command{
 	RunE:  runUnlink,
 }
 
+var dashboardCmd = &cobra.Command{
+	Use:   "dashboard",
+	Short: "Show a visual overview of installed skills",
+	RunE:  runDashboard,
+}
+
+var versionCmd = &cobra.Command{
+	Use:   "version",
+	Short: "Print the build version",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(buildCommit)
+	},
+}
+
 var setupCmd = &cobra.Command{
 	Use:   "setup",
-	Short: "Symlink this binary to ~/.local/bin/skills",
+	Short: "Install this binary so 'skills' works globally",
 	RunE:  runSetup,
 }
 
@@ -72,7 +90,12 @@ func init() {
 		cmd.Flags().StringVar(&flagSource, "source", "", "Skills source directory")
 	}
 
-	rootCmd.AddCommand(installCmd, statusCmd, unlinkCmd, setupCmd)
+	rootCmd.AddCommand(installCmd, statusCmd, unlinkCmd, setupCmd, dashboardCmd, versionCmd)
+
+	// Check for updates on every command (non-blocking, best-effort).
+	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
+		checkForUpdate()
+	}
 }
 
 // findSourceDir resolves the skills source directory.
@@ -324,13 +347,13 @@ func runUnlink(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func runSetup(cmd *cobra.Command, args []string) error {
-	home, _ := os.UserHomeDir()
-	binDir := filepath.Join(home, ".local", "bin")
-	if err := os.MkdirAll(binDir, 0o755); err != nil {
-		return fmt.Errorf("creating %s: %w", binDir, err)
-	}
+func runDashboard(cmd *cobra.Command, args []string) error {
+	harnesses, _ := harness.LoadConfig()
+	tui.Dashboard(harnesses)
+	return nil
+}
 
+func runSetup(cmd *cobra.Command, args []string) error {
 	exe, err := os.Executable()
 	if err != nil {
 		return fmt.Errorf("finding executable: %w", err)
@@ -340,8 +363,17 @@ func runSetup(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("resolving executable: %w", err)
 	}
 
+	// Remove any stale "skills" binaries elsewhere in PATH that would shadow ours.
+	removeStaleBinaries(exe)
+
+	home, _ := os.UserHomeDir()
+	binDir := filepath.Join(home, ".local", "bin")
+	if err := os.MkdirAll(binDir, 0o755); err != nil {
+		return fmt.Errorf("creating %s: %w", binDir, err)
+	}
+
 	linkPath := filepath.Join(binDir, "skills")
-	os.Remove(linkPath) // remove existing if any
+	os.Remove(linkPath)
 	if err := os.Symlink(exe, linkPath); err != nil {
 		return fmt.Errorf("creating symlink: %w", err)
 	}
@@ -366,4 +398,83 @@ func runSetup(cmd *cobra.Command, args []string) error {
 		fmt.Println("Run 'skills' from any directory to install skills.")
 	}
 	return nil
+}
+
+// removeStaleBinaries finds other "skills" binaries in PATH that would shadow
+// the canonical one and removes them (with a message).
+func removeStaleBinaries(canonical string) {
+	others := findAllInPath("skills")
+	for _, p := range others {
+		resolved, err := filepath.EvalSymlinks(p)
+		if err != nil {
+			resolved = p
+		}
+		// Keep it if it resolves to our canonical binary.
+		if resolved == canonical {
+			continue
+		}
+		fmt.Printf("  Removing stale binary: %s\n", p)
+		if err := os.Remove(p); err != nil {
+			fmt.Fprintf(os.Stderr, "  Warning: could not remove %s: %v\n", p, err)
+		}
+	}
+}
+
+// findAllInPath returns all absolute paths for a named binary found in PATH.
+func findAllInPath(name string) []string {
+	var results []string
+	seen := map[string]bool{}
+	for _, dir := range filepath.SplitList(os.Getenv("PATH")) {
+		p := filepath.Join(dir, name)
+		if seen[p] {
+			continue
+		}
+		seen[p] = true
+		if _, err := os.Lstat(p); err == nil {
+			results = append(results, p)
+		}
+	}
+	return results
+}
+
+// checkForUpdate compares the embedded build commit against the repo's current
+// HEAD. If they differ, it prints a one-line hint. Silently does nothing if
+// the repo can't be found or git isn't available.
+func checkForUpdate() {
+	if buildCommit == "dev" {
+		return // local dev build, skip check
+	}
+
+	repoDir := repoRoot()
+	if repoDir == "" {
+		return
+	}
+
+	out, err := exec.Command("git", "-C", repoDir, "rev-parse", "--short", "HEAD").Output()
+	if err != nil {
+		return
+	}
+
+	head := strings.TrimSpace(string(out))
+	if head != buildCommit {
+		fmt.Fprintf(os.Stderr, "Update available: build %s -> HEAD %s  (run: cd %s && make build && skills setup)\n", buildCommit, head, filepath.Join(repoDir, "cli"))
+	}
+}
+
+// repoRoot finds the skills repo root by resolving the binary path.
+func repoRoot() string {
+	exe, err := os.Executable()
+	if err != nil {
+		return ""
+	}
+	resolved, err := filepath.EvalSymlinks(exe)
+	if err != nil {
+		return ""
+	}
+	// Binary lives in cli/ → repo root is ../
+	candidate := filepath.Clean(filepath.Join(filepath.Dir(resolved), ".."))
+	if _, err := os.Stat(filepath.Join(candidate, ".git")); err == nil {
+		return candidate
+	}
+	return ""
 }
