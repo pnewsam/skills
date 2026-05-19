@@ -33,10 +33,11 @@ Run `./skills-cli setup` to register `skills` as a global command in `~/.local/b
 
 ## Skills
 
-### Pull requests
+### Git Workflow
 
 | Skill | Description |
 |---|---|
+| [stash-work](registry/stash-work/SKILL.md) | Stash in-progress work onto a local `wip/` branch with a descriptive commit and context file — preserves your place without pushing to origin. |
 | [prepare-pr](registry/prepare-pr/SKILL.md) | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR. |
 | [revise-pr](registry/revise-pr/SKILL.md) | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits. |
 | [review-pr](registry/review-pr/SKILL.md) | Review a pull request and post inline code review comments with an overall verdict (approve, request changes, or comment). |
