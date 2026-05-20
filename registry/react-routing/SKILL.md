@@ -91,7 +91,7 @@ Navigational state — anything the user would expect to survive a refresh or be
 
 ### 4. Use a routing library
 
-Always use a proper routing library — React Router, TanStack Router, or the framework's built-in routing (Next.js, Remix). Don't build routing from scratch with `window.location` and conditionals.
+Always use a proper routing library. For SPA React apps, default to the project's existing router, usually React Router or TanStack Router. Don't build routing from scratch with `window.location` and conditionals.
 
 The routing library provides:
 - Declarative route definitions
@@ -100,7 +100,7 @@ The routing library provides:
 - Code splitting per route
 - Nested layouts
 
-**Route definitions should be centralized** in one place (a route config file or a routes directory), not scattered across components. This makes the app's URL structure visible at a glance.
+**Route definitions should be discoverable** in one place (a route config file or a routes directory), not scattered invisibly across leaf components. This makes the app's URL structure visible at a glance.
 
 ```tsx
 // Good: centralized route definitions

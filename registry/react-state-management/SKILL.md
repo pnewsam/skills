@@ -163,7 +163,7 @@ For these, React Context is usually sufficient — see the performance caveats i
 
 Filter selections, pagination, sort order, selected tabs, open/closed panels — if the user would expect these to survive a page refresh or be shareable via URL, they should be URL state (search params or route params), not component state.
 
-See the `react-routing` skill for URL design principles. The key point for state management: **don't duplicate URL state in component state.** Read from the URL, write to the URL. The router is your state manager for navigational state.
+See the `react-routing` skill for URL design principles and `react-data-fetching` for server-state patterns. The key point for state management: **don't duplicate URL state in component state.** Read from the URL, write to the URL. The router is your state manager for navigational state.
 
 ```tsx
 // Bad: duplicating URL state

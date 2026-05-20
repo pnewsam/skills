@@ -7,7 +7,7 @@ description: patterns for building forms in React using form contexts and compos
 
 ## Overview
 
-This skill defines the preferred pattern for building forms in React. The core idea: each form gets a context that configures its fields and validation, and reusable field components consume that context directly. This makes form construction flexible and keeps form UI decoupled from form logic.
+This skill defines the preferred pattern for building non-trivial forms in React. The core idea: a form-library provider or context configures fields and validation, and reusable field components consume that form state directly. This makes form construction flexible and keeps form UI decoupled from form logic.
 
 ## The pattern
 
@@ -128,13 +128,15 @@ function CreateInvoicePage() {
 
 ## Guidelines
 
-### One form context per form
+### One form context per non-trivial form
 
-Don't try to make a single generic form context that handles every form via configuration. Each form has its own context component that defines its specific schema and validation. The *field components* are generic and reusable; the *form context* is specific.
+Don't try to make a single generic form context that handles every form via configuration. Each substantial form has its own context or provider setup that defines its specific schema and validation. The *field components* are generic and reusable; the *form context* is specific.
+
+For a tiny form with one or two fields and no reusable field components, local state or the project's existing lightweight pattern is fine. Introduce a form context when validation, field reuse, dirty tracking, async submission, or multi-step behavior would otherwise spread logic across the JSX.
 
 ### Field components are base UI
 
-Field components (`InputField`, `TextareaField`, `SelectField`, etc.) belong in the base UI layer (`src/components/ui/` or similar). They are form-library-aware but domain-free — they don't know about invoices, users, or agents.
+Field components (`InputField`, `TextareaField`, `SelectField`, etc.) usually belong in the base UI layer (`src/components/ui/` or similar). They are form-library-aware but domain-free — they don't know about invoices, users, or agents. If a project keeps form adapters separate from visual primitives, put the library-aware wrappers in that established form layer and keep the raw input primitives domain-free.
 
 ### Form contexts live with their feature
 

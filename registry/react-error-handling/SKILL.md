@@ -156,7 +156,7 @@ function App() {
 }
 ```
 
-**Suspense with data fetching** (TanStack Query with `suspense: true`, or React's `use()` in React 19+):
+**Suspense with data fetching** (TanStack Query's suspense APIs, a Suspense-enabled router/framework, or React's `use()` in supported setups):
 
 ```tsx
 function InvoiceDetail({ id }: { id: string }) {
@@ -177,6 +177,8 @@ function InvoiceDetailContent({ id }: { id: string }) {
   return <InvoiceCard invoice={invoice} />;
 }
 ```
+
+Only recommend Suspense for data when the project already uses Suspense-enabled data fetching or is intentionally adopting it. Plain `useEffect` fetching does not activate Suspense; non-suspense query code should render explicit loading and error states instead.
 
 **Where to place Suspense boundaries:**
 - Around route-level lazy imports (see `react-performance`)

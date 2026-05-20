@@ -180,3 +180,7 @@ A flaky test trains the team to ignore test failures. If a test flakes:
 Tests that only run on a developer's machine don't protect the main branch. Browser tests especially should run in CI on every PR — they're the tests most likely to catch real regressions.
 
 Keep the CI test suite fast enough that developers don't skip it. If browser tests are slow, run a subset (smoke tests) on every push and the full suite on PR merge.
+
+### Include accessibility in the right tier
+
+Accessibility checks belong where the behavior happens. Use linting for static issues, component tests for shared primitives, and browser tests for keyboard flows, focus management, dialogs, forms, and route navigation. Automated axe checks are useful, but they do not replace keyboard and screen-reader-oriented flow testing.

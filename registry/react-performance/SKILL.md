@@ -72,7 +72,7 @@ function AgentList({ agents }: Props) {
 ```tsx
 // Good: expensive filtering/sorting that shouldn't re-run on every render
 const sortedItems = useMemo(
-  () => items.sort((a, b) => a.name.localeCompare(b.name)),
+  () => [...items].sort((a, b) => a.name.localeCompare(b.name)),
   [items]
 );
 
@@ -188,46 +188,45 @@ function LongList({ items }: { items: Item[] }) {
 
 React's concurrent features let you mark some state updates as non-urgent so they don't block the UI.
 
-**`useTransition`** — wrap a state update to tell React it's low-priority:
+**`useDeferredValue`** — let an expensive derived view lag behind an urgent input:
 
 ```tsx
 function SearchableList({ items }: Props) {
   const [query, setQuery] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const deferredQuery = useDeferredValue(query);
 
   const handleSearch = (value: string) => {
     // The input updates immediately
     setQuery(value);
-    // The expensive filtering is deferred
-    startTransition(() => {
-      setFilteredItems(items.filter(item =>
-        item.name.toLowerCase().includes(value.toLowerCase())
-      ));
-    });
   };
+
+  // The expensive filtering uses a value that can lag behind while typing
+  const filteredItems = useMemo(
+    () => items.filter(item =>
+      item.name.toLowerCase().includes(deferredQuery.toLowerCase())
+    ),
+    [items, deferredQuery]
+  );
 
   return (
     <>
       <input value={query} onChange={e => handleSearch(e.target.value)} />
-      {isPending && <Spinner />}
+      {query !== deferredQuery && <Spinner />}
       <ItemList items={filteredItems} />
     </>
   );
 }
 ```
 
-**`useDeferredValue`** — create a deferred version of a value that lags behind during urgent updates:
+**`useTransition`** — mark non-urgent state updates, such as switching to an expensive tab or applying a large view change:
 
 ```tsx
-function SearchResults({ query }: { query: string }) {
-  // deferredQuery updates after the UI has responded to the keystroke
-  const deferredQuery = useDeferredValue(query);
-  const results = useMemo(
-    () => expensiveSearch(deferredQuery),
-    [deferredQuery]
-  );
+const [isPending, startTransition] = useTransition();
 
-  return <ResultsList results={results} />;
+function handleTabChange(nextTab: Tab) {
+  startTransition(() => {
+    setActiveTab(nextTab);
+  });
 }
 ```
 
@@ -235,6 +234,8 @@ function SearchResults({ query }: { query: string }) {
 - Search/filter interactions where typing should feel instant but results can lag slightly
 - Tab switching where the new tab content is expensive to render
 - Any interaction where the UI should remain responsive while expensive rendering happens in the background
+
+Do not use concurrent APIs to create duplicate derived state. If results can be calculated from existing props or state, derive them with a plain expression or `useMemo`; use `useDeferredValue` when the input should update immediately but the expensive result can trail behind.
 
 ### 7. Common performance anti-patterns
 
@@ -298,3 +299,7 @@ const { data: item } = useQuery({ queryKey: ["item", id], queryFn: () => fetchIt
 - **Avoid importing entire libraries** when you need one function: `import { format } from "date-fns"` not `import moment from "moment"`
 - **Be cautious with barrel files** (`index.ts` that re-exports everything) — some bundlers can't tree-shake through them, pulling in the entire module when you import one thing
 - **Dynamic imports for heavy dependencies** — if a feature uses a large library (chart lib, PDF renderer, code editor), lazy-load both the component and the library together
+
+### 9. React Compiler awareness
+
+If the project uses React Compiler, it can automatically apply many memoization optimizations. In compiler-enabled projects, be even more conservative about manual `React.memo`, `useMemo`, and `useCallback`: keep them when they express a real semantic need (stable dependency, expensive calculation, third-party integration), but don't add them as boilerplate.

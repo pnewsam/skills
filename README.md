@@ -69,14 +69,17 @@ Run `./skills-cli setup` to register `skills` as a global command in `~/.local/b
 | [plan-bug-bash](registry/plan-bug-bash/SKILL.md) | Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
 | [fix-bug-bash-item](registry/fix-bug-bash-item/SKILL.md) | Execute one fix from a bug bash plan — investigate, apply a targeted fix, verify, commit, push, and open a PR. |
 
-### React Principles
+### React SPA Principles
 
 | Skill | Description |
 |---|---|
 | [react-component-design](registry/react-component-design/SKILL.md) | Component size, single responsibility, compositional patterns, and "branch early" — prefer distinct components over prop-toggled behavior. |
 | [react-project-structure](registry/react-project-structure/SKILL.md) | Base UI as a design system layer, domain components in `src/features/`, naming conventions, and feature module boundaries. |
-| [react-form-patterns](registry/react-form-patterns/SKILL.md) | Form contexts per form, reusable field components that read from context, schema-level validation. |
-| [react-state-management](registry/react-state-management/SKILL.md) | Keep state low, minimize global state, use TanStack Query for server state, derive don't sync. |
+| [react-spa-architecture](registry/react-spa-architecture/SKILL.md) | App entrypoints, provider composition, routing setup, environment config, API clients, auth bootstrap, and SPA deployment concerns. |
+| [react-hooks-effects](registry/react-hooks-effects/SKILL.md) | Effects as escape hatches, dependency arrays, cleanup, stale closures, refs vs state, Strict Mode, and custom hook boundaries. |
+| [react-form-patterns](registry/react-form-patterns/SKILL.md) | Form-library contexts for non-trivial forms, reusable field components, schema-level validation, dirty tracking, and wizards. |
+| [react-state-management](registry/react-state-management/SKILL.md) | Keep state low, minimize global state, treat URL/form/server/local state differently, derive don't sync. |
+| [react-data-fetching](registry/react-data-fetching/SKILL.md) | Server-state fetching, query keys, colocated API clients, mutations, invalidation, optimistic updates, pagination, and prefetching. |
 | [react-routing](registry/react-routing/SKILL.md) | RESTful URL design, new views = new URLs, URL as source of truth for navigational state. |
 | [react-performance](registry/react-performance/SKILL.md) | Profile first, then optimize — React.memo, useMemo/useCallback, code splitting, virtualization, concurrent features. |
 | [react-error-handling](registry/react-error-handling/SKILL.md) | Error Boundaries at feature boundaries, Suspense for loading states, fallback UI design, route-level error handling. |

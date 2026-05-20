@@ -120,6 +120,8 @@ When you build a widget that has no native HTML equivalent (tabs, combobox, tree
 
 **First rule of ARIA:** Don't use ARIA if a native HTML element can do the job. ARIA adds semantics but no behavior — you still have to implement keyboard handling, focus management, and state management yourself.
 
+For complex primitives such as dialogs, popovers, menus, comboboxes, tooltips, and date pickers, prefer the project's existing accessible design-system primitive or a proven library such as React Aria, Radix UI, Ariakit, or Headless UI. Hand-rolled ARIA widgets are easy to get subtly wrong.
+
 ### 4. Focus management
 
 When the UI changes dynamically — a modal opens, a route changes, content loads — focus needs to move to the right place. Without this, keyboard and screen reader users get lost.
@@ -303,6 +305,7 @@ Common uses:
 - **axe-core** (via `jest-axe` or `@axe-core/react`) — catches missing labels, invalid ARIA, contrast failures, missing alt text
 - **ESLint** — `eslint-plugin-jsx-a11y` catches common issues at lint time (missing `alt`, click handlers without keyboard equivalents)
 - **Lighthouse** — accessibility audit in Chrome DevTools
+- **Playwright accessibility checks** — run axe or equivalent checks against critical browser flows, especially forms, dialogs, and navigation
 
 **Manual testing catches the rest:**
 - **Keyboard-only navigation:** Unplug your mouse and navigate the feature. Can you reach everything? Is the focus order logical? Can you escape modals?

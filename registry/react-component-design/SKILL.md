@@ -93,7 +93,7 @@ function useAgentCardState(agent: Agent) {
 
 **Why this matters beyond readability:**
 
-- **Performance:** Cleanly separated components have independent render cycles. When component A updates, component B doesn't re-render unless its props actually changed. Entangled components with lateral dependencies trigger unnecessary re-renders.
+- **Performance:** Cleanly separated components make it easier to place state, memoization, and expensive work at the right boundary. Separation alone does not guarantee fewer renders, but it gives React clearer component boundaries to optimize.
 - **Maintenance:** When you modify the compact variant, you can't accidentally break the full variant. The blast radius of changes is contained.
 - **Testing:** Each variant can be tested independently with clear inputs and outputs.
 

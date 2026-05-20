@@ -175,7 +175,26 @@ export type { Invoice } from "./types/invoice";
 
 If using barrel files, keep them at the feature boundary only (one per feature). Don't create barrel files inside sub-directories (`components/index.ts`). If the project doesn't already use them, don't introduce them.
 
-### 8. Code splitting at the feature level
+### 8. Route-first projects
+
+Some SPA projects, especially TanStack Router or file-route React Router apps, organize page entry points under `src/routes/` first. That is fine. Keep route files thin and move domain logic into feature modules:
+
+```
+src/
+  routes/
+    invoices/
+      index.tsx
+      $invoiceId.tsx
+  features/
+    invoices/
+      components/
+      hooks/
+      api/
+```
+
+Route-first structure should not become route-only structure. If a route file grows significant JSX, data transformation, or business rules, extract those pieces into `src/features/<feature>/`.
+
+### 9. Code splitting at the feature level
 
 Features and pages should be lazy-loaded at route boundaries so the initial bundle only includes what's needed for the landing page. See `react-performance` for the `React.lazy` + `Suspense` pattern.
 
@@ -188,7 +207,7 @@ const InvoicesPage = lazy(() => import("./pages/invoices-page"));
 
 This works best when page components are thin (see `react-routing`) and feature code is self-contained in its feature folder.
 
-### 9. Adapting to existing projects
+### 10. Adapting to existing projects
 
 These conventions describe the target structure. When working in an existing project:
 
