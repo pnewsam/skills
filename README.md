@@ -69,6 +69,20 @@ Run `./skills-cli setup` to register `skills` as a global command in `~/.local/b
 | [plan-bug-bash](registry/plan-bug-bash/SKILL.md) | Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
 | [fix-bug-bash-item](registry/fix-bug-bash-item/SKILL.md) | Execute one fix from a bug bash plan — investigate, apply a targeted fix, verify, commit, push, and open a PR. |
 
+### React Principles
+
+| Skill | Description |
+|---|---|
+| [react-component-design](registry/react-component-design/SKILL.md) | Component size, single responsibility, compositional patterns, and "branch early" — prefer distinct components over prop-toggled behavior. |
+| [react-project-structure](registry/react-project-structure/SKILL.md) | Base UI as a design system layer, domain components in `src/features/`, naming conventions, and feature module boundaries. |
+| [react-form-patterns](registry/react-form-patterns/SKILL.md) | Form contexts per form, reusable field components that read from context, schema-level validation. |
+| [react-state-management](registry/react-state-management/SKILL.md) | Keep state low, minimize global state, use TanStack Query for server state, derive don't sync. |
+| [react-routing](registry/react-routing/SKILL.md) | RESTful URL design, new views = new URLs, URL as source of truth for navigational state. |
+| [react-performance](registry/react-performance/SKILL.md) | Profile first, then optimize — React.memo, useMemo/useCallback, code splitting, virtualization, concurrent features. |
+| [react-error-handling](registry/react-error-handling/SKILL.md) | Error Boundaries at feature boundaries, Suspense for loading states, fallback UI design, route-level error handling. |
+| [react-accessibility](registry/react-accessibility/SKILL.md) | Semantic HTML first, keyboard navigation, ARIA patterns, focus management, accessible forms, live regions, color/contrast. |
+| [react-testing](registry/react-testing/SKILL.md) | Integration tests for critical flows, unit tests for business logic, minimal component tests — test ROI over coverage percentage. |
+
 ### Frontend / Design
 
 | Skill | Description | Origin |
