@@ -62,7 +62,11 @@ Some skills span multiple phases (the redesign skills analyze, propose, and impl
 | **Convergence** | design-audit, audit-component-size, audit-browser-tests | plan-vulnerability-remediation, plan-code-scanning-remediation | design-fix, fix-browser-test, fix-bug-bash-item, remediate-vulnerability, remediate-code-scanning, decompose-component |
 | **Divergence** | design-crit, extract-design-system | plan-browser-tests, plan-bug-bash | redesign-component, redesign-screen, add-browser-test |
 
-Skills that don't fit neatly into this grid — reference skills like the react-\* principles, or creative tools like svg-animations and color-expert — are **knowledge skills**. They inform work across modes and phases rather than driving a specific workflow.
+### Skill types: Workflow and Reference
+
+**Workflow** skills are invoked to get something done. They have steps, produce artifacts or code changes, and operate within the mode/phase framework above.
+
+**Reference** skills encode knowledge — principles, patterns, conventions, or domain expertise. They inform how work is done across modes and phases rather than driving a specific workflow. The react-\* principles, color-expert, and emil-design-eng are reference skills.
 
 ## Installation
 
@@ -131,74 +135,72 @@ The skills in this registry are organized into groups. As the library grows, gro
 
 ### Git Workflow
 
-| Skill | Description |
-|---|---|
-| [stash-work](registry/stash-work/SKILL.md) | `execute` — Stash in-progress work onto a local `wip/` branch with a descriptive commit and context file — preserves your place without pushing to origin. |
-| [save-session](registry/save-session/SKILL.md) | `analyze` — Summarize the current working session and save it to `docs/tmp/` — builds a searchable knowledge base of past solutions, decisions, and debugging paths. |
-| [prepare-pr](registry/prepare-pr/SKILL.md) | `execute` — Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR. |
-| [revise-pr](registry/revise-pr/SKILL.md) | `convergence` `execute` — Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits. |
-| [review-pr](registry/review-pr/SKILL.md) | `analyze` — Review a pull request and post inline code review comments with an overall verdict (approve, request changes, or comment). |
-| [assess-pr-risk](registry/assess-pr-risk/SKILL.md) | `analyze` — Assess the risk level of a pull request across blast radius, security sensitivity, test coverage, and dependencies. |
+| Skill | Type | Mode | Phase | Description |
+|---|---|---|---|---|
+| [stash-work](registry/stash-work/SKILL.md) | workflow | | execute | Stash in-progress work onto a local `wip/` branch with a descriptive commit and context file. |
+| [save-session](registry/save-session/SKILL.md) | workflow | | analyze | Summarize the current working session and save it to `docs/tmp/`. |
+| [prepare-pr](registry/prepare-pr/SKILL.md) | workflow | | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR. |
+| [revise-pr](registry/revise-pr/SKILL.md) | workflow | convergence | execute | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits. |
+| [review-pr](registry/review-pr/SKILL.md) | workflow | | analyze | Review a pull request and post inline code review comments with an overall verdict. |
+| [assess-pr-risk](registry/assess-pr-risk/SKILL.md) | workflow | | analyze | Assess the risk level of a pull request across blast radius, security sensitivity, test coverage, and dependencies. |
 
 ### Security
 
-| Skill | Description |
-|---|---|
-| [plan-vulnerability-remediation](registry/plan-vulnerability-remediation/SKILL.md) | `convergence` `analyze` `plan` — Triage CVEs, Dependabot alerts, and audit findings, then group them into safe remediation PR plans. |
-| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md) | `convergence` `execute` — Execute a vulnerability remediation plan — update dependencies, verify the fix, commit, push, and open a PR. |
-| [plan-code-scanning-remediation](registry/plan-code-scanning-remediation/SKILL.md) | `convergence` `analyze` `plan` — Triage CodeQL and SAST alerts, then group them into remediation PR plans. |
-| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md) | `convergence` `execute` — Apply source code fixes for CodeQL/SAST alerts, verify the fix, and create or update a pull request. |
+| Skill | Type | Mode | Phase | Description |
+|---|---|---|---|---|
+| [plan-vulnerability-remediation](registry/plan-vulnerability-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CVEs, Dependabot alerts, and audit findings, then group them into safe remediation PR plans. |
+| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md) | workflow | convergence | execute | Execute a vulnerability remediation plan — update dependencies, verify the fix, commit, push, and open a PR. |
+| [plan-code-scanning-remediation](registry/plan-code-scanning-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CodeQL and SAST alerts, then group them into remediation PR plans. |
+| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md) | workflow | convergence | execute | Apply source code fixes for CodeQL/SAST alerts, verify the fix, and create or update a pull request. |
 
 ### Testing
 
-| Skill | Description |
-|---|---|
-| [plan-browser-tests](registry/plan-browser-tests/SKILL.md) | `divergence` `analyze` `plan` — Analyze an application to identify critical user flows and produce a prioritized browser test plan. |
-| [add-browser-test](registry/add-browser-test/SKILL.md) | `divergence` `execute` — Implement one browser integration test from the plan — picks the next unchecked flow, writes the test, and verifies it passes. |
-| [audit-browser-tests](registry/audit-browser-tests/SKILL.md) | `convergence` `analyze` — Audit an existing browser test suite to identify stale tests, missing coverage, flaky patterns, and quality issues. |
-| [fix-browser-test](registry/fix-browser-test/SKILL.md) | `convergence` `execute` — Repair a broken or flaky browser test — diagnoses the root cause, applies a targeted fix, and re-runs to confirm. |
+| Skill | Type | Mode | Phase | Description |
+|---|---|---|---|---|
+| [plan-browser-tests](registry/plan-browser-tests/SKILL.md) | workflow | divergence | analyze, plan | Analyze an application to identify critical user flows and produce a prioritized browser test plan. |
+| [add-browser-test](registry/add-browser-test/SKILL.md) | workflow | divergence | execute | Implement one browser integration test from the plan — picks the next unchecked flow, writes the test, and verifies it passes. |
+| [audit-browser-tests](registry/audit-browser-tests/SKILL.md) | workflow | convergence | analyze | Audit an existing browser test suite to identify stale tests, missing coverage, flaky patterns, and quality issues. |
+| [fix-browser-test](registry/fix-browser-test/SKILL.md) | workflow | convergence | execute | Repair a broken or flaky browser test — diagnoses the root cause, applies a targeted fix, and re-runs to confirm. |
 
 ### Bug Bash
 
-| Skill | Description |
-|---|---|
-| [plan-bug-bash](registry/plan-bug-bash/SKILL.md) | `analyze` `plan` — Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
-| [fix-bug-bash-item](registry/fix-bug-bash-item/SKILL.md) | `convergence` `execute` — Execute one fix from a bug bash plan — investigate, apply a targeted fix, verify, commit, push, and open a PR. |
+| Skill | Type | Mode | Phase | Description |
+|---|---|---|---|---|
+| [plan-bug-bash](registry/plan-bug-bash/SKILL.md) | workflow | | analyze, plan | Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
+| [fix-bug-bash-item](registry/fix-bug-bash-item/SKILL.md) | workflow | convergence | execute | Execute one fix from a bug bash plan — investigate, apply a targeted fix, verify, commit, push, and open a PR. |
 
 ### React SPA Principles
 
-`knowledge` — These skills encode architectural principles and patterns. They inform work across modes and phases rather than driving a specific workflow.
-
-| Skill | Description |
-|---|---|
-| [react-component-design](registry/react-component-design/SKILL.md) | Component size, single responsibility, compositional patterns, and "branch early" — prefer distinct components over prop-toggled behavior. |
-| [react-project-structure](registry/react-project-structure/SKILL.md) | Base UI as a design system layer, domain components in `src/features/`, naming conventions, and feature module boundaries. |
-| [react-spa-architecture](registry/react-spa-architecture/SKILL.md) | App entrypoints, provider composition, routing setup, environment config, API clients, auth bootstrap, and SPA deployment concerns. |
-| [react-hooks-effects](registry/react-hooks-effects/SKILL.md) | Effects as escape hatches, dependency arrays, cleanup, stale closures, refs vs state, Strict Mode, and custom hook boundaries. |
-| [react-form-patterns](registry/react-form-patterns/SKILL.md) | Form-library contexts for non-trivial forms, reusable field components, schema-level validation, dirty tracking, and wizards. |
-| [react-state-management](registry/react-state-management/SKILL.md) | Keep state low, minimize global state, treat URL/form/server/local state differently, derive don't sync. |
-| [react-data-fetching](registry/react-data-fetching/SKILL.md) | Server-state fetching, query keys, colocated API clients, mutations, invalidation, optimistic updates, pagination, and prefetching. |
-| [react-routing](registry/react-routing/SKILL.md) | RESTful URL design, new views = new URLs, URL as source of truth for navigational state. |
-| [react-performance](registry/react-performance/SKILL.md) | Profile first, then optimize — React.memo, useMemo/useCallback, code splitting, virtualization, concurrent features. |
-| [react-error-handling](registry/react-error-handling/SKILL.md) | Error Boundaries at feature boundaries, Suspense for loading states, fallback UI design, route-level error handling. |
-| [react-accessibility](registry/react-accessibility/SKILL.md) | Semantic HTML first, keyboard navigation, ARIA patterns, focus management, accessible forms, live regions, color/contrast. |
-| [react-testing](registry/react-testing/SKILL.md) | Integration tests for critical flows, unit tests for business logic, minimal component tests — test ROI over coverage percentage. |
+| Skill | Type | Description |
+|---|---|---|
+| [react-component-design](registry/react-component-design/SKILL.md) | reference | Component size, single responsibility, compositional patterns, and "branch early" — prefer distinct components over prop-toggled behavior. |
+| [react-project-structure](registry/react-project-structure/SKILL.md) | reference | Base UI as a design system layer, domain components in `src/features/`, naming conventions, and feature module boundaries. |
+| [react-spa-architecture](registry/react-spa-architecture/SKILL.md) | reference | App entrypoints, provider composition, routing setup, environment config, API clients, auth bootstrap, and SPA deployment concerns. |
+| [react-hooks-effects](registry/react-hooks-effects/SKILL.md) | reference | Effects as escape hatches, dependency arrays, cleanup, stale closures, refs vs state, Strict Mode, and custom hook boundaries. |
+| [react-form-patterns](registry/react-form-patterns/SKILL.md) | reference | Form-library contexts for non-trivial forms, reusable field components, schema-level validation, dirty tracking, and wizards. |
+| [react-state-management](registry/react-state-management/SKILL.md) | reference | Keep state low, minimize global state, treat URL/form/server/local state differently, derive don't sync. |
+| [react-data-fetching](registry/react-data-fetching/SKILL.md) | reference | Server-state fetching, query keys, colocated API clients, mutations, invalidation, optimistic updates, pagination, and prefetching. |
+| [react-routing](registry/react-routing/SKILL.md) | reference | RESTful URL design, new views = new URLs, URL as source of truth for navigational state. |
+| [react-performance](registry/react-performance/SKILL.md) | reference | Profile first, then optimize — React.memo, useMemo/useCallback, code splitting, virtualization, concurrent features. |
+| [react-error-handling](registry/react-error-handling/SKILL.md) | reference | Error Boundaries at feature boundaries, Suspense for loading states, fallback UI design, route-level error handling. |
+| [react-accessibility](registry/react-accessibility/SKILL.md) | reference | Semantic HTML first, keyboard navigation, ARIA patterns, focus management, accessible forms, live regions, color/contrast. |
+| [react-testing](registry/react-testing/SKILL.md) | reference | Integration tests for critical flows, unit tests for business logic, minimal component tests — test ROI over coverage percentage. |
 
 ### Frontend / Design
 
-| Skill | Description | Origin |
-|---|---|---|
-| [extract-design-system](registry/extract-design-system/SKILL.md) | `divergence` `analyze` — Extract the implicit design system from a codebase into a documented contract (`docs/design_system.md`). | |
-| [design-audit](registry/design-audit/SKILL.md) | `convergence` `analyze` — Scan pages or components against the design system contract and find deviations. | |
-| [design-fix](registry/design-fix/SKILL.md) | `convergence` `execute` — Fix design system deviations identified by design-audit — mechanical, batchable alignment work. | |
-| [design-crit](registry/design-crit/SKILL.md) | `divergence` `analyze` — Evaluate a UI view or page through multiple design lenses (polish, UX, hierarchy, composition, consistency). | |
-| [audit-component-size](registry/audit-component-size/SKILL.md) | `convergence` `analyze` — Scan a codebase to find React components that have grown too large and are good candidates for decomposition. | |
-| [decompose-component](registry/decompose-component/SKILL.md) | `convergence` `execute` — Break a large React component into smaller, well-named sub-components in separate files. | |
-| [redesign-component](registry/redesign-component/SKILL.md) | `divergence` `analyze` `plan` `execute` — Redesign a UI component that has outgrown its original layout — audit what it displays and does, then propose and implement a better layout. | |
-| [redesign-screen](registry/redesign-screen/SKILL.md) | `divergence` `analyze` `plan` `execute` — Redesign a screen or page that has become cluttered or poorly organized as features accumulated. | |
-| [svg-animations](registry/svg-animations/SKILL.md) | `knowledge` — Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
-| [color-expert](registry/color-expert/SKILL.md) | `knowledge` — Color science expert — color theory, accessibility standards, palette generation, and practical color tools. | [meodai](https://github.com/meodai/skill.color-expert) |
-| [emil-design-eng](registry/emil-design-eng/SKILL.md) | `knowledge` — Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great. | [emilkowalski](https://github.com/emilkowalski/skill) |
+| Skill | Type | Mode | Phase | Description | Origin |
+|---|---|---|---|---|---|
+| [extract-design-system](registry/extract-design-system/SKILL.md) | workflow | divergence | analyze | Extract the implicit design system from a codebase into a documented contract (`docs/design_system.md`). | |
+| [design-audit](registry/design-audit/SKILL.md) | workflow | convergence | analyze | Scan pages or components against the design system contract and find deviations. | |
+| [design-fix](registry/design-fix/SKILL.md) | workflow | convergence | execute | Fix design system deviations identified by design-audit — mechanical, batchable alignment work. | |
+| [design-crit](registry/design-crit/SKILL.md) | workflow | divergence | analyze | Evaluate a UI view or page through multiple design lenses (polish, UX, hierarchy, composition, consistency). | |
+| [audit-component-size](registry/audit-component-size/SKILL.md) | workflow | convergence | analyze | Scan a codebase to find React components that have grown too large and are good candidates for decomposition. | |
+| [decompose-component](registry/decompose-component/SKILL.md) | workflow | convergence | execute | Break a large React component into smaller, well-named sub-components in separate files. | |
+| [redesign-component](registry/redesign-component/SKILL.md) | workflow | divergence | analyze, plan, execute | Redesign a UI component that has outgrown its original layout — audit what it displays and does, then propose and implement a better layout. | |
+| [redesign-screen](registry/redesign-screen/SKILL.md) | workflow | divergence | analyze, plan, execute | Redesign a screen or page that has become cluttered or poorly organized as features accumulated. | |
+| [svg-animations](registry/svg-animations/SKILL.md) | reference | | | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
+| [color-expert](registry/color-expert/SKILL.md) | reference | | | Color science expert — color theory, accessibility standards, palette generation, and practical color tools. | [meodai](https://github.com/meodai/skill.color-expert) |
+| [emil-design-eng](registry/emil-design-eng/SKILL.md) | reference | | | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great. | [emilkowalski](https://github.com/emilkowalski/skill) |
 
 **References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
 
