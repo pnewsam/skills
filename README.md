@@ -59,8 +59,8 @@ Some skills span multiple phases (the redesign skills analyze, propose, and impl
 
 | | Analyze | Plan | Execute |
 |---|---|---|---|
-| **Convergence** | audit-component-size, audit-browser-tests | plan-vulnerability-remediation, plan-code-scanning-remediation | fix-browser-test, fix-bug-bash-item, remediate-vulnerability, remediate-code-scanning, decompose-component |
-| **Divergence** | | plan-browser-tests, plan-bug-bash | redesign-component, redesign-screen, add-browser-test |
+| **Convergence** | design-audit, audit-component-size, audit-browser-tests | plan-vulnerability-remediation, plan-code-scanning-remediation | design-fix, fix-browser-test, fix-bug-bash-item, remediate-vulnerability, remediate-code-scanning, decompose-component |
+| **Divergence** | design-crit, extract-design-system | plan-browser-tests, plan-bug-bash | redesign-component, redesign-screen, add-browser-test |
 
 Skills that don't fit neatly into this grid — reference skills like the react-\* principles, or creative tools like svg-animations and color-expert — are **knowledge skills**. They inform work across modes and phases rather than driving a specific workflow.
 
@@ -125,7 +125,7 @@ The skills in this registry are organized into groups. As the library grows, gro
 | **security** | plan-vulnerability-remediation, remediate-vulnerability, plan-code-scanning-remediation, remediate-code-scanning | Project — when doing security work |
 | **browser-testing** | plan-browser-tests, add-browser-test, audit-browser-tests, fix-browser-test | Project — where you have browser tests |
 | **bug-bash** | plan-bug-bash, fix-bug-bash-item | Global — useful anywhere |
-| **frontend-design** | audit-component-size, decompose-component, redesign-component, redesign-screen, svg-animations, emil-design-eng, color-expert | Project — when actively refactoring UI |
+| **frontend-design** | extract-design-system, design-audit, design-fix, design-crit, audit-component-size, decompose-component, redesign-component, redesign-screen, svg-animations, emil-design-eng, color-expert | Project — when actively refactoring UI |
 
 ## Skills
 
@@ -188,6 +188,10 @@ The skills in this registry are organized into groups. As the library grows, gro
 
 | Skill | Description | Origin |
 |---|---|---|
+| [extract-design-system](registry/extract-design-system/SKILL.md) | `divergence` `analyze` — Extract the implicit design system from a codebase into a documented contract (`docs/design_system.md`). | |
+| [design-audit](registry/design-audit/SKILL.md) | `convergence` `analyze` — Scan pages or components against the design system contract and find deviations. | |
+| [design-fix](registry/design-fix/SKILL.md) | `convergence` `execute` — Fix design system deviations identified by design-audit — mechanical, batchable alignment work. | |
+| [design-crit](registry/design-crit/SKILL.md) | `divergence` `analyze` — Evaluate a UI view or page through multiple design lenses (polish, UX, hierarchy, composition, consistency). | |
 | [audit-component-size](registry/audit-component-size/SKILL.md) | `convergence` `analyze` — Scan a codebase to find React components that have grown too large and are good candidates for decomposition. | |
 | [decompose-component](registry/decompose-component/SKILL.md) | `convergence` `execute` — Break a large React component into smaller, well-named sub-components in separate files. | |
 | [redesign-component](registry/redesign-component/SKILL.md) | `divergence` `analyze` `plan` `execute` — Redesign a UI component that has outgrown its original layout — audit what it displays and does, then propose and implement a better layout. | |
