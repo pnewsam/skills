@@ -2,6 +2,68 @@
 
 Collected agent skills for Claude Code.
 
+## Philosophy
+
+Skills organize around two dimensions: **mode** and **phase**.
+
+### Modes: Convergence and Divergence
+
+**Convergence** moves toward established patterns. The intent already exists — the work is alignment, consistency, and reinforcement. You're finding deviations and closing gaps. The "right answer" is already known.
+
+- Fixing a component that drifted from the design system
+- Remediating known vulnerabilities
+- Repairing broken tests
+- Enforcing coding conventions
+- Updating dependencies
+
+**Divergence** moves into new territory. The intent doesn't exist yet, or needs to change because requirements outgrew it. The work involves exploration, judgment, and choosing among multiple valid outcomes.
+
+- Redesigning a page whose requirements have grown
+- Planning a test suite for untested flows
+- Rearchitecting a feature
+- Building a new product surface
+- Researching alternative approaches
+
+The first pass on anything is divergent. Once patterns are established, maintaining them is convergent. Over time, convergent work dominates — until requirements shift and another round of divergence is needed.
+
+### Phases: Analyze, Plan, Execute
+
+```
+┌───────────┐      ┌───────────┐      ┌───────────┐
+│  Analyze  │ ───> │   Plan    │ ───> │  Execute  │
+│           │      │           │      │           │
+│ Observe,  │      │ Decide,   │      │ Do the    │
+│ measure,  │      │ propose,  │      │ work.     │
+│ diagnose. │      │ prioritize│      │           │
+│           │      │ get       │      │           │
+│ Output:   │      │ buy-in.   │      │ Output:   │
+│ audit,    │      │           │      │ code      │
+│ critique, │      │ Output:   │      │ changes,  │
+│ or review │      │ plan      │      │ PRs       │
+└───────────┘      └───────────┘      └───────────┘
+       ^                                    │
+       └────────────────────────────────────┘
+```
+
+How each phase behaves depends on the mode:
+
+| Phase | Convergence | Divergence |
+|---|---|---|
+| **Analyze** | Pattern-match: find deviations from established standards | Evaluate: assess fitness for purpose, identify what's not working |
+| **Plan** | Often trivial — the fix is obvious from the deviation | Substantive — multiple valid approaches, human weighs in |
+| **Execute** | Mechanical, batchable, low-risk | Creative, iterative, requires judgment |
+
+Some skills span multiple phases (the redesign skills analyze, propose, and implement in one pass). Others are phase-specific and compose together — `plan-browser-tests` produces a plan that `add-browser-test` executes against, one item at a time.
+
+### Mapping skills to the grid
+
+| | Analyze | Plan | Execute |
+|---|---|---|---|
+| **Convergence** | audit-component-size, audit-browser-tests | plan-vulnerability-remediation, plan-code-scanning-remediation | fix-browser-test, fix-bug-bash-item, remediate-vulnerability, remediate-code-scanning, decompose-component |
+| **Divergence** | | plan-browser-tests, plan-bug-bash | redesign-component, redesign-screen, add-browser-test |
+
+Skills that don't fit neatly into this grid — reference skills like the react-\* principles, or creative tools like svg-animations and color-expert — are **knowledge skills**. They inform work across modes and phases rather than driving a specific workflow.
+
 ## Installation
 
 ```bash
@@ -63,7 +125,7 @@ The skills in this registry are organized into groups. As the library grows, gro
 | **security** | plan-vulnerability-remediation, remediate-vulnerability, plan-code-scanning-remediation, remediate-code-scanning | Project — when doing security work |
 | **browser-testing** | plan-browser-tests, add-browser-test, audit-browser-tests, fix-browser-test | Project — where you have browser tests |
 | **bug-bash** | plan-bug-bash, fix-bug-bash-item | Global — useful anywhere |
-| **frontend-design** | audit-component-size, decompose-component, redesign-component, redesign-screen, svg-animations | Project — when actively refactoring UI |
+| **frontend-design** | audit-component-size, decompose-component, redesign-component, redesign-screen, svg-animations, emil-design-eng, color-expert | Project — when actively refactoring UI |
 
 ## Skills
 
@@ -129,8 +191,8 @@ The skills in this registry are organized into groups. As the library grows, gro
 | [redesign-component](registry/redesign-component/SKILL.md) | Redesign a UI component that has outgrown its original layout — audit what it displays and does, then propose and implement a better layout. | |
 | [redesign-screen](registry/redesign-screen/SKILL.md) | Redesign a screen or page that has become cluttered or poorly organized as features accumulated. | |
 | [svg-animations](registry/svg-animations/SKILL.md) | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
-| [color-expert](https://github.com/meodai/skill.color-expert) | Color science expert — color theory, accessibility standards, palette generation, and practical color tools. | [meodai](https://github.com/meodai/skill.color-expert) |
-| [emil-design-eng](https://github.com/emilkowalski/skill/blob/main/skills/emil-design-eng/SKILL.md) | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great. | [emilkowalski](https://github.com/emilkowalski/skill) |
+| [color-expert](registry/color-expert/SKILL.md) | Color science expert — color theory, accessibility standards, palette generation, and practical color tools. | [meodai](https://github.com/meodai/skill.color-expert) |
+| [emil-design-eng](registry/emil-design-eng/SKILL.md) | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great. | [emilkowalski](https://github.com/emilkowalski/skill) |
 
 **References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
 
