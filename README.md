@@ -133,39 +133,41 @@ The skills in this registry are organized into groups. As the library grows, gro
 
 | Skill | Description |
 |---|---|
-| [stash-work](registry/stash-work/SKILL.md) | Stash in-progress work onto a local `wip/` branch with a descriptive commit and context file — preserves your place without pushing to origin. |
-| [save-session](registry/save-session/SKILL.md) | Summarize the current working session and save it to `docs/tmp/` — builds a searchable knowledge base of past solutions, decisions, and debugging paths. |
-| [prepare-pr](registry/prepare-pr/SKILL.md) | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR. |
-| [revise-pr](registry/revise-pr/SKILL.md) | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits. |
-| [review-pr](registry/review-pr/SKILL.md) | Review a pull request and post inline code review comments with an overall verdict (approve, request changes, or comment). |
-| [assess-pr-risk](registry/assess-pr-risk/SKILL.md) | Assess the risk level of a pull request across blast radius, security sensitivity, test coverage, and dependencies. |
+| [stash-work](registry/stash-work/SKILL.md) | `execute` — Stash in-progress work onto a local `wip/` branch with a descriptive commit and context file — preserves your place without pushing to origin. |
+| [save-session](registry/save-session/SKILL.md) | `analyze` — Summarize the current working session and save it to `docs/tmp/` — builds a searchable knowledge base of past solutions, decisions, and debugging paths. |
+| [prepare-pr](registry/prepare-pr/SKILL.md) | `execute` — Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR. |
+| [revise-pr](registry/revise-pr/SKILL.md) | `convergence` `execute` — Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits. |
+| [review-pr](registry/review-pr/SKILL.md) | `analyze` — Review a pull request and post inline code review comments with an overall verdict (approve, request changes, or comment). |
+| [assess-pr-risk](registry/assess-pr-risk/SKILL.md) | `analyze` — Assess the risk level of a pull request across blast radius, security sensitivity, test coverage, and dependencies. |
 
 ### Security
 
 | Skill | Description |
 |---|---|
-| [plan-vulnerability-remediation](registry/plan-vulnerability-remediation/SKILL.md) | Triage CVEs, Dependabot alerts, and audit findings, then group them into safe remediation PR plans. |
-| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md) | Execute a vulnerability remediation plan — update dependencies, verify the fix, commit, push, and open a PR. |
-| [plan-code-scanning-remediation](registry/plan-code-scanning-remediation/SKILL.md) | Triage CodeQL and SAST alerts, then group them into remediation PR plans. |
-| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md) | Apply source code fixes for CodeQL/SAST alerts, verify the fix, and create or update a pull request. |
+| [plan-vulnerability-remediation](registry/plan-vulnerability-remediation/SKILL.md) | `convergence` `analyze` `plan` — Triage CVEs, Dependabot alerts, and audit findings, then group them into safe remediation PR plans. |
+| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md) | `convergence` `execute` — Execute a vulnerability remediation plan — update dependencies, verify the fix, commit, push, and open a PR. |
+| [plan-code-scanning-remediation](registry/plan-code-scanning-remediation/SKILL.md) | `convergence` `analyze` `plan` — Triage CodeQL and SAST alerts, then group them into remediation PR plans. |
+| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md) | `convergence` `execute` — Apply source code fixes for CodeQL/SAST alerts, verify the fix, and create or update a pull request. |
 
 ### Testing
 
 | Skill | Description |
 |---|---|
-| [plan-browser-tests](registry/plan-browser-tests/SKILL.md) | Analyze an application to identify critical user flows and produce a prioritized browser test plan. |
-| [add-browser-test](registry/add-browser-test/SKILL.md) | Implement one browser integration test from the plan — picks the next unchecked flow, writes the test, and verifies it passes. |
-| [audit-browser-tests](registry/audit-browser-tests/SKILL.md) | Audit an existing browser test suite to identify stale tests, missing coverage, flaky patterns, and quality issues. |
-| [fix-browser-test](registry/fix-browser-test/SKILL.md) | Repair a broken or flaky browser test — diagnoses the root cause, applies a targeted fix, and re-runs to confirm. |
+| [plan-browser-tests](registry/plan-browser-tests/SKILL.md) | `divergence` `analyze` `plan` — Analyze an application to identify critical user flows and produce a prioritized browser test plan. |
+| [add-browser-test](registry/add-browser-test/SKILL.md) | `divergence` `execute` — Implement one browser integration test from the plan — picks the next unchecked flow, writes the test, and verifies it passes. |
+| [audit-browser-tests](registry/audit-browser-tests/SKILL.md) | `convergence` `analyze` — Audit an existing browser test suite to identify stale tests, missing coverage, flaky patterns, and quality issues. |
+| [fix-browser-test](registry/fix-browser-test/SKILL.md) | `convergence` `execute` — Repair a broken or flaky browser test — diagnoses the root cause, applies a targeted fix, and re-runs to confirm. |
 
 ### Bug Bash
 
 | Skill | Description |
 |---|---|
-| [plan-bug-bash](registry/plan-bug-bash/SKILL.md) | Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
-| [fix-bug-bash-item](registry/fix-bug-bash-item/SKILL.md) | Execute one fix from a bug bash plan — investigate, apply a targeted fix, verify, commit, push, and open a PR. |
+| [plan-bug-bash](registry/plan-bug-bash/SKILL.md) | `analyze` `plan` — Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
+| [fix-bug-bash-item](registry/fix-bug-bash-item/SKILL.md) | `convergence` `execute` — Execute one fix from a bug bash plan — investigate, apply a targeted fix, verify, commit, push, and open a PR. |
 
 ### React SPA Principles
+
+`knowledge` — These skills encode architectural principles and patterns. They inform work across modes and phases rather than driving a specific workflow.
 
 | Skill | Description |
 |---|---|
@@ -186,13 +188,13 @@ The skills in this registry are organized into groups. As the library grows, gro
 
 | Skill | Description | Origin |
 |---|---|---|
-| [audit-component-size](registry/audit-component-size/SKILL.md) | Scan a codebase to find React components that have grown too large and are good candidates for decomposition. | |
-| [decompose-component](registry/decompose-component/SKILL.md) | Break a large React component into smaller, well-named sub-components in separate files. | |
-| [redesign-component](registry/redesign-component/SKILL.md) | Redesign a UI component that has outgrown its original layout — audit what it displays and does, then propose and implement a better layout. | |
-| [redesign-screen](registry/redesign-screen/SKILL.md) | Redesign a screen or page that has become cluttered or poorly organized as features accumulated. | |
-| [svg-animations](registry/svg-animations/SKILL.md) | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
-| [color-expert](registry/color-expert/SKILL.md) | Color science expert — color theory, accessibility standards, palette generation, and practical color tools. | [meodai](https://github.com/meodai/skill.color-expert) |
-| [emil-design-eng](registry/emil-design-eng/SKILL.md) | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great. | [emilkowalski](https://github.com/emilkowalski/skill) |
+| [audit-component-size](registry/audit-component-size/SKILL.md) | `convergence` `analyze` — Scan a codebase to find React components that have grown too large and are good candidates for decomposition. | |
+| [decompose-component](registry/decompose-component/SKILL.md) | `convergence` `execute` — Break a large React component into smaller, well-named sub-components in separate files. | |
+| [redesign-component](registry/redesign-component/SKILL.md) | `divergence` `analyze` `plan` `execute` — Redesign a UI component that has outgrown its original layout — audit what it displays and does, then propose and implement a better layout. | |
+| [redesign-screen](registry/redesign-screen/SKILL.md) | `divergence` `analyze` `plan` `execute` — Redesign a screen or page that has become cluttered or poorly organized as features accumulated. | |
+| [svg-animations](registry/svg-animations/SKILL.md) | `knowledge` — Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
+| [color-expert](registry/color-expert/SKILL.md) | `knowledge` — Color science expert — color theory, accessibility standards, palette generation, and practical color tools. | [meodai](https://github.com/meodai/skill.color-expert) |
+| [emil-design-eng](registry/emil-design-eng/SKILL.md) | `knowledge` — Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great. | [emilkowalski](https://github.com/emilkowalski/skill) |
 
 **References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
 
