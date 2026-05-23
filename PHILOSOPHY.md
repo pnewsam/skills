@@ -32,7 +32,7 @@ Some skills span multiple phases (the redesign skills analyze, propose, and impl
 |                 | Analyze                                                 | Plan                                                           | Execute                                                                                                                |
 | --------------- | ------------------------------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | **Convergence** | design-audit, audit-component-size, audit-browser-tests | plan-vulnerability-remediation, plan-code-scanning-remediation | design-fix, fix-browser-test, fix-bug-bash-item, remediate-vulnerability, remediate-code-scanning, decompose-component |
-| **Divergence**  | design-crit, extract-design-system                      | plan-browser-tests, plan-bug-bash, create-charter, plan-epic   | plan-feature, redesign-component, redesign-screen, add-browser-test                                                    |
+| **Divergence**  | explore-directions, design-crit, extract-design-system  | plan-browser-tests, plan-bug-bash, create-charter, plan-epic   | plan-feature, redesign-component, redesign-screen, add-browser-test                                                    |
 
 ## Types
 
