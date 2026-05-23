@@ -18,22 +18,10 @@ Work oscillates between the two. The first pass on anything is divergent. Once p
 
 ### Phases: Analyze, Plan, Execute
 
-```
-┌───────────┐      ┌───────────┐      ┌───────────┐
-│  Analyze  │ ───> │   Plan    │ ───> │  Execute  │
-│           │      │           │      │           │
-│ Observe,  │      │ Decide,   │      │ Do the    │
-│ measure,  │      │ propose,  │      │ work.     │
-│ diagnose. │      │ prioritize│      │           │
-│           │      │ get       │      │           │
-│ Output:   │      │ buy-in.   │      │ Output:   │
-│ audit,    │      │           │      │ code      │
-│ critique, │      │ Output:   │      │ changes,  │
-│ or review │      │ plan      │      │ PRs       │
-└───────────┘      └───────────┘      └───────────┘
-       ^                                    │
-       └────────────────────────────────────┘
-```
+| Analyze | Plan | Execute |
+| --- | --- | --- |
+| Observe, measure, diagnose. | Decide, propose, prioritize, get buy-in. | Do the work. |
+| Output: audit, critique, or review. | Output: plan. | Output: code changes, PRs. |
 
 How each phase behaves depends on the mode:
 
@@ -54,9 +42,10 @@ Some skills span multiple phases (the redesign skills analyze, propose, and impl
 
 ### Skill types: Workflow and Reference
 
-**Workflow** skills are invoked to get something done. They have steps, produce artifacts or code changes, and operate within the mode/phase framework above.
-
-**Reference** skills encode knowledge — principles, patterns, conventions, or domain expertise. They inform how work is done across modes and phases rather than driving a specific workflow. The react-\* principles, color-expert, and emil-design-eng are reference skills.
+| Workflow | Reference |
+| --- | --- |
+| Invoked to get something done. Have steps, produce artifacts or code changes, and operate within the mode/phase framework. | Encode knowledge — principles, patterns, conventions, or domain expertise. Inform how work is done across modes and phases rather than driving a specific workflow. |
+| Examples: `plan-browser-tests`, `remediate-vulnerability`, `prepare-pr` | Examples: `react-*` principles, `color-expert`, `emil-design-eng` |
 
 ## Installation
 
