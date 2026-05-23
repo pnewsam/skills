@@ -1,13 +1,13 @@
 ---
 name: create-charter
-description: create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning. use when starting a new product, pivoting direction, or when existing plans have drifted from core intent. produces a concise, opinionated CHARTER.md at the repo root that subsequent planning skills (plan-epic, plan-feature) align against.
+description: create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning. use when starting a new product, pivoting direction, or when existing plans have drifted from core intent. produces a concise, opinionated CHARTER.md in the docs/ directory that subsequent planning skills (plan-epic, plan-feature) align against. Other high-level documents such as BRAND.md also live directly in docs/.
 ---
 
 # Create Charter
 
 ## Overview
 
-Produce a `CHARTER.md` at the repository root that captures the core product vision in a format short enough to read in five minutes and durable enough to guide decisions for quarters.
+Produce a `docs/CHARTER.md` that captures the core product vision in a format short enough to read in five minutes and durable enough to guide decisions for quarters.
 
 The charter is the parent document for all downstream planning. Every epic, project, and feature plan should reference it. When teams disagree on scope or priority, the charter is the tie-breaker.
 
@@ -32,7 +32,7 @@ This skill is interactive and judgment-heavy. It asks clarifying questions when 
 ### 1. Check for an existing charter
 
 ```bash
-ls CHARTER.md 2>/dev/null && cat CHARTER.md
+ls docs/CHARTER.md 2>/dev/null && cat docs/CHARTER.md
 ```
 
 If a charter exists:
@@ -124,10 +124,10 @@ If any check fails, flag it to the user and propose a revision. Do not silently 
 
 ```bash
 # Ensure no accidental overwrite if user hasn't confirmed
-ls CHARTER.md 2>/dev/null && echo "WARNING: CHARTER.md exists. Use refresh workflow."
+ls docs/CHARTER.md 2>/dev/null && echo "WARNING: docs/CHARTER.md exists. Use refresh workflow."
 ```
 
-Write the finalized charter to `CHARTER.md` at the repository root.
+Write the finalized charter to `docs/CHARTER.md`.
 
 ### 7. Final response
 
