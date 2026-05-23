@@ -139,12 +139,15 @@ Skills for code, architecture, testing, security, and delivery.
 
 #### Testing
 
-| Skill                                                        | Type     | Mode        | Phase         | Description                                                                                                                    |
-| ------------------------------------------------------------ | -------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)   | workflow | divergence  | analyze, plan | Analyze an application to identify critical user flows and produce a prioritized browser test plan.                            |
-| [add-browser-test](registry/add-browser-test/SKILL.md)       | workflow | divergence  | execute       | Implement one browser integration test from the plan — picks the next unchecked flow, writes the test, and verifies it passes. |
-| [audit-browser-tests](registry/audit-browser-tests/SKILL.md) | workflow | convergence | analyze       | Audit an existing browser test suite to identify stale tests, missing coverage, flaky patterns, and quality issues.            |
-| [fix-browser-test](registry/fix-browser-test/SKILL.md)       | workflow | convergence | execute       | Repair a broken or flaky browser test — diagnoses the root cause, applies a targeted fix, and re-runs to confirm.              |
+| Skill                                                                      | Type     | Mode        | Phase         | Description                                                                                                                                    |
+| -------------------------------------------------------------------------- | -------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [setup-browser-testing](registry/setup-browser-testing/SKILL.md)           | workflow | convergence | execute       | Set up the browser testing facility — installs and configures framework, auth helpers, CI workflow with scheduled runs, and conventions docs.  |
+| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Analyze an application to identify critical user flows and produce a prioritized browser test plan.                                            |
+| [add-browser-test](registry/add-browser-test/SKILL.md)                     | workflow | divergence  | execute       | Implement one browser integration test from the plan — picks the next unchecked flow, writes the test, and verifies it passes.                 |
+| [audit-browser-tests](registry/audit-browser-tests/SKILL.md)               | workflow | convergence | analyze       | Audit an existing browser test suite to identify stale tests, missing coverage, flaky patterns, and quality issues.                            |
+| [fix-browser-test](registry/fix-browser-test/SKILL.md)                     | workflow | convergence | execute       | Repair a broken or flaky browser test — diagnoses the root cause, applies a targeted fix, and re-runs to confirm.                              |
+| [validate-changes](registry/validate-changes/SKILL.md)                     | workflow | convergence | execute       | Run targeted validation against recent code changes — maps diff to relevant tests, runs only those, and reports coverage gaps.                 |
+| [validate-feature](registry/validate-feature/SKILL.md)                     | workflow | convergence | execute       | Comprehensive post-build validation — targeted tests, full browser suite, acceptance criteria verification, and structured ship/no-ship report. |
 
 ## Other Skill Collections
 
