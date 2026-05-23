@@ -130,7 +130,10 @@ Report:
 - The feature plan file path.
 - Whether a PR exists for the feature.
 - How many child features remain incomplete.
-- Recommended next step: run `advance-epic` again for the next feature.
+- Recommended next steps:
+  - Run `validate-feature` to comprehensively validate the completed child feature.
+  - Run `advance-epic` again for the next feature.
+  - If all features are complete, run `validate-feature` on the final feature, then `prepare-pr` for the epic branch.
 
 ## Handling common situations
 

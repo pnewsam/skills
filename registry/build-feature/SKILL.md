@@ -165,6 +165,8 @@ If there is no automated test for the new behavior, perform manual verification 
 
 Do not mark the item complete if verification fails. Fix the issue or mark it as blocked and explain why.
 
+**After the item passes basic verification:** If the change touches UI, routing, or shared components, recommend running `validate-changes` for targeted regression testing on the changed area. This is optional during the build loop but highly recommended for items with broad blast radius.
+
 ### 7. Update the feature plan
 
 Mark the item as complete in the plan file:
@@ -227,7 +229,10 @@ Report:
 - Verification result (test command and outcome, or manual verification steps).
 - Commit hash.
 - How many items remain unchecked in the plan.
-- Recommended next step: run `build-feature` again for the next item, or `prepare-pr` if the plan is complete.
+- Recommended next steps:
+  - If items remain: run `build-feature` again for the next item.
+  - If the feature is complete: run `validate-feature` for a comprehensive validation pass, then `prepare-pr`.
+  - If changes touched UI, routing, or shared components: consider running `validate-changes` for targeted regression testing.
 
 ## Handling common situations
 
