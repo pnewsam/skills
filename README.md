@@ -2,48 +2,7 @@
 
 Collected agent skills for Claude Code.
 
-## Philosophy
-
-Skills organize around two dimensions: **mode** and **phase**.
-
-### Modes
-
-| Convergence                                                                                                              | Divergence                                                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Toward established patterns**                                                                                          | **Into new territory**                                                                                                                             |
-| The intent already exists. The work is alignment, consistency, and closing gaps.                                         | The intent doesn't exist yet, or requirements have outgrown it. The work is exploration, judgment, and choosing among valid outcomes.              |
-| Fix design-system drift. Remediate known vulnerabilities. Repair broken tests. Enforce conventions. Update dependencies. | Redesign a page whose requirements grew. Plan tests for untested flows. Rearchitect a feature. Build a new product surface. Research alternatives. |
-
-### Phases
-
-| Analyze                             | Plan                                     | Execute                    |
-| ----------------------------------- | ---------------------------------------- | -------------------------- |
-| Observe, measure, diagnose.         | Decide, propose, prioritize, get buy-in. | Do the work.               |
-| Output: audit, critique, or review. | Output: plan.                            | Output: code changes, PRs. |
-
-How each phase behaves depends on the mode:
-
-| Phase       | Convergence                                               | Divergence                                                        |
-| ----------- | --------------------------------------------------------- | ----------------------------------------------------------------- |
-| **Analyze** | Pattern-match: find deviations from established standards | Evaluate: assess fitness for purpose, identify what's not working |
-| **Plan**    | Often trivial — the fix is obvious from the deviation     | Substantive — multiple valid approaches, human weighs in          |
-| **Execute** | Mechanical, batchable, low-risk                           | Creative, iterative, requires judgment                            |
-
-Some skills span multiple phases (the redesign skills analyze, propose, and implement in one pass). Others are phase-specific and compose together — `plan-browser-tests` produces a plan that `add-browser-test` executes against, one item at a time.
-
-### Mapping skills to the grid
-
-|                 | Analyze                                                 | Plan                                                           | Execute                                                                                                                |
-| --------------- | ------------------------------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| **Convergence** | design-audit, audit-component-size, audit-browser-tests | plan-vulnerability-remediation, plan-code-scanning-remediation | design-fix, fix-browser-test, fix-bug-bash-item, remediate-vulnerability, remediate-code-scanning, decompose-component |
-| **Divergence**  | design-crit, extract-design-system                      | plan-browser-tests, plan-bug-bash, create-charter, plan-epic   | plan-feature, redesign-component, redesign-screen, add-browser-test                                                    |
-
-### Types
-
-| Workflow                                                                                                                   | Reference                                                                                                                                                           |
-| -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Invoked to get something done. Have steps, produce artifacts or code changes, and operate within the mode/phase framework. | Encode knowledge — principles, patterns, conventions, or domain expertise. Inform how work is done across modes and phases rather than driving a specific workflow. |
-| Examples: `plan-browser-tests`, `remediate-vulnerability`, `prepare-pr`                                                    | Examples: `react-*` principles, `color-expert`, `emil-design-eng`                                                                                                   |
+Skills organize around two dimensions — **mode** (convergence vs divergence) and **phase** (analyze, plan, execute) — and come in two types: **workflow** and **reference**. See [PHILOSOPHY.md](PHILOSOPHY.md) for the full framework.
 
 ## Installation
 
@@ -74,40 +33,7 @@ go build -o skills-cli ./cmd/skills
 
 Run `./skills-cli setup` to register `skills` as a global command in `~/.local/bin`. See [cli/README.md](cli/README.md) for full CLI documentation.
 
-## How skills are loaded
-
-Skills are installed by symlinking SKILL.md files into a skills directory that the AI tool reads. At session startup, only the **name and description** from each skill's frontmatter are loaded into context. The full skill content is loaded only when the skill is invoked during a session.
-
-This means:
-
-- **Having many skills available is cheap.** 50+ installed skills add only a few thousand tokens of description text at startup. Install liberally.
-- **Invoking a skill is what costs context.** Each invocation loads the full SKILL.md (typically 3,000-8,000 tokens). Invoking 3-5 skills in a session is comfortable; invoking 15 would crowd out working context.
-- **Descriptions matter for routing.** The model uses the one-line description to decide which skill to invoke. As your skill library grows, descriptions must be precise and non-overlapping so the right skill triggers.
-
-### Where to install
-
-Skills can be installed at two levels:
-
-| Level                 | Location                    | Scope                         | Best for                                                                    |
-| --------------------- | --------------------------- | ----------------------------- | --------------------------------------------------------------------------- |
-| **Personal / global** | `~/.claude/skills/`         | Every session, every project  | General-purpose workflow skills (git, session logging, PR prep)             |
-| **Project**           | `<project>/.claude/skills/` | Sessions in this project only | Stack-specific skills (React, security, testing patterns for this codebase) |
-
-**For teams:** Project-level skills committed to the repo (in `.claude/skills/`) are shared with everyone who works on the project. This is the right place for team conventions, stack-specific principles, and project-specific workflows. Personal skills stay in `~/.claude/skills/` and reflect individual preferences.
-
-### Skill groups
-
-The skills in this registry are organized into groups. As the library grows, groups help you install or remove related skills as a unit and reason about which skills are active where.
-
-| Category      | Group               | Skills                                                                                                                                                                                                                                                     | Recommended install                    |
-| ------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| **Product**   | **product-direction** | create-charter, plan-epic, plan-feature                                                                                                                                                                                                                  | Global — when defining product vision  |
-| **Product**   | **bug-bash**        | plan-bug-bash, fix-bug-bash-item                                                                                                                                                                                                                           | Global — useful anywhere               |
-| **Design**    | **frontend-design** | extract-design-system, design-audit, design-fix, design-crit, audit-component-size, decompose-component, redesign-component, redesign-screen, svg-animations, emil-design-eng, color-expert                                                                | Project — when actively refactoring UI |
-| **Engineering** | **git-workflow**    | stash-work, save-session, prepare-pr, revise-pr, review-pr, assess-pr-risk                                                                                                                                                                                 | Global — useful in every repo          |
-| **Engineering** | **react-spa**       | react-component-design, react-project-structure, react-spa-architecture, react-hooks-effects, react-form-patterns, react-state-management, react-data-fetching, react-routing, react-performance, react-error-handling, react-accessibility, react-testing | Project — only in React SPA projects   |
-| **Engineering** | **security**        | plan-vulnerability-remediation, remediate-vulnerability, plan-code-scanning-remediation, remediate-code-scanning                                                                                                                                           | Project — when doing security work     |
-| **Engineering** | **browser-testing** | plan-browser-tests, add-browser-test, audit-browser-tests, fix-browser-test                                                                                                                                                                                | Project — where you have browser tests |
+Skills are installed by symlinking SKILL.md files into a directory the AI tool reads. See [MECHANICS.md](MECHANICS.md) for how lazy loading works, where to install (global vs project), and how skill groups are organized.
 
 ## Skills
 
