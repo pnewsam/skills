@@ -49,6 +49,8 @@ Skills for product direction, planning, and quality.
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
 | [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create a structured epic plan that translates a product charter into a quarter-level initiative.                              |
 | [plan-feature](registry/plan-feature/SKILL.md)         | workflow | divergence | execute | Create a structured feature plan that defines a 1–2 week deliverable and links it to a parent epic.                           |
+| [build-feature](registry/build-feature/SKILL.md)       | workflow | convergence | execute | Implement one acceptance criterion from a feature plan — write code, verify, commit, and check it off. Run repeatedly until the feature is complete. |
+| [advance-epic](registry/advance-epic/SKILL.md)         | workflow | convergence | execute | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete.    |
 
 #### Bug Bash
 
