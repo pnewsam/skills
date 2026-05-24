@@ -60,13 +60,35 @@ Gap types:
 | `missing-plan` | Feature in epic has no feature plan file | Run `plan-feature` |
 | `unchecked-criteria` | Must-have acceptance criteria not done | Run `build-feature` for each unchecked criterion |
 | `checkbox-mismatch` | Epic checkbox disagrees with feature plan state | Manual: verify actual state, then update the incorrect checkbox |
-| `incomplete-dod` | Definition of done has unchecked items | Run `build-feature` or manual verification for each undone item |
+| `tracking-drift` | Tasks checked but AC not checked — code built, plan not updated | Manual: verify which AC the completed tasks satisfy, then update the AC checklist |
+| `incomplete-dod` | Definition of done has unchecked items | Manual verification or DoD review session |
 | `stale-tasks` | Task list doesn't reflect actual progress | Manual: refresh the task list to match reality |
 | `orphan-plan` | Feature plan file not tracked in any epic | Decision needed: add to epic or delete the file |
 | `status-mismatch` | Feature plan status field doesn't match reality | Manual: update the status field |
 | `missing-epic-reference` | Feature plan doesn't link to its parent epic | Manual: add the parent epic reference |
 
-### 3. Determine the fix for each gap
+### 3. Separate systemic from isolated gaps
+
+Before determining individual fixes, scan for gaps that repeat across 3+ features with the same type. These are **systemic** — they indicate a process issue, not individual oversights.
+
+Systemic gap examples:
+- `incomplete-dod` across 5 of 6 features → process gap, not 5 independent problems.
+- `tracking-drift` across 3 features → the team is building without updating plans.
+- `stale-tasks` across 4 features → task lists aren't being maintained.
+
+Systemic gaps should produce **one** recommendation in the plan, not N individual items:
+
+```markdown
+### Systemic: Definition of Done Review
+
+- **Pattern:** DoD is 0% across 5 of 6 features, including features with all AC complete.
+- **Action:** Run a single DoD review session. For each feature, check off the DoD items that have actually been completed by the work already done. Do not fix feature-by-feature — fix at the process level.
+- **Affected:** Features 001, 002, 003, 004, 006
+```
+
+Features covered by a systemic recommendation should **not** get individual items for the same gap type. They appear once in the systemic section and are omitted from the per-feature punch list.
+
+### 4. Determine the fix for each remaining gap
 
 For each gap, map it to a concrete action. Be specific:
 
@@ -93,15 +115,15 @@ The file `docs/features/007-old-dashboard.md` references epic 001 but is not lis
 3. Move it to a different epic if it belongs elsewhere.
 ```
 
-### 4. Prioritize
+### 5. Prioritize
 
 Order the actions by:
 
 1. **Severity:** high before medium before low.
-2. **Dependency:** actions that unblock other actions go first. A missing feature plan must be created before its acceptance criteria can be built. An orphan decision must be resolved before the file can be acted on.
+2. **Dependency:** actions that unblock other actions go first. A missing feature plan must be created before its acceptance criteria can be built. When the audit notes that Feature X depends on Feature Y and Feature Y has gaps, escalate Feature Y's gaps and place them first.
 3. **Effort:** within the same severity and dependency level, prefer quick wins first.
 
-### 5. Write the gap-closure plan
+### 6. Write the gap-closure plan
 
 Write the plan to `docs/epics/NNN-<slug>-gap-closure.md` using the structure below. If the file already exists, update it (preserving any items already marked complete).
 
@@ -119,6 +141,16 @@ Write the plan to `docs/epics/NNN-<slug>-gap-closure.md` using the structure bel
 ## Summary
 
 <One paragraph describing the overall state and the most important gaps to close.>
+
+## Systemic Issues
+
+<Patterns that span 3+ features. One recommendation covers all affected features.>
+
+### Systemic: <title>
+
+- **Pattern:** <what repeats and why it's systemic>
+- **Action:** <one action that addresses all affected features>
+- **Affected:** Features 001, 002, 003, 004, 006
 
 ## Decision Points
 
@@ -140,13 +172,13 @@ Write the plan to `docs/epics/NNN-<slug>-gap-closure.md` using the structure bel
 
 ### High Priority
 
-- [ ] **<Feature name>:** Run `plan-feature` for "<feature name>" — no feature plan exists.
-- [ ] **<Feature name>:** Run `build-feature` to complete criterion: "<criterion text>"
-- [ ] **<Feature name>:** Verify feature is actually complete, then update epic checkbox from `[ ]` to `[x]`.
+- [ ] **<Feature name>:** Run `plan-feature` for "<feature name>" — no feature plan exists. **Blocks: Feature 6.**
+- [ ] **<Feature name>:** Update epic checkbox from `[ ]` to `[x]` — all AC and tasks are complete.
+- [ ] **<Feature name>:** Tracking drift: verify which AC the completed tasks satisfy, then update the AC checklist. Run `build-feature` for any AC not yet satisfied.
 
 ### Medium Priority
 
-- [ ] **<Feature name>:** Complete definition of done items: <list unchecked items>
+- [ ] **<Feature name>:** Run `plan-feature` for "<feature name>" — no feature plan exists (no downstream dependents).
 - [ ] **Orphan:** Decide fate of `docs/features/NNN-<slug>.md` — add to epic or delete.
 
 ### Low Priority
@@ -164,7 +196,7 @@ Write the plan to `docs/epics/NNN-<slug>-gap-closure.md` using the structure bel
 4. ...
 ```
 
-### 6. Final response
+### 7. Final response
 
 Report:
 
@@ -182,11 +214,14 @@ When classifying gaps, use these mappings:
 |---------------|----------|----------------|
 | Feature plan missing, epic unchecked | `missing-plan` | Run `plan-feature` |
 | Feature plan missing, epic checked | `checkbox-mismatch` | Decision: verify if done, then fix |
-| Must-have criteria unchecked, epic checked | `checkbox-mismatch` | Run `build-feature` for remaining criteria |
+| Feature plan missing, blocks another feature | `missing-plan` + `blocks-dep` | Run `plan-feature` — escalate to high priority |
+| Must-have criteria unchecked, epic checked | `checkbox-mismatch` | Run `build-feature` for remaining criteria, then update checkbox |
 | Must-have criteria unchecked, epic unchecked | `unchecked-criteria` | Run `build-feature` |
-| Should-have criteria unchecked | `stale-tasks` (low) | Run `build-feature` if time permits |
-| Definition of done incomplete | `incomplete-dod` | Run `build-feature` or manual verification |
-| Task list stale | `stale-tasks` | Manual: refresh task list |
+| Tasks checked, AC unchecked | `tracking-drift` | Verify which AC are actually done, update checklist, build remainder |
+| Should-have criteria unchecked | low | Run `build-feature` if time permits |
+| Definition of done incomplete (isolated) | `incomplete-dod` | Manual verification per feature |
+| Definition of done incomplete (systemic: 3+ features) | `incomplete-dod` (systemic) | One DoD review session, not per-feature |
+| Task list stale (AC ahead of tasks) | `stale-tasks` | Manual: refresh task list |
 | Orphaned feature plan | `orphan-plan` | Decision: add to epic or delete |
 | Status field mismatch | `status-mismatch` | Manual: update status field |
 
