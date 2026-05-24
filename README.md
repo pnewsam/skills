@@ -10,6 +10,20 @@ Skills are installed by symlinking SKILL.md files into a directory the AI tool r
 
 Skills for product direction, planning, and quality.
 
+```mermaid
+flowchart TD
+    CC[create-charter] -->|produces docs/CHARTER.md| ED[explore-directions]
+    ED -->|produces docs/directions/| PE[plan-epic]
+    PE -->|produces docs/epics/| PF[plan-feature]
+    PF -->|produces docs/features/| BF[build-feature]
+    BF -->|validates with| VF[validate-feature]
+    PE --> AE[advance-epic]
+    AE -.->|orchestrates| PF
+    AE -.->|orchestrates| BF
+    AE2[audit-epic] -->|produces audit report| PEG[plan-epic-gaps]
+    PEG -.->|informs revisions to| PE
+```
+
 ### Direction
 
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
@@ -25,6 +39,11 @@ Skills for product direction, planning, and quality.
 
 ### Bug Bash
 
+```mermaid
+flowchart LR
+    PBB[plan-bug-bash] --> FBBI[fix-bug-bash-item]
+```
+
 | Skill                                                    | Type     | Mode        | Phase         | Description                                                                                                                    |
 | -------------------------------------------------------- | -------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | [plan-bug-bash](registry/plan-bug-bash/SKILL.md)         | workflow |             | analyze, plan | Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
@@ -33,6 +52,12 @@ Skills for product direction, planning, and quality.
 ## Design
 
 Skills for UI/UX, design systems, and visual polish.
+
+```mermaid
+flowchart LR
+    EDS[extract-design-system] -->|produces docs/design_system.md| DA[design-audit]
+    DA -->|finds deviations| DF[design-fix]
+```
 
 ### System
 
@@ -49,6 +74,13 @@ Skills for UI/UX, design systems, and visual polish.
 | [design-crit](registry/design-crit/SKILL.md) | workflow | divergence | analyze | Evaluate a UI view or page through multiple design lenses (polish, UX, hierarchy, composition, consistency). |
 
 ### Components
+
+```mermaid
+flowchart LR
+    ACS[audit-component-size] -->|finds large components| DC[decompose-component]
+    RC[redesign-component]
+    RS[redesign-screen]
+```
 
 | Skill                                                          | Type     | Mode        | Phase                  | Description                                                                                                                           |
 | -------------------------------------------------------------- | -------- | ----------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
@@ -72,6 +104,14 @@ Skills for UI/UX, design systems, and visual polish.
 Skills for code, architecture, testing, security, and delivery.
 
 ### Git Workflow
+
+```mermaid
+flowchart LR
+    PP[prepare-pr] -->|creates PR| RP[review-pr]
+    PP -->|creates PR| APR[assess-pr-risk]
+    RP --> RVP[revise-pr]
+    APR --> RVP
+```
 
 | Skill                                              | Type     | Mode        | Phase   | Description                                                                                                         |
 | -------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -112,6 +152,12 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 
 ### Security
 
+```mermaid
+flowchart LR
+    PVR[plan-vulnerability-remediation] --> RV[remediate-vulnerability]
+    PCSR[plan-code-scanning-remediation] --> RCS[remediate-code-scanning]
+```
+
 | Skill                                                                              | Type     | Mode        | Phase         | Description                                                                                                  |
 | ---------------------------------------------------------------------------------- | -------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------ |
 | [plan-vulnerability-remediation](registry/plan-vulnerability-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CVEs, Dependabot alerts, and audit findings, then group them into safe remediation PR plans.          |
@@ -120,6 +166,15 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 | [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md)               | workflow | convergence | execute       | Apply source code fixes for CodeQL/SAST alerts, verify the fix, and create or update a pull request.         |
 
 ### Testing
+
+```mermaid
+flowchart LR
+    SBT[setup-browser-testing] --> PBT[plan-browser-tests]
+    PBT --> ABT[add-browser-test]
+    ABT2[audit-browser-tests] --> FBT[fix-browser-test]
+    BF2[build-feature] --> VC[validate-changes]
+    BF2 --> VF2[validate-feature]
+```
 
 | Skill                                                                      | Type     | Mode        | Phase         | Description                                                                                                                                    |
 | -------------------------------------------------------------------------- | -------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
