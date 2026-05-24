@@ -1,6 +1,6 @@
 ---
 name: audit-epic
-description: audit an epic to find missing, incomplete, or inconsistent child features. reads the epic plan from docs/epics/NNN-*.md, checks each child feature's plan in docs/features/, cross-references checklist completion, and produces a structured report of gaps and undone work. use when assessing epic readiness, before a milestone, or when wondering "what's left to do on this epic?"
+description: audit an epic to find missing, incomplete, or inconsistent child features. reads the epic plan from docs/epics/NNN-*.md, checks each child feature's plan in docs/features/, cross-references checklist completion, and writes a structured audit report to docs/epics/NNN-<slug>-audit.md. use when assessing epic readiness, before a milestone, or when wondering "what's left to do on this epic?"
 ---
 
 # Audit Epic
@@ -127,7 +127,11 @@ Report these as orphans — they exist in the filesystem but are not tracked in 
 - The epic was updated and this feature was removed (stale file).
 - The feature was added but the epic was not updated (oversight).
 
-### 6. Produce the audit report
+### 6. Write the audit report
+
+Write the audit report to `docs/epics/NNN-<slug>-audit.md`. Use the epic's ID and slug from its filename (e.g., epic `docs/epics/001-user-platform.md` produces audit at `docs/epics/001-user-platform-audit.md`).
+
+If an audit file already exists for this epic, overwrite it — the new audit replaces the old one.
 
 Structure the report as follows:
 
@@ -206,11 +210,12 @@ Structure the report as follows:
 
 ### 7. Final response
 
-Deliver the report and highlight:
+Report:
 
+- The path to the audit report file.
 - The overall health assessment (healthy / caution / at-risk).
 - The highest-severity discrepancies that need attention.
-- Concrete next steps for each gap found.
+- Recommended next step: run `plan-epic-gaps` to create a closure plan for any gaps found.
 
 ## Health assessment criteria
 
