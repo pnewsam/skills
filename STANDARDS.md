@@ -41,3 +41,31 @@ Plan documents form a hierarchy: directions inform epics, epics contain features
 - **Temporary artifacts**: descriptive name in `docs/tmp/`.
 - **Skill files**: `SKILL.md` in `registry/<skill-name>/`.
 - **Skill references**: templates and other supporting files in `registry/<skill-name>/references/`.
+
+## Skill types
+
+Skills come in two types:
+
+| Workflow | Reference |
+| -------- | --------- |
+| Invoked to get something done. Have steps, produce artifacts or code changes, and operate within the phase framework. | Encode knowledge — principles, patterns, conventions, or domain expertise. Inform how work is done across phases rather than driving a specific workflow. |
+| Examples: `plan-browser-tests`, `remediate-vulnerability`, `prepare-pr` | Examples: `react-*` principles, `color-expert`, `emil-design-eng` |
+
+## Skill phases
+
+Workflow skills operate in three sequential phases:
+
+```mermaid
+flowchart LR
+    Analyze[Analyze<br/>Observe, measure, diagnose] -->|audit, critique, review| Plan[Plan<br/>Decide, propose, prioritize]
+    Plan -->|plan document| Execute[Execute<br/>Do the work]
+    Execute -->|code changes, PR| Analyze
+```
+
+| Phase | Description | Output |
+| ----- | ----------- | ------ |
+| **Analyze** | Observe, measure, diagnose. Understand the current state. | Audit, critique, or review. |
+| **Plan** | Decide, propose, prioritize, get buy-in. Chart the path forward. | Plan document. |
+| **Execute** | Do the work. Implement the plan. | Code changes, PRs. |
+
+Phases compose sequentially: analysis informs planning, planning guides execution, and execution feeds back into the next cycle of analysis. Some skills span multiple phases (e.g., the redesign skills analyze, propose, and implement in one pass). Others are phase-specific and chain together — `plan-browser-tests` produces a plan that `add-browser-test` executes, one item at a time.
