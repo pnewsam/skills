@@ -1,6 +1,6 @@
 ---
 name: build-feature
-description: implement one acceptance criterion or task from a feature plan produced by plan-feature. use when building a planned feature. reads docs/features/NNN-*.md, picks the next unchecked item, implements the code change, verifies it against the criterion, commits on a feature branch, and marks the item as complete in the plan. run repeatedly until the feature is complete. pairs with plan-feature.
+description: implement one acceptance criterion or task from a feature plan produced by plan-feature. use when building a planned feature. reads docs/features/NNN-*.md, picks the next unchecked item, implements the code change, verifies it against the criterion, commits on a feature branch, and marks the item as complete in the plan. run repeatedly until the feature is complete. when all items are done, invokes prepare-pr to push the branch to GitHub and open a pull request. pairs with plan-feature.
 ---
 
 # Build Feature
@@ -98,7 +98,7 @@ Scan the feature plan for checklist items (`- [ ]`). Pick the first one.
 If all items are checked:
 
 1. Report that the feature is complete.
-2. Recommend running `prepare-pr` to create a pull request.
+2. Invoke `prepare-pr` to push the feature branch to GitHub and open a pull request.
 3. Stop.
 
 If the plan does not contain checklists, treat each acceptance criterion as a single item and track progress in a "Progress" section at the bottom of the file.
@@ -231,7 +231,7 @@ Report:
 - How many items remain unchecked in the plan.
 - Recommended next steps:
   - If items remain: run `build-feature` again for the next item.
-  - If the feature is complete: run `validate-feature` for a comprehensive validation pass, then `prepare-pr`.
+  - If the feature is complete: run `validate-feature` for a comprehensive validation pass, then invoke `prepare-pr` to push the branch to GitHub and open a pull request.
   - If changes touched UI, routing, or shared components: consider running `validate-changes` for targeted regression testing.
 
 ## Handling common situations
