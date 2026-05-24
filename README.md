@@ -55,7 +55,7 @@ Skills for UI/UX, design systems, and visual polish.
 
 ```mermaid
 flowchart LR
-    EDS[extract-design-system] -->|produces docs/design_system.md| DA[design-audit]
+    EDS[extract-design-system] -->|produces docs/DESIGN_SYSTEM.md| DA[design-audit]
     DA -->|finds deviations| DF[design-fix]
 ```
 
@@ -63,7 +63,7 @@ flowchart LR
 
 | Skill                                                            | Type     | Mode        | Phase   | Description                                                                                                  |
 | ---------------------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------ |
-| [extract-design-system](registry/extract-design-system/SKILL.md) | workflow | divergence  | analyze | Extract the implicit design system from a codebase into a documented contract (`docs/design_system.md`).     |
+| [extract-design-system](registry/extract-design-system/SKILL.md) | workflow | divergence  | analyze | Extract the implicit design system from a codebase into a documented contract (`docs/DESIGN_SYSTEM.md`).     |
 | [design-audit](registry/design-audit/SKILL.md)                   | workflow | convergence | analyze | Scan pages or components against the design system contract and find deviations.                             |
 | [design-fix](registry/design-fix/SKILL.md)                       | workflow | convergence | execute | Fix design system deviations identified by design-audit — mechanical, batchable alignment work.              |
 

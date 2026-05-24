@@ -1,25 +1,25 @@
 ---
 name: design-audit
-description: scan pages or components against the project's design system contract (docs/design_system.md) and find deviations — wrong spacing values, inconsistent shadows, off-system colors, components that don't follow established patterns. use when you want to find and catalog UI inconsistencies for systematic cleanup. produces a structured audit artifact in docs/tmp/. pairs with design-fix for execution.
+description: scan pages or components against the project's design system contract (docs/DESIGN_SYSTEM.md) and find deviations — wrong spacing values, inconsistent shadows, off-system colors, components that don't follow established patterns. use when you want to find and catalog UI inconsistencies for systematic cleanup. produces a structured audit artifact in docs/tmp/. pairs with design-fix for execution.
 ---
 
 # Design Audit
 
 ## Overview
 
-The design system contract (`docs/design_system.md`) defines what the UI should look like. This skill scans the actual code and finds where it deviates. The output is a structured list of findings that design-fix can execute against, one item at a time.
+The design system contract (`docs/DESIGN_SYSTEM.md`) defines what the UI should look like. This skill scans the actual code and finds where it deviates. The output is a structured list of findings that design-fix can execute against, one item at a time.
 
 This is convergence work — the right answer already exists in the contract. The skill's job is to find where the code disagrees.
 
 ## Prerequisites
 
-A `docs/design_system.md` must exist. If it doesn't, run `extract-design-system` first.
+A `docs/DESIGN_SYSTEM.md` must exist. If it doesn't, run `extract-design-system` first.
 
 ## Workflow
 
 ### 1. Read the contract
 
-Read `docs/design_system.md` completely. Internalize the defined values:
+Read `docs/DESIGN_SYSTEM.md` completely. Internalize the defined values:
 - Spacing scale
 - Color palette and semantic roles
 - Typography scale and hierarchy
@@ -89,7 +89,7 @@ Produce `docs/tmp/design-audit-{scope}.md`:
 ```markdown
 # Design Audit: {scope}
 
-Audited against: docs/design_system.md
+Audited against: docs/DESIGN_SYSTEM.md
 Date: {date}
 Files scanned: {count}
 

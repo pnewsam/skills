@@ -1,6 +1,6 @@
 ---
 name: extract-design-system
-description: extract the implicit design system from a codebase into a documented contract (docs/design_system.md). use when starting design work on a project, when the design system has never been documented, or when you suspect the documented system has drifted from reality. reads the codebase to identify spacing scales, color tokens, typography, component patterns, and layout conventions, then produces a structured reference that convergence skills (design-audit, design-fix) can enforce against.
+description: extract the implicit design system from a codebase into a documented contract (docs/DESIGN_SYSTEM.md). use when starting design work on a project, when the design system has never been documented, or when you suspect the documented system has drifted from reality. reads the codebase to identify spacing scales, color tokens, typography, component patterns, and layout conventions, then produces a structured reference that convergence skills (design-audit, design-fix) can enforce against.
 ---
 
 # Extract Design System
@@ -9,7 +9,7 @@ description: extract the implicit design system from a codebase into a documente
 
 Every codebase has a design system — it's just not always written down. Spacing values cluster around certain numbers. Colors repeat. Typography follows a rough scale. Components share structural patterns. This skill reads the codebase to find those patterns and documents them as an explicit contract.
 
-The output (`docs/design_system.md`) becomes the reference that convergence skills enforce against. Without it, there's nothing to converge toward.
+The output (`docs/DESIGN_SYSTEM.md`) becomes the reference that convergence skills enforce against. Without it, there's nothing to converge toward.
 
 ## When to use
 
@@ -106,7 +106,7 @@ Document higher-level layout patterns:
 
 ### 7. Write the contract
 
-Produce `docs/design_system.md` with the following structure:
+Produce `docs/DESIGN_SYSTEM.md` with the following structure:
 
 ```markdown
 # Design System

@@ -12,7 +12,7 @@ This skill takes findings from a design-audit artifact and fixes them. Each fix 
 ## Prerequisites
 
 - A design audit artifact must exist in `docs/tmp/design-audit-*.md`
-- The design system contract (`docs/design_system.md`) must exist
+- The design system contract (`docs/DESIGN_SYSTEM.md`) must exist
 
 If neither exists, tell the user to run `extract-design-system` and then `design-audit` first.
 
@@ -80,7 +80,7 @@ After completing the batch, report:
 
 ### The audit finding is ambiguous
 
-If the expected value isn't clear from the audit, consult `docs/design_system.md` directly. If it's still ambiguous, skip the item and note it needs manual review.
+If the expected value isn't clear from the audit, consult `docs/DESIGN_SYSTEM.md` directly. If it's still ambiguous, skip the item and note it needs manual review.
 
 ### The fix would change visual behavior significantly
 
