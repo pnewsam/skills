@@ -111,6 +111,17 @@ Skills for code, architecture, testing, security, and delivery.
 | [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze | Review a pull request and post inline code review comments with an overall verdict.                                 |
 | [assess-pr-risk](registry/assess-pr-risk/SKILL.md) | workflow |             | analyze | Assess the risk level of a pull request across blast radius, security sensitivity, test coverage, and dependencies. |
 
+#### Core Language
+
+TypeScript and JavaScript best practices — reference skills that inform how code is written across the stack.
+
+| Skill                                                        | Type      | Description                                                                                                                  |
+| ------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| [functional-patterns](registry/functional-patterns/SKILL.md) | reference | Immutability, pure functions, array methods over imperative loops, composition over inheritance, avoiding side effects.      |
+| [typescript-types](registry/typescript-types/SKILL.md)       | reference | No `any`, discriminated unions, type narrowing, `satisfies`, branded types, deriving types from values.                      |
+| [error-handling](registry/error-handling/SKILL.md)           | reference | Error as values (Result types), typed errors, throw for exceptional cases only, catch at system boundaries.                  |
+| [async-patterns](registry/async-patterns/SKILL.md)           | reference | async/await over raw promises, `Promise.all` for concurrency, AbortController, race condition guards, limiting concurrency.  |
+
 #### React SPA
 
 | Skill                                                                | Type      | Description                                                                                                                                |
