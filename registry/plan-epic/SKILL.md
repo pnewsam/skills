@@ -1,6 +1,6 @@
 ---
 name: plan-epic
-description: create a structured epic plan that translates a product charter into a quarter-level initiative. use when breaking down CHARTER.md into actionable, time-bounded workstreams. produces a markdown epic document in docs/epics/ that features and projects will reference. enforces charter alignment via mandatory checks.
+description: create a structured epic plan that translates a product charter into a quarter-level initiative. use when breaking down docs/CHARTER.md into actionable, time-bounded workstreams. produces a markdown epic document in docs/epics/ that features and projects will reference. enforces charter alignment via mandatory checks.
 ---
 
 # Plan Epic
@@ -11,7 +11,7 @@ Translate a product charter (or a large strategic initiative) into a concrete ep
 
 An epic is the bridge between vision and execution. It answers: "What are we doing this quarter, why does it matter, and how will we know it worked?"
 
-Every epic must reference `CHARTER.md` and pass an alignment check. If no charter exists, stop and recommend `create-charter` first.
+Every epic must reference `docs/CHARTER.md` and pass an alignment check. If no charter exists, stop and recommend `create-charter` first.
 
 ## Goals
 
@@ -23,7 +23,7 @@ Every epic must reference `CHARTER.md` and pass an alignment check. If no charte
 ## Safety rules
 
 - Do not modify source code, configuration, or branches.
-- Do not create an epic without reading `CHARTER.md` first.
+- Do not create an epic without reading `docs/CHARTER.md` first.
 - Do not invent charter content — reference it by section.
 - Do not produce vague or unmeasurable success criteria.
 - Epics should represent 4–12 weeks of work. If the scope is smaller, recommend `plan-feature` instead.
@@ -33,7 +33,7 @@ Every epic must reference `CHARTER.md` and pass an alignment check. If no charte
 ### 1. Read the charter
 
 ```bash
-cat CHARTER.md 2>/dev/null || echo "CHARTER.md not found"
+cat docs/CHARTER.md 2>/dev/null || echo "docs/CHARTER.md not found"
 ```
 
 If no charter exists:
@@ -48,7 +48,25 @@ If a charter exists, read it fully. Note:
 - The guiding principles most relevant to this epic.
 - The non-goals that could constrain this epic's scope.
 
-### 2. Understand the initiative
+### 2. Check for direction documents
+
+This skill may be invoked after `explore-directions`, which produces options documents in `docs/directions/`. If direction documents exist, they contain the strategic reasoning that led to this epic — use them.
+
+```bash
+ls docs/directions/ 2>/dev/null
+```
+
+If direction documents exist:
+
+1. Read the most recent direction document(s).
+2. Check the "Decision log" table for a direction marked as **chosen**. If none is marked chosen, ask the user which direction they selected.
+3. Note the chosen direction's evidence, trade-offs, confidence, and rough size — these directly inform the epic's problem statement, scope, and risks.
+4. If the chosen direction says the charter needs a refresh, flag this. The epic may need to account for charter drift.
+5. If the chosen direction's next step is `plan-feature` (not `plan-epic`), confirm with the user that an epic-level plan is appropriate — the direction may have been sized smaller.
+
+If no direction documents exist, proceed to understand the initiative directly.
+
+### 3. Understand the initiative
 
 Ask the user to describe the initiative they want to epic-ize. Gather:
 
@@ -60,7 +78,7 @@ Ask the user to describe the initiative they want to epic-ize. Gather:
 
 If the user describes something that feels smaller than 4 weeks, recommend `plan-feature` instead.
 
-### 3. Explore existing plans
+### 4. Explore existing plans
 
 Check for prior epics to avoid duplication and understand current priorities:
 
@@ -74,11 +92,11 @@ Read any existing epics that seem related. Note:
 - Whether this initiative overlaps with or supersedes an existing epic.
 - Dependencies on work already in flight.
 
-### 4. Draft the epic
+### 5. Draft the epic
 
 Write the epic document using the template in `references/epic_template.md`. Store it at `docs/epics/NNN-epic-name.md` where `NNN` is a zero-padded number (e.g., `001`, `002`).
 
-### 5. Validate the epic
+### 6. Validate the epic
 
 Before finalizing, run these checks:
 
@@ -90,7 +108,7 @@ Before finalizing, run these checks:
 
 If any check fails, flag it to the user and propose a revision.
 
-### 6. Write the file
+### 7. Write the file
 
 ```bash
 mkdir -p docs/epics
@@ -104,7 +122,7 @@ ls docs/epics/ | grep -E '^[0-9]+' | sort | tail -1
 
 Write the finalized epic to `docs/epics/NNN-<slug>.md`.
 
-### 7. Final response
+### 8. Final response
 
 Report:
 
