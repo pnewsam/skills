@@ -4,36 +4,7 @@ Collected agent skills for Claude Code.
 
 Skills organize around two dimensions — **mode** (convergence vs divergence) and **phase** (analyze, plan, execute) — and come in two types: **workflow** and **reference**. See [PHILOSOPHY.md](PHILOSOPHY.md) for the full framework.
 
-## Installation
-
-```bash
-git clone https://github.com/paulnewsam/skills.git
-cd skills/cli
-go build -o skills-cli ./cmd/skills
-```
-
-## Usage
-
-```bash
-# Interactive — choose harnesses and skills via TUI
-./skills-cli
-
-# Install all skills to all harnesses
-./skills-cli install -a -y
-
-# Install to a specific harness
-./skills-cli install -t claude -y
-
-# Project install (copies into <cwd>/.claude/skills)
-./skills-cli install -p -y
-
-# Check what's installed
-./skills-cli status
-```
-
-Run `./skills-cli setup` to register `skills` as a global command in `~/.local/bin`. See [cli/README.md](cli/README.md) for full CLI documentation.
-
-Skills are installed by symlinking SKILL.md files into a directory the AI tool reads. See [MECHANICS.md](MECHANICS.md) for how lazy loading works, where to install (global vs project), and how skill groups are organized.
+Skills are installed by symlinking SKILL.md files into a directory the AI tool reads. See [cli/README.md](cli/README.md) for CLI installation, usage, and full documentation. See [MECHANICS.md](MECHANICS.md) for how lazy loading works, where to install (global vs project), and how skill groups are organized.
 
 ## Skills
 
