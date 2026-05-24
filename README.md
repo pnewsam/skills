@@ -6,13 +6,11 @@ Skills organize around two dimensions — **mode** (convergence vs divergence) a
 
 Skills are installed by symlinking SKILL.md files into a directory the AI tool reads. See [cli/README.md](cli/README.md) for CLI installation, usage, and full documentation. See [MECHANICS.md](MECHANICS.md) for how lazy loading works, where to install (global vs project), and how skill groups are organized.
 
-## Skills
-
-### Product
+## Product
 
 Skills for product direction, planning, and quality.
 
-#### Direction
+### Direction
 
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
 | ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -25,18 +23,18 @@ Skills for product direction, planning, and quality.
 | [audit-epic](registry/audit-epic/SKILL.md)             | workflow | convergence | analyze | Audit an epic to find missing, inconsistent, or incomplete child features — cross-references feature plans against the epic and reports gaps. |
 | [plan-epic-gaps](registry/plan-epic-gaps/SKILL.md)     | workflow | convergence | plan    | Create a prioritized plan to close gaps found by audit-epic — maps each gap to a concrete action and produces a structured punch list.        |
 
-#### Bug Bash
+### Bug Bash
 
 | Skill                                                    | Type     | Mode        | Phase         | Description                                                                                                                    |
 | -------------------------------------------------------- | -------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | [plan-bug-bash](registry/plan-bug-bash/SKILL.md)         | workflow |             | analyze, plan | Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
 | [fix-bug-bash-item](registry/fix-bug-bash-item/SKILL.md) | workflow | convergence | execute       | Execute one fix from a bug bash plan — investigate, apply a targeted fix, verify, commit, push, and open a PR.                 |
 
-### Design
+## Design
 
 Skills for UI/UX, design systems, and visual polish.
 
-#### System
+### System
 
 | Skill                                                            | Type     | Mode        | Phase   | Description                                                                                                  |
 | ---------------------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------ |
@@ -44,13 +42,13 @@ Skills for UI/UX, design systems, and visual polish.
 | [design-audit](registry/design-audit/SKILL.md)                   | workflow | convergence | analyze | Scan pages or components against the design system contract and find deviations.                             |
 | [design-fix](registry/design-fix/SKILL.md)                       | workflow | convergence | execute | Fix design system deviations identified by design-audit — mechanical, batchable alignment work.              |
 
-#### Critique
+### Critique
 
 | Skill                                        | Type     | Mode       | Phase   | Description                                                                                                  |
 | -------------------------------------------- | -------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------ |
 | [design-crit](registry/design-crit/SKILL.md) | workflow | divergence | analyze | Evaluate a UI view or page through multiple design lenses (polish, UX, hierarchy, composition, consistency). |
 
-#### Components
+### Components
 
 | Skill                                                          | Type     | Mode        | Phase                  | Description                                                                                                                           |
 | -------------------------------------------------------------- | -------- | ----------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
@@ -59,7 +57,7 @@ Skills for UI/UX, design systems, and visual polish.
 | [redesign-component](registry/redesign-component/SKILL.md)     | workflow | divergence  | analyze, plan, execute | Redesign a UI component that has outgrown its original layout — audit what it displays and does, then propose and implement a better layout. |
 | [redesign-screen](registry/redesign-screen/SKILL.md)           | workflow | divergence  | analyze, plan, execute | Redesign a screen or page that has become cluttered or poorly organized as features accumulated.                                      |
 
-#### References
+### References
 
 | Skill                                                | Type      | Description                                                                                                                                           | Origin                                                                                     |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -69,11 +67,11 @@ Skills for UI/UX, design systems, and visual polish.
 
 **References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
 
-### Engineering
+## Engineering
 
 Skills for code, architecture, testing, security, and delivery.
 
-#### Git Workflow
+### Git Workflow
 
 | Skill                                              | Type     | Mode        | Phase   | Description                                                                                                         |
 | -------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -84,7 +82,7 @@ Skills for code, architecture, testing, security, and delivery.
 | [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze | Review a pull request and post inline code review comments with an overall verdict.                                 |
 | [assess-pr-risk](registry/assess-pr-risk/SKILL.md) | workflow |             | analyze | Assess the risk level of a pull request across blast radius, security sensitivity, test coverage, and dependencies. |
 
-#### Core Language
+### Core Language
 
 TypeScript and JavaScript best practices — reference skills that inform how code is written across the stack.
 
@@ -95,7 +93,7 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 | [error-handling](registry/error-handling/SKILL.md)           | reference | Error as values (Result types), typed errors, throw for exceptional cases only, catch at system boundaries.                  |
 | [async-patterns](registry/async-patterns/SKILL.md)           | reference | async/await over raw promises, `Promise.all` for concurrency, AbortController, race condition guards, limiting concurrency.  |
 
-#### React SPA
+### React SPA
 
 | Skill                                                                | Type      | Description                                                                                                                                |
 | -------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -112,7 +110,7 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 | [react-accessibility](registry/react-accessibility/SKILL.md)         | reference | Semantic HTML first, keyboard navigation, ARIA patterns, focus management, accessible forms, live regions, color/contrast.                 |
 | [react-testing](registry/react-testing/SKILL.md)                     | reference | Integration tests for critical flows, unit tests for business logic, minimal component tests — test ROI over coverage percentage.          |
 
-#### Security
+### Security
 
 | Skill                                                                              | Type     | Mode        | Phase         | Description                                                                                                  |
 | ---------------------------------------------------------------------------------- | -------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -121,7 +119,7 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 | [plan-code-scanning-remediation](registry/plan-code-scanning-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CodeQL and SAST alerts, then group them into remediation PR plans.                                    |
 | [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md)               | workflow | convergence | execute       | Apply source code fixes for CodeQL/SAST alerts, verify the fix, and create or update a pull request.         |
 
-#### Testing
+### Testing
 
 | Skill                                                                      | Type     | Mode        | Phase         | Description                                                                                                                                    |
 | -------------------------------------------------------------------------- | -------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
