@@ -1,0 +1,3 @@
+interface:
+  display_name: "Python Typing & Data"
+  short_description: "Model Python data with clear types, schemas, and boundaries."

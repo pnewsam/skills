@@ -1,0 +1,3 @@
+interface:
+  display_name: "Python Database Patterns"
+  short_description: "Keep Python persistence, sessions, and migrations orderly."

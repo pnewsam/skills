@@ -1,0 +1,3 @@
+interface:
+  display_name: "Python Testing"
+  short_description: "Write and refactor focused pytest suites and fixtures."

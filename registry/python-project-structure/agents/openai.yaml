@@ -1,0 +1,3 @@
+interface:
+  display_name: "Python Project Structure"
+  short_description: "Organize Python packages, modules, entrypoints, and imports."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Python Error Handling"
+  short_description: "Model Python failures with clear exceptions and boundaries."

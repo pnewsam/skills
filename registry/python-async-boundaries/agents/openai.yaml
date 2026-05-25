@@ -1,0 +1,3 @@
+interface:
+  display_name: "Python Async Boundaries"
+  short_description: "Keep async Python and FastAPI concurrency boundaries clear."

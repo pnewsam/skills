@@ -113,7 +113,7 @@ Update a "Progress" section at the bottom of the epic if one exists:
 ## Progress
 
 | Feature | Status | Plan | PR / Commit |
-|---------|--------|------|-------------|
+| ------- | ------ | ---- | ----------- |
 | ...     | [x]    | ...  | ...         |
 ```
 

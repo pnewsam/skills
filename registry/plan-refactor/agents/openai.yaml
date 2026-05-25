@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plan Refactor"
+  short_description: "Plan incremental maintainability refactors across files and modules."
