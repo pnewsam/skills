@@ -14,7 +14,7 @@ This skill takes findings from a design-audit artifact and fixes them. Each fix 
 - A design audit artifact must exist in `docs/tmp/design-audit-*.md`
 - The design system contract (`docs/DESIGN_SYSTEM.md`) must exist
 
-If neither exists, tell the user to run `extract-design-system` and then `design-audit` first.
+If neither exists, tell the user to run `create-design-system` and then `design-audit` first.
 
 ## Workflow
 

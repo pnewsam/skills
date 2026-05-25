@@ -179,7 +179,7 @@ Say so. A short report with 1-2 minor findings is an honest result.
 
 ### The finding is a design system gap
 
-If components consistently use a value that's wrong because the design system doesn't define it, flag as a system-level gap. Recommend `extract-design-system`.
+If components consistently use a value that's wrong because the design system doesn't define it, flag as a system-level gap. Recommend `create-design-system`.
 
 ### A finding crosses into structural territory
 

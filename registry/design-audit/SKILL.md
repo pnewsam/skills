@@ -13,7 +13,7 @@ This is convergence work — the right answer already exists in the contract. Th
 
 ## Prerequisites
 
-A `docs/DESIGN_SYSTEM.md` must exist. If it doesn't, run `extract-design-system` first.
+A `docs/DESIGN_SYSTEM.md` must exist. If it doesn't, run `create-design-system` first.
 
 ## Workflow
 
@@ -130,7 +130,7 @@ After writing the artifact, present the summary to the user:
 
 ## Key principles
 
-- **Only flag deviations from the contract.** Personal aesthetic preferences are not findings. If the design system says cards use `rounded-lg` and a card uses `rounded-lg`, that's not a finding even if you think `rounded-xl` would look better. That's divergence work (design-crit), not convergence work.
+- **Only flag deviations from the contract.** Personal aesthetic preferences are not findings. If the design system says cards use `rounded-lg` and a card uses `rounded-lg`, that's not a finding even if you think `rounded-xl` would look better. That's divergence work (design-review), not convergence work.
 - **Be precise about the expected value.** "Should use consistent spacing" is not a finding. "Should use `gap-4` (16px) to match the card grid pattern documented in the design system" is a finding.
 - **Don't flag intentional variations.** Some components legitimately need different values (a compact table row vs. a spacious card). If the design system documents these variations, they're not deviations. If it doesn't, flag them as inconsistencies (lowest severity) rather than violations.
 - **Batch similar findings.** If 12 components all use `#6366f1` instead of the primary token, that's one finding with 12 locations — not 12 separate findings.
@@ -139,11 +139,11 @@ After writing the artifact, present the summary to the user:
 
 ### No design system contract exists
 
-Tell the user and recommend running `extract-design-system` first. Do not audit against an imagined standard.
+Tell the user and recommend running `create-design-system` first. Do not audit against an imagined standard.
 
 ### The contract itself is incomplete
 
-Audit against what's documented. Note sections where the contract is silent and findings are ambiguous. Recommend updating the contract via `extract-design-system` to cover the gaps.
+Audit against what's documented. Note sections where the contract is silent and findings are ambiguous. Recommend updating the contract via `create-design-system` to cover the gaps.
 
 ### Too many findings
 

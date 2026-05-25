@@ -55,21 +55,21 @@ Skills for UI/UX, design systems, and visual polish.
 
 ```mermaid
 flowchart LR
-    EDS[extract-design-system] -->|produces docs/DESIGN_SYSTEM.md| DA[design-audit]
+    CDS[create-design-system] -->|produces docs/DESIGN_SYSTEM.md| DA[design-audit]
     DA --> PDF[plan-design-fixes]
     DP[design-polish] --> PDF
-    DC[design-crit] --> PDF
+    DR[design-review] --> PDF
     PDF -->|routes to| DF[design-fix]
     PDF -->|routes to| RC[redesign-component]
     PDF -->|routes to| RS[redesign-screen]
-    PDF -->|routes to| EDS
+    PDF -->|routes to| CDS
 ```
 
 ### System
 
 | Skill                                                            | Type     | Mode        | Phase   | Description                                                                                                  |
 | ---------------------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------ |
-| [extract-design-system](registry/extract-design-system/SKILL.md) | workflow | divergence  | analyze | Extract the implicit design system from a codebase into a documented contract (`docs/DESIGN_SYSTEM.md`).     |
+| [create-design-system](registry/create-design-system/SKILL.md) | workflow | divergence  | analyze, plan | Create a documented design system contract — derives from existing codebase patterns when present, proposes fresh when greenfield.     |
 | [design-audit](registry/design-audit/SKILL.md)                   | workflow | convergence | analyze | Scan pages or components against the design system contract and find deviations.                             |
 | [design-fix](registry/design-fix/SKILL.md)                       | workflow | convergence | execute | Fix design system deviations identified by design-audit — mechanical, batchable alignment work.              |
 
@@ -78,8 +78,8 @@ flowchart LR
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                         |
 | ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | [design-polish](registry/design-polish/SKILL.md)       | workflow | convergence | analyze | Evaluate a UI at the component level for visual polish — spacing, alignment, typography, color, and pixel-level issues.             |
-| [design-crit](registry/design-review/SKILL.md)         | workflow | divergence  | analyze | Evaluate a UI at the page/app level for structural UX quality — information hierarchy, navigation, content prioritization, and page structure. |
-| [plan-design-fixes](registry/plan-design-fixes/SKILL.md) | workflow | convergence | plan    | Create a prioritized, sequenced punch list from design-polish, design-crit, or design-audit findings — triages each item and routes it to the right execution path. |
+| [design-review](registry/design-review/SKILL.md)       | workflow | divergence  | analyze | Evaluate a UI at the page/app level for structural UX quality — information hierarchy, navigation, content prioritization, and page structure. |
+| [plan-design-fixes](registry/plan-design-fixes/SKILL.md) | workflow | convergence | plan    | Create a prioritized, sequenced punch list from design-polish, design-review, or design-audit findings — triages each item and routes it to the right execution path. |
 
 ### Components
 

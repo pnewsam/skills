@@ -1,19 +1,19 @@
 ---
 name: plan-design-fixes
-description: create a prioritized, sequenced punch list from design findings produced by design-polish, design-crit, or design-audit. triages each finding by effort and type, routes it to the right execution path, and produces a structured plan. use after running any design analysis skill when there are enough findings to warrant a plan before execution. pairs with design-fix, redesign-component, and redesign-screen for execution.
+description: create a prioritized, sequenced punch list from design findings produced by design-polish, design-review, or design-audit. triages each finding by effort and type, routes it to the right execution path, and produces a structured plan. use after running any design analysis skill when there are enough findings to warrant a plan before execution. pairs with design-fix, redesign-component, and redesign-screen for execution.
 ---
 
 # Plan Design Fixes
 
 ## Overview
 
-Take a design artifact — from design-polish, design-crit, or design-audit — and transform it into a prioritized, sequenced plan of discrete work items. Each item is routed to the appropriate execution path based on effort and type.
+Take a design artifact — from design-polish, design-review, or design-audit — and transform it into a prioritized, sequenced plan of discrete work items. Each item is routed to the appropriate execution path based on effort and type.
 
 This skill plans the work only. It does not edit source code.
 
 ## When to use
 
-- After running design-polish, design-crit, or design-audit and the artifact has more than a handful of findings
+- After running design-polish, design-review, or design-audit and the artifact has more than a handful of findings
 - When findings span multiple effort levels and execution paths — you need a plan before diving in
 - When you want to sequence work to avoid conflicts (fix spacing before restructuring a component)
 - When you want to batch similar fixes together for efficiency
@@ -25,7 +25,7 @@ Skip this skill when the artifact has only 2-3 trivial fixes — just apply them
 Read the design artifact. Look for the most recent file matching one of these patterns:
 
 - `docs/tmp/design-polish-*.md`
-- `docs/tmp/design-crit-*.md`
+- `docs/tmp/design-review-*.md`
 - `docs/tmp/design-audit-*.md`
 
 If multiple artifacts exist, ask the user which to plan from. If the user specifies a target name, use that one.
@@ -66,7 +66,7 @@ For each finding, determine the execution path:
 | Quick fix | Known deviation from design system contract | `design-fix` |
 | Moderate | Component-level rework (new layout, split, restructure) | `redesign-component` |
 | Structural | Page-level restructure (reorder sections, change navigation) | `redesign-screen` |
-| System gap | Missing design tokens, no defined pattern | `extract-design-system` |
+| System gap | Missing design tokens, no defined pattern | `create-design-system` |
 
 Classification rules:
 
@@ -74,7 +74,7 @@ Classification rules:
 - **design-fix**: the finding is a mechanical deviation from a documented design system contract where the correct value is known.
 - **redesign-component**: the component has accumulated too many responsibilities or its layout no longer fits. The fix requires rethinking the component, not tweaking a value.
 - **redesign-screen**: the page structure, section ordering, or navigation needs rethinking. Multiple components may be affected.
-- **extract-design-system**: the finding reveals a gap in the design system itself — no defined token, scale, or pattern exists, so individual fixes would be arbitrary.
+- **create-design-system**: the finding reveals a gap in the design system itself — no defined token, scale, or pattern exists, so individual fixes would be arbitrary.
 
 For findings that could go either way (e.g., a component-level spacing issue that might indicate a deeper layout problem), classify conservatively (start with quick fix) and add a note to escalate if the quick fix doesn't resolve it.
 
@@ -105,7 +105,7 @@ Create `docs/tmp/design-fixes-{target}.md`:
 
 ## Metadata
 
-- Source: {design-polish | design-crit | design-audit}
+- Source: {design-polish | design-review | design-audit}
 - Source artifact: {path to the artifact this plan was built from}
 - Date planned: {date}
 - Total items: {count}
@@ -130,7 +130,7 @@ Create `docs/tmp/design-fixes-{target}.md`:
   - {file path}
 - Finding: {what's wrong, from the source artifact}
 - Fix: {what to do, from the source artifact's recommendation}
-- Execution path: {direct-fix | design-fix | redesign-component | redesign-screen | extract-design-system}
+- Execution path: {direct-fix | design-fix | redesign-component | redesign-screen | create-design-system}
 - Notes: {dependencies, warnings, or escalation conditions}
 
 ## Resolved
@@ -167,7 +167,7 @@ After planning, items are ready for execution. The execution path determines wha
 - **design-fix**: invoke `design-fix` to mechanically apply the known correction.
 - **redesign-component**: invoke `redesign-component` for component-level rework.
 - **redesign-screen**: invoke `redesign-screen` for page-level restructure.
-- **extract-design-system**: invoke `extract-design-system` to fill the design system gap.
+- **create-design-system**: invoke `create-design-system` to fill the design system gap.
 
 Direct fixes should be done first (they're quick and reduce noise), followed by mechanical batches, then component/page rework.
 
