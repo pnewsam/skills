@@ -174,6 +174,7 @@ flowchart LR
 
 | Skill                                                                                  | Type      | Description                                                                                                                           |
 | -------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| [python-tooling](registry/python-tooling/SKILL.md)                                     | reference | Preferred Python tooling stack — uv for package management, ruff for linting/formatting, mypy for type checking, pytest, pre-commit, and just. |
 | [python-project-structure](registry/python-project-structure/SKILL.md)                 | reference | Organize Python packages, modules, entrypoints, configuration, imports, scripts, services, utilities, and tests.                       |
 | [python-testing](registry/python-testing/SKILL.md)                                     | reference | Pytest suites, fixtures, dependency overrides, async tests, mocks, factories, integration tests, and regression coverage.              |
 | [python-typing-data-modeling](registry/python-typing-data-modeling/SKILL.md)           | reference | Type hints, Pydantic models, dataclasses, DTOs, `TypedDict`, `Protocol`, validation boundaries, and serialization.                     |
