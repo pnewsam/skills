@@ -1,0 +1,3 @@
+interface:
+  display_name: "Validate Changes"
+  short_description: "Run targeted validation from a diff."

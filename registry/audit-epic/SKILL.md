@@ -1,6 +1,6 @@
 ---
 name: audit-epic
-description: audit an epic to find missing, incomplete, or inconsistent child features. reads the epic plan from docs/epics/NNN-*.md, checks each child feature's plan in docs/features/, cross-references checklist completion, and writes a structured audit report to docs/epics/NNN-<slug>-audit.md. use when assessing epic readiness, before a milestone, or when wondering "what's left to do on this epic?"
+description: audit an epic to find missing, incomplete, or inconsistent child features. reads the epic plan from docs/epics/NNN-*.md, checks each child feature's plan in docs/features/, cross-references checklist completion, and writes a structured audit report such as docs/epics/NNN-slug-audit.md. use when assessing epic readiness, before a milestone, or when wondering "what's left to do on this epic?"
 ---
 
 # Audit Epic

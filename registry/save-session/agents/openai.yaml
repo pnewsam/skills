@@ -1,0 +1,3 @@
+interface:
+  display_name: "Save Session"
+  short_description: "Save a concise working-session summary."

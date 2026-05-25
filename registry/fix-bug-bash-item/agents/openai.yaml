@@ -1,0 +1,3 @@
+interface:
+  display_name: "Fix Bug Bash Item"
+  short_description: "Fix one issue from a bug bash plan."

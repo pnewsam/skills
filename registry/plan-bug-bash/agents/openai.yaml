@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plan Bug Bash"
+  short_description: "Turn bug notes into a fix plan."

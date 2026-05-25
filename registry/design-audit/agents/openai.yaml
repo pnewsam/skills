@@ -1,0 +1,3 @@
+interface:
+  display_name: "Design Audit"
+  short_description: "Find deviations from a design system."

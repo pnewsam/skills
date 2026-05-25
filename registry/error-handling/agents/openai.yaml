@@ -1,0 +1,3 @@
+interface:
+  display_name: "Error Handling"
+  short_description: "Model JavaScript and TypeScript errors."

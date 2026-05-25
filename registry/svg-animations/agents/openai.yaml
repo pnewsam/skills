@@ -1,0 +1,3 @@
+interface:
+  display_name: "SVG Animations"
+  short_description: "Create performant SVG animations."

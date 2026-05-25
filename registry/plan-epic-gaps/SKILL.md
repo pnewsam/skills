@@ -1,6 +1,6 @@
 ---
 name: plan-epic-gaps
-description: create a prioritized plan to close gaps found by audit-epic. reads the audit report from docs/epics/NNN-<slug>-audit.md, maps each gap to a concrete action, prioritizes by severity and dependency order, and writes a structured gap-closure plan. use after audit-epic to turn findings into an actionable punch list. pairs with audit-epic.
+description: create a prioritized plan to close gaps found by audit-epic. reads the audit report from docs/epics/NNN-slug-audit.md, maps each gap to a concrete action, prioritizes by severity and dependency order, and writes a structured gap-closure plan. use after audit-epic to turn findings into an actionable punch list. pairs with audit-epic.
 ---
 
 # Plan Epic Gaps

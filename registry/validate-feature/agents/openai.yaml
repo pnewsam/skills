@@ -1,0 +1,3 @@
+interface:
+  display_name: "Validate Feature"
+  short_description: "Validate a completed feature end to end."

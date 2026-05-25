@@ -1,0 +1,3 @@
+interface:
+  display_name: "Audit Component Size"
+  short_description: "Find oversized React components."

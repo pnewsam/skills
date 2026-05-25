@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plan Epic"
+  short_description: "Create a structured product epic."

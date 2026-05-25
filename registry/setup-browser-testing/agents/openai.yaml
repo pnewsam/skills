@@ -1,0 +1,3 @@
+interface:
+  display_name: "Setup Browser Testing"
+  short_description: "Set up browser testing infrastructure."

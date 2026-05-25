@@ -1,0 +1,3 @@
+interface:
+  display_name: "Audit Browser Tests"
+  short_description: "Audit browser tests for gaps and flakes."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Fix Browser Test"
+  short_description: "Repair a broken or flaky browser test."

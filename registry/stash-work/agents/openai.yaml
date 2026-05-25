@@ -1,0 +1,3 @@
+interface:
+  display_name: "Stash Work"
+  short_description: "Save WIP on a local branch."

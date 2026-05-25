@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plan Browser Tests"
+  short_description: "Plan critical browser test coverage."

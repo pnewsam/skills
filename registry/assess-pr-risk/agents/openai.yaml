@@ -1,0 +1,3 @@
+interface:
+  display_name: "Assess PR Risk"
+  short_description: "Rate PR risk across key dimensions."
