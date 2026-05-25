@@ -69,9 +69,10 @@ flowchart LR
 
 ### Critique
 
-| Skill                                        | Type     | Mode       | Phase   | Description                                                                                                  |
-| -------------------------------------------- | -------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------ |
-| [design-crit](registry/design-crit/SKILL.md) | workflow | divergence | analyze | Evaluate a UI view or page through multiple design lenses (polish, UX, hierarchy, composition, consistency). |
+| Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                         |
+| ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [design-polish](registry/design-polish/SKILL.md)       | workflow | convergence | analyze | Evaluate a UI at the component level for visual polish — spacing, alignment, typography, color, and pixel-level issues.             |
+| [design-crit](registry/design-review/SKILL.md)         | workflow | divergence  | analyze | Evaluate a UI at the page/app level for structural UX quality — information hierarchy, navigation, content prioritization, and page structure. |
 
 ### Components
 
