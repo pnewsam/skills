@@ -218,3 +218,4 @@ flowchart LR
 | [agent-skills](https://github.com/addyosmani/agent-skills)                     | addyosmani |
 | [skills](https://github.com/mattpocock/skills)                                 | mattpocock |
 | [gstack](https://github.com/garrytan/gstack)                                   | garrytan   |
+| [eng-practices](https://github.com/google/eng-practices)                       | google     |
