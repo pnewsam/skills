@@ -133,6 +133,18 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 | [error-handling](registry/error-handling/SKILL.md)           | reference | Error as values (Result types), typed errors, throw for exceptional cases only, catch at system boundaries.                  |
 | [async-patterns](registry/async-patterns/SKILL.md)           | reference | async/await over raw promises, `Promise.all` for concurrency, AbortController, race condition guards, limiting concurrency.  |
 
+### Refactoring
+
+```mermaid
+flowchart LR
+    PR[plan-refactor] --> AR[apply-refactor]
+```
+
+| Skill                                                | Type     | Mode        | Phase   | Description                                                                                                                   |
+| ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [plan-refactor](registry/plan-refactor/SKILL.md)     | workflow | convergence | plan    | Create a structured maintainability refactor plan for large, tangled, poorly organized, or hard-to-navigate code.             |
+| [apply-refactor](registry/apply-refactor/SKILL.md)   | workflow | convergence | execute | Implement the next unchecked task from a refactor plan — one behavior-preserving split, move, extraction, or cleanup at a time. |
+
 ### React SPA
 
 | Skill                                                                | Type      | Description                                                                                                                                |
@@ -149,6 +161,18 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 | [react-error-handling](registry/react-error-handling/SKILL.md)       | reference | Error Boundaries at feature boundaries, Suspense for loading states, fallback UI design, route-level error handling.                       |
 | [react-accessibility](registry/react-accessibility/SKILL.md)         | reference | Semantic HTML first, keyboard navigation, ARIA patterns, focus management, accessible forms, live regions, color/contrast.                 |
 | [react-testing](registry/react-testing/SKILL.md)                     | reference | Integration tests for critical flows, unit tests for business logic, minimal component tests — test ROI over coverage percentage.          |
+
+### Python And FastAPI
+
+| Skill                                                                                  | Type      | Description                                                                                                                           |
+| -------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| [python-project-structure](registry/python-project-structure/SKILL.md)                 | reference | Organize Python packages, modules, entrypoints, configuration, imports, scripts, services, utilities, and tests.                       |
+| [python-testing](registry/python-testing/SKILL.md)                                     | reference | Pytest suites, fixtures, dependency overrides, async tests, mocks, factories, integration tests, and regression coverage.              |
+| [python-typing-data-modeling](registry/python-typing-data-modeling/SKILL.md)           | reference | Type hints, Pydantic models, dataclasses, DTOs, `TypedDict`, `Protocol`, validation boundaries, and serialization.                     |
+| [python-async-boundaries](registry/python-async-boundaries/SKILL.md)                   | reference | Async boundaries, FastAPI handlers, async database access, background tasks, cancellations, timeouts, and blocking-call risks.         |
+| [python-error-handling](registry/python-error-handling/SKILL.md)                       | reference | Python exceptions, domain errors, API/CLI/job boundary translation, logging, retries, validation failures, and rollback behavior.      |
+| [python-database-patterns](registry/python-database-patterns/SKILL.md)                 | reference | SQLAlchemy models, sessions, transactions, repositories, migrations, query boundaries, async database access, fixtures, and tests.     |
+| [fastapi-architecture](registry/fastapi-architecture/SKILL.md)                         | reference | FastAPI project structure, thin routers, Pydantic schemas, dependency injection, service boundaries, settings, errors, and tests.      |
 
 ### Security
 
