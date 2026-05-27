@@ -4,7 +4,7 @@ Collected agent skills for Claude Code.
 
 Skills organize around two dimensions — **mode** (convergence vs divergence) and **phase** (analyze, plan, execute) — and come in two types: **workflow** and **reference**. See [PHILOSOPHY.md](PHILOSOPHY.md) for the full framework.
 
-Skills are installed by symlinking SKILL.md files into a directory the AI tool reads. See [cli/README.md](cli/README.md) for CLI installation, usage, and full documentation. See [MECHANICS.md](MECHANICS.md) for how lazy loading works, where to install (global vs project), and how skill groups are organized.
+Skills are installed by symlinking SKILL.md files into a directory the AI tool reads. See [cli/README.md](cli/README.md) for CLI installation, usage, and full documentation. See [AUTHORING.md](AUTHORING.md) for how lazy loading works, where to install (global vs project), skill groups, and how to write effective skills.
 
 ## Product
 
@@ -105,6 +105,17 @@ flowchart LR
 | [color-expert](registry/color-expert/SKILL.md)       | reference | Color science expert — color theory, accessibility standards, palette generation, and practical color tools.                                          | [meodai](https://github.com/meodai/skill.color-expert)                                     |
 | [emil-design-eng](registry/emil-design-eng/SKILL.md) | reference | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great.                | [emilkowalski](https://github.com/emilkowalski/skill)                                      |
 | [email-design-expert](registry/email-design-expert/SKILL.md) | reference | Design polished, premium HTML emails with real email-client constraints — transactional, digest, product update, and lifecycle emails.            |
+
+### UI Patterns
+
+Reference skills for selecting the right UI patterns based on data density, task complexity, and user goals. Each covers a distinct decision domain — invoke individually as the relevant question arises.
+
+| Skill                                                | Type      | Description                                                                                                                                           |
+| ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [ui-patterns](registry/ui-patterns/SKILL.md)         | reference | Data display patterns — tables vs cards vs lists, pagination, search/filter placement, detail views, navigation, tabs vs accordions, content organization. |
+| [ui-forms](registry/ui-forms/SKILL.md)               | reference | Form patterns — container selection (modal vs drawer vs page), field type heuristics, wizard design, settings page organization.                      |
+| [ui-feedback](registry/ui-feedback/SKILL.md)         | reference | Feedback patterns — empty states, loading states (skeleton vs spinner vs optimistic), error handling, toast vs banner vs modal alerts, confirmation vs undo. |
+| [ui-actions](registry/ui-actions/SKILL.md)           | reference | Action affordances — row actions (inline vs overflow), bulk operations, hover vs static visibility, keyboard shortcuts, drag-and-drop, mobile touch adaptations. |
 
 **References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
 
