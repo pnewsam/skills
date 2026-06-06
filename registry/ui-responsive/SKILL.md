@@ -309,6 +309,9 @@ Images should serve appropriate resolutions for the device:
 - Don't serve a 2400px-wide image to a 375px-wide phone. Use `srcset`.
 - Use `loading="lazy"` for images below the fold.
 - Always specify `width` and `height` attributes (or use aspect-ratio CSS) to prevent layout shift as images load.
+- Define an intended aspect ratio and `object-fit` behavior for every image slot. Unconstrained images should not resize cards, rows, or page sections.
+- For text over images, use a scrim, gradient, or solid backing so contrast survives light, dark, and busy images.
+- Treat user-uploaded images as hostile to layout: handle odd aspect ratios, transparent backgrounds, tiny files, missing images, and low-contrast content.
 
 ---
 

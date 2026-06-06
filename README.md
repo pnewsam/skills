@@ -128,6 +128,7 @@ flowchart LR
     UX --> S[ui-spacing]
     UX --> T[ui-typography]
     UX --> CL[ui-color]
+    UX --> D[ui-depth]
     UX --> R[ui-responsive]
     UX --> I[ui-icons]
     UX --> DV[ui-data-viz]
@@ -136,7 +137,7 @@ flowchart LR
 
 | Skill                                                | Type      | Description                                                                                                                                           |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ui-expert](registry/ui-expert/SKILL.md)             | reference | Router for broad UI work — coordinates the focused `ui-*` skills and prevents overlap across layout, patterns, forms, actions, states, and visual system decisions. |
+| [ui-expert](registry/ui-expert/SKILL.md)             | reference | Router for broad UI work — coordinates the focused `ui-*` skills and prevents overlap across layout, patterns, forms, actions, states, surfaces, and visual system decisions. |
 | [ui-layouts](registry/ui-layouts/SKILL.md)           | reference | Page-level layout patterns — app shell, page chrome, content zoning, standard page archetypes, scroll behavior, and responsive layout adaptation.      |
 | [ui-patterns](registry/ui-patterns/SKILL.md)         | reference | Data display patterns — tables vs cards vs lists, pagination, search/filter placement, detail views, navigation, tabs vs accordions, content organization. |
 | [ui-forms](registry/ui-forms/SKILL.md)               | reference | Form patterns — container selection (modal vs drawer vs page), field type heuristics, wizard design, settings page organization.                      |
@@ -147,6 +148,7 @@ flowchart LR
 | [ui-spacing](registry/ui-spacing/SKILL.md)           | reference | Spacing and proximity — spacing scale, density, negative space, rhythm, and context-specific spacing for forms, tables, cards, lists, and pages.      |
 | [ui-typography](registry/ui-typography/SKILL.md)     | reference | Typography — type scales, font choices, line length, heading hierarchy, contrast, numeric figures, and context-specific text treatment.               |
 | [ui-color](registry/ui-color/SKILL.md)               | reference | Color systems — palettes, semantic tokens, neutral scales, dark mode, contrast, status colors, and brand color selection.                              |
+| [ui-depth](registry/ui-depth/SKILL.md)               | reference | Depth and media treatment — elevation, shadows, layered surfaces, overlays, inset controls, image crops, text over images, and user-uploaded media.    |
 | [ui-responsive](registry/ui-responsive/SKILL.md)     | reference | Responsive design — breakpoints, stack/reduce/reorganize/off-canvas patterns, touch targets, navigation adaptation, images, and testing widths.       |
 | [ui-icons](registry/ui-icons/SKILL.md)               | reference | Icon usage — when to use icons, label pairing, sizing, accessible icon buttons, library selection, consistency, color, and animation.                 |
 | [ui-data-viz](registry/ui-data-viz/SKILL.md)         | reference | Data visualization — chart type selection, number-vs-chart decisions, dashboard cards, data-ink ratio, chart color, and time-series guidance.         |

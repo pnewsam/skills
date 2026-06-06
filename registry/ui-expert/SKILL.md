@@ -1,6 +1,6 @@
 ---
 name: ui-expert
-description: Route broad UI, UX, page design, interaction, responsive, visual hierarchy, and frontend product-interface requests to the right ui-* skills. Use when designing or reviewing a full screen, page, app flow, design system decision, or when the needed UI skill is unclear. Coordinates ui-layouts, ui-patterns, ui-forms, ui-actions, ui-feedback, ui-content, ui-visual-hierarchy, ui-spacing, ui-typography, ui-color, ui-responsive, ui-icons, ui-data-viz, and ui-onboarding while avoiding overlap.
+description: Route broad UI, UX, page design, interaction, responsive, visual hierarchy, and frontend product-interface requests to the right ui-* skills. Use when designing or reviewing a full screen, page, app flow, design system decision, or when the needed UI skill is unclear. Coordinates ui-layouts, ui-patterns, ui-forms, ui-actions, ui-feedback, ui-content, ui-visual-hierarchy, ui-spacing, ui-typography, ui-color, ui-depth, ui-responsive, ui-icons, ui-data-viz, and ui-onboarding while avoiding overlap.
 ---
 
 # UI Expert - Skill Router
@@ -33,6 +33,7 @@ Load the smallest set of focused skills that covers the task.
 | Gaps, padding, density, proximity, rhythm | `ui-spacing` | `ui-layouts`, `ui-visual-hierarchy` |
 | Font sizes, heading hierarchy, readability, line length | `ui-typography` | `ui-visual-hierarchy`, `ui-spacing` |
 | Palette, semantic tokens, dark mode, contrast, status colors | `ui-color` | `ui-feedback`, `ui-visual-hierarchy` |
+| Surfaces, shadows, elevation, overlays, image crops, text over images | `ui-depth` | `ui-color`, `ui-spacing`, `ui-visual-hierarchy` |
 | Mobile/tablet adaptation, breakpoints, touch targets, responsive nav | `ui-responsive` | `ui-layouts`, `ui-actions` |
 | Icon selection, icon-only buttons, icon library consistency | `ui-icons` | `ui-actions`, `ui-content` |
 | Charts, metrics, dashboards, choosing chart type vs number | `ui-data-viz` | `ui-layouts`, `ui-color` |
@@ -54,6 +55,7 @@ Use these boundaries to prevent conflicting advice:
 - `ui-content` owns words: labels, messages, helper text, terminology, tone.
 - `ui-visual-hierarchy` owns importance: what dominates, what recedes, scanning path, chunking.
 - `ui-spacing`, `ui-typography`, and `ui-color` own the visual system details.
+- `ui-depth` owns surfaces, shadows, elevation, overlays, and image treatment.
 - `ui-responsive` owns adaptation across viewport and input mode.
 - `ui-icons` owns icon semantics, consistency, and icon-only accessibility.
 - `ui-data-viz` owns quantitative presentation and chart selection.
@@ -67,14 +69,16 @@ When two skills overlap, decide by asking: "Is this about where the thing lives,
 
 When generating UI, follow this order before writing code:
 
-1. **Name the user goal.** What is the primary job this screen or flow must support?
-2. **Choose the page archetype.** Use `ui-layouts`: list/index, detail, form, dashboard, settings, marketing, utility.
-3. **Inventory content and actions.** Separate primary content, secondary content, primary actions, secondary actions, and system states.
-4. **Pick inner patterns.** Use `ui-patterns`, `ui-forms`, `ui-actions`, `ui-feedback`, or `ui-data-viz` for the dominant interaction.
-5. **Establish hierarchy.** Use `ui-visual-hierarchy`: one primary focal point per context, clear secondary/tertiary treatment.
-6. **Apply visual system rules.** Use spacing, typography, color, icons, and responsive guidance. Prefer the project's existing design system when present.
-7. **Check state coverage.** Include empty, loading, error, success, disabled, focus, hover, and mobile/touch states when relevant.
-8. **Verify ergonomics.** The page should be understandable above the fold, navigable by keyboard, readable on mobile, and free of decorative or explanatory filler.
+1. **Name the concrete feature.** Start with the user-facing functionality, not app chrome, navigation, or decoration.
+2. **Name the user goal.** What is the primary job this screen or flow must support?
+3. **Choose the page archetype.** Use `ui-layouts`: list/index, detail, form, dashboard, settings, marketing, utility.
+4. **Inventory content and actions.** Separate primary content, secondary content, primary actions, secondary actions, and system states.
+5. **Pick inner patterns.** Use `ui-patterns`, `ui-forms`, `ui-actions`, `ui-feedback`, or `ui-data-viz` for the dominant interaction.
+6. **Establish hierarchy before styling.** The screen should work in grayscale before relying on brand color, icons, shadows, or imagery.
+7. **Apply visual system rules.** Use spacing, typography, color, depth, icons, and responsive guidance. Prefer the project's existing design system when present.
+8. **Check state coverage.** Include empty, loading, error, success, disabled, focus, hover, and mobile/touch states when relevant.
+9. **Limit choices.** Use constrained scales for spacing, type, color, radius, shadow, and icon style instead of one-off values.
+10. **Verify ergonomics.** The page should be understandable above the fold, navigable by keyboard, readable on mobile, and free of decorative or explanatory filler.
 
 Do not add landing-page hero copy, decorative cards, feature explanations, or onboarding tours unless the user's product context specifically calls for them.
 

@@ -215,6 +215,21 @@ Color should guide the eye to what's important and communicate meaning. It shoul
 | **Too many semantic colors** | Every status gets its own color (purple for "pending review", teal for "in progress", orange for "on hold") — the system becomes unlearnable | Limit to 3-4 status colors; use text labels for finer distinctions |
 | **Decorative color blocks** | Colored backgrounds behind card headers or section titles that don't carry meaning | Remove the color or assign it a semantic role |
 
+### Colored Backgrounds Need Their Own Text Colors
+
+Do not put ordinary gray text on saturated or tinted colored backgrounds. Gray text is tuned for neutral surfaces; on colored surfaces it often looks muddy or fails contrast.
+
+Use:
+- white or near-white text on dark saturated backgrounds
+- a darker shade of the same hue on pale tinted backgrounds
+- semantic foreground tokens such as `--color-primary-foreground`, `--color-danger-foreground`, and `--color-warning-foreground`
+
+Every colored surface should define both background and foreground tokens.
+
+### Accent Borders Over Color Fills
+
+When a component needs a touch of color but does not need to dominate, prefer an accent border, left rail, icon, or small badge over a full colored background. This keeps the page from turning into competing color blocks while still signaling category, status, or emphasis.
+
 ---
 
 ## 6. Accessible Contrast

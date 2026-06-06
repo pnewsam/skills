@@ -135,6 +135,15 @@ The optimal line length for continuous reading is **45-75 characters**. This tra
 
 **For forms:** Single-column forms should be 400-560px wide. Wider forms create a disconnect between labels and their inputs.
 
+### Align for Readability
+
+Align text by baseline when text sits next to icons, buttons, metrics, or mixed-size labels. Center alignment can look mathematically balanced while making text feel optically off, especially when small labels sit next to large numbers.
+
+Rules:
+- Numeric values in tables align right; labels and text align left.
+- Mixed-size text blocks align by baseline, not bounding-box center.
+- Do not center-align long paragraphs or dense lists. Center alignment is for short, decorative, or ceremonial text.
+
 ---
 
 ## 4. Heading Hierarchy
@@ -167,6 +176,12 @@ caption: 12px Regular — Supporting information. Muted color.
 ```
 
 The progression should be obvious at a glance. If h2 and h3 look the same, increase the weight or size difference.
+
+### Not Every Link Needs a Bright Color
+
+Use color for links when discoverability matters in body text. In dense navigation, tables, cards, and repeated metadata, links can use inherited text color plus underline, hover, icon, or placement cues.
+
+If every linked row title is bright blue, link color becomes the dominant visual feature of the page. Reserve strong link color for inline prose or actions that must stand out.
 
 ### Headings + Body Spacing
 

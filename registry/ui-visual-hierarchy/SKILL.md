@@ -35,6 +35,15 @@ The squint test is the single most useful hierarchy check: squint at the page un
 
 **How to fix:** Increase the visual weight of what should dominate, or decrease the weight of what shouldn't. Don't try to make everything prominent — hierarchy is about contrast.
 
+### Prefer De-Emphasis First
+
+When everything competes, demote secondary elements before making the primary element louder. Reducing metadata size, muting borders, softening icons, or simplifying badges often improves hierarchy more than making the title bigger.
+
+Use this order:
+1. Remove unnecessary emphasis from tertiary elements.
+2. Reduce color, contrast, border weight, or shadow from secondary elements.
+3. Increase size, weight, or position of the primary element only if it still does not dominate.
+
 ---
 
 ## 2. The Four Levers of Visual Weight
@@ -64,6 +73,12 @@ Bolder text draws the eye. Use weight differences within the same size to create
 | Active nav item semibold, inactive regular | The current location is clear |
 
 **Rule:** One weight step (regular → medium, 400 → 500) is subtle. Two steps (regular → semibold, 400 → 600) is clear. Choose the right contrast.
+
+### Document vs. Visual Hierarchy
+
+Semantic heading structure and visual hierarchy are related but not identical. Use semantic HTML for document structure, then style headings and labels to match the user's scanning needs.
+
+Example: a card title may be visually prominent without becoming an `h1`; a page `h1` may be visually restrained in a dense tool if the primary task is the table or editor below it.
 
 ### Color & Contrast
 
@@ -146,6 +161,17 @@ Delete Account [Delete]
 | **Sections with headings** | Chunks are sequential and read top-to-bottom | Settings pages, detail pages, long-form content |
 | **Tabs** | Chunks are mutually exclusive views of the same context | Detail page tabs (Overview, Activity, Settings) |
 | **Accordion / Collapsible** | Chunks are secondary and the user only needs one at a time | FAQs, advanced settings, documentation nav |
+
+### Labels Are a Last Resort
+
+If a value can be understood from context, position, formatting, or grouping, do not add a label just to be explicit. Labels add visual noise and can make every row or card feel heavier.
+
+Use labels when:
+- the value is ambiguous without one
+- multiple nearby values could be confused
+- accessibility or data interpretation depends on explicit naming
+
+Prefer recognizable formatting for common values: currency, dates, counts, avatars, status badges, and units.
 
 ---
 

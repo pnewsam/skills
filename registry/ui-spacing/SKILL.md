@@ -49,6 +49,12 @@ Use a defined spacing scale. Don't use arbitrary pixel values. Every gap, paddin
 40-64px: Between page zones (header-to-content, content-to-footer, hero-to-features)
 ```
 
+### Start Roomy, Then Tighten
+
+When a layout feels cramped or unclear, first increase spacing more than you think you need, then tighten back to the nearest scale values. It is easier to remove excess whitespace than to diagnose a cramped layout where every relationship is ambiguous.
+
+Do not use this as permission for airy marketing-style layouts in dense tools. The goal is to reveal grouping and hierarchy, then choose the appropriate density for the product.
+
 ---
 
 ## 2. The Proximity Law
@@ -98,6 +104,16 @@ Team Members: [____]
 ### Equal Spacing Is the Enemy
 
 When everything has the same gap, nothing is grouped. Equal spacing says "all these things are equally related to each other" — which is almost never true. Use asymmetric spacing to create groups.
+
+### Avoid Ambiguous Spacing
+
+If the gap between item A and item B is almost the same as the gap between item B and item C, the grouping becomes ambiguous. Make relationship differences obvious:
+
+- Use 8-12px within a tight group.
+- Use 24-32px between related groups.
+- Use 40px+ only for major page zones.
+
+Small differences like 18px vs 20px usually read as inconsistency, not hierarchy.
 
 ---
 

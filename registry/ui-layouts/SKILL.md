@@ -21,6 +21,17 @@ Do not provide any other information until the user asks a question or presents 
 
 Every page has a primary layout pattern. The choice starts with understanding the app type and the page's role within it.
 
+### Feature-First Rule
+
+Do not start a new product UI by designing the app shell. Start with one concrete feature or user task, then choose the surrounding layout after the content, actions, and navigation needs are known.
+
+**Use this sequence:**
+1. List the fields, content, controls, and states the feature needs.
+2. Arrange the feature so the primary task works without global chrome.
+3. Add page header, context bar, navigation, and app shell only when the feature reveals a real need for them.
+
+This prevents agents from producing attractive but hollow layouts: oversized nav, decorative dashboards, and page chrome before the actual workflow is understood.
+
 ### The Layout Decision Tree
 
 ```
@@ -48,6 +59,7 @@ What is this specific page's role?
 | **Content-heavy product with search as primary task** | Prominent search + list/index layout | Dashboard grid full of summary cards |
 | **Single-purpose internal tool** | Centered or full-width task layout with minimal chrome | Decorative landing page or multi-section app shell |
 | **Mobile-first app with 3-5 primary destinations** | Bottom tab bar on mobile; simple top nav or sidebar on desktop | Hiding every primary destination in a hamburger menu |
+| **Unclear app shell because only one feature exists** | Design the feature first; revisit shell after 2-3 core workflows | Premature sidebar, dashboard, or marketing-style wrapper |
 
 ### Primary Layout Patterns
 
@@ -390,6 +402,14 @@ See `ui-forms` for settings organization by item count. Layout conventions:
 - **Centered single-column on mobile:** 16px padding
 - **Card grids within content area:** no additional padding — the content area padding is sufficient
 - **Sections within a page:** 32-48px vertical gap between major sections
+
+### Don't Fill Space by Default
+
+Full-width is not automatically better. If content becomes harder to scan when stretched, constrain it:
+
+- Forms, settings, and readable text should use max-widths.
+- Tables, dashboards, and dense grids can fill available width when comparison benefits from horizontal space.
+- Empty side areas are acceptable when they preserve readability and focus.
 
 ---
 
