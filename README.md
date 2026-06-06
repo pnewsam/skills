@@ -111,6 +111,24 @@ flowchart LR
 
 Reference skills for selecting the right UI patterns based on data density, task complexity, and user goals. Use `ui-expert` for broad page/app work or when the right focused skill is unclear; invoke individual skills for specific decisions.
 
+```mermaid
+flowchart LR
+    UX[ui-expert] --> L[ui-layouts]
+    UX --> P[ui-patterns]
+    UX --> F[ui-forms]
+    UX --> A[ui-actions]
+    UX --> FB[ui-feedback]
+    UX --> C[ui-content]
+    UX --> VH[ui-visual-hierarchy]
+    UX --> S[ui-spacing]
+    UX --> T[ui-typography]
+    UX --> CL[ui-color]
+    UX --> R[ui-responsive]
+    UX --> I[ui-icons]
+    UX --> DV[ui-data-viz]
+    UX --> O[ui-onboarding]
+```
+
 | Skill                                                | Type      | Description                                                                                                                                           |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [ui-expert](registry/ui-expert/SKILL.md)             | reference | Router for broad UI work — coordinates the focused `ui-*` skills and prevents overlap across layout, patterns, forms, actions, states, and visual system decisions. |
@@ -179,8 +197,25 @@ flowchart LR
 
 ### React SPA
 
+```mermaid
+flowchart LR
+    RX[react-expert] --> RSA[react-spa-architecture]
+    RX --> RCD[react-component-design]
+    RX --> RPS[react-project-structure]
+    RX --> RHE[react-hooks-effects]
+    RX --> RFP[react-form-patterns]
+    RX --> RSM[react-state-management]
+    RX --> RDF[react-data-fetching]
+    RX --> RR[react-routing]
+    RX --> RP[react-performance]
+    RX --> REH[react-error-handling]
+    RX --> RA[react-accessibility]
+    RX --> RT[react-testing]
+```
+
 | Skill                                                                | Type      | Description                                                                                                                                |
 | -------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| [react-expert](registry/react-expert/SKILL.md)                       | reference | Router for broad React work - coordinates focused React skills across architecture, components, hooks, forms, state, data, routing, performance, errors, accessibility, and tests. |
 | [react-component-design](registry/react-component-design/SKILL.md)   | reference | Component size, single responsibility, compositional patterns, and "branch early" — prefer distinct components over prop-toggled behavior. |
 | [react-project-structure](registry/react-project-structure/SKILL.md) | reference | Base UI as a design system layer, domain components in `src/features/`, naming conventions, and feature module boundaries.                 |
 | [react-spa-architecture](registry/react-spa-architecture/SKILL.md)   | reference | App entrypoints, provider composition, routing setup, environment config, API clients, auth bootstrap, and SPA deployment concerns.        |
@@ -196,8 +231,21 @@ flowchart LR
 
 ### Python And FastAPI
 
+```mermaid
+flowchart LR
+    PX[python-expert] --> PT[python-tooling]
+    PX --> PPS[python-project-structure]
+    PX --> PTEST[python-testing]
+    PX --> PTDM[python-typing-data-modeling]
+    PX --> PAB[python-async-boundaries]
+    PX --> PEH[python-error-handling]
+    PX --> PDP[python-database-patterns]
+    PX --> FA[fastapi-architecture]
+```
+
 | Skill                                                                                  | Type      | Description                                                                                                                           |
 | -------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| [python-expert](registry/python-expert/SKILL.md)                                       | reference | Router for broad Python work - coordinates focused Python and FastAPI skills across tooling, structure, typing, async, errors, database, testing, and API architecture. |
 | [python-tooling](registry/python-tooling/SKILL.md)                                     | reference | Preferred Python tooling stack — uv for package management, ruff for linting/formatting, mypy for type checking, pytest, pre-commit, and just. |
 | [python-project-structure](registry/python-project-structure/SKILL.md)                 | reference | Organize Python packages, modules, entrypoints, configuration, imports, scripts, services, utilities, and tests.                       |
 | [python-testing](registry/python-testing/SKILL.md)                                     | reference | Pytest suites, fixtures, dependency overrides, async tests, mocks, factories, integration tests, and regression coverage.              |
