@@ -19,6 +19,10 @@ flowchart TD
     CC[create-charter] -->|produces docs/CHARTER.md| ED[explore-directions]
     ED -->|produces docs/directions/| PE[plan-epic]
     PE -->|produces docs/epics/| PF[plan-feature]
+    PE --> SP[ship-epic]
+    SP -->|plans missing features| PF
+    SP -->|advances until complete| AE
+    SP -->|prepares PR| PPR[prepare-pr]
     PF -->|produces docs/features/| BF[build-feature]
     BF -->|validates with| VF[validate-feature]
     PE --> AE[advance-epic]
@@ -39,6 +43,7 @@ flowchart TD
 | [plan-feature](registry/plan-feature/SKILL.md)         | workflow | divergence | execute | Create a structured feature plan that defines a 1–2 week deliverable and links it to a parent epic.                           |
 | [build-feature](registry/build-feature/SKILL.md)       | workflow | convergence | execute | Implement one acceptance criterion from a feature plan — write code, verify, commit, and check it off. Run repeatedly until the feature is complete. |
 | [advance-epic](registry/advance-epic/SKILL.md)         | workflow | convergence | execute | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete.    |
+| [ship-epic](registry/ship-epic/SKILL.md)               | workflow | convergence | execute | Complete an epic end-to-end — plan missing features, advance until all child features are complete, validate, and prepare a PR. |
 | [audit-epic](registry/audit-epic/SKILL.md)             | workflow | convergence | analyze | Audit an epic to find missing, inconsistent, or incomplete child features — cross-references feature plans against the epic and reports gaps. |
 | [plan-epic-gaps](registry/plan-epic-gaps/SKILL.md)     | workflow | convergence | plan    | Create a prioritized plan to close gaps found by audit-epic — maps each gap to a concrete action and produces a structured punch list.        |
 
