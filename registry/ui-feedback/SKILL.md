@@ -5,7 +5,7 @@ description: Select the right feedback pattern for system states. Decision frame
 
 # UI Feedback — States, Notifications & Errors
 
-A decision engine for choosing the right feedback, state, and notification patterns. For data display patterns, see `ui-patterns`. For form containers and fields, see `ui-forms`. For action affordances, see `ui-actions`.
+A decision engine for choosing the right feedback, state, and notification patterns. For data display patterns, see `ui-patterns`. For form containers and fields, see `ui-forms`. For action affordances, see `ui-actions`. For message wording, see `ui-content`. For first-run onboarding strategy, see `ui-onboarding`.
 
 ## Initial Response
 

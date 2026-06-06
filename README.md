@@ -109,14 +109,25 @@ flowchart LR
 
 ### UI Patterns
 
-Reference skills for selecting the right UI patterns based on data density, task complexity, and user goals. Each covers a distinct decision domain — invoke individually as the relevant question arises.
+Reference skills for selecting the right UI patterns based on data density, task complexity, and user goals. Use `ui-expert` for broad page/app work or when the right focused skill is unclear; invoke individual skills for specific decisions.
 
 | Skill                                                | Type      | Description                                                                                                                                           |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [ui-expert](registry/ui-expert/SKILL.md)             | reference | Router for broad UI work — coordinates the focused `ui-*` skills and prevents overlap across layout, patterns, forms, actions, states, and visual system decisions. |
+| [ui-layouts](registry/ui-layouts/SKILL.md)           | reference | Page-level layout patterns — app shell, page chrome, content zoning, standard page archetypes, scroll behavior, and responsive layout adaptation.      |
 | [ui-patterns](registry/ui-patterns/SKILL.md)         | reference | Data display patterns — tables vs cards vs lists, pagination, search/filter placement, detail views, navigation, tabs vs accordions, content organization. |
 | [ui-forms](registry/ui-forms/SKILL.md)               | reference | Form patterns — container selection (modal vs drawer vs page), field type heuristics, wizard design, settings page organization.                      |
 | [ui-feedback](registry/ui-feedback/SKILL.md)         | reference | Feedback patterns — empty states, loading states (skeleton vs spinner vs optimistic), error handling, toast vs banner vs modal alerts, confirmation vs undo. |
 | [ui-actions](registry/ui-actions/SKILL.md)           | reference | Action affordances — row actions (inline vs overflow), bulk operations, hover vs static visibility, keyboard shortcuts, drag-and-drop, mobile touch adaptations. |
+| [ui-content](registry/ui-content/SKILL.md)           | reference | UX writing and microcopy — button labels, empty states, errors, field help, terminology, confirmations, success messages, and tone.                    |
+| [ui-visual-hierarchy](registry/ui-visual-hierarchy/SKILL.md) | reference | Visual hierarchy — size, weight, color, position, chunking, progressive disclosure, scanning patterns, and action hierarchy.                 |
+| [ui-spacing](registry/ui-spacing/SKILL.md)           | reference | Spacing and proximity — spacing scale, density, negative space, rhythm, and context-specific spacing for forms, tables, cards, lists, and pages.      |
+| [ui-typography](registry/ui-typography/SKILL.md)     | reference | Typography — type scales, font choices, line length, heading hierarchy, contrast, numeric figures, and context-specific text treatment.               |
+| [ui-color](registry/ui-color/SKILL.md)               | reference | Color systems — palettes, semantic tokens, neutral scales, dark mode, contrast, status colors, and brand color selection.                              |
+| [ui-responsive](registry/ui-responsive/SKILL.md)     | reference | Responsive design — breakpoints, stack/reduce/reorganize/off-canvas patterns, touch targets, navigation adaptation, images, and testing widths.       |
+| [ui-icons](registry/ui-icons/SKILL.md)               | reference | Icon usage — when to use icons, label pairing, sizing, accessible icon buttons, library selection, consistency, color, and animation.                 |
+| [ui-data-viz](registry/ui-data-viz/SKILL.md)         | reference | Data visualization — chart type selection, number-vs-chart decisions, dashboard cards, data-ink ratio, chart color, and time-series guidance.         |
+| [ui-onboarding](registry/ui-onboarding/SKILL.md)     | reference | Onboarding — first-run experiences, sample data, checklists, progressive discovery, tours, activation moments, and re-onboarding.                     |
 
 **References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
 

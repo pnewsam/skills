@@ -5,7 +5,7 @@ description: Select the right UI pattern for displaying data collections. Decisi
 
 # UI Patterns — Data Display & Organization
 
-A decision engine for choosing the right layout, navigation, and content organization patterns based on data density, user goals, and information hierarchy. For form container decisions, see `ui-forms`. For action affordances, see `ui-actions`. For loading/empty/error states and notifications, see `ui-feedback`.
+A decision engine for choosing the right data display, navigation, and content organization patterns inside a page zone based on data density, user goals, and information hierarchy. For page-level layout and chrome, see `ui-layouts`. For form container decisions, see `ui-forms`. For action affordances, see `ui-actions`. For loading/empty/error states and notifications, see `ui-feedback`.
 
 ## Initial Response
 
@@ -229,7 +229,7 @@ When the same data benefits from multiple visual perspectives:
 
 ## Review Format (Required)
 
-When reviewing UI layouts, you MUST use this structure:
+When reviewing data display and organization patterns, you MUST use this structure:
 
 1. **Current State Summary:** What patterns are in use? Data density, user goal, task frequency.
 2. **Finding → Recommendation Table:**
