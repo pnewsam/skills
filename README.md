@@ -12,6 +12,10 @@ Skills for product direction, planning, and quality.
 
 ```mermaid
 flowchart TD
+    CE[consult-expert] -->|routes to domain experts| UE[ui-expert]
+    CE --> RE[react-expert]
+    CE --> PY[python-expert]
+    CE -->|produces epic briefs| PE
     CC[create-charter] -->|produces docs/CHARTER.md| ED[explore-directions]
     ED -->|produces docs/directions/| PE[plan-epic]
     PE -->|produces docs/epics/| PF[plan-feature]
@@ -28,6 +32,7 @@ flowchart TD
 
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
 | ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [consult-expert](registry/consult-expert/SKILL.md)     | workflow | divergence | analyze, plan | Route broad product or engineering prompts to domain experts, synthesize recommendations, and produce epic briefs for downstream planning. |
 | [explore-directions](registry/explore-directions/SKILL.md) | workflow | divergence | analyze | Analyze the product's current state and generate 3–5 distinct strategic directions with evidence and trade-offs for review. |
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
 | [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create a structured epic plan that translates a product charter into a quarter-level initiative.                              |
