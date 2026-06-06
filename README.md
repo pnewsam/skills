@@ -105,6 +105,7 @@ flowchart LR
 | [color-expert](registry/color-expert/SKILL.md)       | reference | Color science expert — color theory, accessibility standards, palette generation, and practical color tools.                                          | [meodai](https://github.com/meodai/skill.color-expert)                                     |
 | [emil-design-eng](registry/emil-design-eng/SKILL.md) | reference | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great.                | [emilkowalski](https://github.com/emilkowalski/skill)                                      |
 | [email-design-expert](registry/email-design-expert/SKILL.md) | reference | Design polished, premium HTML emails with real email-client constraints — transactional, digest, product update, and lifecycle emails.            |
+| [animation-vocabulary](registry/animation-vocabulary/SKILL.md) | reference | Glossary of animation patterns and terminology — entrances, exits, easing, springs, scroll effects, feedback interactions, and performance concepts. | [emilkowalski](https://animations.dev/vocabulary) |
 
 ### UI Patterns
 
