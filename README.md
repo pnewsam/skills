@@ -184,6 +184,17 @@ flowchart LR
 | [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze | Review a pull request and post inline code review comments with an overall verdict.                                 |
 | [assess-pr-risk](registry/assess-pr-risk/SKILL.md) | workflow |             | analyze | Assess the risk level of a pull request across blast radius, security sensitivity, test coverage, and dependencies. |
 
+### Architecture
+
+```mermaid
+flowchart LR
+    DA[document-architecture] -->|produces docs/ARCHITECTURE.md| AR[Architecture Reference]
+```
+
+| Skill                                                | Type     | Mode        | Phase   | Description                                                                                                                   |
+| ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [document-architecture](registry/document-architecture/SKILL.md) | workflow | convergence | analyze | Create or refresh `docs/ARCHITECTURE.md` from the codebase, including Mermaid diagrams for system context, runtime flows, boundaries, and data shape. |
+
 ### Core Language
 
 TypeScript and JavaScript best practices — reference skills that inform how code is written across the stack.
