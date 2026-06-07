@@ -142,20 +142,22 @@ A feature should **not** directly import from another feature's internals. If fe
 | Page-level route component | `src/pages/` or `src/routes/` |
 | App-wide providers and configuration | `src/app/` or `src/providers/` |
 
-### 6. Co-located tests and styles
+### 6. Co-located tests, stories, and styles
 
-Tests, stories, and style files live next to the component they test, not in a separate `__tests__/` tree:
+Tests live in a local `__tests__/` folder at the same directory level as the file they cover. Do not place tests as direct sibling files like `invoice-list.test.tsx`, and do not move them into a distant global test tree.
 
 ```
 src/features/invoices/components/
   invoice-list.tsx
-  invoice-list.test.tsx
   invoice-list.stories.tsx
   invoice-detail.tsx
-  invoice-detail.test.tsx
+  invoice-detail.stories.tsx
+  __tests__/
+    invoice-list.test.tsx
+    invoice-detail.test.tsx
 ```
 
-Co-location keeps related files together and makes it obvious when a component is missing tests. If the project uses CSS modules, `.module.css` files also live alongside their component.
+Local `__tests__/` folders keep tests discoverable without mixing implementation, stories, and test files in the same listing. Stories and component-specific style files still live alongside their component unless the project has a stronger convention. If the project uses CSS modules, `.module.css` files also live alongside their component.
 
 ### 7. Barrel files — use with caution
 
