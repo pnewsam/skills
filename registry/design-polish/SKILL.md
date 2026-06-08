@@ -1,9 +1,11 @@
 ---
 name: design-polish
-description: evaluate a UI at the component level for visual polish — spacing, alignment, typography, color, and pixel-level issues. produces a structured critique focused on quick mechanical fixes. use when checking if a component or page looks refined, or after implementing a design. this is the "does a designer's eye twitch?" skill. for structural, page-level, or navigation concerns, use design-review instead.
+description: DEPRECATED legacy design polish workflow. Do not use for new UI/design work unless the user explicitly asks for this old polish artifact workflow. Prefer ui-expert, design-expert, and focused ui-*/design-* reference skills.
 ---
 
 # Design Polish
+
+> Deprecated: this legacy polish workflow is parked while the design skill taxonomy is being reorganized around `design-expert` and focused `design-*` reference skills. Do not invoke it for new work unless the user explicitly asks for this old artifact workflow.
 
 ## Overview
 

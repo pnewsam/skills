@@ -1,3 +1,3 @@
 interface:
-  display_name: "Design Review"
-  short_description: "Review UI structure and UX clarity."
+  display_name: "Deprecated: Design Review"
+  short_description: "Legacy design critique workflow."

@@ -13,6 +13,7 @@ Skills for product direction, planning, and quality.
 ```mermaid
 flowchart TD
     CE[consult-expert] -->|routes to domain experts| UE[ui-expert]
+    CE --> DX[design-expert]
     CE --> RE[react-expert]
     CE --> PY[python-expert]
     CE -->|produces epic briefs| PE
@@ -61,35 +62,31 @@ flowchart LR
 
 ## Design
 
-Skills for UI/UX, design systems, and visual polish.
+Skills for visual design judgment, UI/UX references, and targeted UI restructuring.
+
+Legacy design-system and critique workflow skills are deprecated for now while the design taxonomy is reorganized around a `design-expert` router and focused `design-*` reference skills. Deprecated skills remain in `registry/` for recovery, but they are not part of the active framework: `create-design-system`, `extract-design-system`, `design-audit`, `design-fix`, `design-review`, `design-polish`, and `plan-design-fixes`.
+
+### Design Principles
+
+Reference skills for turning a functional interface into something clearer, calmer, more elegant, and more visually coherent. Use `design-expert` for broad visual quality work or when the right focused design skill is unclear.
 
 ```mermaid
 flowchart LR
-    CDS[create-design-system] -->|produces docs/DESIGN_SYSTEM.md| DA[design-audit]
-    DA --> PDF[plan-design-fixes]
-    DP[design-polish] --> PDF
-    DR[design-review] --> PDF
-    PDF -->|routes to| DF[design-fix]
-    PDF -->|routes to| RC[redesign-component]
-    PDF -->|routes to| RS[redesign-screen]
-    PDF -->|routes to| CDS
+    DX[design-expert] --> DC[design-composition]
+    DX --> DH[design-hierarchy]
+    DX --> DR[design-rhythm]
+    DX --> DS[design-simplicity]
+    DX --> DVL[design-visual-language]
 ```
 
-### System
-
-| Skill                                                            | Type     | Mode        | Phase   | Description                                                                                                  |
-| ---------------------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------ |
-| [create-design-system](registry/create-design-system/SKILL.md) | workflow | divergence  | analyze, plan | Create a documented design system contract — derives from existing codebase patterns when present, proposes fresh when greenfield.     |
-| [design-audit](registry/design-audit/SKILL.md)                   | workflow | convergence | analyze | Scan pages or components against the design system contract and find deviations.                             |
-| [design-fix](registry/design-fix/SKILL.md)                       | workflow | convergence | execute | Fix design system deviations identified by design-audit — mechanical, batchable alignment work.              |
-
-### Critique
-
-| Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                         |
-| ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [design-polish](registry/design-polish/SKILL.md)       | workflow | convergence | analyze | Evaluate a UI at the component level for visual polish — spacing, alignment, typography, color, and pixel-level issues.             |
-| [design-review](registry/design-review/SKILL.md)       | workflow | divergence  | analyze | Evaluate a UI at the page/app level for structural UX quality — information hierarchy, navigation, content prioritization, and page structure. |
-| [plan-design-fixes](registry/plan-design-fixes/SKILL.md) | workflow | convergence | plan    | Create a prioritized, sequenced punch list from design-polish, design-review, or design-audit findings — triages each item and routes it to the right execution path. |
+| Skill                                                | Type      | Description                                                                                                                                           |
+| ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [design-expert](registry/design-expert/SKILL.md)     | reference | Router for visual design judgment - coordinates focused `design-*` skills for composition, hierarchy, rhythm, simplicity, and visual language.        |
+| [design-composition](registry/design-composition/SKILL.md) | reference | Composition principles - balance, alignment, proportion, focal point, spatial structure, grouping, figure-ground, and visual weight.                  |
+| [design-hierarchy](registry/design-hierarchy/SKILL.md) | reference | Visual hierarchy principles - dominance, emphasis, contrast, de-emphasis, foreground/background, and calm visual priority.                            |
+| [design-rhythm](registry/design-rhythm/SKILL.md)     | reference | Rhythm principles - cadence, repetition, variation, whitespace, density flow, and visual tempo.                                                       |
+| [design-simplicity](registry/design-simplicity/SKILL.md) | reference | Simplicity principles - restraint, reduction, decluttering, focus, and reducing visual/cognitive load without removing needed capability.             |
+| [design-visual-language](registry/design-visual-language/SKILL.md) | reference | Visual language principles - aesthetic direction, mood, personality, cohesion, materiality, brand fit, and avoiding generic or mismatched styling.    |
 
 ### Components
 
@@ -114,7 +111,6 @@ flowchart LR
 | [svg-animations](registry/svg-animations/SKILL.md)   | reference | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
 | [color-expert](registry/color-expert/SKILL.md)       | reference | Color science expert — color theory, accessibility standards, palette generation, and practical color tools.                                          | [meodai](https://github.com/meodai/skill.color-expert)                                     |
 | [emil-design-eng](registry/emil-design-eng/SKILL.md) | reference | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great.                | [emilkowalski](https://github.com/emilkowalski/skill)                                      |
-| [email-design-expert](registry/email-design-expert/SKILL.md) | reference | Design polished, premium HTML emails with real email-client constraints — transactional, digest, product update, and lifecycle emails.            |
 | [animation-vocabulary](registry/animation-vocabulary/SKILL.md) | reference | Glossary of animation patterns and terminology — entrances, exits, easing, springs, scroll effects, feedback interactions, and performance concepts. | [emilkowalski](https://animations.dev/vocabulary) |
 
 ### UI Patterns
@@ -138,6 +134,7 @@ flowchart LR
     UX --> I[ui-icons]
     UX --> DV[ui-data-viz]
     UX --> O[ui-onboarding]
+    UX --> E[ui-email]
 ```
 
 | Skill                                                | Type      | Description                                                                                                                                           |
@@ -158,6 +155,7 @@ flowchart LR
 | [ui-icons](registry/ui-icons/SKILL.md)               | reference | Icon usage — when to use icons, label pairing, sizing, accessible icon buttons, library selection, consistency, color, and animation.                 |
 | [ui-data-viz](registry/ui-data-viz/SKILL.md)         | reference | Data visualization — chart type selection, number-vs-chart decisions, dashboard cards, data-ink ratio, chart color, and time-series guidance.         |
 | [ui-onboarding](registry/ui-onboarding/SKILL.md)     | reference | Onboarding — first-run experiences, sample data, checklists, progressive discovery, tours, activation moments, and re-onboarding.                     |
+| [ui-email](registry/ui-email/SKILL.md)               | reference | Email UI patterns — transactional, digest, report, product update, and lifecycle email layouts with real email-client constraints.                    |
 
 **References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
 

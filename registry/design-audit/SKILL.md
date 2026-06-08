@@ -1,9 +1,11 @@
 ---
 name: design-audit
-description: scan pages or components against the project's design system contract (docs/DESIGN_SYSTEM.md) and find deviations — wrong spacing values, inconsistent shadows, off-system colors, components that don't follow established patterns. use when you want to find and catalog UI inconsistencies for systematic cleanup. produces a structured audit artifact in docs/tmp/. pairs with design-fix for execution.
+description: DEPRECATED legacy design-system workflow. Do not use for new UI/design work unless the user explicitly asks to audit against the old docs/DESIGN_SYSTEM.md contract workflow. Prefer the current ui-* reference skills and design-expert/design-* reference model.
 ---
 
 # Design Audit
+
+> Deprecated: this legacy workflow is parked while the design skill taxonomy is being reorganized around `design-expert` and focused `design-*` reference skills. Do not invoke it for new work unless the user explicitly asks to use the old `docs/DESIGN_SYSTEM.md` contract workflow.
 
 ## Overview
 

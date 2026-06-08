@@ -1,9 +1,11 @@
 ---
 name: design-review
-description: evaluate a UI at the page/app level for structural UX quality — information hierarchy, navigation patterns, content prioritization, page structure, and "does this UI make sense?" questions. produces a structured critique with architectural recommendations. use when a page feels confusing or cluttered, or when reviewing overall UX before shipping. for component-level visual polish (spacing, alignment, typography, color), use design-polish instead.
+description: DEPRECATED legacy design critique workflow. Do not use for new UI/design work unless the user explicitly asks for this old critique artifact workflow. Prefer ui-expert, design-expert, and focused ui-*/design-* reference skills.
 ---
 
 # Design Crit
+
+> Deprecated: this legacy critique workflow is parked while the design skill taxonomy is being reorganized around `design-expert` and focused `design-*` reference skills. Do not invoke it for new work unless the user explicitly asks for this old artifact workflow.
 
 ## Overview
 

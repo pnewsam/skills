@@ -1,9 +1,11 @@
 ---
 name: create-design-system
-description: create a documented design system contract (docs/DESIGN_SYSTEM.md) for a project. when existing patterns are present in the codebase, derives the system from those patterns — extracting spacing scales, color tokens, typography, component patterns, and layout conventions. when no patterns exist (greenfield), proposes a complete design system with a cohesive aesthetic, spacing scale, color palette, and typography. use when starting design work, when a design system has never been documented, or when the documented system has drifted from reality.
+description: DEPRECATED legacy design-system workflow. Do not use for new UI/design work unless the user explicitly asks for the old docs/DESIGN_SYSTEM.md contract workflow. Prefer the current ui-* reference skills and design-expert/design-* reference model.
 ---
 
 # Create Design System
+
+> Deprecated: this legacy workflow is parked while the design skill taxonomy is being reorganized around `design-expert` and focused `design-*` reference skills. Do not invoke it for new work unless the user explicitly asks to use the old `docs/DESIGN_SYSTEM.md` contract workflow.
 
 ## Overview
 

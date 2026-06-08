@@ -1,9 +1,11 @@
 ---
 name: design-fix
-description: fix design system deviations identified by design-audit. picks items from the audit artifact, applies targeted fixes to align the code with the design system contract, and marks items as complete. use after running design-audit, or when asked to fix specific design inconsistencies. mechanical, batchable convergence work.
+description: DEPRECATED legacy design-system workflow. Do not use for new UI/design work unless the user explicitly asks to fix findings from the old design-audit/docs/DESIGN_SYSTEM.md contract workflow. Prefer the current ui-* reference skills and design-expert/design-* reference model.
 ---
 
 # Design Fix
+
+> Deprecated: this legacy workflow is parked while the design skill taxonomy is being reorganized around `design-expert` and focused `design-*` reference skills. Do not invoke it for new work unless the user explicitly asks to use the old `docs/DESIGN_SYSTEM.md` contract workflow.
 
 ## Overview
 

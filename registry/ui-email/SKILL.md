@@ -1,9 +1,9 @@
 ---
-name: email-design-expert
-description: Design polished, premium HTML emails with strong aesthetics and real email-client constraints. Use before creating, redesigning, or critiquing transactional emails, analytics digests, product updates, reports, lifecycle emails, or any email template where visual quality, hierarchy, copy, and deliverability all matter. Combines aesthetic references from strong email galleries with practical email-safe implementation guidance.
+name: ui-email
+description: UI patterns and visual design guidance for polished HTML emails with real email-client constraints. Use before creating, redesigning, or critiquing transactional emails, analytics digests, product updates, reports, lifecycle emails, or any email template where hierarchy, copy, layout, accessibility, deliverability, and email-client-safe implementation all matter.
 ---
 
-# Email Design Expert
+# UI Email
 
 ## Use This Skill When
 
@@ -11,7 +11,7 @@ description: Design polished, premium HTML emails with strong aesthetics and rea
 - A user says an email feels unprofessional, generic, cluttered, or not aesthetically refined.
 - Improving transactional emails, analytics digests, weekly reports, receipts, confirmations, notifications, or lifecycle emails.
 - Translating web-app design quality into inbox-safe email.
-- Choosing references before applying `design-crit`, `design-polish`, `redesign-component`, or `design-fix` to an email.
+- Choosing references before applying `design-expert`, `ui-expert`, focused `ui-*` guidance, or `redesign-component` to an email.
 
 ## Core Principle
 
@@ -145,8 +145,7 @@ If a module does not help answer one of those questions, remove it or move it lo
 
 ## Pairing With Other Skills
 
-- Use `design-crit` after this skill for structural critique.
-- Use `design-polish` after this skill for spacing, color, typography, and component finish.
-- Use `plan-design-fixes` when critique/polish findings are numerous.
+- Use `ui-expert` after this skill when an email needs broader structure, hierarchy, content, or visual-system routing.
+- Use `design-expert` when an email feels generic, cluttered, visually incoherent, or insufficiently refined.
+- Use focused `ui-*` skills for specific follow-up decisions: `ui-content` for copy, `ui-visual-hierarchy` for emphasis, `ui-spacing` for density, `ui-typography` for readability, and `ui-color` for semantic color and contrast.
 - Use `redesign-component` for top-section or module-level rework.
-- Use `design-fix` only for mechanical token/value fixes.

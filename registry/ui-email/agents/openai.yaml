@@ -1,0 +1,3 @@
+interface:
+  display_name: "UI Email"
+  short_description: "Design email-safe UI."

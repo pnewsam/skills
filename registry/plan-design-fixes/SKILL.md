@@ -1,9 +1,11 @@
 ---
 name: plan-design-fixes
-description: create a prioritized, sequenced punch list from design findings produced by design-polish, design-review, or design-audit. triages each finding by effort and type, routes it to the right execution path, and produces a structured plan. use after running any design analysis skill when there are enough findings to warrant a plan before execution. pairs with design-fix, redesign-component, and redesign-screen for execution.
+description: DEPRECATED legacy design workflow planner. Do not use for new UI/design work unless the user explicitly asks to plan from old design-polish, design-review, or design-audit artifacts. Prefer ui-expert, design-expert, and focused ui-*/design-* reference skills.
 ---
 
 # Plan Design Fixes
+
+> Deprecated: this legacy planning workflow is parked while the design skill taxonomy is being reorganized around `design-expert` and focused `design-*` reference skills. Do not invoke it for new work unless the user explicitly asks to plan from old design critique/audit artifacts.
 
 ## Overview
 

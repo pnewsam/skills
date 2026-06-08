@@ -1,6 +1,6 @@
 ---
 name: consult-expert
-description: Route broad, ambiguous product or engineering prompts to the right domain expert skills, synthesize their recommendations, and produce one or more epic briefs suitable for plan-epic, plan-feature, and build-feature workflows. Use when the user asks for strategic direction, product/app planning, cross-domain architecture, or when the correct expert/domain is unclear. Coordinates expert router skills such as ui-expert, react-expert, python-expert, color-expert, email-design-expert, and future domain experts.
+description: Route broad, ambiguous product or engineering prompts to the right domain expert skills, synthesize their recommendations, and produce one or more epic briefs suitable for plan-epic, plan-feature, and build-feature workflows. Use when the user asks for strategic direction, product/app planning, cross-domain architecture, or when the correct expert/domain is unclear. Coordinates expert router skills such as ui-expert, design-expert, react-expert, python-expert, color-expert, and focused domain skills such as ui-email.
 ---
 
 # Consult Expert - Cross-Domain Intake
@@ -24,12 +24,13 @@ Load only the expert skills that match the prompt.
 | Prompt Signal | Expert Skill | Use For |
 | :--- | :--- | :--- |
 | Page/app UX, information architecture, workflows, visual quality, UI reliability | `ui-expert` | Product UI direction, screen architecture, interaction and visual system concerns |
+| Visual design quality, elegance, composition, hierarchy, rhythm, simplicity, aesthetic direction | `design-expert` | Turning functional UI direction into coherent, calm, polished visual design |
 | React SPA, frontend architecture, components, hooks, data fetching, routing | `react-expert` | Frontend implementation architecture and maintainability |
 | Python, FastAPI, backend boundaries, data modeling, async, persistence | `python-expert` | Backend/API/Python implementation architecture |
 | Palette, color naming, contrast, color science, palette generation | `color-expert` | Color-specific design decisions beyond semantic UI color usage |
-| Transactional/lifecycle email UX and HTML email constraints | `email-design-expert` | Email product surfaces and email-client-safe implementation |
+| Transactional/lifecycle email UX and HTML email constraints | `ui-email` | Email product surfaces and email-client-safe implementation |
 
-If the prompt spans product, frontend, and backend, consult `ui-expert`, `react-expert`, and `python-expert` in that order. Add narrower experts only when the prompt explicitly involves their domain.
+If the prompt spans product, frontend, and backend, consult `ui-expert`, `react-expert`, and `python-expert` in that order. Add `design-expert` when visual quality, aesthetic coherence, or interface elegance is a meaningful part of the request. Add narrower experts only when the prompt explicitly involves their domain.
 
 ---
 

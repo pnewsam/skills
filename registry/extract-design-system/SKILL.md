@@ -1,9 +1,11 @@
 ---
 name: extract-design-system
-description: extract the implicit design system from a codebase into a documented contract (docs/DESIGN_SYSTEM.md). use when starting design work on a project, when the design system has never been documented, or when you suspect the documented system has drifted from reality. reads the codebase to identify spacing scales, color tokens, typography, component patterns, and layout conventions, then produces a structured reference that convergence skills (design-audit, design-fix) can enforce against.
+description: DEPRECATED legacy design-system workflow. Do not use for new UI/design work unless the user explicitly asks for the old docs/DESIGN_SYSTEM.md contract extraction workflow. Prefer the current ui-* reference skills and design-expert/design-* reference model.
 ---
 
 # Extract Design System
+
+> Deprecated: this legacy workflow is parked while the design skill taxonomy is being reorganized around `design-expert` and focused `design-*` reference skills. Do not invoke it for new work unless the user explicitly asks to use the old `docs/DESIGN_SYSTEM.md` contract workflow.
 
 ## Overview
 
