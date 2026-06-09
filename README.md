@@ -1,12 +1,23 @@
 # Skills
 
-Collected agent skills for Claude Code.
+This repository is a registry of agent skills. Each skill is a focused `SKILL.md` file that teaches an agent a workflow, convention, or domain-specific judgment pattern.
 
-Skills organize around two dimensions — **mode** (convergence vs divergence) and **phase** (analyze, plan, execute) — and come in two types: **workflow** and **reference**. Workflow skills do work and produce artifacts or code changes. Reference skills provide principles, patterns, and domain guidance.
+Use the registry by installing selected skills into the directory your agent client reads, then invoke the relevant skill by name or let the agent choose from the available skill descriptions. See [cli/README.md](cli/README.md) for installation and usage, and [AUTHORING.md](AUTHORING.md) for how to write or update skills.
 
-Skills are installed by symlinking SKILL.md files into a directory the AI tool reads. See [cli/README.md](cli/README.md) for CLI installation, usage, and full documentation. See [AUTHORING.md](AUTHORING.md) for how lazy loading works, where to install (global vs project), skill groups, and how to write effective skills.
+## Taxonomy
 
-## General Flow
+Skills organize around two dimensions, **mode** and **phase**, and come in two types: **workflow** and **reference**.
+
+### Mode
+
+Initiatives sit between two opposing modes. Divergent work is the outward force: it expands the option space when intent is unclear or several good outcomes are possible. Convergent work is the inward force: it narrows ambiguity when the standard, target, or gap is already known. Healthy projects need both in productive tension.
+
+```mermaid
+flowchart LR
+    D["Divergence<br/>Outward force<br/>Expand possibility<br/>Explore, compare, reframe, choose"] <-->|"opposing forces<br/>held in balance over time"| C["Convergence<br/>Inward force<br/>Narrow commitment<br/>Align, repair, complete, validate"]
+```
+
+### Phase
 
 Most workflow skills move work through the same abstract loop: understand the situation, turn that understanding into scoped plans, then execute and validate the planned work. New evidence, blockers, or review feedback can send the work back through analysis before it proceeds.
 
@@ -17,14 +28,9 @@ flowchart LR
     E -.->|new evidence, blockers, or feedback| A
 ```
 
-## Modes
+### Type
 
-Initiatives sit between two opposing modes. Divergent work is the outward force: it expands the option space when intent is unclear or several good outcomes are possible. Convergent work is the inward force: it narrows ambiguity when the standard, target, or gap is already known. Healthy projects need both in productive tension.
-
-```mermaid
-flowchart LR
-    D["Divergence<br/>Outward force<br/>Expand possibility<br/>Explore, compare, reframe, choose"] <-->|"opposing forces<br/>held in balance over time"| C["Convergence<br/>Inward force<br/>Narrow commitment<br/>Align, repair, complete, validate"]
-```
+Workflow skills do work and produce artifacts or code changes. Reference skills provide principles, patterns, and domain guidance.
 
 ## Project Structure
 
