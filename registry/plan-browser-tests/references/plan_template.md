@@ -1,70 +1,57 @@
-# Plan file template
+# Browser-Test Epic Template
 
-Write this to `docs/tmp/browser-test-plan.md`. Fill in every section.
+Use this structure when creating or updating a browser-test coverage epic in `docs/epics/`.
 
 ```markdown
-# Browser Test Plan
+# Epic: Browser Test Coverage
 
-Generated: <date>
-Framework: <playwright|cypress>
-App: <brief description of what the app does>
-Total flows: <n>
+## Metadata
 
-## Setup
+- **ID:** <NNN>
+- **Status:** draft
+- **Created:** <date>
+- **Last updated:** <date>
+- **Framework:** <playwright|cypress|recommended playwright>
 
-<!-- Include this section only if the framework is not yet installed -->
+## Charter Alignment
 
-Install and initialize <framework>:
+- **Principle advanced:** <charter principle, or provisional if docs/CHARTER.md is missing>
+- **Reliability outcome:** <what user trust or workflow confidence improves>
+- **Non-goal check:** <what this coverage pass will not test>
 
-```bash
-<setup command>
-```
+## Problem Statement
 
-<!-- Remove this section once the framework is installed -->
+<Summarize the coverage gap and why browser tests are worth adding now.>
 
-## Flows
+## Goals
 
-<!-- Each flow has a checkbox. The add-browser-test skill marks it [x] when implemented. -->
-<!-- Priority order: highest-value flows first. -->
+1. <coverage goal>
+2. <coverage goal>
 
-### 1. [ ] <Flow name>
+## Success Criteria
 
-**Why critical:** <one sentence>
-**Preconditions:** <starting state, e.g. "logged-out user on the home page">
-**File:** `<tests/flows/flow-name.spec.ts>` or `<cypress/e2e/flow-name.cy.ts>`
+| Criterion | Target | Measurement Method |
+| --- | --- | --- |
+| Critical flows covered | <n> flows | Passing browser tests in CI/local run |
 
-Steps:
-1. <User action>
-2. <User action>
-3. ...
+## Child Features
 
-Expected outcome: <what the user sees when the flow completes successfully>
+- [ ] <Feature 1> - <flow cluster and outcome>
+- [ ] <Feature 2> - <flow cluster and outcome>
 
----
+## Flow Inventory
 
-### 2. [ ] <Flow name>
+| Flow | Priority | Existing coverage | Proposed child feature | Notes |
+| --- | --- | --- | --- | --- |
+| <flow> | critical/high/moderate/low | none/partial/covered | <feature> | <setup or risk notes> |
 
-**Why critical:** <one sentence>
-**Preconditions:** <starting state>
-**File:** `<path>`
+## Deferred Flows
 
-Steps:
-1.
-2.
-
-Expected outcome:
-
----
-
-<!-- Repeat for each flow -->
-
-## Deferred flows
-
-<!-- Flows that were identified but intentionally left out of this plan -->
-
-- <flow name> — <reason deferred>
+- <flow> - <reason deferred>
 
 ## Notes
 
-<!-- Anything the implementer should know: auth setup, test data, environment variables, base URL config, etc. -->
+- Framework detected:
+- Existing test conventions:
+- Auth/test data notes:
 ```

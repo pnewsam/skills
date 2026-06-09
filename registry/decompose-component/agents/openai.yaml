@@ -1,3 +1,0 @@
-interface:
-  display_name: "Decompose Component"
-  short_description: "Split large React components safely."

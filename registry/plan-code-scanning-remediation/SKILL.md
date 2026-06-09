@@ -1,61 +1,54 @@
 ---
 name: plan-code-scanning-remediation
-description: plan safe, idempotent remediation work for GitHub code scanning alerts (CodeQL, SAST). use when asked to triage CodeQL alerts, code scanning findings, fix SAST issues, or group code scanning vulnerabilities into remediation PR plans before changing code. for dependency vulnerabilities (CVEs, Dependabot, npm audit), use plan-vulnerability-remediation instead.
+description: plan safe, idempotent remediation work for GitHub code scanning alerts (CodeQL, SAST) by creating or updating a standard docs/epics security remediation epic with child features. use when asked to triage CodeQL alerts, code scanning findings, SAST issues, or group code scanning vulnerabilities before changing code. for dependency vulnerabilities, use plan-vulnerability-remediation instead.
 ---
 
 # Plan Code Scanning Remediation
 
 ## Overview
 
-Create an actionable, idempotent remediation plan for **code scanning alerts** (CodeQL, SAST tools) before making changes. The plan fetches open alerts from GitHub's code scanning API, reads the flagged source code to assess each finding, groups related findings into coherent PR-scoped units, and emits remediation plans ready for `remediate-code-scanning`.
+Plan remediation for code scanning alerts before making code changes. The durable artifact is a normal security remediation epic in `docs/epics/`, with child features for coherent remediation groups. Do not create a separate remediation tracker.
 
-This skill is designed to pair with the `remediate-code-scanning` skill. Use this skill first when the user asks to triage, plan, batch, or group code scanning fixes. Use `remediate-code-scanning` when it is time to implement one plan and open or update a PR.
-
-For **dependency vulnerabilities** (CVEs, Dependabot, audit findings), use `plan-vulnerability-remediation` instead.
+For dependency vulnerabilities, use `plan-vulnerability-remediation`.
 
 ## Goals
 
-- Be idempotent: rerunning should not create duplicate branches or PRs for the same alert set.
-- Prefer the smallest safe code change that resolves the alert.
-- Group alerts only when doing so creates one coherent, reviewable PR.
-- Detect existing remediation PRs before starting new work.
-- Produce enough structured information for an automated loop to process one plan at a time.
-- Track longer-running remediation progress in a repository-local markdown file.
+- Verify scanner findings against current source code.
+- Detect existing PRs that already address alerts.
+- Group alerts into focused, reviewable remediation features.
+- Use stable group IDs, branch names, and PR markers for idempotency.
+- Create or update a `docs/epics/NNN-code-scanning-remediation.md` epic.
+- Avoid copying raw scanner logs or secrets into docs; summarize only the actionable facts.
 
 ## Inputs
 
-Accept code scanning findings from any of these sources:
+Accept findings from:
 
-- **GitHub code scanning alerts** via `gh api repos/{owner}/{repo}/code-scanning/alerts`.
-- User-provided alert numbers, rule IDs, or file paths.
-- Security tracking issues or files in the repository.
+- GitHub code scanning alerts via `gh api`.
+- User-provided alert numbers, rule IDs, file paths, or alert URLs.
+- Security tracking issues or pasted scanner summaries.
 
-Each finding should be normalized to these fields when possible:
+Normalize each alert when possible:
 
-- `alert_number`: GitHub code scanning alert number.
-- `rule_id`: CodeQL rule identifier, e.g. `py/path-injection`, `js/xss-through-dom`, `actions/missing-workflow-permissions`.
-- `rule_description`: human-readable rule name.
-- `severity`: security severity level (critical, high, medium, low).
-- `tool`: scanner name, typically `CodeQL`.
-- `file_path`: source file containing the vulnerability.
-- `start_line` / `end_line`: line range of the vulnerable code.
-- `message`: CodeQL's description of the specific instance.
-- `html_url`: link to the alert on GitHub.
+- alert number and URL
+- rule ID and description
+- severity
+- tool
+- affected file and line range
+- message
+- current status: ready, covered by existing PR, already fixed locally, needs input
 
-## Safety rules
+## Safety Rules
 
-- Do not change source code, workflow files, or branches in this planning skill unless the user explicitly asks you to proceed with remediation.
-- It is acceptable to create or update the progress tracker at `docs/tmp/code-scanning-remediation.md` when planning a longer-running or automated remediation run.
-- Treat code scanning output as advisory, not absolute truth. Read the flagged source code to verify each finding before planning a fix.
-- Do not group unrelated files or rule families into one PR unless the user explicitly requests broad batching.
-- Do not expose secrets from scanner output or CI logs.
-- Prefer read-only commands until the plan is accepted.
+- Do not change source code, workflows, branches, or config in this planning skill.
+- Do not create separate security tracker files outside the epic/feature flow.
+- Treat scanner output as advisory. Read flagged source before planning a fix.
+- Do not group unrelated rules, languages, or ownership areas into one feature.
+- Do not expose secrets, tokens, or raw CI logs in docs.
 
 ## Workflow
 
-### 1. Establish repository context
-
-Identify the repository root and structure:
+### 1. Establish Repository Context
 
 ```bash
 git status --short --branch
@@ -63,211 +56,139 @@ git remote -v
 git branch --show-current
 ```
 
-Determine:
+Determine base branch, source languages, frameworks, and existing security/dependency automation.
 
-- Base branch (`main`, `master`, or repository default from `gh repo view --json defaultBranchRef` when available).
-- Source language(s) and frameworks in use.
-- GitHub Actions workflow files present.
+### 2. Gather Alerts
 
-### 2. Gather code scanning alerts
-
-Verify `gh` is available and authenticated:
+If using GitHub:
 
 ```bash
 gh --version
 gh auth status
+gh api "repos/{owner}/{repo}/code-scanning/alerts?state=open&per_page=100" --paginate
 ```
 
-List open code scanning alerts:
+If the user supplied alerts directly, normalize those instead.
 
-```bash
-gh api "repos/{owner}/{repo}/code-scanning/alerts?state=open&per_page=100" --paginate --jq '.[] | {number, rule_id: .rule.id, rule_description: .rule.description, severity: .rule.security_severity_level, tool: .tool.name, state, file_path: .most_recent_instance.location.path, start_line: .most_recent_instance.location.start_line, end_line: .most_recent_instance.location.end_line, message: .most_recent_instance.message.text, html_url}'
-```
-
-For detailed context on a specific alert:
-
-```bash
-gh api "repos/{owner}/{repo}/code-scanning/alerts/{alert_number}" --jq '{number, rule: .rule, most_recent_instance: .most_recent_instance, html_url}'
-```
-
-### 3. Check whether each finding is already resolved locally
+### 3. Verify Current Source State
 
 For each alert:
 
-1. Read the source file at the flagged line range to understand the current code.
-2. Determine whether the vulnerable pattern has already been fixed (e.g. path validation added, error handling changed, permissions set).
-3. If the code no longer matches the vulnerable pattern, mark as `already-fixed-locally` — the alert may be stale and will auto-close on the next CodeQL scan after merge.
-4. If the code still exhibits the vulnerability, it needs remediation.
-5. Check the alert's `state` via the API — if it shows `fixed` or `dismissed`, mark accordingly.
+1. Read the flagged file and surrounding function/handler.
+2. Check whether the vulnerable pattern still exists.
+3. Mark stale findings as `already-fixed-locally`.
+4. Identify likely fix strategy for real findings.
 
-### 4. Check for existing open PRs that already address findings
+### 4. Check Existing PRs
 
-Before proposing a new remediation PR, search open PRs:
+Search open PRs before proposing new work:
 
 ```bash
 gh pr list --state open --limit 100 --json number,title,headRefName,baseRefName,body,labels,url,updatedAt
 ```
 
-For each finding or candidate group, look for:
+A PR may already cover an alert if it mentions the alert number/rule, uses the expected PR marker, modifies the affected file, or has a matching security branch. Inspect likely PRs before deciding.
 
-- Alert numbers or rule IDs in title, body, branch name, or labels.
-- Affected file paths in the PR diff.
-- Branch names created by this automation using the convention `security/codeql-<slug>`.
+### 5. Group Alerts Into Child Features
 
-Inspect likely PRs before deciding they match:
+Group alerts when they share a cohesive fix:
 
-```bash
-gh pr view <number> --json number,title,body,headRefName,baseRefName,state,mergeable,url
-gh pr diff <number> --name-only
-```
+- Same rule ID in one file or directory.
+- Same rule family in one subsystem.
+- Same workflow-permissions fix across GitHub Actions files.
+- Same source/sink pattern and verification path.
 
-A PR counts as already addressing a finding only if its diff modifies the flagged code in a way that eliminates the vulnerable pattern. If uncertain, classify as `possibly-covered-by-pr` rather than creating a duplicate.
+Do not group unrelated languages, rule families, or behavior changes. One child feature should map to one focused PR.
 
-### 5. Group findings into remediation units
+For every group, define:
 
-Create candidate remediation groups. Group findings when all or most of these are true:
-
-- Same rule ID across the same file or closely related files (e.g. all `py/path-injection` in `server/routes/utilities.py`).
-- Same rule family in the same directory (e.g. all `py/stack-trace-exposure` across `server/routes/*.py`).
-- Same file with multiple related rules that share a common fix pattern (e.g. both path injection and stack trace exposure in one route file, if the fix is cohesive).
-- All `actions/missing-workflow-permissions` alerts across workflow files can be grouped into one PR since the fix pattern is uniform (adding `permissions:` blocks).
-
-Do not group findings when any of these are true unless explicitly requested:
-
-- Different languages or unrelated directories.
-- Unrelated rule families (e.g. a Python path injection fix and a JS XSS fix).
-- Fixes that touch unrelated application logic.
-- Combining would make review or rollback unclear.
-
-Group priority:
-
-1. Critical and high severity alerts.
-2. Alerts with clear, well-understood fix patterns.
-3. Multiple alerts resolved by one cohesive code change.
-4. Alerts already covered by existing PRs should be marked and excluded from new work.
-
-### 6. Define a remediation plan for each group
-
-For every proposed group, include:
-
-- `group_id`: stable slug, e.g. `codeql-py-path-injection-server-routes` or `codeql-actions-permissions`.
-- `alert_numbers`: GitHub code scanning alert numbers included.
-- `rule_ids`: CodeQL rule IDs in this group.
-- `affected_files`: file paths and line ranges.
-- `branch_name`: stable and deterministic, e.g. `security/codeql-py-path-injection-server-routes`.
-- `pr_title`: e.g. `fix(security): resolve CodeQL path injection alerts in server routes`.
-- `remediation_strategy`: one of `code-fix`, `workflow-permissions-fix`, `config-fix`, or `needs-investigation`.
-- `code_changes`: description of the source code changes needed for each alert.
-- `verification`: note that CodeQL will re-scan on push; optionally include test commands.
-- `existing_pr`: PR URL or number if already covered.
-- `risk_notes`: behavioral changes, edge cases, or uncertainty.
-- `automation_status`: one of `ready`, `in-progress`, `pr-opened`, `covered-by-existing-pr`, `already-fixed-locally`, `needs-user-input`, `needs-verification`, `blocked`, or `done`.
-- `progress_notes`: concise notes about decisions, blockers, or verification gaps.
-
-### 7. Create or update the progress tracker
-
-For longer-running tasks, automated loops, or when the user asks for persistent tracking, create or update:
-
-```text
-docs/tmp/code-scanning-remediation.md
-```
-
-If `docs/tmp` does not exist, create it. This file is the handoff mechanism between `plan-code-scanning-remediation` and `remediate-code-scanning`.
-
-Use this structure:
-
-```markdown
-# Code Scanning Remediation Tracker
-
-## Run metadata
-
-- Started: <date/time if known>
-- Repository: <owner/repo or remote URL>
-- Base branch: <base branch>
-- Sources: <GitHub code scanning alerts>
-- Tracker version: 1
-
-## Status summary
-
-- Ready: <count>
-- In progress: <count>
-- PR opened: <count>
-- Covered by existing PR: <count>
-- Already fixed locally: <count>
-- Needs input: <count>
-- Blocked: <count>
-- Done: <count>
-
-## Remediation queue
-
-### <group_id>
-
-- Status: ready
-- Branch: security/<group_id>
-- PR: <none or URL>
-- Alerts: <alert numbers>
-- Rule IDs: <CodeQL rule IDs>
-- Affected files: <file paths and line ranges>
-- Strategy: <code-fix/workflow-permissions-fix/config-fix>
-- Code changes:
-  - <description of source code changes needed per alert>
-- Verification:
-  - <test commands or "CodeQL re-scan on push">
-- Risk notes: <notes>
-- Progress notes:
-  - <timestamp or date> — planned remediation group
-```
-
-Keep each group under a stable `### <group_id>` heading. Preserve existing notes and append new progress notes.
-
-### 8. Handoff contract for `remediate-code-scanning`
-
-Two supported handoff modes:
-
-1. **Conversation handoff** — output a full group plan in the response, then invoke `remediate-code-scanning`.
-2. **Tracker-file handoff** — write the plan into `docs/tmp/code-scanning-remediation.md`; `remediate-code-scanning` reads the next `Status: ready` group.
-
-For automated work, prefer tracker-file handoff. `remediate-code-scanning` should process exactly one `ready` group per invocation.
-
-### 9. Output an automation-friendly summary
-
-End with a concise queue:
-
-```text
-READY:
-1. <group_id> — <branch_name> — <short remediation summary>
-
-SKIP:
-1. alert #<number> — already fixed locally
-2. alert #<number> — covered by <PR URL>
-
-NEEDS INPUT:
-1. <group_id> — reason
-```
-
-## Idempotency contract
-
-Preserve idempotency by using:
-
-- Stable `group_id` values derived from rule IDs, file paths, and alert numbers.
-- Stable branch names derived from `group_id`.
-- PR bodies containing a machine-readable marker:
+- `group_id`
+- alert numbers and rule IDs
+- affected files
+- branch name, usually `security/<group_id>`
+- PR title
+- remediation strategy
+- expected code changes
+- verification commands
+- risk notes
+- PR marker:
 
 ```text
 <!-- code-scanning-remediation: group_id=<group_id>; alerts=<comma-separated numbers>; rules=<comma-separated rule IDs> -->
 ```
 
-On rerun, search for this marker in open PR bodies before creating any new plan.
+### 6. Write Or Update The Epic
 
-## Final response
+Create or update a normal epic in `docs/epics/`, such as `NNN-code-scanning-remediation.md`:
+
+```bash
+mkdir -p docs/epics
+ls docs/epics/ | grep -E '^[0-9]+' | sort | tail -1
+```
+
+Use this structure:
+
+```markdown
+# Epic: Code Scanning Remediation
+
+## Metadata
+
+- **ID:** <NNN>
+- **Status:** draft
+- **Created:** <date>
+- **Last updated:** <date>
+- **Source:** GitHub code scanning / user-provided alerts
+
+## Charter Alignment
+
+- **Principle advanced:** <security, trust, reliability, or provisional>
+- **Security outcome:** <what risk is reduced>
+- **Non-goal check:** <what broad rewrites are excluded>
+
+## Problem Statement
+
+<Summarize alert families and risk. Do not paste raw scanner logs.>
+
+## Goals
+
+1. Resolve verified open code scanning alerts.
+2. Keep remediation PRs focused and reviewable.
+3. Preserve application behavior unless a security fix requires a documented change.
+
+## Success Criteria
+
+| Criterion | Target | Measurement Method |
+| --- | --- | --- |
+| Verified alert groups remediated | <n> | PRs merged and scanner re-run |
+
+## Child Features
+
+- [ ] <Feature 1> - Remediate <group_id>
+- [ ] <Feature 2> - Remediate <group_id>
+
+## Remediation Inventory
+
+| Group | Alerts | Rule IDs | Severity | Affected files | Status | Child feature |
+| --- | --- | --- | --- | --- | --- | --- |
+| <group_id> | <alerts> | <rules> | <severity> | <files> | ready/covered/already-fixed/needs-input | <feature> |
+
+## Notes
+
+- Existing PRs:
+- Already fixed locally:
+- Needs input:
+- Verification guidance:
+```
+
+Do not create `docs/features/` files unless the user asks to plan the remediation child features now.
+
+## Final Response
 
 Report:
 
-- Number of alerts examined.
-- Path to the progress tracker if created or updated.
-- Alerts already fixed locally.
-- Alerts covered by existing PRs.
-- Proposed remediation groups ready for implementation.
-- Alerts that need user input or investigation.
-- The next `group_id` that `remediate-code-scanning` should process, if any.
-- Recommended next command or skill invocation.
+- Code-scanning epic path.
+- Alerts examined.
+- Groups ready for feature planning/remediation.
+- Alerts already fixed locally or covered by existing PRs.
+- Alerts needing input.
+- Recommended next step: run `plan-feature` for the highest-priority remediation group, or `ship-epic` to plan and advance the remediation epic.

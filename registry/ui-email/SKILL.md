@@ -11,7 +11,7 @@ description: UI patterns and visual design guidance for polished HTML emails wit
 - A user says an email feels unprofessional, generic, cluttered, or not aesthetically refined.
 - Improving transactional emails, analytics digests, weekly reports, receipts, confirmations, notifications, or lifecycle emails.
 - Translating web-app design quality into inbox-safe email.
-- Choosing references before applying `design-expert`, `ui-expert`, focused `ui-*` guidance, or `redesign-component` to an email.
+- Choosing references before applying `design-expert`, `ui-expert`, or focused `ui-*` guidance to an email.
 
 ## Core Principle
 
@@ -148,4 +148,4 @@ If a module does not help answer one of those questions, remove it or move it lo
 - Use `ui-expert` after this skill when an email needs broader structure, hierarchy, content, or visual-system routing.
 - Use `design-expert` when an email feels generic, cluttered, visually incoherent, or insufficiently refined.
 - Use focused `ui-*` skills for specific follow-up decisions: `ui-content` for copy, `ui-visual-hierarchy` for emphasis, `ui-spacing` for density, `ui-typography` for readability, and `ui-color` for semantic color and contrast.
-- Use `redesign-component` for top-section or module-level rework.
+- Use `ui-expert` and `design-expert` for top-section or module-level rework.

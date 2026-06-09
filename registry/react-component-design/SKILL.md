@@ -7,7 +7,7 @@ description: principles for designing, creating, and refactoring React component
 
 ## Overview
 
-This skill defines the principles that govern how React components should be designed, structured, and decomposed. It is not a workflow — it is a set of guidelines that other skills (like `decompose-component`, `audit-component-size`, and `redesign-component`) should defer to when making structural decisions.
+This skill defines the principles that govern how React components should be designed, structured, and decomposed. It is not a workflow — it is a set of guidelines for agents making component-structure decisions during normal feature work.
 
 The core philosophy: components should be small, focused, and compositional. When a component starts doing too much, the answer is almost always to split it into multiple components — not to add props that toggle behavior.
 

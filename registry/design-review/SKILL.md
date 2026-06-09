@@ -112,8 +112,8 @@ For each issue found, record:
 - **Effort**: quick fix (reorder/add a label), moderate (extract a component, restructure a section), or structural (rethink page architecture)
 - **Recommendation**: what to do about it
   - Quick fixes → describe the specific change
-  - Component-level issues → recommend `redesign-component`
-  - Page-level structural issues → recommend `redesign-screen`
+  - Component-level issues → recommend normal feature work with `react-component-design`, `ui-expert`, and `design-expert`
+  - Page-level structural issues → recommend normal feature work with `design-expert`, `ui-expert`, and focused `design-*` / `ui-*` skills
   - System-level issues → recommend updating navigation patterns or page templates
 
 ### 5. Write the critique artifact
@@ -177,7 +177,7 @@ Source: {code-only | screenshot + code}
 
 ### Deeper Work
 
-{Items that need redesign-component, redesign-screen, or navigation pattern updates}
+{Items that need feature-level component work, page restructure, or navigation pattern updates}
 ```
 
 ### 6. Present the critique

@@ -66,16 +66,16 @@ For each finding, determine the execution path:
 |---|---|---|
 | Quick fix | Spacing, alignment, color, typography tweak | Direct fix (apply inline, no separate skill needed) |
 | Quick fix | Known deviation from design system contract | `design-fix` |
-| Moderate | Component-level rework (new layout, split, restructure) | `redesign-component` |
-| Structural | Page-level restructure (reorder sections, change navigation) | `redesign-screen` |
+| Moderate | Component-level rework (new layout, split, restructure) | normal feature work with `react-component-design`, `ui-expert`, and `design-expert` |
+| Structural | Page-level restructure (reorder sections, change navigation) | normal feature work with `design-expert`, `ui-expert`, and focused `design-*` / `ui-*` skills |
 | System gap | Missing design tokens, no defined pattern | `create-design-system` |
 
 Classification rules:
 
 - **Quick fix**: a 1-2 line change with a known correct value. The finding itself contains the answer (e.g., "change gap-3 to gap-4").
 - **design-fix**: the finding is a mechanical deviation from a documented design system contract where the correct value is known.
-- **redesign-component**: the component has accumulated too many responsibilities or its layout no longer fits. The fix requires rethinking the component, not tweaking a value.
-- **redesign-screen**: the page structure, section ordering, or navigation needs rethinking. Multiple components may be affected.
+- **Component-level rework**: the component has accumulated too many responsibilities or its layout no longer fits. Treat this as normal feature work and apply `react-component-design`, `ui-expert`, and `design-expert`.
+- **Page-level restructure**: the page structure, section ordering, or navigation needs rethinking. Treat this as normal feature work informed by `design-expert`, `ui-expert`, and focused `design-*` / `ui-*` skills.
 - **create-design-system**: the finding reveals a gap in the design system itself — no defined token, scale, or pattern exists, so individual fixes would be arbitrary.
 
 For findings that could go either way (e.g., a component-level spacing issue that might indicate a deeper layout problem), classify conservatively (start with quick fix) and add a note to escalate if the quick fix doesn't resolve it.
@@ -93,8 +93,8 @@ Sequence in this order:
 1. Design system gaps first (they unblock other fixes)
 2. Mechanical batch fixes (design-fix items, all at once)
 3. Quick fixes grouped by file
-4. Component reworks (redesign-component)
-5. Page restructures (redesign-screen, last — they have the largest blast radius)
+4. Component reworks through normal feature work
+5. Page restructures through normal feature work (last — they have the largest blast radius)
 
 Within each group, order by impact (highest first).
 
@@ -132,7 +132,7 @@ Create `docs/tmp/design-fixes-{target}.md`:
   - {file path}
 - Finding: {what's wrong, from the source artifact}
 - Fix: {what to do, from the source artifact's recommendation}
-- Execution path: {direct-fix | design-fix | redesign-component | redesign-screen | create-design-system}
+- Execution path: {direct-fix | design-fix | feature-work | create-design-system}
 - Notes: {dependencies, warnings, or escalation conditions}
 
 ## Resolved
@@ -167,8 +167,8 @@ After planning, items are ready for execution. The execution path determines wha
 
 - **direct-fix**: the agent applies the fix inline. No separate skill needed — the finding contains the exact change.
 - **design-fix**: invoke `design-fix` to mechanically apply the known correction.
-- **redesign-component**: invoke `redesign-component` for component-level rework.
-- **redesign-screen**: invoke `redesign-screen` for page-level restructure.
+- **feature-work**: use normal feature implementation plus `react-component-design`, `ui-expert`, and `design-expert` for component-level rework.
+- **feature-work**: use normal feature implementation plus `design-expert`, `ui-expert`, and focused `design-*` / `ui-*` skills for page-level restructure.
 - **create-design-system**: invoke `create-design-system` to fill the design system gap.
 
 Direct fixes should be done first (they're quick and reduce noise), followed by mechanical batches, then component/page rework.
@@ -179,7 +179,7 @@ Report:
 
 - Source artifact used
 - Number of work items created
-- Breakdown by execution path: X direct fixes, Y design-fix, Z redesign-component, etc.
+- Breakdown by execution path: X direct fixes, Y design-fix, Z feature-work, etc.
 - Path to the tracker file
 - The recommended first item
 - Any items that need clarification before execution

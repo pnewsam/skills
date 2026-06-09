@@ -9,7 +9,7 @@ description: process stream-of-consciousness bug, issue, and app-feedback observ
 
 Take unstructured bug bash input — often dictated while clicking through an app — and transform it into a normal epic plan under `docs/epics/`. A bug bash is not a separate queue or tracker type. It is an epic with child features, and each child feature can later be expanded with `plan-feature` and executed with `advance-epic`, `build-feature`, or `ship-epic`.
 
-Do not create a separate bug-bash tracker under `docs/tmp/`. Execution belongs to `plan-feature`, `advance-epic`, `build-feature`, and `ship-epic`.
+Do not create a separate bug-bash tracker. Execution belongs to `plan-feature`, `advance-epic`, `build-feature`, and `ship-epic`.
 
 ## Goals
 
@@ -35,7 +35,7 @@ The input may contain incomplete sentences, repeated complaints, ambiguous UI re
 ## Safety Rules
 
 - Do not change source code, assets, configuration, or branches.
-- Do not create a separate bug-bash tracker under `docs/tmp/`.
+- Do not create a separate bug-bash tracker outside the epic/feature flow.
 - Do not discard distinct observations, even if they seem minor.
 - Do not invent issues that were not mentioned or directly implied.
 - Do not create feature plans directly unless the user explicitly asks to plan the child features now.
@@ -175,7 +175,7 @@ Do not create `docs/features/` files unless the user asks to plan the child feat
 
 Before finishing, check:
 
-- **No parallel tracker:** The plan uses `docs/epics/` and does not create a separate `docs/tmp/` tracker.
+- **No parallel tracker:** The plan uses `docs/epics/` and does not create a separate tracker.
 - **Child feature clarity:** Each child feature is independently plannable and verifiable.
 - **Deduplication:** Repeated observations were merged without losing useful details.
 - **Prioritization:** Critical and high-severity issues are visible near the top of the child feature order or issue inventory.

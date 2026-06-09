@@ -58,17 +58,11 @@ Workflow skills use a conventional `docs/` workspace inside the target project f
       NNN-<slug>.md                    # feature plans
       NNN-<slug>-validation.md         # validate-feature report
     tmp/
-      browser-test-plan.md             # browser test planning queue
-      browser-test-audit.md            # browser test audit report
-      code-scanning-remediation.md     # code scanning remediation queue
-      component-size-audit.md          # large component audit report
-      vulnerability-remediation.md     # vulnerability remediation queue
       session-YYYY-MM-DD-<slug>.md     # saved session notes
       wip-<name>.md                    # stash-work context breadcrumb
-      design-*.md                      # deprecated legacy design workflow artifacts
 ```
 
-`docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Projects, refactors, platform work, and internal quality initiatives should still flow through epics and features rather than separate top-level planning directories. `docs/tmp/` is a lightweight handoff area; several skills note that it may be gitignored unless the user explicitly wants those trackers committed.
+`docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Projects, refactors, bug bashes, browser-test coverage, component-structure work, security remediation, platform work, and internal quality initiatives should still flow through epics and features rather than separate top-level planning directories or `docs/tmp` queues. `docs/tmp/` is reserved for ephemeral session breadcrumbs and WIP handoff notes.
 
 ## Product
 
@@ -141,22 +135,6 @@ flowchart LR
 | [design-rhythm](registry/design-rhythm/SKILL.md)     | reference | Rhythm principles - cadence, repetition, variation, whitespace, density flow, and visual tempo.                                                       |
 | [design-simplicity](registry/design-simplicity/SKILL.md) | reference | Simplicity principles - restraint, reduction, decluttering, focus, and reducing visual/cognitive load without removing needed capability.             |
 | [design-visual-language](registry/design-visual-language/SKILL.md) | reference | Visual language principles - aesthetic direction, mood, personality, cohesion, materiality, brand fit, and avoiding generic or mismatched styling.    |
-
-### Components
-
-```mermaid
-flowchart LR
-    ACS[audit-component-size] -->|finds large components| DC[decompose-component]
-    RC[redesign-component]
-    RS[redesign-screen]
-```
-
-| Skill                                                          | Type     | Mode        | Phase                  | Description                                                                                                                           |
-| -------------------------------------------------------------- | -------- | ----------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| [audit-component-size](registry/audit-component-size/SKILL.md) | workflow | convergence | analyze                | Scan a codebase to find React components that have grown too large and are good candidates for decomposition.                         |
-| [decompose-component](registry/decompose-component/SKILL.md)   | workflow | convergence | execute                | Break a large React component into smaller, well-named sub-components in separate files.                                              |
-| [redesign-component](registry/redesign-component/SKILL.md)     | workflow | divergence  | analyze, plan, execute | Redesign a UI component that has outgrown its original layout — audit what it displays and does, then propose and implement a better layout. |
-| [redesign-screen](registry/redesign-screen/SKILL.md)           | workflow | divergence  | analyze, plan, execute | Redesign a screen or page that has become cluttered or poorly organized as features accumulated.                                      |
 
 ### References
 
@@ -322,24 +300,28 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    PVR[plan-vulnerability-remediation] --> RV[remediate-vulnerability]
-    PCSR[plan-code-scanning-remediation] --> RCS[remediate-code-scanning]
+    PVR[plan-vulnerability-remediation] -->|produces security epic| PF1[plan-feature]
+    PCSR[plan-code-scanning-remediation] -->|produces security epic| PF1
+    PF1 --> RV[remediate-vulnerability]
+    PF1 --> RCS[remediate-code-scanning]
 ```
 
 | Skill                                                                              | Type     | Mode        | Phase         | Description                                                                                                  |
 | ---------------------------------------------------------------------------------- | -------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------ |
-| [plan-vulnerability-remediation](registry/plan-vulnerability-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CVEs, Dependabot alerts, and audit findings, then group them into safe remediation PR plans.          |
-| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md)               | workflow | convergence | execute       | Execute a vulnerability remediation plan — update dependencies, verify the fix, commit, push, and open a PR. |
-| [plan-code-scanning-remediation](registry/plan-code-scanning-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CodeQL and SAST alerts, then group them into remediation PR plans.                                    |
-| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md)               | workflow | convergence | execute       | Apply source code fixes for CodeQL/SAST alerts, verify the fix, and create or update a pull request.         |
+| [plan-vulnerability-remediation](registry/plan-vulnerability-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CVEs, Dependabot alerts, and audit findings into a standard vulnerability remediation epic.           |
+| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md)               | workflow | convergence | execute       | Execute one planned dependency vulnerability remediation feature, verify the fix, commit, push, and open a PR. |
+| [plan-code-scanning-remediation](registry/plan-code-scanning-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CodeQL and SAST alerts into a standard code-scanning remediation epic.                                |
+| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md)               | workflow | convergence | execute       | Execute one planned CodeQL/SAST remediation feature, verify the fix, and create or update a pull request.    |
 
 ### Testing
 
 ```mermaid
 flowchart LR
     SBT[setup-browser-testing] --> PBT[plan-browser-tests]
-    PBT --> ABT[add-browser-test]
-    ABT2[audit-browser-tests] --> FBT[fix-browser-test]
+    PBT -->|produces browser-test epic| PF2[plan-feature]
+    ABT2[audit-browser-tests] -->|writes epic audit| PBT
+    PF2 --> ABT[add-browser-test]
+    PF2 --> FBT[fix-browser-test]
     BF2[build-feature] --> VC[validate-changes]
     BF2 --> VF2[validate-feature]
 ```
@@ -347,10 +329,10 @@ flowchart LR
 | Skill                                                                      | Type     | Mode        | Phase         | Description                                                                                                                                    |
 | -------------------------------------------------------------------------- | -------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | [setup-browser-testing](registry/setup-browser-testing/SKILL.md)           | workflow | convergence | execute       | Set up the browser testing facility — installs and configures framework, auth helpers, CI workflow with scheduled runs, and conventions docs.  |
-| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Analyze an application to identify critical user flows and produce a prioritized browser test plan.                                            |
-| [add-browser-test](registry/add-browser-test/SKILL.md)                     | workflow | divergence  | execute       | Implement one browser integration test from the plan — picks the next unchecked flow, writes the test, and verifies it passes.                 |
-| [audit-browser-tests](registry/audit-browser-tests/SKILL.md)               | workflow | convergence | analyze       | Audit an existing browser test suite to identify stale tests, missing coverage, flaky patterns, and quality issues.                            |
-| [fix-browser-test](registry/fix-browser-test/SKILL.md)                     | workflow | convergence | execute       | Repair a broken or flaky browser test — diagnoses the root cause, applies a targeted fix, and re-runs to confirm.                              |
+| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Analyze critical UI flows and produce a standard browser-test coverage epic with child features.                                               |
+| [add-browser-test](registry/add-browser-test/SKILL.md)                     | workflow | divergence  | execute       | Implement one browser integration test from a planned browser-test feature, then verify and update the feature plan.                           |
+| [audit-browser-tests](registry/audit-browser-tests/SKILL.md)               | workflow | convergence | analyze       | Audit an existing browser test suite, write an epic audit, and update the browser-test coverage epic.                                          |
+| [fix-browser-test](registry/fix-browser-test/SKILL.md)                     | workflow | convergence | execute       | Repair one broken or flaky browser test from a test failure or planned browser-test feature.                                                   |
 | [validate-changes](registry/validate-changes/SKILL.md)                     | workflow | convergence | execute       | Run targeted validation against recent code changes — maps diff to relevant tests, runs only those, and reports coverage gaps.                 |
 | [validate-feature](registry/validate-feature/SKILL.md)                     | workflow | convergence | execute       | Comprehensive post-build validation — targeted tests, full browser suite, acceptance criteria verification, and structured ship/no-ship report. |
 
