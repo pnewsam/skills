@@ -17,6 +17,20 @@ flowchart LR
     E -.->|new evidence, blockers, or feedback| A
 ```
 
+## Modes
+
+Initiatives can also be classified by mode. Divergent work opens the option space when intent is unclear or several good outcomes are possible. Convergent work narrows the option space when the standard, target, or gap is already known. Healthy projects need both in balance.
+
+```mermaid
+flowchart LR
+    I["Initiative"] --> Q{"Dominant posture?"}
+    Q -->|open options| D["Divergence<br/>Explore, compare, reframe, choose"]
+    Q -->|close gaps| C["Convergence<br/>Align, repair, complete, validate"]
+    D <-->|balance over time| C
+    D --> DE["Examples<br/>directions, charters, epics, new surfaces"]
+    C --> CE["Examples<br/>audits, fixes, remediation, validation"]
+```
+
 ## Project Structure
 
 This repository is a skills registry. The skills themselves live here, while many workflow skills create or consume planning documents inside the target project they are helping with.
