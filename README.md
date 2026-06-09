@@ -23,11 +23,7 @@ Initiatives sit between two opposing modes. Divergent work is the outward force:
 
 ```mermaid
 flowchart LR
-    D["Divergence<br/>Outward force<br/>Expand: explore, compare, reframe, choose"] <-.->|"opposing forces<br/>productive tension over time"| C["Convergence<br/>Inward force<br/>Contract: align, repair, complete, validate"]
-    I["Initiative"] -.->|"leans outward<br/>when intent is unclear"| D
-    I -.->|"leans inward<br/>when target is known"| C
-    D --> DE["Excess divergence<br/>sprawl, churn, no commitment"]
-    C --> CE["Excess convergence<br/>premature closure, local fixes, stale direction"]
+    D["Divergence<br/>Outward force<br/>Expand possibility<br/>Explore, compare, reframe, choose"] <-->|"opposing forces<br/>held in balance over time"| C["Convergence<br/>Inward force<br/>Narrow commitment<br/>Align, repair, complete, validate"]
 ```
 
 ## Project Structure
