@@ -1,0 +1,3 @@
+interface:
+  display_name: "Quality Code Clarity"
+  short_description: "Improve naming, readability, and local reasoning."

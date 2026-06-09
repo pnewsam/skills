@@ -4,39 +4,9 @@ This repository is a registry of agent skills. Each skill is a focused `SKILL.md
 
 Use the registry by installing selected skills into the directory your agent client reads, then invoke the relevant skill by name or let the agent choose from the available skill descriptions. See [cli/README.md](cli/README.md) for installation and usage, and [AUTHORING.md](AUTHORING.md) for how to write or update skills.
 
-## Taxonomy
+## Repository Layout
 
-Skills organize around two dimensions, **mode** and **phase**, and come in two types: **workflow** and **reference**.
-
-### Mode
-
-Initiatives sit between two opposing modes. Divergent work is the outward force: it expands the option space when intent is unclear or several good outcomes are possible. Convergent work is the inward force: it narrows ambiguity when the standard, target, or gap is already known. Healthy projects need both in productive tension.
-
-```mermaid
-flowchart LR
-    D["Divergence<br/>Outward force<br/>Expand possibility<br/>Explore, compare, reframe, choose"] <-->|"opposing forces<br/>held in balance over time"| C["Convergence<br/>Inward force<br/>Narrow commitment<br/>Align, repair, complete, validate"]
-```
-
-### Phase
-
-Most workflow skills move work through the same abstract loop: understand the situation, turn that understanding into scoped plans, then execute and validate the planned work. New evidence, blockers, or review feedback can send the work back through analysis before it proceeds.
-
-```mermaid
-flowchart LR
-    A["Analyze<br/>Understand context, evidence, goals, and gaps"] --> P["Plan<br/>Choose direction, scope epics/features, define acceptance criteria"]
-    P --> E["Execute<br/>Implement, verify, validate, and prepare the PR"]
-    E -.->|new evidence, blockers, or feedback| A
-```
-
-### Type
-
-Workflow skills do work and produce artifacts or code changes. Reference skills provide principles, patterns, and domain guidance.
-
-## Project Structure
-
-This repository is a skills registry. The skills themselves live here, while many workflow skills create or consume planning documents inside the target project they are helping with.
-
-### Registry Layout
+This repository is a skills registry. The source skills live under `registry/`, and installers symlink selected `SKILL.md` files into the directory an agent client reads.
 
 ```text
 skills/
@@ -52,7 +22,7 @@ skills/
   AUTHORING.md              # how to write and install skills
 ```
 
-Installers symlink each selected `SKILL.md` into the directory an agent client reads. Claude-oriented installs commonly use these locations:
+Claude-oriented installs commonly use these locations:
 
 ```text
 ~/.claude/skills/           # personal/global skills
@@ -61,9 +31,52 @@ Installers symlink each selected `SKILL.md` into the directory an agent client r
 
 Codex or other clients may use analogous roots such as `~/.codex/skills/`, `~/.agents/skills/`, or `<project>/.codex/skills/` depending on client configuration. The registry source remains `registry/<skill-name>/`.
 
-### Project Docs
+## Taxonomy
 
-Workflow skills use a conventional `docs/` workspace inside the target project for durable plans, handoff queues, audits, and generated reference docs.
+Skills organize around two dimensions, **mode** and **phase**, and come in two types: **workflow** and **reference**.
+
+![mode: divergence](https://img.shields.io/badge/mode-divergence-0ea5e9?style=flat-square)
+![mode: convergence](https://img.shields.io/badge/mode-convergence-f59e0b?style=flat-square)
+![phase: analyze](https://img.shields.io/badge/phase-analyze-8b5cf6?style=flat-square)
+![phase: plan](https://img.shields.io/badge/phase-plan-10b981?style=flat-square)
+![phase: execute](https://img.shields.io/badge/phase-execute-f97316?style=flat-square)
+![type: workflow](https://img.shields.io/badge/type-workflow-475569?style=flat-square)
+![type: reference](https://img.shields.io/badge/type-reference-64748b?style=flat-square)
+
+### Mode
+
+Initiatives sit between two opposing modes. Divergent work is the outward force: it expands the option space when intent is unclear or several good outcomes are possible. Convergent work is the inward force: it narrows ambiguity when the standard, target, or gap is already known. Healthy projects need both in productive tension.
+
+```mermaid
+flowchart LR
+    D["Divergence<br/>Outward force<br/>Expand possibility<br/>Explore, compare, reframe, choose"]:::divergence <-->|"opposing forces<br/>held in balance over time"| C["Convergence<br/>Inward force<br/>Narrow commitment<br/>Align, repair, complete, validate"]:::convergence
+
+    classDef divergence fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e;
+    classDef convergence fill:#fef3c7,stroke:#d97706,color:#78350f;
+```
+
+### Phase
+
+Most workflow skills move work through the same abstract loop: understand the situation, turn that understanding into scoped plans, then execute and validate the planned work. New evidence, blockers, or review feedback can send the work back through analysis before it proceeds.
+
+```mermaid
+flowchart LR
+    A["Analyze<br/>Understand context, evidence, goals, and gaps"]:::analyze --> P["Plan<br/>Choose direction, scope epics/features, define acceptance criteria"]:::plan
+    P --> E["Execute<br/>Implement, verify, validate, and prepare the PR"]:::execute
+    E -.->|new evidence, blockers, or feedback| A
+
+    classDef analyze fill:#ede9fe,stroke:#7c3aed,color:#4c1d95;
+    classDef plan fill:#d1fae5,stroke:#059669,color:#064e3b;
+    classDef execute fill:#ffedd5,stroke:#ea580c,color:#7c2d12;
+```
+
+### Type
+
+Workflow skills do work and produce artifacts or code changes. Reference skills provide principles, patterns, and domain guidance.
+
+## Artifacts
+
+Workflow skills create and consume artifacts inside the target project they are helping with. Durable planning artifacts live under a conventional `docs/` workspace.
 
 ```text
 <project>/
@@ -90,7 +103,7 @@ Workflow skills use a conventional `docs/` workspace inside the target project f
 
 ## Product
 
-Skills for product direction, planning, and quality.
+Skills for product direction, planning, and cross-domain consultation.
 
 ```mermaid
 flowchart TD
@@ -98,6 +111,8 @@ flowchart TD
     CE --> DX[design-expert]
     CE --> RE[react-expert]
     CE --> PY[python-expert]
+    CE --> QE[quality-expert]
+    CE --> CX[compliance-expert]
     CE -->|produces epic briefs| PE
     CC[create-charter] -->|produces docs/CHARTER.md| ED[explore-directions]
     ED -->|produces docs/directions/| PE[plan-epic]
@@ -120,7 +135,7 @@ flowchart TD
 
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
 | ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [consult-expert](registry/consult-expert/SKILL.md)     | workflow | divergence | analyze, plan | Route broad product or engineering prompts to domain experts, synthesize recommendations, and produce epic briefs for downstream planning. |
+| [consult-expert](registry/consult-expert/SKILL.md)     | workflow | divergence | analyze, plan | Route broad product, engineering, quality, or compliance prompts to domain experts, synthesize recommendations, and produce epic briefs. |
 | [explore-directions](registry/explore-directions/SKILL.md) | workflow | divergence | analyze | Analyze the product's current state and generate 3–5 distinct strategic directions with evidence and trade-offs for review. |
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
 | [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create a structured epic plan that translates a product charter into a quarter-level initiative.                              |
@@ -217,7 +232,7 @@ flowchart LR
 
 ## Engineering
 
-Skills for code, architecture, testing, security, and delivery.
+Skills for code, architecture, quality, compliance, testing, security, and delivery.
 
 ### Git Workflow
 
@@ -248,6 +263,48 @@ flowchart LR
 | Skill                                                | Type     | Mode        | Phase   | Description                                                                                                                   |
 | ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | [document-architecture](registry/document-architecture/SKILL.md) | workflow | convergence | analyze | Create or refresh `docs/ARCHITECTURE.md` from the codebase, including Mermaid diagrams for system context, runtime flows, boundaries, and data shape. |
+
+### Quality
+
+```mermaid
+flowchart LR
+    QX[quality-expert] --> QCC[quality-code-clarity]
+    QX --> QM[quality-modularity]
+    QX --> QR[quality-refactoring]
+    QX --> QC[quality-correctness]
+    QX --> QT[quality-testing]
+    QX --> QREL[quality-reliability]
+```
+
+| Skill                                                              | Type      | Description                                                                                                                  |
+| ------------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| [quality-expert](registry/quality-expert/SKILL.md)                 | reference | Router for broad code quality work - coordinates clarity, modularity, refactoring, correctness, testing, and reliability.    |
+| [quality-code-clarity](registry/quality-code-clarity/SKILL.md)     | reference | Naming, readability, local reasoning, intention-revealing code, control flow, comments, and removal of cleverness.          |
+| [quality-modularity](registry/quality-modularity/SKILL.md)         | reference | Cohesion, coupling, responsibility boundaries, dependency direction, abstractions, module seams, and change isolation.       |
+| [quality-refactoring](registry/quality-refactoring/SKILL.md)       | reference | Code smells, safe incremental transformations, behavior preservation, cleanup sequencing, and validation of refactors.       |
+| [quality-correctness](registry/quality-correctness/SKILL.md)       | reference | Invariants, edge cases, boundary validation, data integrity, idempotency, concurrency hazards, and behavioral truth.         |
+| [quality-testing](registry/quality-testing/SKILL.md)               | reference | Language-agnostic testing strategy, test ROI, test levels, regression confidence, test smells, and flakiness.               |
+| [quality-reliability](registry/quality-reliability/SKILL.md)       | reference | Failure modes, timeouts, retries, graceful degradation, observability, backpressure, recovery, and operational confidence.  |
+
+### Compliance
+
+```mermaid
+flowchart LR
+    CX[compliance-expert] --> CS[compliance-security]
+    CX --> CVM[compliance-vulnerability-management]
+    CX --> CA[compliance-accessibility]
+    CX --> CP[compliance-privacy]
+    CX --> CAT[compliance-auditability]
+```
+
+| Skill                                                                                      | Type      | Description                                                                                                                         |
+| ------------------------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [compliance-expert](registry/compliance-expert/SKILL.md)                                   | reference | Router for security, vulnerability management, accessibility, privacy, auditability, and external-risk work.                        |
+| [compliance-security](registry/compliance-security/SKILL.md)                               | reference | Secure coding, auth/authz, input handling, injection risk, secrets, dependency trust, least privilege, and safe errors.             |
+| [compliance-vulnerability-management](registry/compliance-vulnerability-management/SKILL.md) | reference | CVE and advisory triage, exploitability, remediation sequencing, patch risk, risk acceptance, and evidence.                         |
+| [compliance-accessibility](registry/compliance-accessibility/SKILL.md)                     | reference | Keyboard access, semantic structure, accessible names, focus order, contrast, forms, motion, and WCAG-oriented obligations.         |
+| [compliance-privacy](registry/compliance-privacy/SKILL.md)                                 | reference | PII classification, minimization, consent, purpose limits, retention, deletion, logging, analytics, and third-party sharing.        |
+| [compliance-auditability](registry/compliance-auditability/SKILL.md)                       | reference | Traceability, change records, approval evidence, audit logs, remediation proof, access records, and verifiable controls.            |
 
 ### Core Language
 
@@ -320,7 +377,7 @@ flowchart LR
 | [python-database-patterns](registry/python-database-patterns/SKILL.md)                 | reference | SQLAlchemy models, sessions, transactions, repositories, migrations, query boundaries, async database access, fixtures, and tests.     |
 | [fastapi-architecture](registry/fastapi-architecture/SKILL.md)                         | reference | FastAPI project structure, thin routers, Pydantic schemas, dependency injection, service boundaries, settings, errors, and tests.      |
 
-### Security
+### Security Remediation Workflows
 
 ```mermaid
 flowchart LR

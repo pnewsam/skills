@@ -1,0 +1,3 @@
+interface:
+  display_name: "Quality Modularity"
+  short_description: "Assess cohesion, coupling, and boundaries."

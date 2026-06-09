@@ -1,0 +1,3 @@
+interface:
+  display_name: "Quality Testing"
+  short_description: "Choose tests by risk and confidence."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Quality Refactoring"
+  short_description: "Refactor safely without changing behavior."

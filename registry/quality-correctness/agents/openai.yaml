@@ -1,0 +1,3 @@
+interface:
+  display_name: "Quality Correctness"
+  short_description: "Reason about invariants and edge cases."

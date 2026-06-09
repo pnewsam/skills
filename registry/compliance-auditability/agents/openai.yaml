@@ -1,0 +1,3 @@
+interface:
+  display_name: "Compliance Auditability"
+  short_description: "Design evidence, logs, and traceability."
