@@ -6,6 +6,75 @@ Skills organize around two dimensions — **mode** (convergence vs divergence) a
 
 Skills are installed by symlinking SKILL.md files into a directory the AI tool reads. See [cli/README.md](cli/README.md) for CLI installation, usage, and full documentation. See [AUTHORING.md](AUTHORING.md) for how lazy loading works, where to install (global vs project), skill groups, and how to write effective skills.
 
+## Project Structure
+
+This repository is a skills registry. The skills themselves live here, while many workflow skills create or consume planning documents inside the target project they are helping with.
+
+### Registry Layout
+
+```text
+skills/
+  registry/
+    <skill-name>/
+      SKILL.md              # required skill instructions
+      agents/
+        openai.yaml         # optional agent/client metadata
+      references/           # optional templates, examples, rubrics
+      scripts/              # optional helper scripts invoked by the skill
+      assets/               # optional supporting files
+  cli/                      # installer and registry tooling
+  AUTHORING.md              # how to write and install skills
+  PHILOSOPHY.md             # skill taxonomy and operating model
+  STANDARDS.md              # shared authoring standards
+```
+
+Installers symlink each selected `SKILL.md` into the directory an agent client reads. Claude-oriented installs commonly use these locations:
+
+```text
+~/.claude/skills/           # personal/global skills
+<project>/.claude/skills/   # project-local shared skills
+```
+
+Codex or other clients may use analogous roots such as `~/.codex/skills/`, `~/.agents/skills/`, or `<project>/.codex/skills/` depending on client configuration. The registry source remains `registry/<skill-name>/`.
+
+### Project Docs
+
+Workflow skills use a conventional `docs/` workspace inside the target project for durable plans, handoff queues, audits, and generated reference docs.
+
+```text
+<project>/
+  docs/
+    CHARTER.md                         # product north star
+    ARCHITECTURE.md                    # codebase-derived system architecture
+    BRAND.md                           # optional brand/product reference
+    DESIGN_SYSTEM.md                   # deprecated legacy design-system workflow only
+    directions/
+      NNN-<slug>.md                    # strategic options from explore-directions
+    epics/
+      NNN-<slug>.md                    # quarter-level epic plans
+      NNN-<slug>-audit.md              # audit-epic findings
+      NNN-<slug>-gap-closure.md        # plan-epic-gaps punch list
+    features/
+      NNN-<slug>.md                    # feature plans
+      NNN-<slug>-validation.md         # validate-feature report
+    projects/
+      ...                              # optional project-level plans when present
+    refactors/
+      NNN-<slug>.md                    # maintainability refactor plans
+    tmp/
+      browser-test-plan.md             # browser test planning queue
+      browser-test-audit.md            # browser test audit report
+      bug-bash.md                      # bug bash queue
+      code-scanning-remediation.md     # code scanning remediation queue
+      component-size-audit.md          # large component audit report
+      vulnerability-remediation.md     # vulnerability remediation queue
+      session-YYYY-MM-DD-<slug>.md     # saved session notes
+      wip-<name>.md                    # stash-work context breadcrumb
+      design-*.md                      # deprecated legacy design workflow artifacts
+```
+
+`docs/epics/`, `docs/features/`, `docs/refactors/`, and `docs/directions/` are durable planning surfaces that are usually worth committing. `docs/tmp/` is a lightweight handoff area; several skills note that it may be gitignored unless the user explicitly wants those trackers committed.
+
 ## Product
 
 Skills for product direction, planning, and quality.
