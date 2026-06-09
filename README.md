@@ -2,7 +2,7 @@
 
 Collected agent skills for Claude Code.
 
-Skills organize around two dimensions — **mode** (convergence vs divergence) and **phase** (analyze, plan, execute) — and come in two types: **workflow** and **reference**. See [PHILOSOPHY.md](PHILOSOPHY.md) for the full framework.
+Skills organize around two dimensions — **mode** (convergence vs divergence) and **phase** (analyze, plan, execute) — and come in two types: **workflow** and **reference**. Workflow skills do work and produce artifacts or code changes. Reference skills provide principles, patterns, and domain guidance.
 
 Skills are installed by symlinking SKILL.md files into a directory the AI tool reads. See [cli/README.md](cli/README.md) for CLI installation, usage, and full documentation. See [AUTHORING.md](AUTHORING.md) for how lazy loading works, where to install (global vs project), skill groups, and how to write effective skills.
 
@@ -44,8 +44,6 @@ skills/
       assets/               # optional supporting files
   cli/                      # installer and registry tooling
   AUTHORING.md              # how to write and install skills
-  PHILOSOPHY.md             # skill taxonomy and operating model
-  STANDARDS.md              # shared authoring standards
 ```
 
 Installers symlink each selected `SKILL.md` into the directory an agent client reads. Claude-oriented installs commonly use these locations:
