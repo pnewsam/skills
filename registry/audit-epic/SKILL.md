@@ -45,13 +45,13 @@ If the user did not specify an epic, list available plans and ask which one.
 Read the selected epic plan fully. Note:
 
 - The epic's goals, success criteria, and scope.
-- The "Child Projects / Features" section with its checkboxes.
+- The "Child Features" section with its checkboxes.
 - Any references or links to feature plan files.
 - The epic's status and target quarter.
 
 ### 2. Inventory child features
 
-Extract every child feature from the epic's "Child Projects / Features" section. For each entry, capture:
+Extract every child feature from the epic's "Child Features" section. For each entry, capture:
 
 - The checkbox status (`[ ]` or `[x]`).
 - The feature name and one-line description.
@@ -129,7 +129,7 @@ Check the "Metadata" section for a `Status` field.
 ls docs/features/ 2>/dev/null
 ```
 
-Look for feature plans in `docs/features/` that reference the epic as their parent but are not listed in the epic's "Child Projects / Features" section.
+Look for feature plans in `docs/features/` that reference the epic as their parent but are not listed in the epic's "Child Features" section.
 
 Report these as orphans — they exist in the filesystem but are not tracked in the epic. This could mean:
 - The epic was updated and this feature was removed (stale file).

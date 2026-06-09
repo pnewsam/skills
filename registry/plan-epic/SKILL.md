@@ -1,23 +1,25 @@
 ---
 name: plan-epic
-description: create a structured epic plan that translates a product charter into a quarter-level initiative. use when breaking down docs/CHARTER.md into actionable, time-bounded workstreams. produces a markdown epic document in docs/epics/ that features and projects will reference. enforces charter alignment via mandatory checks.
+description: create a structured epic plan that translates a product charter into a quarter-level initiative. use when breaking down docs/CHARTER.md into actionable, time-bounded workstreams. produces a markdown epic document in docs/epics/ that features will reference. enforces charter alignment via mandatory checks.
 ---
 
 # Plan Epic
 
 ## Overview
 
-Translate a product charter (or a large strategic initiative) into a concrete epic: a quarter-level body of work with clear goals, scope boundaries, success criteria, and child projects/features.
+Translate a product charter (or a large strategic initiative) into a concrete epic: a quarter-level body of work with clear goals, scope boundaries, success criteria, and child features.
 
 An epic is the bridge between vision and execution. It answers: "What are we doing this quarter, why does it matter, and how will we know it worked?"
 
 Every epic must reference `docs/CHARTER.md` and pass an alignment check. If no charter exists, stop and recommend `create-charter` first.
 
+Projects, refactors, platform work, and internal quality initiatives can all be epics when they are large enough to need coordinated planning. Keep the standard flow as `docs/directions/` -> `docs/epics/` -> `docs/features/`; do not create separate top-level planning directories for project or refactor work.
+
 ## Goals
 
 - Break a strategic initiative into a well-scoped, time-bounded epic.
 - Define what is in scope, what is out of scope, and what success looks like.
-- Identify child projects or features that can be planned independently.
+- Identify child features that can be planned independently.
 - Enforce charter alignment — refuse to proceed if the epic cannot demonstrate how it advances the product vision.
 
 ## Safety rules
@@ -104,7 +106,7 @@ Before finalizing, run these checks:
 - **Scope check:** Can a single team reasonably deliver the "In Scope" items in 4–12 weeks? If not, split into multiple epics or move items to out-of-scope.
 - **Success criteria check:** Is each criterion measurable without a survey? Prefer behavioral or system metrics over subjective ratings.
 - **Non-goal check:** Does the out-of-scope section actually exclude tempting but distracting work? If it only excludes obviously unrelated things, it is not doing its job.
-- **Child clarity check:** Are the child projects/features independent enough that one could be deprioritized without killing the whole epic? If not, reconsider the decomposition.
+- **Child clarity check:** Are the child features independent enough that one could be deprioritized without killing the whole epic? If not, reconsider the decomposition.
 
 If any check fails, flag it to the user and propose a revision.
 
@@ -130,7 +132,7 @@ Report:
 - The assigned epic ID and file path.
 - A one-paragraph summary of the epic's core argument.
 - Any alignment concerns or scope warnings flagged during validation.
-- Recommended next step: run `plan-feature` to plan the first child feature, or `plan-project` if the epic contains multi-week cross-functional workstreams.
+- Recommended next step: run `plan-feature` to plan the first child feature.
 
 ## Idempotency
 
@@ -145,4 +147,4 @@ If `docs/epics/NNN-<slug>.md` already exists:
 
 - Do not use this skill for work that fits in 1–2 weeks — use `plan-feature` instead.
 - Do not use this skill without a charter — the alignment step will fail.
-- Do not use this skill for purely technical refactoring with no user-facing outcome — use an RFC or architecture decision record instead (unless the refactoring is chartered as a strategic initiative).
+- Do not use this skill for tiny isolated tech-debt tasks that do not need epic-level coordination. For strategic maintainability, architecture, platform, or refactor initiatives, create a normal epic and decompose it into feature plans.

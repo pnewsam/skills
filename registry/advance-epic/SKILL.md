@@ -25,7 +25,7 @@ Before starting work on a child feature:
 
 Prefer an epic plan from `plan-epic` with:
 
-- A clear "Child Projects / Features" section with checkboxes.
+- A clear "Child Features" section with checkboxes.
 - References to `docs/features/` files for planned features.
 - Success criteria to guide prioritization.
 
@@ -60,12 +60,12 @@ Read the selected epic plan fully. Note:
 Also check for a linked charter:
 
 ```bash
-cat CHARTER.md 2>/dev/null
+cat docs/CHARTER.md 2>/dev/null
 ```
 
 ### 2. Find the next incomplete child feature
 
-Scan the epic's "Child Projects / Features" section for checklist items (`- [ ]`). Pick the first unchecked one.
+Scan the epic's "Child Features" section for checklist items (`- [ ]`). Pick the first unchecked one.
 
 If all child features are checked:
 

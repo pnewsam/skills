@@ -34,7 +34,7 @@ This skill is divergence-heavy. It should surface possibilities the user has not
 ### 1. Read the current state
 
 ```bash
-cat CHARTER.md 2>/dev/null || echo "CHARTER.md not found"
+cat docs/CHARTER.md 2>/dev/null || echo "docs/CHARTER.md not found"
 ls docs/epics/ 2>/dev/null
 ls docs/features/ 2>/dev/null
 ls docs/directions/ 2>/dev/null

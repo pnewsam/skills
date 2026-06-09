@@ -57,10 +57,6 @@ Workflow skills use a conventional `docs/` workspace inside the target project f
     features/
       NNN-<slug>.md                    # feature plans
       NNN-<slug>-validation.md         # validate-feature report
-    projects/
-      ...                              # optional project-level plans when present
-    refactors/
-      NNN-<slug>.md                    # maintainability refactor plans
     tmp/
       browser-test-plan.md             # browser test planning queue
       browser-test-audit.md            # browser test audit report
@@ -73,7 +69,7 @@ Workflow skills use a conventional `docs/` workspace inside the target project f
       design-*.md                      # deprecated legacy design workflow artifacts
 ```
 
-`docs/epics/`, `docs/features/`, `docs/refactors/`, and `docs/directions/` are durable planning surfaces that are usually worth committing. `docs/tmp/` is a lightweight handoff area; several skills note that it may be gitignored unless the user explicitly wants those trackers committed.
+`docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Projects, refactors, platform work, and internal quality initiatives should still flow through epics and features rather than separate top-level planning directories. `docs/tmp/` is a lightweight handoff area; several skills note that it may be gitignored unless the user explicitly wants those trackers committed.
 
 ## Product
 
@@ -272,18 +268,6 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 | [typescript-types](registry/typescript-types/SKILL.md)       | reference | No `any`, discriminated unions, type narrowing, `satisfies`, branded types, deriving types from values.                      |
 | [error-handling](registry/error-handling/SKILL.md)           | reference | Error as values (Result types), typed errors, throw for exceptional cases only, catch at system boundaries.                  |
 | [async-patterns](registry/async-patterns/SKILL.md)           | reference | async/await over raw promises, `Promise.all` for concurrency, AbortController, race condition guards, limiting concurrency.  |
-
-### Refactoring
-
-```mermaid
-flowchart LR
-    PR[plan-refactor] --> AR[apply-refactor]
-```
-
-| Skill                                                | Type     | Mode        | Phase   | Description                                                                                                                   |
-| ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [plan-refactor](registry/plan-refactor/SKILL.md)     | workflow | convergence | plan    | Create a structured maintainability refactor plan for large, tangled, poorly organized, or hard-to-navigate code.             |
-| [apply-refactor](registry/apply-refactor/SKILL.md)   | workflow | convergence | execute | Implement the next unchecked task from a refactor plan — one behavior-preserving split, move, extraction, or cleanup at a time. |
 
 ### React SPA
 

@@ -60,13 +60,13 @@ Be more specific than the charter. This is the charter's problem statement narro
 - <What the team is saying no to>
 - <Related work that is not part of this initiative>
 
-## Child Projects / Features
+## Child Features
 
-<List the projects or features this epic will produce. Each should be independently plannable. Link to their plan documents when they exist.>
+<List the features this epic will produce. Each should be independently plannable and represented by a docs/features/ plan when it exists.>
 
-- [ ] <Feature/Project 1> — <one-line description>
-- [ ] <Feature/Project 2> — <one-line description>
-- [ ] <Feature/Project 3> — <one-line description>
+- [ ] <Feature 1> — <one-line description>
+- [ ] <Feature 2> — <one-line description>
+- [ ] <Feature 3> — <one-line description>
 
 ## Dependencies & Risks
 
