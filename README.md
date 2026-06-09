@@ -6,6 +6,17 @@ Skills organize around two dimensions — **mode** (convergence vs divergence) a
 
 Skills are installed by symlinking SKILL.md files into a directory the AI tool reads. See [cli/README.md](cli/README.md) for CLI installation, usage, and full documentation. See [AUTHORING.md](AUTHORING.md) for how lazy loading works, where to install (global vs project), skill groups, and how to write effective skills.
 
+## General Flow
+
+Most workflow skills move work through the same abstract loop: understand the situation, turn that understanding into scoped plans, then execute and validate the planned work. New evidence, blockers, or review feedback can send the work back through analysis before it proceeds.
+
+```mermaid
+flowchart LR
+    A["Analyze<br/>Understand context, evidence, goals, and gaps"] --> P["Plan<br/>Choose direction, scope epics/features, define acceptance criteria"]
+    P --> E["Execute<br/>Implement, verify, validate, and prepare the PR"]
+    E -.->|new evidence, blockers, or feedback| A
+```
+
 ## Project Structure
 
 This repository is a skills registry. The skills themselves live here, while many workflow skills create or consume planning documents inside the target project they are helping with.
