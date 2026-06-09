@@ -60,7 +60,6 @@ Workflow skills use a conventional `docs/` workspace inside the target project f
     tmp/
       browser-test-plan.md             # browser test planning queue
       browser-test-audit.md            # browser test audit report
-      bug-bash.md                      # bug bash queue
       code-scanning-remediation.md     # code scanning remediation queue
       component-size-audit.md          # large component audit report
       vulnerability-remediation.md     # vulnerability remediation queue
@@ -85,6 +84,7 @@ flowchart TD
     CC[create-charter] -->|produces docs/CHARTER.md| ED[explore-directions]
     ED -->|produces docs/directions/| PE[plan-epic]
     PE -->|produces docs/epics/| PF[plan-feature]
+    PBB[plan-bug-bash] -->|produces bug-bash epic| PF
     PE --> SP[ship-epic]
     SP -->|plans missing features| PF
     SP -->|advances until complete| AE
@@ -106,24 +106,13 @@ flowchart TD
 | [explore-directions](registry/explore-directions/SKILL.md) | workflow | divergence | analyze | Analyze the product's current state and generate 3–5 distinct strategic directions with evidence and trade-offs for review. |
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
 | [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create a structured epic plan that translates a product charter into a quarter-level initiative.                              |
+| [plan-bug-bash](registry/plan-bug-bash/SKILL.md)       | workflow | divergence | analyze, plan | Turn stream-of-consciousness bug observations into a standard bug-bash epic with prioritized child features.            |
 | [plan-feature](registry/plan-feature/SKILL.md)         | workflow | divergence | execute | Create a structured feature plan that defines a 1–2 week deliverable and links it to a parent epic.                           |
 | [build-feature](registry/build-feature/SKILL.md)       | workflow | convergence | execute | Implement one acceptance criterion from a feature plan — write code, verify, commit, and check it off. Run repeatedly until the feature is complete. |
 | [advance-epic](registry/advance-epic/SKILL.md)         | workflow | convergence | execute | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete.    |
 | [ship-epic](registry/ship-epic/SKILL.md)               | workflow | convergence | execute | Complete an epic end-to-end — plan missing features, advance until all child features are complete, validate, and prepare a PR. |
 | [audit-epic](registry/audit-epic/SKILL.md)             | workflow | convergence | analyze | Audit an epic to find missing, inconsistent, or incomplete child features — cross-references feature plans against the epic and reports gaps. |
 | [plan-epic-gaps](registry/plan-epic-gaps/SKILL.md)     | workflow | convergence | plan    | Create a prioritized plan to close gaps found by audit-epic — maps each gap to a concrete action and produces a structured punch list.        |
-
-### Bug Bash
-
-```mermaid
-flowchart LR
-    PBB[plan-bug-bash] --> FBBI[fix-bug-bash-item]
-```
-
-| Skill                                                    | Type     | Mode        | Phase         | Description                                                                                                                    |
-| -------------------------------------------------------- | -------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| [plan-bug-bash](registry/plan-bug-bash/SKILL.md)         | workflow |             | analyze, plan | Process stream-of-consciousness dictation about bugs and issues into a structured, prioritized plan of discrete units of work. |
-| [fix-bug-bash-item](registry/fix-bug-bash-item/SKILL.md) | workflow | convergence | execute       | Execute one fix from a bug bash plan — investigate, apply a targeted fix, verify, commit, push, and open a PR.                 |
 
 ## Design
 
