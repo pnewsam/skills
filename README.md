@@ -101,9 +101,13 @@ Workflow skills create and consume artifacts inside the target project they are 
 
 `docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Projects, refactors, bug bashes, browser-test coverage, component-structure work, security remediation, platform work, and internal quality initiatives should still flow through epics and features rather than separate top-level planning directories or `docs/tmp` queues. `docs/tmp/` is reserved for ephemeral session breadcrumbs and WIP handoff notes.
 
-## Product
+## Workflow Skills
 
-Skills for product direction, planning, and cross-domain consultation.
+Workflow skills do work: they analyze a situation, produce planning artifacts, modify code, validate behavior, prepare delivery, or create pull requests.
+
+### Product Direction And Delivery
+
+Workflow skills for product direction, planning, cross-domain consultation, epic/feature delivery, and PR preparation.
 
 ```mermaid
 flowchart TD
@@ -133,8 +137,6 @@ flowchart TD
     PEG -.->|informs revisions to| PE
 ```
 
-### Direction
-
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
 | ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | [consult-expert](registry/consult-expert/SKILL.md)     | workflow | divergence | analyze, plan | Route broad product, engineering, backend, platform, quality, or compliance prompts to domain experts, synthesize recommendations, and produce epic briefs. |
@@ -149,15 +151,85 @@ flowchart TD
 | [audit-epic](registry/audit-epic/SKILL.md)             | workflow | convergence | analyze | Audit an epic to find missing, inconsistent, or incomplete child features — cross-references feature plans against the epic and reports gaps. |
 | [plan-epic-gaps](registry/plan-epic-gaps/SKILL.md)     | workflow | convergence | plan    | Create a prioritized plan to close gaps found by audit-epic — maps each gap to a concrete action and produces a structured punch list.        |
 
-## Design
+### Git And PR Workflow
 
-Skills for visual design judgment, UI/UX references, and targeted UI restructuring.
+```mermaid
+flowchart LR
+    PP[prepare-pr] -->|creates PR| RP[review-pr]
+    PP -->|creates PR| APR[assess-pr-risk]
+    RP --> RVP[revise-pr]
+    APR --> RVP
+```
 
-Legacy design-system and critique workflow skills are deprecated for now while the design taxonomy is reorganized around a `design-expert` router and focused `design-*` reference skills. Deprecated skills remain in `registry/` for recovery, but they are not part of the active framework: `create-design-system`, `extract-design-system`, `design-audit`, `design-fix`, `design-review`, `design-polish`, and `plan-design-fixes`.
+| Skill                                              | Type     | Mode        | Phase   | Description                                                                                                         |
+| -------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
+| [stash-work](registry/stash-work/SKILL.md)         | workflow |             | execute | Stash in-progress work onto a local `wip/` branch with a descriptive commit and context file.                       |
+| [save-session](registry/save-session/SKILL.md)     | workflow |             | analyze | Summarize the current working session and save it to `docs/tmp/`.                                                   |
+| [prepare-pr](registry/prepare-pr/SKILL.md)         | workflow |             | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR.     |
+| [revise-pr](registry/revise-pr/SKILL.md)           | workflow | convergence | execute | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits.        |
+| [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze | Review a pull request and post inline code review comments with an overall verdict.                                 |
+| [assess-pr-risk](registry/assess-pr-risk/SKILL.md) | workflow |             | analyze | Assess the risk level of a pull request across blast radius, security sensitivity, test coverage, and dependencies. |
+
+### Architecture Documentation
+
+```mermaid
+flowchart LR
+    DA[document-architecture] -->|produces docs/ARCHITECTURE.md| AR[Architecture Reference]
+```
+
+| Skill                                                | Type     | Mode        | Phase   | Description                                                                                                                   |
+| ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [document-architecture](registry/document-architecture/SKILL.md) | workflow | convergence | analyze | Create or refresh `docs/ARCHITECTURE.md` from the codebase, including Mermaid diagrams for system context, runtime flows, boundaries, and data shape. |
+
+### Security Remediation Workflows
+
+```mermaid
+flowchart LR
+    PVR[plan-vulnerability-remediation] -->|produces security epic| PF1[plan-feature]
+    PCSR[plan-code-scanning-remediation] -->|produces security epic| PF1
+    PF1 --> RV[remediate-vulnerability]
+    PF1 --> RCS[remediate-code-scanning]
+```
+
+| Skill                                                                              | Type     | Mode        | Phase         | Description                                                                                                  |
+| ---------------------------------------------------------------------------------- | -------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------ |
+| [plan-vulnerability-remediation](registry/plan-vulnerability-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CVEs, Dependabot alerts, and audit findings into a standard vulnerability remediation epic.           |
+| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md)               | workflow | convergence | execute       | Execute one planned dependency vulnerability remediation feature, verify the fix, commit, push, and open a PR. |
+| [plan-code-scanning-remediation](registry/plan-code-scanning-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CodeQL and SAST alerts into a standard code-scanning remediation epic.                                |
+| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md)               | workflow | convergence | execute       | Execute one planned CodeQL/SAST remediation feature, verify the fix, and create or update a pull request.    |
+
+### Testing Workflows
+
+```mermaid
+flowchart LR
+    SBT[setup-browser-testing] --> PBT[plan-browser-tests]
+    PBT -->|produces browser-test epic| PF2[plan-feature]
+    ABT2[audit-browser-tests] -->|writes epic audit| PBT
+    PF2 --> ABT[add-browser-test]
+    PF2 --> FBT[fix-browser-test]
+    BF2[build-feature] --> VC[validate-changes]
+    BF2 --> VF2[validate-feature]
+```
+
+| Skill                                                                      | Type     | Mode        | Phase         | Description                                                                                                                                    |
+| -------------------------------------------------------------------------- | -------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [setup-browser-testing](registry/setup-browser-testing/SKILL.md)           | workflow | convergence | execute       | Set up the browser testing facility — installs and configures framework, auth helpers, CI workflow with scheduled runs, and conventions docs.  |
+| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Analyze critical UI flows and produce a standard browser-test coverage epic with child features.                                               |
+| [add-browser-test](registry/add-browser-test/SKILL.md)                     | workflow | divergence  | execute       | Implement one browser integration test from a planned browser-test feature, then verify and update the feature plan.                           |
+| [audit-browser-tests](registry/audit-browser-tests/SKILL.md)               | workflow | convergence | analyze       | Audit an existing browser test suite, write an epic audit, and update the browser-test coverage epic.                                          |
+| [fix-browser-test](registry/fix-browser-test/SKILL.md)                     | workflow | convergence | execute       | Repair one broken or flaky browser test from a test failure or planned browser-test feature.                                                   |
+| [validate-changes](registry/validate-changes/SKILL.md)                     | workflow | convergence | execute       | Run targeted validation against recent code changes — maps diff to relevant tests, runs only those, and reports coverage gaps.                 |
+| [validate-feature](registry/validate-feature/SKILL.md)                     | workflow | convergence | execute       | Comprehensive post-build validation — targeted tests, full browser suite, acceptance criteria verification, and structured ship/no-ship report. |
+
+## Reference Skills
+
+Reference skills provide principles, patterns, conventions, and domain judgment. They guide agents while workflow skills perform the actual planning, implementation, validation, and delivery.
 
 ### Design Principles
 
 Reference skills for turning a functional interface into something clearer, calmer, more elegant, and more visually coherent. Use `design-expert` for broad visual quality work or when the right focused design skill is unclear.
+
+Legacy design-system and critique workflow skills are deprecated for now while the design taxonomy is reorganized around a `design-expert` router and focused `design-*` reference skills. Deprecated skills remain in `registry/` for recovery, but they are not part of the active framework: `create-design-system`, `extract-design-system`, `design-audit`, `design-fix`, `design-review`, `design-polish`, and `plan-design-fixes`.
 
 ```mermaid
 flowchart LR
@@ -177,7 +249,7 @@ flowchart LR
 | [design-simplicity](registry/design-simplicity/SKILL.md) | reference | Simplicity principles - restraint, reduction, decluttering, focus, and reducing visual/cognitive load without removing needed capability.             |
 | [design-visual-language](registry/design-visual-language/SKILL.md) | reference | Visual language principles - aesthetic direction, mood, personality, cohesion, materiality, brand fit, and avoiding generic or mismatched styling.    |
 
-### References
+### Design References
 
 | Skill                                                | Type      | Description                                                                                                                                           | Origin                                                                                     |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -231,40 +303,6 @@ flowchart LR
 | [ui-email](registry/ui-email/SKILL.md)               | reference | Email UI patterns — transactional, digest, report, product update, and lifecycle email layouts with real email-client constraints.                    |
 
 **References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
-
-## Engineering
-
-Skills for code, architecture, quality, compliance, testing, security, and delivery.
-
-### Git Workflow
-
-```mermaid
-flowchart LR
-    PP[prepare-pr] -->|creates PR| RP[review-pr]
-    PP -->|creates PR| APR[assess-pr-risk]
-    RP --> RVP[revise-pr]
-    APR --> RVP
-```
-
-| Skill                                              | Type     | Mode        | Phase   | Description                                                                                                         |
-| -------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
-| [stash-work](registry/stash-work/SKILL.md)         | workflow |             | execute | Stash in-progress work onto a local `wip/` branch with a descriptive commit and context file.                       |
-| [save-session](registry/save-session/SKILL.md)     | workflow |             | analyze | Summarize the current working session and save it to `docs/tmp/`.                                                   |
-| [prepare-pr](registry/prepare-pr/SKILL.md)         | workflow |             | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR.     |
-| [revise-pr](registry/revise-pr/SKILL.md)           | workflow | convergence | execute | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits.        |
-| [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze | Review a pull request and post inline code review comments with an overall verdict.                                 |
-| [assess-pr-risk](registry/assess-pr-risk/SKILL.md) | workflow |             | analyze | Assess the risk level of a pull request across blast radius, security sensitivity, test coverage, and dependencies. |
-
-### Architecture
-
-```mermaid
-flowchart LR
-    DA[document-architecture] -->|produces docs/ARCHITECTURE.md| AR[Architecture Reference]
-```
-
-| Skill                                                | Type     | Mode        | Phase   | Description                                                                                                                   |
-| ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [document-architecture](registry/document-architecture/SKILL.md) | workflow | convergence | analyze | Create or refresh `docs/ARCHITECTURE.md` from the codebase, including Mermaid diagrams for system context, runtime flows, boundaries, and data shape. |
 
 ### Quality
 
@@ -424,46 +462,6 @@ flowchart LR
 | [python-error-handling](registry/python-error-handling/SKILL.md)                       | reference | Python exceptions, domain errors, API/CLI/job boundary translation, logging, retries, validation failures, and rollback behavior.      |
 | [python-database-patterns](registry/python-database-patterns/SKILL.md)                 | reference | SQLAlchemy models, sessions, transactions, repositories, migrations, query boundaries, async database access, fixtures, and tests.     |
 | [fastapi-architecture](registry/fastapi-architecture/SKILL.md)                         | reference | FastAPI project structure, thin routers, Pydantic schemas, dependency injection, service boundaries, settings, errors, and tests.      |
-
-### Security Remediation Workflows
-
-```mermaid
-flowchart LR
-    PVR[plan-vulnerability-remediation] -->|produces security epic| PF1[plan-feature]
-    PCSR[plan-code-scanning-remediation] -->|produces security epic| PF1
-    PF1 --> RV[remediate-vulnerability]
-    PF1 --> RCS[remediate-code-scanning]
-```
-
-| Skill                                                                              | Type     | Mode        | Phase         | Description                                                                                                  |
-| ---------------------------------------------------------------------------------- | -------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------ |
-| [plan-vulnerability-remediation](registry/plan-vulnerability-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CVEs, Dependabot alerts, and audit findings into a standard vulnerability remediation epic.           |
-| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md)               | workflow | convergence | execute       | Execute one planned dependency vulnerability remediation feature, verify the fix, commit, push, and open a PR. |
-| [plan-code-scanning-remediation](registry/plan-code-scanning-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CodeQL and SAST alerts into a standard code-scanning remediation epic.                                |
-| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md)               | workflow | convergence | execute       | Execute one planned CodeQL/SAST remediation feature, verify the fix, and create or update a pull request.    |
-
-### Testing
-
-```mermaid
-flowchart LR
-    SBT[setup-browser-testing] --> PBT[plan-browser-tests]
-    PBT -->|produces browser-test epic| PF2[plan-feature]
-    ABT2[audit-browser-tests] -->|writes epic audit| PBT
-    PF2 --> ABT[add-browser-test]
-    PF2 --> FBT[fix-browser-test]
-    BF2[build-feature] --> VC[validate-changes]
-    BF2 --> VF2[validate-feature]
-```
-
-| Skill                                                                      | Type     | Mode        | Phase         | Description                                                                                                                                    |
-| -------------------------------------------------------------------------- | -------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| [setup-browser-testing](registry/setup-browser-testing/SKILL.md)           | workflow | convergence | execute       | Set up the browser testing facility — installs and configures framework, auth helpers, CI workflow with scheduled runs, and conventions docs.  |
-| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Analyze critical UI flows and produce a standard browser-test coverage epic with child features.                                               |
-| [add-browser-test](registry/add-browser-test/SKILL.md)                     | workflow | divergence  | execute       | Implement one browser integration test from a planned browser-test feature, then verify and update the feature plan.                           |
-| [audit-browser-tests](registry/audit-browser-tests/SKILL.md)               | workflow | convergence | analyze       | Audit an existing browser test suite, write an epic audit, and update the browser-test coverage epic.                                          |
-| [fix-browser-test](registry/fix-browser-test/SKILL.md)                     | workflow | convergence | execute       | Repair one broken or flaky browser test from a test failure or planned browser-test feature.                                                   |
-| [validate-changes](registry/validate-changes/SKILL.md)                     | workflow | convergence | execute       | Run targeted validation against recent code changes — maps diff to relevant tests, runs only those, and reports coverage gaps.                 |
-| [validate-feature](registry/validate-feature/SKILL.md)                     | workflow | convergence | execute       | Comprehensive post-build validation — targeted tests, full browser suite, acceptance criteria verification, and structured ship/no-ship report. |
 
 ## Other Skill Collections
 
