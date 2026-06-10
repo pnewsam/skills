@@ -1,6 +1,6 @@
 ---
 name: create-charter
-description: create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning. use when starting a new product, pivoting direction, or when existing plans have drifted from core intent. produces a concise, opinionated CHARTER.md in the docs/ directory that subsequent planning skills (plan-epic, plan-feature) align against. Other high-level documents such as BRAND.md also live directly in docs/.
+description: create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning. use when starting a new product, pivoting direction, or when existing plans have drifted from core intent. produces a concise, opinionated CHARTER.md in the docs/ directory that subsequent planning skills (plan-epic, plan-feature) align against. Other high-level constitutional documents such as METHODS.md and PRESENTATION.md also live directly in docs/.
 ---
 
 # Create Charter

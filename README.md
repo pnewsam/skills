@@ -85,8 +85,7 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
   docs/
     CHARTER.md                         # product north star
     METHODS.md                         # project methods, engineering principles, and operating approach
-    BRAND.md                           # optional brand/product reference
-    DESIGN_SYSTEM.md                   # deprecated legacy design-system workflow only
+    PRESENTATION.md                    # product presentation, identity, voice, and visual direction
     architecture/
       ARCHITECTURE.md                  # derived current-state system architecture
     directions/
