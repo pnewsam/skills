@@ -1,0 +1,3 @@
+interface:
+  display_name: "Platform Environments"
+  short_description: "Keep runtime environments clear."

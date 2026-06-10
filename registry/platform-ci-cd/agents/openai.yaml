@@ -1,0 +1,3 @@
+interface:
+  display_name: "Platform CI/CD"
+  short_description: "Build safer release pipelines."

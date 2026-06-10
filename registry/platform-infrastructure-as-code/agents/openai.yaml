@@ -1,0 +1,3 @@
+interface:
+  display_name: "Platform IaC"
+  short_description: "Review infrastructure as code."

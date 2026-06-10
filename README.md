@@ -111,6 +111,7 @@ flowchart TD
     CE --> DX[design-expert]
     CE --> RE[react-expert]
     CE --> BE[backend-expert]
+    CE --> PL[platform-expert]
     CE --> PY[python-expert]
     CE --> QE[quality-expert]
     CE --> CX[compliance-expert]
@@ -136,7 +137,7 @@ flowchart TD
 
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
 | ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [consult-expert](registry/consult-expert/SKILL.md)     | workflow | divergence | analyze, plan | Route broad product, engineering, backend, quality, or compliance prompts to domain experts, synthesize recommendations, and produce epic briefs. |
+| [consult-expert](registry/consult-expert/SKILL.md)     | workflow | divergence | analyze, plan | Route broad product, engineering, backend, platform, quality, or compliance prompts to domain experts, synthesize recommendations, and produce epic briefs. |
 | [explore-directions](registry/explore-directions/SKILL.md) | workflow | divergence | analyze | Analyze the product's current state and generate 3–5 distinct strategic directions with evidence and trade-offs for review. |
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
 | [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create a structured epic plan that translates a product charter into a quarter-level initiative.                              |
@@ -321,6 +322,26 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 | [typescript-types](registry/typescript-types/SKILL.md)       | reference | No `any`, discriminated unions, type narrowing, `satisfies`, branded types, deriving types from values.                      |
 | [error-handling](registry/error-handling/SKILL.md)           | reference | Error as values (Result types), typed errors, throw for exceptional cases only, catch at system boundaries.                  |
 | [async-patterns](registry/async-patterns/SKILL.md)           | reference | async/await over raw promises, `Promise.all` for concurrency, AbortController, race condition guards, limiting concurrency.  |
+
+### Platform
+
+```mermaid
+flowchart LR
+    PLX[platform-expert] --> PE[platform-environments]
+    PLX --> PCD[platform-ci-cd]
+    PLX --> PSC[platform-secrets-config]
+    PLX --> PDR[platform-deployments-rollbacks]
+    PLX --> PIAC[platform-infrastructure-as-code]
+```
+
+| Skill                                                                            | Type      | Description                                                                                                                       |
+| -------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| [platform-expert](registry/platform-expert/SKILL.md)                             | reference | Router for broad platform work - coordinates environment, CI/CD, secrets/config, deployment/rollback, and infrastructure-as-code guidance. |
+| [platform-environments](registry/platform-environments/SKILL.md)                 | reference | Local, preview, staging, and production parity; backing services, runtime config, feature flags, promotion, and readiness.        |
+| [platform-ci-cd](registry/platform-ci-cd/SKILL.md)                               | reference | Build/test/deploy pipelines, artifacts, workflow permissions, gates, provenance, supply-chain hardening, and release automation.  |
+| [platform-secrets-config](registry/platform-secrets-config/SKILL.md)             | reference | Secrets, credentials, env vars, config schemas, secret stores, runtime injection, rotation, redaction, and leakage prevention.    |
+| [platform-deployments-rollbacks](registry/platform-deployments-rollbacks/SKILL.md) | reference | Release strategy, canaries, blue/green, migration sequencing, health checks, smoke tests, rollback, roll-forward, and evidence.   |
+| [platform-infrastructure-as-code](registry/platform-infrastructure-as-code/SKILL.md) | reference | Terraform/OpenTofu/Pulumi/CDK/Kubernetes manifests, modules, state, drift, plans, review, GitOps, and infra change safety.      |
 
 ### Backend
 

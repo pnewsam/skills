@@ -1,0 +1,3 @@
+interface:
+  display_name: "Platform Deployments"
+  short_description: "Plan safer releases and rollbacks."

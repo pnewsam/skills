@@ -1,6 +1,6 @@
 ---
 name: consult-expert
-description: Route broad, ambiguous product or engineering prompts to the right domain expert skills, synthesize their recommendations, and produce one or more epic briefs suitable for plan-epic, plan-feature, and build-feature workflows. Use when the user asks for strategic direction, product/app planning, cross-domain architecture, backend architecture, quality, compliance, GDPR, HIPAA, or when the correct expert/domain is unclear. Coordinates expert router skills such as ui-expert, design-expert, react-expert, backend-expert, python-expert, quality-expert, compliance-expert, color-expert, and focused domain skills such as ui-email.
+description: Route broad, ambiguous product or engineering prompts to the right domain expert skills, synthesize their recommendations, and produce one or more epic briefs suitable for plan-epic, plan-feature, and build-feature workflows. Use when the user asks for strategic direction, product/app planning, cross-domain architecture, backend architecture, platform engineering, quality, compliance, GDPR, HIPAA, or when the correct expert/domain is unclear. Coordinates expert router skills such as ui-expert, design-expert, react-expert, backend-expert, platform-expert, python-expert, quality-expert, compliance-expert, color-expert, and focused domain skills such as ui-email.
 ---
 
 # Consult Expert - Cross-Domain Intake
@@ -27,13 +27,14 @@ Load only the expert skills that match the prompt.
 | Visual design quality, elegance, composition, hierarchy, rhythm, simplicity, aesthetic direction | `design-expert` | Turning functional UI direction into coherent, calm, polished visual design |
 | React SPA, frontend architecture, components, hooks, data fetching, routing | `react-expert` | Frontend implementation architecture and maintainability |
 | Backend architecture, API contracts, service boundaries, persistence, jobs, integrations, auth boundaries | `backend-expert` | Language-agnostic server-side architecture and behavior |
+| Platform engineering, environments, CI/CD, secrets, config, deploys, rollbacks, infrastructure as code | `platform-expert` | Operational platform, release safety, and production-readiness |
 | Python, FastAPI, Python data modeling, async, persistence implementation | `python-expert` | Python and FastAPI implementation architecture |
 | Code quality, maintainability, correctness, refactoring, testing strategy, reliability | `quality-expert` | Language-agnostic code health and system quality judgment |
 | Security, accessibility, privacy, GDPR, HIPAA, vulnerability management, auditability, external obligations | `compliance-expert` | Required constraints, unacceptable risk, and evidence expectations |
 | Palette, color naming, contrast, color science, palette generation | `color-expert` | Color-specific design decisions beyond semantic UI color usage |
 | Transactional/lifecycle email UX and HTML email constraints | `ui-email` | Email product surfaces and email-client-safe implementation |
 
-If the prompt spans product, frontend, and backend, consult `ui-expert`, `react-expert`, and `backend-expert` in that order. Add `python-expert` when the backend implementation is Python or FastAPI-specific. Add `quality-expert` when maintainability, test confidence, correctness, or reliability materially affects the plan. Add `compliance-expert` when security, accessibility, privacy, GDPR, HIPAA, vulnerability, audit, or regulatory concerns are in scope. Add `design-expert` when visual quality, aesthetic coherence, or interface elegance is meaningful. Add narrower experts only when the prompt explicitly involves their domain.
+If the prompt spans product, frontend, and backend, consult `ui-expert`, `react-expert`, and `backend-expert` in that order. Add `platform-expert` when the work needs environments, CI/CD, secrets, deployment, rollback, infrastructure, or production-readiness planning. Add `python-expert` when the backend implementation is Python or FastAPI-specific. Add `quality-expert` when maintainability, test confidence, correctness, or reliability materially affects the plan. Add `compliance-expert` when security, accessibility, privacy, GDPR, HIPAA, vulnerability, audit, or regulatory concerns are in scope. Add `design-expert` when visual quality, aesthetic coherence, or interface elegance is meaningful. Add narrower experts only when the prompt explicitly involves their domain.
 
 ---
 

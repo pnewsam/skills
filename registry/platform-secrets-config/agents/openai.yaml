@@ -1,0 +1,3 @@
+interface:
+  display_name: "Platform Secrets & Config"
+  short_description: "Keep secrets and config safe."
