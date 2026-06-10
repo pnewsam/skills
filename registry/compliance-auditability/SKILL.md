@@ -1,44 +1,62 @@
 ---
 name: compliance-auditability
-description: Auditability and evidence guidance for compliance-sensitive systems. Use when designing traceability, change records, approval evidence, audit logs, remediation proof, access records, decision records, and verifiable controls. Pair with prepare-pr, assess-pr-risk, and remediation workflows for PR and evidence artifacts.
+description: Auditability and evidence guidance for compliance-sensitive systems. Use when designing traceability, change records, approval evidence, audit logs, remediation proof, access records, decision records, exception ownership, and verifiable controls. Pair with prepare-pr, assess-pr-risk, and remediation workflows for PR and evidence artifacts.
 ---
 
 # Compliance Auditability
 
-Auditability means the system and team can prove what happened, who approved it, why it was acceptable, and how resolution was verified.
+## Use When
 
-## Principles
+Use when a team must prove what changed, who approved it, what control exists, what action occurred, or how a risk was resolved.
 
-### 1. Capture Evidence At The Moment Of Work
+This is engineering evidence guidance, not legal advice. Escalate records retention, audit scope, and regulatory evidence requirements to the appropriate owner.
 
-Evidence is strongest when created as part of the workflow: PRs, reviews, test output, scanner output, deployment logs, screenshots, audit events, and linked tickets.
+## Source Anchors
 
-### 2. Link Decisions To Artifacts
+- NIST SSDF evidence-oriented development practices: https://csrc.nist.gov/pubs/sp/800/218/final
+- OWASP ASVS verification framing: https://owasp.org/www-project-application-security-verification-standard/
 
-Important decisions should connect:
+## Core Position
 
-- Requirement or risk.
-- Change or control.
-- Reviewer or approver.
-- Validation evidence.
-- Deployment or release record.
+If it was not captured, linked, and preserved, it is weak evidence. Create evidence as part of the workflow, not after the fact.
 
-### 3. Make Audit Logs Useful
+## Common Agent Mistakes
 
-Audit logs should answer who did what, to which resource, when, from where, and with what result. Avoid logging sensitive payloads unless absolutely required.
+- Saying "verified" without naming command, scan, artifact, or reviewer.
+- Logging sensitive payloads in the name of auditability.
+- Accepting risk without owner, expiry, and rationale.
+- Designing audit events that omit actor, resource, action, time, or result.
+- Leaving PRs disconnected from alerts, tickets, decisions, and deployments.
 
-### 4. Preserve Tamper Resistance Proportionally
+## Decision Rubric
 
-High-risk systems may need append-only logs, restricted access, retention policies, signed artifacts, or external log sinks. Lower-risk systems may need clear PR and ticket traceability.
+| Need | Evidence |
+| :--- | :--- |
+| Code change | PR, commit, review, test output, deployment record. |
+| Vulnerability remediation | Advisory ID, affected/fixed versions, scanner clean result, regression tests. |
+| Sensitive action | Audit log with actor, action, resource, timestamp, result, and source context. |
+| Risk acceptance | Owner, rationale, expiry, compensating controls, follow-up issue. |
+| Compliance control | Policy/control mapping, implementation link, verification artifact. |
 
-### 5. Track Exceptions Explicitly
+## Do / Don't
 
-Risk acceptance, skipped checks, disabled alerts, and temporary mitigations need owners, expiry dates, rationale, and follow-up work.
+| Do | Don't |
+| :--- | :--- |
+| Link issue, PR, scan, test, and deployment evidence. | Leave evidence scattered in chat or local terminal output only. |
+| Keep audit logs structured and queryable. | Store unstructured prose that cannot answer who/what/when/result. |
+| Redact sensitive payloads. | Log secrets/PII/ePHI to prove access occurred. |
+| Time-box exceptions. | Accept permanent risk without review. |
 
-## Review Checks
+## Review Checklist
 
 - Can someone reconstruct the change from issue to PR to deployment?
 - Is there evidence that required tests, scans, or reviews passed?
 - Are sensitive actions logged without exposing sensitive data?
-- Are exceptions time-bound and owned?
-- Would an auditor or future maintainer understand why the decision was made?
+- Are exceptions owned, justified, and expiring?
+- Would an auditor or future maintainer understand the decision?
+
+## Handoff Rules
+
+- Use `prepare-pr`, `review-pr`, and `assess-pr-risk` for PR evidence.
+- Use remediation workflow skills for scanner/advisory evidence.
+- Use stack experts for concrete audit log implementation.

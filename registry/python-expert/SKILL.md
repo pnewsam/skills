@@ -1,11 +1,13 @@
 ---
 name: python-expert
-description: Route broad Python architecture, project structure, tooling, typing, data modeling, async boundaries, error handling, database, testing, and FastAPI requests to the right python-* or fastapi-* skills. Use when building, reviewing, refactoring, or debugging Python code and the needed Python skill is unclear. Coordinates python-tooling, python-project-structure, python-testing, python-typing-data-modeling, python-async-boundaries, python-error-handling, python-database-patterns, and fastapi-architecture while avoiding overlap.
+description: Route broad Python architecture, project structure, tooling, typing, data modeling, async boundaries, error handling, database, testing, and FastAPI implementation requests to the right python-* or fastapi-* skills. Use when building, reviewing, refactoring, or debugging Python code and the needed Python skill is unclear. Coordinates python-tooling, python-project-structure, python-testing, python-typing-data-modeling, python-async-boundaries, python-error-handling, python-database-patterns, and fastapi-architecture while avoiding overlap with backend-expert for language-agnostic backend architecture.
 ---
 
 # Python Expert - Skill Router
 
 Use this as the entry point for broad Python work. Identify the actual engineering problem, load only the focused Python skills needed, and keep changes aligned with the project's existing package layout, tooling, runtime model, and test conventions.
+
+For language-agnostic backend architecture such as API contract shape, service boundary strategy, persistence lifecycle, background jobs, external integrations, or auth boundary placement, use `backend-expert` first, then return to `python-expert` for Python/FastAPI implementation details.
 
 ## Initial Response
 
@@ -48,6 +50,7 @@ Use these boundaries to prevent conflicting advice:
 - `python-database-patterns` owns sessions, transactions, repositories, migrations, and query boundaries.
 - `python-testing` owns pytest strategy, fixtures, integration boundaries, mocks, and regression coverage.
 - `fastapi-architecture` owns HTTP routes, FastAPI dependency injection, API schemas, app wiring, and OpenAPI-visible behavior.
+- `backend-expert` owns language-agnostic backend architecture decisions before they become Python/FastAPI implementation work.
 
 When two skills overlap, decide by asking: "Is this problem about tooling, ownership, data shape, async behavior, error translation, persistence, API boundaries, or tests?"
 

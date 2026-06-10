@@ -1,58 +1,67 @@
 ---
 name: compliance-expert
-description: Route broad compliance, security, vulnerability management, accessibility, privacy, auditability, and external-risk requests to the right compliance-* reference skills and existing remediation workflows. Use alongside stack experts for implementation details and ui-expert/design-expert for user-facing accessibility and privacy UX. Coordinates compliance-security, compliance-vulnerability-management, compliance-accessibility, compliance-privacy, and compliance-auditability.
+description: Route broad compliance, security, vulnerability management, accessibility, privacy, GDPR, HIPAA, auditability, and external-risk requests to the right compliance-* reference skills and existing remediation workflows. Use alongside stack experts for implementation details and ui-expert/design-expert for user-facing accessibility and privacy UX. Coordinates compliance-security, compliance-vulnerability-management, compliance-accessibility, compliance-privacy, compliance-gdpr, compliance-hipaa, and compliance-auditability.
 ---
 
 # Compliance Expert - Skill Router
 
-Use this as the entry point for compliance-oriented work. Identify the obligation or risk class, load only the relevant `compliance-*` skills, and route implementation to stack or workflow skills when needed.
+## Use When
 
-This skill provides engineering guidance, not legal advice. If a decision depends on jurisdiction, contract terms, or regulatory interpretation, surface that explicitly.
+Use for security, privacy, accessibility, regulated data, vulnerability, auditability, GDPR, HIPAA, or "are we allowed/safe/compliant?" prompts.
 
-## Initial Response
+This is engineering guidance, not legal advice. If a decision depends on jurisdiction, contract terms, organizational policy, or regulatory interpretation, surface the legal/policy question explicitly.
 
-When invoked without a specific request, respond only with:
+## Source Anchors
 
-> I'm ready to route the compliance work. Tell me the product surface, data involved, and the obligation or risk you're concerned about.
+- OWASP ASVS: https://owasp.org/www-project-application-security-verification-standard/
+- OWASP Top 10: https://owasp.org/www-project-top-ten/
+- W3C WCAG 2.2: https://www.w3.org/TR/WCAG22/
+- GDPR Regulation 2016/679: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+- HHS HIPAA Security Rule: https://www.hhs.gov/hipaa/for-professionals/security/index.html
 
-Do not provide any other information until the user asks a question or presents a compliance task.
+## Core Position
 
----
+Compliance skills translate external obligations and unacceptable risks into concrete engineering controls, evidence, and escalation points. They should prevent vague "be compliant" advice.
 
-## 1. Routing Table
+## Common Agent Mistakes
 
-| User Need | Primary Skill | Secondary Skills |
+- Treating compliance as a checklist detached from product data flow.
+- Giving legal conclusions instead of identifying engineering controls and escalation points.
+- Applying GDPR/HIPAA labels without first checking data, actors, and applicability.
+- Ignoring evidence: tests, scans, logs, approvals, and PR links.
+- Treating accessibility as visual polish rather than operability and semantics.
+
+## Decision Rubric
+
+| Prompt Signal | Primary Skill | Secondary Skills |
 | :--- | :--- | :--- |
-| Secure coding, auth/authz, secrets, injection, least privilege | `compliance-security` | stack expert, `quality-correctness` |
-| CVEs, dependency advisories, CodeQL/SAST findings, patch risk | `compliance-vulnerability-management` | `plan-vulnerability-remediation`, `plan-code-scanning-remediation` |
-| Keyboard access, semantic structure, contrast, forms, assistive tech | `compliance-accessibility` | `ui-expert`, `react-accessibility`, `color-expert` |
-| PII, consent, minimization, retention, deletion, logging, third parties | `compliance-privacy` | stack expert, `quality-reliability` |
-| Evidence, traceability, logs, approvals, change records, audit trails | `compliance-auditability` | `prepare-pr`, `assess-pr-risk` |
+| Authn/authz, injection, secrets, session safety, secure defaults | `compliance-security` | stack expert, `quality-correctness` |
+| CVE, dependency advisory, CodeQL/SAST finding, patch risk | `compliance-vulnerability-management` | remediation planning workflows |
+| Keyboard, screen reader, contrast, focus, form errors, WCAG | `compliance-accessibility` | `ui-expert`, `react-accessibility`, `color-expert` |
+| PII, data minimization, retention, deletion, analytics, vendors | `compliance-privacy` | `compliance-gdpr` if EU/UK GDPR applies |
+| GDPR, lawful basis, data subject rights, DPIA, breach notification | `compliance-gdpr` | `compliance-privacy`, legal/policy review |
+| HIPAA, ePHI, covered entity, business associate, safeguards | `compliance-hipaa` | `compliance-security`, legal/policy review |
+| Evidence, audit logs, approvals, exception tracking, traceability | `compliance-auditability` | `prepare-pr`, `assess-pr-risk` |
 
-If implementation is required, route to the relevant stack expert after the compliance risk is clear. If remediation needs durable planning, hand off to the epic/feature workflow or existing remediation planning skills.
+## Do / Don't
 
----
+| Do | Don't |
+| :--- | :--- |
+| Start by identifying data, actors, systems, and obligation. | Say a feature is GDPR/HIPAA compliant without applicability review. |
+| Convert obligations into concrete controls and evidence. | Provide generic "ensure compliance" recommendations. |
+| Identify legal/policy escalation points. | Pretend engineering guidance is legal advice. |
+| Pair with stack experts for implementation details. | Encode framework-specific code patterns in generic compliance skills. |
 
-## 2. Overlap Boundaries
+## Review Checklist
 
-- `compliance-security` owns abuse resistance and secure implementation constraints.
-- `compliance-vulnerability-management` owns advisory triage and remediation strategy.
-- `compliance-accessibility` owns disability access obligations and inclusive interaction requirements.
-- `compliance-privacy` owns personal data collection, use, sharing, retention, and deletion risk.
-- `compliance-auditability` owns evidence that the system did what it was supposed to do.
+- What obligation or risk class is in scope?
+- What data is involved and who can access it?
+- What control prevents the unacceptable outcome?
+- What evidence proves the control exists and worked?
+- What decision needs legal, security, privacy, or policy owner review?
 
-When two skills overlap, ask: "Is the main concern attack resistance, known vulnerability exposure, accessibility, personal data, or evidence?"
+## Handoff Rules
 
----
-
-## 3. Review Protocol
-
-When reviewing compliance risk, report:
-
-1. **Scope:** product surface, data involved, users affected, and systems touched.
-2. **Obligation/Risk Class:** security, vulnerability, accessibility, privacy, auditability, or mixed.
-3. **Findings:** prioritized by severity, exploitability, user impact, and remediation urgency.
-4. **Recommended Path:** immediate fix, planned epic/feature, policy/legal escalation, or accepted risk.
-5. **Evidence:** tests, scans, logs, screenshots, PR links, or artifacts needed to prove resolution.
-
-Avoid vague "be compliant" advice. Tie every recommendation to a concrete risk and observable proof.
+- Use `plan-vulnerability-remediation` or `plan-code-scanning-remediation` for multi-step remediation work.
+- Use `plan-feature` or `plan-epic` when compliance work requires product, workflow, or architecture change.
+- Use stack experts for concrete implementation and tests.

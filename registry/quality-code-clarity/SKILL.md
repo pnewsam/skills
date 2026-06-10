@@ -1,60 +1,60 @@
 ---
 name: quality-code-clarity
-description: Code clarity principles for language-agnostic maintainability. Use when improving naming, readability, local reasoning, control flow, comments, intention-revealing structure, and removal of clever or surprising code. Pair with stack experts for idiomatic implementation details.
+description: Code clarity principles for language-agnostic maintainability. Use when improving naming, readability, local reasoning, control flow, comments, intention-revealing structure, hidden dependencies, and removal of clever or surprising code. Pair with stack experts for idiomatic implementation details.
 ---
 
 # Quality Code Clarity
 
-Code is clear when a maintainer can understand what it does, why it exists, and what would break if it changed without reconstructing the whole system.
+## Use When
 
-## Principles
+Use when code is technically working but hard to read, reason about, review, or safely modify.
 
-### 1. Make Intent Visible
+## Source Anchors
 
-- Prefer names that describe domain meaning, not mechanics.
-- Name booleans as predicates: `isEligible`, `hasPermission`, `shouldRetry`.
-- Name side-effecting functions with verbs: `sendInvoice`, `persistUser`, `emitMetric`.
-- Avoid vague names like `data`, `item`, `manager`, `handler`, and `process` unless the scope makes them obvious.
+- Google code review guidance on complexity, naming, and comments: https://google.github.io/eng-practices/review/reviewer/looking-for.html
+- Fowler refactorings: Rename Variable, Extract Function, Extract Variable, Decompose Conditional, Replace Nested Conditional with Guard Clauses: https://refactoring.com/catalog/
 
-### 2. Optimize For Local Reasoning
+## Core Position
 
-Good code lets the reader answer:
+Clear code makes intent obvious at the point of use. A maintainer should understand the main path, inputs, outputs, failure modes, and assumptions without reconstructing distant context.
 
-- What inputs matter?
-- What output or side effect occurs?
-- What can fail?
-- Which invariants are assumed?
+## Common Agent Mistakes
 
-Move hidden dependencies into parameters, constructors, or explicit context. Avoid functions that depend on distant mutable state.
+- Renaming everything cosmetically without improving domain meaning.
+- Adding comments that restate code instead of simplifying the code.
+- Hiding important decisions in clever expressions, nested ternaries, or chained calls.
+- Leaving boolean conditions unnamed when they encode product rules.
+- Keeping hidden global state or ambient dependencies because "it works."
 
-### 3. Prefer Straight-Line Control Flow
+## Decision Rubric
 
-- Handle exceptional or invalid cases early.
-- Keep the main path visually obvious.
-- Avoid deeply nested conditionals.
-- Replace complex boolean expressions with named predicates.
+| Symptom | Action |
+| :--- | :--- |
+| Reader must parse mechanics to infer meaning | Rename or extract an intention-revealing helper. |
+| Main path is buried under error/edge handling | Use guard clauses or early returns. |
+| Boolean condition has domain meaning | Extract a named predicate. |
+| Function depends on distant mutable state | pass dependency explicitly or isolate side effect at boundary. |
+| Comment explains what the code does | Simplify/rename the code; keep comments for why/constraints. |
 
-### 4. Remove Cleverness
+## Do / Don't
 
-Clever code compresses writing effort into reading effort. Prefer explicit steps when the compressed version hides branching, mutation, or non-obvious type behavior.
+| Do | Don't |
+| :--- | :--- |
+| Use names from the domain, not implementation mechanics. | Use `data`, `item`, `manager`, `handler`, or `process` when a domain noun exists. |
+| Name booleans as predicates: `isEligible`, `hasPermission`, `shouldRetry`. | Use ambiguous booleans like `flag`, `enabled`, or `status` without context. |
+| Keep the primary path visually straight. | Nest three or more levels when guard clauses would clarify. |
+| Comment surprising constraints, tradeoffs, and external contracts. | Comment obvious assignments or control flow. |
 
-Use compact expressions only when they preserve intent.
+## Review Checklist
 
-### 5. Comment The Why
+- Can a new maintainer identify the main path in under a minute?
+- Are names specific enough to survive extraction?
+- Are important assumptions, constraints, and failure modes visible?
+- Can complex conditions be named without changing behavior?
+- Is any cleverness increasing reading cost more than it saves lines?
 
-Comments should explain constraints, trade-offs, protocol details, and surprising choices. Do not comment what the next line mechanically does.
+## Handoff Rules
 
-Good comments usually start from:
-
-- "We do this because..."
-- "This cannot be..."
-- "Keep this in sync with..."
-- "This handles..."
-
-## Review Checks
-
-- Can a new maintainer identify the primary path in under a minute?
-- Are names domain-specific enough to survive extraction?
-- Are hidden assumptions named?
-- Is the code boring where it can be boring?
-- Would a smaller helper or named predicate reduce mental stack?
+- Use `quality-refactoring` if clarity requires behavior-preserving transformations.
+- Use `quality-modularity` if clarity fails because one unit owns too many responsibilities.
+- Use the relevant stack expert for naming/file conventions and idiomatic syntax.

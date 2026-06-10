@@ -5,54 +5,62 @@ description: Route broad code quality, maintainability, correctness, reliability
 
 # Quality Expert - Skill Router
 
-Use this as the entry point for broad quality work. Identify the quality dimension, load only the focused `quality-*` skills needed, and pair them with stack experts when implementation details matter.
+## Use When
 
-## Initial Response
+Use this as the entry point for broad software quality work: code review, refactoring strategy, test confidence, maintainability, correctness, reliability, or "this code feels messy/risky" prompts.
 
-When invoked without a specific request, respond only with:
+Pair this with stack experts for implementation. Quality skills decide what good means; React/Python/etc. skills decide how to implement it idiomatically.
 
-> I'm ready to route the quality work. Tell me what code, system, or change you want to review or improve.
+## Source Anchors
 
-Do not provide any other information until the user asks a question or presents a quality task.
+- Google engineering code review guidance: https://google.github.io/eng-practices/review/reviewer/looking-for.html
+- Fowler refactoring catalog: https://refactoring.com/catalog/
+- Fowler test pyramid: https://martinfowler.com/bliki/TestPyramid.html
+- Google Testing Blog on E2E overuse: https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html
 
----
+## Core Position
 
-## 1. Routing Table
+Quality is not polish. Quality is the degree to which code can be understood, changed, verified, and operated without surprising defects. Prefer small, validated improvements that reduce future risk over broad rewrites.
 
-| User Need | Primary Skill | Secondary Skills |
+## Decision Rubric
+
+| Risk Signal | Primary Skill | Secondary Skills |
 | :--- | :--- | :--- |
-| Naming, readability, local reasoning, intention-revealing code | `quality-code-clarity` | `quality-modularity`, stack expert |
-| Boundaries, cohesion, coupling, dependency direction, abstraction | `quality-modularity` | `quality-refactoring`, stack expert |
-| Code smells, safe transformations, incremental cleanup | `quality-refactoring` | `quality-testing`, `quality-modularity` |
-| Invariants, edge cases, idempotency, data integrity | `quality-correctness` | `quality-testing`, `quality-reliability` |
-| Test strategy, risk-based coverage, test smells, flakiness | `quality-testing` | stack-specific testing skill |
-| Failure modes, timeouts, retries, observability, recovery | `quality-reliability` | `quality-correctness`, compliance/security skill |
+| Hard to read, bad names, tangled conditionals, surprising cleverness | `quality-code-clarity` | `quality-refactoring` |
+| Wrong responsibilities, high coupling, unclear boundaries, abstraction disputes | `quality-modularity` | `quality-refactoring`, stack expert |
+| Existing code should improve without behavior change | `quality-refactoring` | `quality-testing`, `quality-modularity` |
+| Edge cases, invariants, idempotency, data integrity, concurrency | `quality-correctness` | `quality-testing`, `quality-reliability` |
+| What to test, test level, brittle tests, flaky tests, coverage gaps | `quality-testing` | stack-specific testing skill |
+| Timeouts, retries, degradation, observability, operational failure modes | `quality-reliability` | `quality-correctness`, `compliance-security` |
 
-If the task is in React, Python, or another specific stack, load the relevant stack expert after choosing the quality dimension. Quality skills decide what good means; stack skills decide how to implement it idiomatically.
+If more than three rows apply, start with `quality-modularity` and `quality-correctness`, then add the most immediate risk skill.
 
----
+## Common Agent Mistakes
 
-## 2. Overlap Boundaries
+- Treating quality as subjective style instead of change risk, defect risk, and operability.
+- Recommending rewrites when a sequence of safe refactorings would work.
+- Adding abstractions because code looks similar, not because decisions repeat.
+- Equating high coverage with confidence.
+- Ignoring reliability and failure behavior because tests pass locally.
 
-- `quality-code-clarity` owns whether code is easy to read and reason about locally.
-- `quality-modularity` owns whether responsibilities, dependencies, and boundaries are well-shaped.
-- `quality-refactoring` owns how to improve existing code safely without changing behavior.
-- `quality-correctness` owns whether behavior preserves invariants across normal and edge cases.
-- `quality-testing` owns confidence strategy and test design, not framework syntax.
-- `quality-reliability` owns runtime failure behavior, recovery, and operational confidence.
+## Do / Don't
 
-When two skills overlap, ask: "Is the core risk readability, boundaries, safe change, behavioral truth, test confidence, or runtime resilience?"
+| Do | Don't |
+| :--- | :--- |
+| Name the specific quality risk before recommending changes. | Say "clean up the code" without a concrete failure mode. |
+| Prefer behavior-preserving, test-backed steps. | Mix refactoring, feature changes, formatting churn, and architecture changes. |
+| Route implementation details to stack skills. | Invent language/framework conventions inside generic quality skills. |
+| Require validation proportional to risk. | Require exhaustive tests for low-risk trivial changes. |
 
----
+## Review Checklist
 
-## 3. Review Protocol
+- What quality risk is most likely to hurt the next change?
+- Is the main issue readability, boundaries, safe refactoring, correctness, testing, or reliability?
+- What is the smallest change that materially reduces the risk?
+- What evidence would prove the risk is reduced?
 
-When reviewing quality, report:
+## Handoff Rules
 
-1. **Current State Summary:** affected boundary, main responsibilities, risk profile, and existing validation.
-2. **Skill Routing:** focused quality skills used, plus any stack experts needed.
-3. **Findings:** prioritize issues that increase change risk, defect risk, or operational risk.
-4. **Recommendations:** give small, sequenced improvements before broad rewrites.
-5. **Validation:** name the tests, checks, or observations that would prove the improvement.
-
-Keep findings grounded in maintainability, correctness, confidence, and operational behavior. Do not report personal style preferences unless they materially affect those qualities.
+- Use `react-expert`, `python-expert`, or another stack expert for idiomatic implementation details.
+- Use `compliance-expert` when the risk involves security, privacy, accessibility, regulated data, or audit evidence.
+- Use `plan-feature` or `plan-epic` when the improvement is too large for a local change.

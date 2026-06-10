@@ -5,57 +5,57 @@ description: Reliability principles for language-agnostic software quality. Use 
 
 # Quality Reliability
 
-Reliable systems behave predictably under stress, partial failure, dependency failure, and ordinary operational messiness.
+## Use When
 
-## Principles
+Use when a system must behave predictably under dependency failure, load, retries, partial success, or production debugging.
 
-### 1. Assume Dependencies Fail
+## Source Anchors
 
-Every network call, database query, queue, cache, file system operation, and third-party API can timeout, fail, return malformed data, or succeed partially.
+- Google code review guidance on functionality and complexity: https://google.github.io/eng-practices/review/reviewer/looking-for.html
+- NIST SSDF for secure/resilient development process context: https://csrc.nist.gov/pubs/sp/800/218/final
 
-For each dependency, decide:
+## Core Position
 
-- Timeout.
-- Retry policy.
-- Fallback behavior.
-- User-visible error.
-- Logging/metric signal.
+Reliable systems make failure explicit: bounded, observable, recoverable, and safe. Local success is not enough if production failure modes are undefined.
 
-### 2. Use Retries Carefully
+## Common Agent Mistakes
 
-Retries help transient failures and amplify persistent ones. Use bounded retries with backoff, jitter, and idempotency. Never retry unsafe writes blindly.
+- Calling external services without timeouts.
+- Retrying writes without idempotency.
+- Logging too little to debug or too much sensitive data.
+- Treating queues/caches/databases as always available.
+- Showing generic failure states with no recovery path.
 
-### 3. Fail Gracefully
+## Decision Rubric
 
-Prefer partial functionality over total failure when safe:
+| Failure Mode | Required Design |
+| :--- | :--- |
+| Slow dependency | Timeout shorter than caller timeout; visible fallback or error. |
+| Transient dependency failure | Bounded retry with backoff/jitter if operation is safe. |
+| Unsafe write retry | Idempotency key, dedupe, transaction, or no retry. |
+| Partial success | Compensation, resume, or explicit user/operator state. |
+| Overload | Backpressure, pagination, rate limiting, queue bounds, or concurrency limits. |
+| Production incident | Logs/metrics/traces that identify operation, dependency, duration, and outcome. |
 
-- Show cached or partial data with clear state.
-- Degrade non-critical features first.
-- Preserve user work.
-- Provide recovery actions.
+## Do / Don't
 
-Do not hide failures that affect correctness or compliance.
+| Do | Don't |
+| :--- | :--- |
+| Define timeout, retry, fallback, and observability for each dependency. | Let default client timeouts decide production behavior. |
+| Preserve user work on recoverable failures. | Drop input or hide failure behind a spinner. |
+| Emit structured operational signals. | Log secrets, tokens, raw PII, or full sensitive payloads. |
+| Limit concurrency and queue growth. | Assume traffic and background jobs are always small. |
 
-### 4. Make Operations Observable
+## Review Checklist
 
-Important flows should emit enough logs, metrics, traces, or audit events to answer:
-
-- Did it run?
-- How long did it take?
-- Did it fail?
-- Which dependency failed?
-- How many users or records were affected?
-
-Avoid logging secrets or unnecessary personal data.
-
-### 5. Control Load And Backpressure
-
-Protect the system from overload with pagination, batching, rate limits, queue bounds, concurrency limits, circuit breakers, or admission control where appropriate.
-
-## Review Checks
-
-- What happens when each dependency is slow or down?
-- Are timeouts explicit and shorter than caller timeouts?
+- What happens when each dependency is slow, down, or malformed?
 - Are retries bounded and idempotent?
-- Can operators diagnose failure without reproducing it locally?
-- Is the user left with a clear recovery path?
+- Is partial success recoverable?
+- Can operators diagnose the failure without reproducing locally?
+- Is the user given a safe next action?
+
+## Handoff Rules
+
+- Use stack experts for concrete timeout/retry/observability APIs.
+- Use `compliance-security` or `compliance-privacy` when logs or failure paths touch sensitive data.
+- Use `quality-correctness` when recovery must preserve invariants.

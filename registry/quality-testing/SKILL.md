@@ -5,62 +5,58 @@ description: Language-agnostic testing strategy and test quality principles. Use
 
 # Quality Testing
 
-Testing is a confidence strategy, not a coverage ritual. The goal is to catch meaningful regressions at the lowest sustainable cost.
+## Use When
 
-## Test Strategy
+Use when deciding test strategy, test level, regression coverage, flakiness response, or whether a test is worth writing.
 
-### 1. Test Risks, Not Files
+## Source Anchors
 
-Prioritize tests for:
+- Fowler test pyramid: https://martinfowler.com/bliki/TestPyramid.html
+- Google Testing Blog on end-to-end test overuse: https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html
+- Google code review guidance on tests: https://google.github.io/eng-practices/review/reviewer/looking-for.html
 
-- Critical user or business workflows.
-- Complex branching or calculations.
-- Security, money, permissions, or data integrity.
-- Bugs that already happened.
-- Integration boundaries where assumptions often drift.
+## Core Position
 
-Do not add tests merely because a file changed.
+Test risk, not files. Coverage percentage is a weak proxy. A good test would fail for a meaningful regression, at the cheapest reliable level, without making harmless refactors painful.
 
-### 2. Choose The Right Level
+## Common Agent Mistakes
 
-- **Unit tests:** pure logic, calculations, transformations, validation rules.
-- **Integration tests:** module boundaries, persistence, APIs, service collaboration.
-- **End-to-end/browser tests:** critical user flows and high-value smoke coverage.
-- **Contract tests:** provider/consumer boundaries, third-party or cross-service assumptions.
+- Adding tests just because a file changed.
+- Mocking away the behavior the test claims to prove.
+- Using broad UI/E2E tests for logic that a unit or service test could prove.
+- Accepting flaky tests as "known issues."
+- Asserting implementation calls instead of user/caller-observable behavior.
 
-Prefer the lowest level that proves the behavior without mocking away the risk.
+## Decision Rubric
 
-### 3. Write Regression Tests At The Failure Level
+| Risk | Test Level |
+| :--- | :--- |
+| Pure calculation, parser, mapper, validation rule | Unit test. |
+| Service collaboration, persistence, API contract, integration boundary | Integration or contract test. |
+| Critical user workflow or smoke path | End-to-end/browser test. |
+| Bug fix | Test at the level where the bug was observable; add lower-level test if broad test exposed missing coverage. |
+| Refactor only | Existing tests should pass; add characterization tests if behavior is risky or unclear. |
 
-When fixing a bug, test at the level where the bug was observable. A parser bug may need a unit test; a checkout failure may need an integration or end-to-end test.
+## Do / Don't
 
-### 4. Keep Tests Stable
+| Do | Don't |
+| :--- | :--- |
+| Prefer the lowest level that proves the behavior. | Default to E2E because it feels realistic. |
+| Assert behavior and outcomes. | Assert private methods, component internals, or call counts unless that is the contract. |
+| Make data, time, randomness, and environment deterministic. | Share mutable state or rely on test order. |
+| Fix, delete, or visibly track flaky tests. | Leave skipped/flaky tests without an owner and reason. |
 
-Good tests:
-
-- Assert behavior, not implementation.
-- Have deterministic data, time, and randomness.
-- Avoid shared mutable state between tests.
-- Fail with useful messages.
-- Do not depend on execution order.
-
-### 5. Treat Flakiness As A Quality Defect
-
-A flaky test trains people to ignore failures. Fix timing, isolation, data setup, and external dependencies. Delete or quarantine only with a visible follow-up plan.
-
-## Test Smells
-
-- Tests mirror implementation structure rather than behavior.
-- Mocks replace the thing being tested.
-- Test setup is larger than the scenario.
-- Assertions prove that code was called, not that behavior happened.
-- Coverage is high but critical flows are untested.
-- Tests are skipped without a tracked reason.
-
-## Review Checks
+## Review Checklist
 
 - What regression would this test catch?
-- Is the test at the cheapest reliable level?
-- Does it verify behavior a user or caller depends on?
-- Would this test survive a harmless refactor?
+- Would it fail if the behavior were broken?
+- Is this the cheapest reliable level?
+- Does the test survive harmless refactoring?
 - What important risk remains untested?
+- Is any existing failure flaky, unrelated, or a real regression?
+
+## Handoff Rules
+
+- Use `react-testing`, `python-testing`, or another stack testing skill for framework syntax and fixtures.
+- Use `quality-correctness` to identify edge cases and invariants worth testing.
+- Use browser-test workflow skills only when browser/user-flow coverage is actually needed.

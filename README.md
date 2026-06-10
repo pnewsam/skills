@@ -110,6 +110,7 @@ flowchart TD
     CE[consult-expert] -->|routes to domain experts| UE[ui-expert]
     CE --> DX[design-expert]
     CE --> RE[react-expert]
+    CE --> BE[backend-expert]
     CE --> PY[python-expert]
     CE --> QE[quality-expert]
     CE --> CX[compliance-expert]
@@ -135,7 +136,7 @@ flowchart TD
 
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
 | ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [consult-expert](registry/consult-expert/SKILL.md)     | workflow | divergence | analyze, plan | Route broad product, engineering, quality, or compliance prompts to domain experts, synthesize recommendations, and produce epic briefs. |
+| [consult-expert](registry/consult-expert/SKILL.md)     | workflow | divergence | analyze, plan | Route broad product, engineering, backend, quality, or compliance prompts to domain experts, synthesize recommendations, and produce epic briefs. |
 | [explore-directions](registry/explore-directions/SKILL.md) | workflow | divergence | analyze | Analyze the product's current state and generate 3–5 distinct strategic directions with evidence and trade-offs for review. |
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
 | [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create a structured epic plan that translates a product charter into a quarter-level initiative.                              |
@@ -294,16 +295,20 @@ flowchart LR
     CX --> CVM[compliance-vulnerability-management]
     CX --> CA[compliance-accessibility]
     CX --> CP[compliance-privacy]
+    CX --> CG[compliance-gdpr]
+    CX --> CH[compliance-hipaa]
     CX --> CAT[compliance-auditability]
 ```
 
 | Skill                                                                                      | Type      | Description                                                                                                                         |
 | ------------------------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [compliance-expert](registry/compliance-expert/SKILL.md)                                   | reference | Router for security, vulnerability management, accessibility, privacy, auditability, and external-risk work.                        |
-| [compliance-security](registry/compliance-security/SKILL.md)                               | reference | Secure coding, auth/authz, input handling, injection risk, secrets, dependency trust, least privilege, and safe errors.             |
+| [compliance-expert](registry/compliance-expert/SKILL.md)                                   | reference | Router for security, vulnerability management, accessibility, privacy, GDPR, HIPAA, auditability, and external-risk work.           |
+| [compliance-security](registry/compliance-security/SKILL.md)                               | reference | OWASP/NIST-anchored secure coding, auth/authz, injection, secrets, sessions, logging, supply chain, CI/CD, and secure defaults.     |
 | [compliance-vulnerability-management](registry/compliance-vulnerability-management/SKILL.md) | reference | CVE and advisory triage, exploitability, remediation sequencing, patch risk, risk acceptance, and evidence.                         |
-| [compliance-accessibility](registry/compliance-accessibility/SKILL.md)                     | reference | Keyboard access, semantic structure, accessible names, focus order, contrast, forms, motion, and WCAG-oriented obligations.         |
-| [compliance-privacy](registry/compliance-privacy/SKILL.md)                                 | reference | PII classification, minimization, consent, purpose limits, retention, deletion, logging, analytics, and third-party sharing.        |
+| [compliance-accessibility](registry/compliance-accessibility/SKILL.md)                     | reference | WCAG 2.2-oriented keyboard access, semantic structure, accessible names, focus order, contrast, forms, errors, and motion.          |
+| [compliance-privacy](registry/compliance-privacy/SKILL.md)                                 | reference | General personal data classification, minimization, purpose limits, retention, deletion, logging, analytics, and third-party flows. |
+| [compliance-gdpr](registry/compliance-gdpr/SKILL.md)                                       | reference | GDPR-specific principles, lawful basis, data subject rights, retention, breach escalation, DPIA triggers, and design/default.       |
+| [compliance-hipaa](registry/compliance-hipaa/SKILL.md)                                     | reference | HIPAA-oriented ePHI, safeguards, access controls, audit controls, integrity, transmission security, risk review, and vendor review. |
 | [compliance-auditability](registry/compliance-auditability/SKILL.md)                       | reference | Traceability, change records, approval evidence, audit logs, remediation proof, access records, and verifiable controls.            |
 
 ### Core Language
@@ -316,6 +321,28 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 | [typescript-types](registry/typescript-types/SKILL.md)       | reference | No `any`, discriminated unions, type narrowing, `satisfies`, branded types, deriving types from values.                      |
 | [error-handling](registry/error-handling/SKILL.md)           | reference | Error as values (Result types), typed errors, throw for exceptional cases only, catch at system boundaries.                  |
 | [async-patterns](registry/async-patterns/SKILL.md)           | reference | async/await over raw promises, `Promise.all` for concurrency, AbortController, race condition guards, limiting concurrency.  |
+
+### Backend
+
+```mermaid
+flowchart LR
+    BX[backend-expert] --> BAD[backend-api-design]
+    BX --> BSB[backend-service-boundaries]
+    BX --> BP[backend-persistence]
+    BX --> BJQ[backend-jobs-queues]
+    BX --> BI[backend-integrations]
+    BX --> BAB[backend-auth-boundaries]
+```
+
+| Skill                                                                    | Type      | Description                                                                                                                              |
+| ------------------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| [backend-expert](registry/backend-expert/SKILL.md)                       | reference | Router for broad backend work - coordinates focused server-side skills across APIs, service boundaries, persistence, jobs, integrations, and auth boundaries. |
+| [backend-api-design](registry/backend-api-design/SKILL.md)               | reference | API contracts, resource modeling, request/response shapes, validation, errors, pagination, filtering, versioning, and idempotency.       |
+| [backend-service-boundaries](registry/backend-service-boundaries/SKILL.md) | reference | Server-side ownership for handlers, services, use cases, domain behavior, transaction placement, dependency direction, and side effects. |
+| [backend-persistence](registry/backend-persistence/SKILL.md)             | reference | Data modeling, migrations, transactions, consistency, repositories, query boundaries, indexing, retention, and safe schema evolution.    |
+| [backend-jobs-queues](registry/backend-jobs-queues/SKILL.md)             | reference | Background jobs, queues, schedules, retries, idempotency, dead-letter handling, concurrency, backpressure, and observability.            |
+| [backend-integrations](registry/backend-integrations/SKILL.md)           | reference | Third-party APIs, webhooks, external clients, sync flows, provider rate limits, outbox/inbox patterns, and partial failure handling.     |
+| [backend-auth-boundaries](registry/backend-auth-boundaries/SKILL.md)     | reference | Authentication and authorization placement, identity propagation, tenant isolation, sessions, tokens, permission checks, and access tests. |
 
 ### React SPA
 

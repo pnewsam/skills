@@ -5,54 +5,56 @@ description: Modularity principles for language-agnostic code quality. Use when 
 
 # Quality Modularity
 
-Modular code localizes change. A good boundary makes related changes happen together and unrelated changes stay apart.
+## Use When
 
-## Principles
+Use when a change touches too many places, a module has multiple responsibilities, abstractions feel wrong, or boundaries are unclear.
 
-### 1. One Reason To Change
+## Source Anchors
 
-A module, class, component, or service should have a coherent responsibility. Split when one unit changes for unrelated reasons, such as UI layout, persistence, validation, and business rules all changing independently.
+- Google code review guidance on design and complexity: https://google.github.io/eng-practices/review/reviewer/looking-for.html
+- Fowler refactorings: Extract Class, Move Function, Inline Class, Hide Delegate, Remove Middle Man, Replace Subclass with Delegate: https://refactoring.com/catalog/
 
-Do not split merely because a file is long. Split when responsibilities pull in different directions.
+## Core Position
 
-### 2. High Cohesion, Low Coupling
+A good boundary makes common changes local and uncommon changes possible. Split by reason to change, not by file length. Abstract only around repeated decisions or real volatility.
 
-Prefer modules where:
+## Common Agent Mistakes
 
-- Most functions use the same domain concepts.
-- Public APIs are smaller than private implementation.
-- Callers do not know internal data shape unnecessarily.
-- Changes inside the module rarely force changes outside it.
+- Splitting files because they are long, while preserving the same tangled responsibility.
+- Creating generic abstractions after seeing two similar blocks.
+- Moving code without changing dependency direction.
+- Letting UI, transport, database, or vendor details leak into domain rules.
+- Ignoring circular dependencies because imports still compile.
 
-### 3. Dependencies Point Toward Stable Concepts
+## Decision Rubric
 
-Volatile details should depend on stable abstractions, not the reverse. UI, HTTP, CLI, database, and vendor SDK details should not leak into domain rules unless the application is intentionally thin.
+| Symptom | Action |
+| :--- | :--- |
+| One unit changes for unrelated reasons | Split by responsibility. |
+| Callers know internal storage or ordering details | Hide data shape behind a smaller API. |
+| One change causes shotgun surgery | Move behavior to the module that owns the concept. |
+| Abstraction has one caller or mirrors implementation | Inline it or keep duplication until the pattern is real. |
+| Volatile mechanism depends on stable policy | Invert dependency so policy is independent. |
 
-### 4. Hide Volatility Behind Boundaries
+## Do / Don't
 
-Create boundaries around things likely to change:
+| Do | Don't |
+| :--- | :--- |
+| Keep related data and behavior together. | Scatter one concept across utility files. |
+| Put boundaries around IO, vendors, persistence, time, randomness, and policy. | Let every caller directly manage volatile details. |
+| Prefer small public APIs and private implementation. | Expose every helper because "someone might need it." |
+| Accept local duplication before the right abstraction is clear. | Create framework-y abstractions from coincidence. |
 
-- External services and SDKs.
-- Persistence details.
-- Transport protocols.
-- Complex business policies.
-- Time, randomness, environment, and configuration.
+## Review Checklist
 
-### 5. Avoid Premature Abstraction
-
-Duplication is cheaper than the wrong abstraction. Introduce an abstraction when it removes repeated decision logic or isolates real volatility, not when two blocks merely look similar.
-
-## Smells
-
-- Shotgun surgery: one change requires many small edits across unrelated files.
-- Feature envy: a function reaches through another module's data to do its work.
-- God object/module: one unit coordinates too many responsibilities.
-- Leaky abstraction: callers must understand internal state, ordering, or storage details.
-- Circular dependency: two modules cannot be understood or tested independently.
-
-## Review Checks
-
-- What responsibility does this boundary own?
-- What changes would force this boundary to change?
-- Can the important behavior be tested without unrelated infrastructure?
+- What responsibility does this module own?
+- What change would force this boundary to change?
+- Can important behavior be tested without unrelated infrastructure?
 - Are dependencies flowing toward stable policy and away from volatile mechanisms?
+- Would the next likely change be local?
+
+## Handoff Rules
+
+- Use `quality-refactoring` to sequence boundary changes safely.
+- Use stack experts for package layout, component/file ownership, and framework conventions.
+- Use `quality-testing` when a boundary cannot be changed safely without characterization tests.

@@ -1,48 +1,64 @@
 ---
 name: compliance-privacy
-description: Privacy engineering guidance for personal data handling. Use when reviewing PII collection, data minimization, consent, purpose limitation, retention, deletion, logging, analytics, third-party sharing, user rights, and privacy-safe defaults. Pair with stack experts for implementation and legal review for jurisdiction-specific obligations.
+description: Privacy engineering guidance for personal data handling. Use when reviewing PII collection, minimization, purpose limitation, retention, deletion, logging, analytics, third-party sharing, user rights support, and privacy-safe defaults. Use compliance-gdpr for GDPR-specific obligations. Pair with stack experts for implementation and legal review for jurisdiction-specific obligations.
 ---
 
 # Compliance Privacy
 
-Privacy work limits what personal data is collected, how it is used, where it flows, how long it remains, and who can access it.
+## Use When
 
-## Principles
+Use for general privacy engineering: personal data flows, minimization, retention, deletion, logging, analytics, vendor sharing, privacy-safe defaults, and data lifecycle design.
 
-### 1. Classify Data Before Designing The Flow
+This is engineering guidance, not legal advice. Use `compliance-gdpr` for GDPR-specific obligations and escalate legal interpretation.
 
-Identify whether the system handles:
+## Source Anchors
 
-- Direct identifiers: name, email, phone, address, account ID.
-- Sensitive data: health, finance, precise location, credentials, government IDs.
-- Behavioral data: analytics, events, search, clicks, device metadata.
-- Derived or inferred data: scores, segments, predictions, risk labels.
+- NIST Privacy Framework: https://www.nist.gov/privacy-framework
+- GDPR Regulation 2016/679 for GDPR-specific work: https://eur-lex.europa.eu/eli/reg/2016/679/oj
 
-### 2. Minimize Collection And Retention
+## Core Position
 
-Collect only what the product needs for a named purpose. Retain it only as long as needed for that purpose, legal obligation, abuse prevention, or user expectation.
+Privacy-safe systems collect less, expose less, retain less, and make data flows explicit. If a lower-data design satisfies the product need, choose it.
 
-### 3. Keep Purpose Boundaries Clear
+## Common Agent Mistakes
 
-Do not reuse data for analytics, training, marketing, sharing, or personalization unless that use is expected, disclosed, and permitted by the product's policy and consent model.
+- Treating email/name as the only personal data.
+- Logging full payloads "for debugging."
+- Sending data to analytics/model/vendor services without mapping the flow.
+- Adding retention/deletion promises without data-model support.
+- Reusing data for a new purpose without checking consent/notice/policy.
 
-### 4. Avoid Sensitive Logs
+## Decision Rubric
 
-Logs, analytics, crash reports, traces, and support tools often become accidental data stores. Redact or avoid personal data unless operationally necessary.
+| Question | Expected Output |
+| :--- | :--- |
+| What data is collected? | Direct identifiers, sensitive data, behavioral data, derived data. |
+| Why is it collected? | Named product, security, legal, or operational purpose. |
+| Where does it flow? | Storage, logs, analytics, vendors, exports, caches, backups. |
+| How long is it kept? | Retention rule or explicit unknown requiring owner decision. |
+| Who can access it? | User/admin/staff/vendor/system roles and enforcement point. |
+| Can it be deleted/exported/corrected? | Supported workflow or explicit gap. |
 
-### 5. Design For Deletion And Access
+## Do / Don't
 
-If users or admins may need export, correction, deletion, or account closure, data relationships must make that feasible.
+| Do | Don't |
+| :--- | :--- |
+| Minimize fields, events, logs, and vendor payloads. | Collect "maybe useful later" data. |
+| Redact or avoid personal data in logs/traces/crash reports. | Treat observability stores as safe by default. |
+| Map third-party data sharing. | Add analytics/model/email vendors without data review. |
+| Design deletion/retention with data relationships in mind. | Promise deletion while leaving orphaned copies. |
 
-### 6. Review Third Parties
+## Review Checklist
 
-Map data sent to vendors, model providers, analytics tools, payment processors, email providers, and observability platforms. Know what leaves the system.
-
-## Review Checks
-
-- What personal data is collected and why?
+- What personal data exists and why?
 - Where is it stored, logged, cached, exported, or shared?
-- How long is it retained?
-- Can it be deleted or corrected?
-- Is consent or notice required for this use?
-- Does a lower-data design satisfy the same product need?
+- What is the retention/deletion path?
+- What role or system can access it?
+- What lower-data alternative would still work?
+- Does this trigger GDPR, HIPAA, or another specific regime?
+
+## Handoff Rules
+
+- Use `compliance-gdpr` for GDPR, EU/UK users, lawful basis, rights, breach, or DPIA concerns.
+- Use `compliance-hipaa` when health data may be ePHI.
+- Use stack experts for implementation and `compliance-auditability` for evidence/log design.

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Backend Service Boundaries"
+  short_description: "Clarify server-side ownership."

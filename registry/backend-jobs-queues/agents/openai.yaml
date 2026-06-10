@@ -1,0 +1,3 @@
+interface:
+  display_name: "Backend Jobs & Queues"
+  short_description: "Design reliable background work."

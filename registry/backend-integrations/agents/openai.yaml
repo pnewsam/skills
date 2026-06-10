@@ -1,0 +1,3 @@
+interface:
+  display_name: "Backend Integrations"
+  short_description: "Isolate external system boundaries."

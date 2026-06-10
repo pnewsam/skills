@@ -1,53 +1,62 @@
 ---
 name: quality-refactoring
-description: "Language-agnostic refactoring principles: identifying code smells, making safe incremental transformations, preserving behavior, improving names and boundaries, and sequencing cleanup work. Use when improving existing code without changing user-visible behavior. Pair with quality-testing and stack experts for validation and idioms."
+description: "Language-agnostic refactoring principles: identifying code smells, mapping them to safe transformations, preserving behavior, improving names and boundaries, and sequencing cleanup work. Use when improving existing code without changing user-visible behavior. Pair with quality-testing and stack experts for validation and idioms."
 ---
 
 # Quality Refactoring
 
-Refactoring changes structure without changing observable behavior. It should make the next change safer, clearer, or smaller.
+## Use When
 
-## Safety Protocol
+Use when existing code should become easier to change without altering observable behavior.
 
-1. **Name the behavior to preserve.** Identify current inputs, outputs, side effects, and edge cases.
-2. **Find or add characterization coverage.** Use existing tests when possible; add focused regression tests when behavior is risky or unclear.
-3. **Make one transformation at a time.** Rename, extract, move, invert dependency, or simplify conditionals in small steps.
-4. **Run validation after meaningful steps.** Prefer fast targeted tests, then broader checks near the end.
-5. **Stop when the next change is easy.** Refactoring is not a mandate to perfect the whole area.
+## Source Anchors
 
-## Common Transformations
+- Fowler refactoring catalog: https://refactoring.com/catalog/
+- Google code review guidance on complexity and tests: https://google.github.io/eng-practices/review/reviewer/looking-for.html
 
-- Rename for intent.
-- Extract function for a named concept.
-- Extract module/service around a responsibility.
-- Inline a misleading abstraction.
-- Replace conditionals with named predicates or strategy only when it reduces branching.
-- Move side effects to the boundary.
-- Separate parsing/validation from domain behavior.
-- Replace primitive obsession with a named value object or validated type where the language supports it.
+## Core Position
 
-## Smells Worth Acting On
+Refactoring is behavior-preserving structural change. If behavior changes, it is not "just refactoring" and must be planned, reviewed, and tested as feature or bug work.
 
-- Long function with multiple levels of abstraction.
-- Conditional logic duplicated across call sites.
-- Comments explaining tangled code that could be named instead.
-- Hidden temporal coupling: callers must invoke methods in a fragile order.
-- Data clumps passed together repeatedly.
-- Tests that require excessive setup because the unit owns too much.
+## Common Agent Mistakes
 
-## Avoid
+- Performing a rewrite and calling it a refactor.
+- Changing behavior, naming, formatting, file layout, and architecture in one diff.
+- Refactoring before characterizing risky behavior.
+- Adding patterns instead of making the next change easier.
+- Continuing after the code is good enough for the intended next change.
 
-- Rewrites disguised as refactors.
-- Broad file moves without behavior protection.
-- Introducing patterns because they are fashionable.
-- Changing formatting, naming, behavior, and architecture in one diff.
-- Refactoring code that is about to be deleted or whose requirements are unknown.
+## Decision Rubric
 
-## Output Guidance
+| Smell                                        | Prefer                                                                                         |
+| :------------------------------------------- | :--------------------------------------------------------------------------------------------- |
+| Long function with mixed abstraction levels  | Extract Function, Extract Variable, Decompose Conditional.                                     |
+| Repeated branching policy                    | Consolidate Conditional Expression, Extract Function, or strategy only when variants are real. |
+| Primitive obsession around meaningful values | Replace Primitive with Object or a validated type if the stack supports it.                    |
+| Data clumps passed together                  | Introduce Parameter Object or Preserve Whole Object.                                           |
+| Feature envy                                 | Move Function toward the data/concept it uses.                                                 |
+| Misleading abstraction                       | Inline Function/Class or Remove Middle Man.                                                    |
+| Flag argument controls separate behaviors    | Remove Flag Argument; expose explicit operations.                                              |
 
-When recommending refactors, include:
+## Do / Don't
 
-- The smell.
-- The risk it creates.
-- The smallest safe transformation.
-- The validation that should pass.
+| Do                                              | Don't                                                 |
+| :---------------------------------------------- | :---------------------------------------------------- |
+| State the behavior that must be preserved.      | Start moving code before naming the invariant.        |
+| Make one transformation at a time.              | Batch unrelated cleanup.                              |
+| Run targeted validation after meaningful steps. | Trust "simple refactor" intuition for risky code.     |
+| Stop when the next change is easy.              | Chase an ideal architecture with no immediate payoff. |
+
+## Review Checklist
+
+- What behavior is preserved?
+- Which smell is being addressed?
+- Which specific refactoring transformation is being applied?
+- Is the diff small enough to review mechanically?
+- What test/check would catch an accidental behavior change?
+
+## Handoff Rules
+
+- Use `quality-testing` before refactoring poorly covered, high-risk code.
+- Use `quality-modularity` when refactoring changes ownership boundaries.
+- Use stack experts for idiomatic transformations and framework constraints.

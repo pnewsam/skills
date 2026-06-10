@@ -1,0 +1,3 @@
+interface:
+  display_name: "Compliance HIPAA"
+  short_description: "Review HIPAA-oriented ePHI safeguards and evidence."

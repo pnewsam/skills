@@ -1,43 +1,65 @@
 ---
 name: compliance-accessibility
-description: General accessibility compliance guidance for digital products. Use when reviewing keyboard access, semantic structure, accessible names, focus order, contrast, forms, errors, motion, assistive technology support, and WCAG-oriented obligations. Pair with ui-expert, react-accessibility, and color-expert for implementation details.
+description: Accessibility compliance guidance anchored in WCAG 2.2. Use when reviewing keyboard access, semantic structure, accessible names, focus order, contrast, forms, errors, motion, assistive technology support, and WCAG-oriented obligations. Pair with ui-expert, react-accessibility, and color-expert for implementation details.
 ---
 
 # Compliance Accessibility
 
-Accessibility means people with different abilities and assistive technologies can perceive, operate, understand, and trust the product.
+## Use When
 
-## Principles
+Use for accessibility reviews, WCAG-oriented fixes, keyboard/screen reader issues, forms, focus, contrast, motion, or accessible error handling.
 
-### 1. Prefer Native Semantics
+This is engineering guidance, not legal advice. Escalate formal conformance claims, contract obligations, and jurisdiction-specific accessibility duties.
 
-Use native controls and document structure before ARIA. A real button, link, input, heading, list, table, or landmark carries behavior that custom elements must recreate.
+## Source Anchors
 
-### 2. Everything Interactive Must Be Keyboard Operable
+- W3C WCAG 2.2: https://www.w3.org/TR/WCAG22/
+- WAI ARIA Authoring Practices Guide: https://www.w3.org/WAI/ARIA/apg/
 
-Users must be able to reach, understand, operate, and leave every interactive control with the keyboard. Focus order should match visual and task order.
+## Core Position
 
-### 3. Names, Roles, And States Must Be Clear
+Accessibility is operability and semantics, not visual polish. Automated checks help, but a meaningful review always includes keyboard flow, accessible names, focus behavior, and user-task completion.
 
-Controls need accessible names that describe their purpose. Custom widgets must expose role, state, and keyboard behavior correctly.
+## Common Agent Mistakes
 
-### 4. Do Not Rely On Color Alone
+- Adding ARIA instead of using native HTML.
+- Making hover-only controls inaccessible to keyboard/touch users.
+- Checking contrast but ignoring focus, names, and error recovery.
+- Using color as the only state signal.
+- Claiming accessibility from automated tools alone.
 
-Color can reinforce status but cannot be the only signal. Use text, icons, shape, position, or pattern alongside color. Verify contrast for text and meaningful UI indicators.
+## Decision Rubric
 
-### 5. Forms Need Explicit Help And Error Recovery
+| Area | Required Check |
+| :--- | :--- |
+| Keyboard | Every interactive element can be reached, operated, and exited. |
+| Semantics | Native elements and landmarks/headings expose structure. |
+| Names | Controls have clear accessible names, roles, and states. |
+| Focus | Focus is visible, ordered, trapped/restored for dialogs, and not lost after async changes. |
+| Forms/errors | Labels, requirements, help, and errors are programmatically associated. |
+| Contrast/color | Text and meaningful indicators meet contrast and do not rely on color alone. |
+| Motion | Reduced-motion preference is honored for non-essential motion. |
 
-Labels, requirements, field help, validation errors, and summaries should be programmatically associated with fields. Errors should explain how to fix the problem.
+## Do / Don't
 
-### 6. Respect Motion And Cognitive Load
+| Do | Don't |
+| :--- | :--- |
+| Use native controls before custom widgets. | Add ARIA to a non-semantic element when a native element exists. |
+| Test the primary flow with keyboard only. | Assume click success means accessibility success. |
+| Pair visual state with text/icon/shape. | Use color alone for errors, status, or required fields. |
+| Verify manually plus automated scans. | Treat automated a11y output as complete coverage. |
 
-Avoid flashing content. Honor reduced-motion preferences. Keep flows predictable and avoid time pressure unless necessary.
-
-## Review Checks
+## Review Checklist
 
 - Can the full flow be completed with keyboard only?
-- Does the page have meaningful headings, landmarks, labels, and names?
+- Are headings, landmarks, labels, names, roles, and states meaningful?
 - Is focus visible and restored after dialogs, navigation, and async updates?
-- Are errors announced and tied to fields?
+- Are form errors announced and tied to fields?
 - Does contrast pass for text and essential indicators?
-- Is accessibility verified with automated checks plus manual keyboard review?
+- Is motion safe and reduced-motion aware?
+
+## Handoff Rules
+
+- Use `ui-expert` for interaction pattern and UX decisions.
+- Use `react-accessibility` for React implementation details.
+- Use `color-expert` or `ui-color` for contrast and color-system decisions.
