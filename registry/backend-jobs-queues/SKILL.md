@@ -9,6 +9,14 @@ description: Backend background work guidance for queues, workers, scheduled job
 
 Use for background jobs, queues, workers, scheduled tasks, long-running operations, retry policy, idempotency, dead-letter queues, backfills, rate-limited processing, and request-to-worker handoff.
 
+## Source Anchors
+
+- Amazon SQS at-least-once delivery: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues-at-least-once-delivery.html
+- AWS Well-Architected idempotent mutating operations: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_idempotent.html
+- Enterprise Integration Patterns, Idempotent Receiver: https://www.enterpriseintegrationpatterns.com/patterns/messaging/IdempotentReceiver.html
+- Microservices.io Idempotent Consumer: https://microservices.io/patterns/communication-style/idempotent-consumer.html
+- Azure Retry pattern: https://learn.microsoft.com/en-us/azure/architecture/patterns/retry
+
 ## Core Position
 
 Background work is distributed systems work in miniature. Assume duplicate execution, partial failure, reordering, delays, and retries. Make every job observable, bounded, idempotent, and recoverable.
@@ -35,6 +43,16 @@ Background work is distributed systems work in miniature. Assume duplicate execu
 | Poison message | Move to dead-letter queue with reason, attempt count, and replay path |
 | Backfill | Make resumable, chunked, monitored, and safe to run more than once |
 
+## Queue Guardrails
+
+- Assume at-least-once delivery unless the platform proves otherwise, and still protect external side effects with idempotency.
+- Treat enqueue as a state transition. If losing the job would corrupt product state, enqueue after commit via a transactional outbox or equivalent durable handoff.
+- Use unique operation/message IDs and persist processed IDs or operation state before performing non-idempotent work.
+- Configure visibility timeout/lease, worker timeout, retry backoff, max attempts, and dead-letter behavior together.
+- Do not let scheduled jobs overlap unless overlap is explicitly safe. Use leases, checkpoints, or sharded work claims.
+- Make user-visible asynchronous work queryable: `pending`, `running`, `succeeded`, `failed`, `cancelled`, timestamps, progress, and last error where relevant.
+- Include replay guidance for dead-lettered jobs. A dead-letter queue without ownership and replay rules becomes silent data loss.
+
 ## Do / Don't
 
 | Do | Don't |
@@ -49,6 +67,7 @@ Background work is distributed systems work in miniature. Assume duplicate execu
 
 - Why is this work asynchronous, and what user/system state represents "pending"?
 - Can the job run twice, out of order, late, or after a deploy?
+- Is enqueue durable relative to the database commit that made the job necessary?
 - Is each external side effect protected by idempotency or a provider idempotency key?
 - Are timeout, retry, backoff, max attempts, and dead-letter behavior explicit?
 - Is there a replay, repair, or manual intervention path?

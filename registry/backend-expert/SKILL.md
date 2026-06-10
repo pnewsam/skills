@@ -7,6 +7,8 @@ description: Route broad backend architecture, API design, service boundary, per
 
 Use this as the entry point for broad backend work. Identify the server-side responsibility, load only the focused `backend-*` skills needed, and keep the final advice language-agnostic unless a stack expert is also in scope.
 
+Backend engineering is not governed by one standards body. Use protocol standards where they apply, and otherwise prefer canonical pattern literature, mature vendor architecture guidance, and production-proven provider documentation.
+
 ## Initial Response
 
 When invoked without a specific request, respond only with:
@@ -14,6 +16,19 @@ When invoked without a specific request, respond only with:
 > I'm ready to route the backend work. Tell me what you're building, reviewing, or debugging, and what server-side boundary is involved.
 
 Do not provide any other information until the user asks a question or presents a backend task.
+
+---
+
+## Source Anchors
+
+- HTTP semantics and method contracts: https://www.rfc-editor.org/rfc/rfc9110.html
+- Problem Details for HTTP APIs: https://www.rfc-editor.org/rfc/rfc9457.html
+- Martin Fowler Service Layer: https://martinfowler.com/eaaCatalog/serviceLayer.html
+- Martin Fowler Bounded Context: https://martinfowler.com/bliki/BoundedContext.html
+- AWS Well-Architected Reliability idempotency guidance: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_idempotent.html
+- OWASP Authorization Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html
+
+Use these as anchors, not as a mandate to over-architect. Apply the smallest pattern that makes the backend behavior safer, clearer, and easier to operate.
 
 ---
 
@@ -46,6 +61,8 @@ Use these boundaries to prevent conflicting advice:
 - `backend-auth-boundaries` owns where identity and permission decisions are made and enforced.
 
 Pair with stack experts for implementation details: `python-expert`, `react-expert` for frontend/client coordination, or other language/framework experts. Pair with `quality-expert` for maintainability, correctness, testing, and reliability. Pair with `compliance-expert` for security, privacy, regulated data, accessibility, or audit evidence.
+
+If a request is mostly a security control, privacy obligation, or audit question, route to `compliance-expert` first and use backend skills to place the control in the system. If a request is mostly code health, use `quality-expert` first and use backend skills to preserve contracts and data behavior.
 
 ---
 

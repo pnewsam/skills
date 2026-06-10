@@ -9,6 +9,13 @@ description: Backend service boundary guidance for handlers, controllers, servic
 
 Use for server-side architecture questions about where behavior belongs: routes/controllers, services, use cases, domain modules, repositories, validators, side effects, and transaction boundaries.
 
+## Source Anchors
+
+- Martin Fowler Service Layer: https://martinfowler.com/eaaCatalog/serviceLayer.html
+- Martin Fowler Bounded Context: https://martinfowler.com/bliki/BoundedContext.html
+- Domain-Driven Design Reference by Eric Evans: https://domainlanguage.com/wp-content/uploads/2016/05/DDD_Reference_2015-03.pdf
+- Microsoft DDD/CQRS microservices architecture guide: https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/
+
 ## Core Position
 
 Backend code should make the business operation obvious. Entrypoints translate protocols, services/use cases coordinate behavior, persistence modules store and query data, and external side effects are explicit. Add layers only when they clarify ownership or testing.
@@ -32,6 +39,15 @@ Backend code should make the business operation obvious. Entrypoints translate p
 | Persistence module | Queries, writes, transaction helpers, storage-specific constraints | Product workflow decisions |
 | Integration client | External API protocol, retries allowed by provider, response mapping | Domain policy or user-facing branching |
 | Worker/job | Deferred execution and retry handling | New business rules that differ from synchronous path |
+
+## Boundary Heuristics
+
+- Create a service/use-case boundary when an operation is reused by multiple entrypoints, owns a transaction, coordinates several dependencies, or expresses domain language worth testing directly.
+- Do not create a service boundary just to move code out of a handler. The extracted unit must have a clearer name, responsibility, or test surface.
+- Put transaction ownership at the operation level that understands the whole invariant. Helpers should not secretly commit or roll back.
+- Keep domain language inside the bounded context where it is true. If the same word means different things in two areas, create separate models or an explicit mapping layer.
+- Use anti-corruption/mapping boundaries for external systems and legacy subsystems whose concepts do not match the local domain.
+- Prefer a modular monolith boundary before splitting a deployable service; distributed boundaries add latency, partial failure, observability, and deployment cost.
 
 ## Do / Don't
 

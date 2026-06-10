@@ -9,6 +9,14 @@ description: API design guidance for backend services. Use when designing, revie
 
 Use for endpoint design, resource modeling, API contracts, request/response bodies, errors, pagination, filtering, sorting, versioning, idempotency keys, and compatibility.
 
+## Source Anchors
+
+- HTTP Semantics, especially resources, methods, status codes, and idempotent methods: https://www.rfc-editor.org/rfc/rfc9110.html
+- Problem Details for HTTP APIs: https://www.rfc-editor.org/rfc/rfc9457.html
+- Google AIP-121 Resource-oriented design: https://google.aip.dev/121
+- Microsoft REST API Guidelines: https://github.com/microsoft/api-guidelines/blob/vNext/azure/Guidelines.md
+- AWS Well-Architected guidance on idempotent mutating operations: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_idempotent.html
+
 ## Core Position
 
 An API is a product contract. Design the success path, failure path, compatibility story, and client ergonomics together. Prefer boring, predictable contracts over clever endpoint shapes.
@@ -34,6 +42,16 @@ An API is a product contract. Design the success path, failure path, compatibili
 | Versioning | Compatible additive changes first; explicit versioning for breaking changes | Silent breaking changes |
 | Idempotency | Required for retryable non-read side effects | Assuming clients will not retry |
 
+## Contract Minimums
+
+- Resource identity: stable IDs, canonical URL shape, and explicit parent/child relationships.
+- Method semantics: `GET` and `HEAD` must be safe; `PUT` and `DELETE` should be idempotent; `POST` needs idempotency keys when duplicate side effects would hurt.
+- Status code policy: distinguish unauthenticated, forbidden, not found, validation failure, conflict, rate limit, and unexpected server failure according to local convention.
+- Error body: stable machine code, human-readable message, optional field errors, trace/correlation ID, and no secrets or stack traces.
+- List behavior: maximum page size, deterministic sort, cursor/offset choice, filter semantics, empty response shape, and total-count strategy if needed.
+- Compatibility: additive response fields are usually safe; removed/renamed fields, changed nullability, changed enum meanings, and changed error codes are breaking.
+- Documentation: request/response examples for success, empty, validation failure, forbidden/not-found, conflict, and rate limit.
+
 ## Do / Don't
 
 | Do | Don't |
@@ -48,6 +66,7 @@ An API is a product contract. Design the success path, failure path, compatibili
 
 - Can a client predict every response shape, including validation, auth, conflict, not found, rate limit, and server failure?
 - Are status codes meaningful and consistent?
+- Are `GET`, `PUT`, `PATCH`, `POST`, and `DELETE` used according to local convention and HTTP semantics?
 - Are request fields validated for type, range, enum membership, length, and cross-field invariants?
 - Does the API avoid leaking hidden records, tenant data, internal IDs, secrets, or persistence-only fields?
 - Are list endpoints bounded, ordered, filterable, and test-covered?

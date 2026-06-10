@@ -9,6 +9,14 @@ description: Backend persistence guidance for data modeling, database boundaries
 
 Use for data modeling, schema changes, migrations, transactions, consistency, repository/query boundaries, indexing, retention, soft delete, concurrency, and data repair.
 
+## Source Anchors
+
+- PostgreSQL transaction isolation and concurrency behavior: https://www.postgresql.org/docs/current/transaction-iso.html
+- Martin Fowler Unit of Work: https://martinfowler.com/eaaCatalog/unitOfWork.html
+- Martin Fowler Repository: https://martinfowler.com/eaaCatalog/repository.html
+- Expand and contract schema migration pattern: https://www.prisma.io/dataguide/types/relational/expand-and-contract-pattern
+- AWS Well-Architected idempotency guidance: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_idempotent.html
+
 ## Core Position
 
 Persistence is a contract with time. Model durable facts carefully, change schemas compatibly, make transactions intentional, and prove data integrity with tests or migration evidence.
@@ -35,6 +43,16 @@ Persistence is a contract with time. Model durable facts carefully, change schem
 | Concurrency | Use uniqueness constraints, optimistic locking, row locks, or idempotency records when duplicates matter. |
 | Retention | Define deletion, archival, audit, and personal-data retention behavior before data accumulates. |
 
+## Persistence Guardrails
+
+- Prefer database constraints for invariants that must survive multiple code paths, workers, imports, and future services.
+- Keep transactions short and scoped to integrity. Do not hold a transaction open across network calls, user interaction, or slow batch work.
+- Choose isolation/concurrency deliberately: know whether read committed behavior is enough, whether a row lock is needed, or whether retryable serialization failures are acceptable.
+- Make idempotency records durable when a retry can create duplicate rows, duplicate charges, duplicate emails, or duplicate external operations.
+- Use expand/migrate/contract for breaking schema changes: add compatible shape, dual-write/backfill/read new shape, then remove old shape after deployment confidence.
+- Make backfills chunked, resumable, observable, and safe to run more than once.
+- Treat soft delete as a lifecycle design, not a boolean shortcut: define uniqueness behavior, list visibility, restore behavior, retention, and hard-delete rules.
+
 ## Do / Don't
 
 | Do | Don't |
@@ -50,6 +68,7 @@ Persistence is a contract with time. Model durable facts carefully, change schem
 - What durable fact is being stored, and who owns its lifecycle?
 - Are critical invariants enforced by validation, database constraints, or both?
 - Is the transaction boundary explicit and covered by a failure test?
+- Does the code avoid network calls and unbounded loops inside transactions?
 - Can the schema change deploy safely with old and new application versions?
 - Are queries bounded, indexed, and resistant to N+1 behavior?
 - What happens under duplicate requests, concurrent writes, and partial failure?

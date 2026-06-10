@@ -9,6 +9,14 @@ description: Backend integration guidance for third-party APIs, webhooks, extern
 
 Use for third-party API clients, webhooks, inbound/outbound sync, provider data mapping, rate limits, outbox/inbox flows, secrets/configuration, integration tests, and partial failure handling.
 
+## Source Anchors
+
+- Enterprise Integration Patterns catalog: https://www.enterpriseintegrationpatterns.com/patterns/messaging/
+- Stripe idempotent requests: https://docs.stripe.com/api/idempotent_requests
+- Stripe webhook signature verification: https://docs.stripe.com/webhooks/signature
+- GitHub webhook delivery validation: https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries
+- Azure Retry pattern: https://learn.microsoft.com/en-us/azure/architecture/patterns/retry
+
 ## Core Position
 
 Every external system is unreliable, slower than local code, and governed by contracts you do not control. Isolate provider details, make sync state explicit, verify authenticity, and design for partial failure from the start.
@@ -35,6 +43,16 @@ Every external system is unreliable, slower than local code, and governed by con
 | Rate limits | Apply backoff, concurrency limits, and queued processing for bursty flows. |
 | Provider outage | Degrade gracefully, queue retryable work, and expose status when user-visible. |
 
+## Integration Guardrails
+
+- Provider clients should set explicit timeouts, classify errors, redact secrets, and translate provider responses into local types at the boundary.
+- Webhook handlers must verify authenticity before trust. Use the raw request body when the provider signature requires it, and use timing-safe comparison for HMAC signatures.
+- Store inbound event IDs or provider operation IDs so duplicates and replays are safe.
+- Acknowledge inbound webhooks quickly after durable receipt; move heavy work to a queue when processing may exceed provider timeout expectations.
+- Keep provider IDs separate from local IDs. Store mapping intentionally and do not make provider state names the local domain model by accident.
+- Use provider idempotency keys for outbound mutating requests where available, and persist enough local state to reconcile when the response is lost.
+- Rate limits are part of the contract. Centralize provider throttling instead of letting every call site retry independently.
+
 ## Do / Don't
 
 | Do | Don't |
@@ -49,6 +67,7 @@ Every external system is unreliable, slower than local code, and governed by con
 
 - What is the provider boundary, and are provider details isolated there?
 - Are credentials, tokens, signatures, and secrets protected from logs and client responses?
+- Does the webhook path preserve the raw body until signature verification succeeds?
 - Are inbound events authenticated, deduplicated, ordered/tolerant of reordering, and replay-safe?
 - Are outbound calls timed out, retried only when safe, and rate-limit aware?
 - Is there reconciliation for drift between local and provider state?

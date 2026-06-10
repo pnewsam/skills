@@ -9,6 +9,13 @@ description: Backend authentication and authorization boundary guidance for iden
 
 Use for authentication/authorization placement, session/token handling, tenant isolation, role/permission checks, service-to-service identity, object-level access control, and access-control testing.
 
+## Source Anchors
+
+- OWASP Authorization Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html
+- OWASP API Security 2023, Broken Object Level Authorization: https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/
+- OAuth 2.0 Security Best Current Practice, RFC 9700: https://www.rfc-editor.org/rfc/rfc9700.html
+- NIST SP 800-63B authentication guidance: https://pages.nist.gov/800-63-4/sp800-63b.html
+
 ## Core Position
 
 Authorization is backend behavior, not UI state. Authenticate once at a trusted boundary, propagate identity deliberately, authorize every protected action and object, and fail closed.
@@ -35,6 +42,16 @@ Authorization is backend behavior, not UI state. Authenticate once at a trusted 
 | Service-to-service | Authenticate callers and authorize scopes/capabilities separately from user auth. |
 | Failure | Fail closed with consistent forbidden/not-found behavior that avoids data leaks. |
 
+## Auth Boundary Guardrails
+
+- Define a permission matrix before coding: actor, action, resource type, object relationship, tenant, state, and exceptional cases.
+- Prefer policy helpers or a policy engine for repeated decisions. A scattered `if role == admin` codebase is hard to audit.
+- Check object-level authorization for list, detail, mutation, export, job, webhook, and admin paths. Hidden IDs and unguessable IDs are not authorization.
+- Filter by tenant/owner in the query when possible, then still handle direct object access consistently.
+- Keep authentication context minimal: subject ID, tenant/account, roles/scopes/claims, assurance if relevant. Do not pass raw tokens through domain code.
+- Separate authentication, authorization, entitlements, feature flags, and billing state. They answer different questions.
+- Log access denials and sensitive access events safely with actor/resource/action/outcome/correlation ID, not secrets or token material.
+
 ## Do / Don't
 
 | Do | Don't |
@@ -49,6 +66,7 @@ Authorization is backend behavior, not UI state. Authenticate once at a trusted 
 
 - Where is identity established, and can untrusted callers bypass that point?
 - What action is being authorized against which resource and tenant?
+- Is the permission decision based on object relationship/state, not only global role?
 - Are list, detail, mutation, export, background job, and integration paths all protected?
 - Does the data query enforce tenant/owner boundaries before records leave storage?
 - Are token/session expiry, revocation, rotation, and secure transport/storage addressed?
