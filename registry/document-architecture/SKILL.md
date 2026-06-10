@@ -1,19 +1,21 @@
 ---
 name: document-architecture
-description: Create or refresh a codebase-derived architecture document at docs/ARCHITECTURE.md, including Mermaid diagrams for system context, runtime flows, module boundaries, data models, and deployment shape. Use when the user asks to understand, document, audit, or explain an application's architecture, system design, service boundaries, data flow, or codebase structure.
+description: Create or refresh a derived, codebase-current architecture document at docs/architecture/ARCHITECTURE.md, including Mermaid diagrams for system context, runtime flows, module boundaries, data models, and deployment shape. Use when the user asks to understand, document, audit, or explain an application's architecture, system design, service boundaries, data flow, or codebase structure.
 ---
 
 # Document Architecture
 
 ## Overview
 
-Create `docs/ARCHITECTURE.md` from the codebase as it exists. The document should help a new engineer understand how the application is built, where important behavior lives, how data moves, and which boundaries should be preserved.
+Create `docs/architecture/ARCHITECTURE.md` from the codebase as it exists. The document should help a new engineer understand how the application is built, where important behavior lives, how data moves, and which boundaries should be preserved.
 
 This is an evidence-first skill. Prefer documented facts from files over guesses. When you infer architecture from code, label it as an inference.
 
+This document is derived, not constitutional. It describes the current application architecture discovered from code and docs. Do not use root-level `docs/ARCHITECTURE.md`; root all-caps docs are reserved for intent, direction, principles, and methods such as `docs/CHARTER.md` and `docs/METHODS.md`.
+
 ## Output
 
-Write or refresh `docs/ARCHITECTURE.md`. If the file already exists, preserve useful current content, correct stale sections, and add missing coverage. Do not create unrelated docs.
+Write or refresh `docs/architecture/ARCHITECTURE.md`. If the file already exists, preserve useful current content, correct stale sections, and add missing coverage. Do not create unrelated docs.
 
 Use this structure unless the codebase clearly calls for a different one:
 
@@ -168,18 +170,20 @@ Before finishing:
 
 ## Existing Architecture Docs
 
-If `docs/ARCHITECTURE.md` already exists:
+If `docs/architecture/ARCHITECTURE.md` already exists:
 
 - Preserve accurate decisions and useful diagrams.
 - Remove or correct stale claims.
 - Add an "Open Questions" item for ambiguous behavior instead of pretending certainty.
 - Prefer incremental updates over a full rewrite unless the current doc is structurally unusable.
 
+If legacy `docs/ARCHITECTURE.md` exists at the project root, treat it as a legacy architecture artifact. Move or recreate the accurate current-state content under `docs/architecture/ARCHITECTURE.md`, and do not leave the root file as the primary output unless the user explicitly asks to preserve the legacy path.
+
 ## Final Response
 
 Summarize:
 
-- whether `docs/ARCHITECTURE.md` was created or refreshed
+- whether `docs/architecture/ARCHITECTURE.md` was created or refreshed
 - the main architecture areas covered
 - Mermaid diagrams included
 - validation performed

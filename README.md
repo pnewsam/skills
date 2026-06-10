@@ -78,13 +78,17 @@ Workflow skills do work and produce artifacts or code changes. Reference skills 
 
 Workflow skills create and consume artifacts inside the target project they are helping with. Durable planning artifacts live under a conventional `docs/` workspace.
 
+Root-level all-caps docs are foundational or constitutional: they describe intent, principles, and operating methods. Derived docs that describe the current state of the codebase live under named subdirectories.
+
 ```text
 <project>/
   docs/
     CHARTER.md                         # product north star
-    ARCHITECTURE.md                    # codebase-derived system architecture
+    METHODS.md                         # project methods, engineering principles, and operating approach
     BRAND.md                           # optional brand/product reference
     DESIGN_SYSTEM.md                   # deprecated legacy design-system workflow only
+    architecture/
+      ARCHITECTURE.md                  # derived current-state system architecture
     directions/
       NNN-<slug>.md                    # strategic options from explore-directions
     epics/
@@ -174,12 +178,12 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    DA[document-architecture] -->|produces docs/ARCHITECTURE.md| AR[Architecture Reference]
+    DA[document-architecture] -->|produces docs/architecture/ARCHITECTURE.md| AR[Architecture Reference]
 ```
 
 | Skill                                                | Type     | Mode        | Phase   | Description                                                                                                                   |
 | ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [document-architecture](registry/document-architecture/SKILL.md) | workflow | convergence | analyze | Create or refresh `docs/ARCHITECTURE.md` from the codebase, including Mermaid diagrams for system context, runtime flows, boundaries, and data shape. |
+| [document-architecture](registry/document-architecture/SKILL.md) | workflow | convergence | analyze | Create or refresh derived `docs/architecture/ARCHITECTURE.md` from the codebase, including Mermaid diagrams for system context, runtime flows, boundaries, and data shape. |
 
 ### Security Remediation Workflows
 
