@@ -1,5 +1,5 @@
 ---
-name: stash-work
+name: stash
 description: stash in-progress work onto a local wip branch with a descriptive commit and context file. use when you want to preserve uncommitted changes without pushing to origin, shelve work-in-progress for later, save current state before switching tasks, or review previously stashed wip branches. pairs with prepare-pr when you're ready to push.
 ---
 
