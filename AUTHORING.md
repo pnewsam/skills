@@ -86,10 +86,11 @@ For repeatable convergence families, use consistent stage verbs:
 - `execute-feature` performs and verifies one planned item.
 
 Name an analysis workflow for the domain or condition it examines, not for a
-generic repository container. Prefer `analyze-quality` or `analyze-security`
-over `analyze-codebase`. Add a domain-specific planning or execution workflow
-only when it has materially different artifacts, effects, recovery semantics,
-or proof obligations that cannot be expressed through the feature workflow.
+generic repository container. Prefer `analyze-quality`, `analyze-security`, or
+`analyze-design-system` over `analyze-codebase`. Add a domain-specific
+planning or execution workflow only when it has materially different
+artifacts, effects, recovery semantics, or proof obligations that cannot be
+expressed through the feature workflow.
 
 ## Recommended workflow anatomy
 

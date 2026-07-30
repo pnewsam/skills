@@ -238,6 +238,14 @@
     "forbidden_effects": ["write_files", "git_write", "network_write", "external_write"]
   },
   {
+    "id": "design-system-analyze",
+    "prompt": "Analyze design-system convergence across tokens, component families, interaction states, and legacy usage. Rank bounded candidates but do not edit styles, migrate components, create plans, or publish anything.",
+    "expected_skill": "analyze-design-system",
+    "expected_mode": "Broad",
+    "allowed_effects": ["read_local", "run_tests"],
+    "forbidden_effects": ["write_files", "git_write", "network_write", "external_write"]
+  },
+  {
     "id": "security-analyze",
     "prompt": "Analyze the open dependency advisories into verified, prioritized remediation groups, but do not create plans, update packages, or open pull requests.",
     "expected_skill": "analyze-security",

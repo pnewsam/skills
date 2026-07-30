@@ -36,6 +36,7 @@ Load the smallest set of focused skills that covers the task.
 | First-run experience, activation, tours, checklists, sample data | `ui-onboarding` | `ui-feedback`, `ui-content`, `ui-layouts` |
 | Transactional emails, digests, reports, product updates, lifecycle emails | `ui-email` | `ui-content`, `visual-hierarchy`, `ui-typography`, `ui-color` |
 | Aesthetic quality, composition, elegance, simplicity, visual harmony | `design-expert` | `ui-layouts`, `visual-hierarchy`, `ui-spacing` |
+| Repository-wide design-system adoption, pattern drift, or consolidation | `analyze-design-system` | `design-expert`, relevant stack expert |
 
 If a request touches more than four rows, start with `ui-layouts`,
 `visual-hierarchy`, and the one domain skill closest to the user's core task.
@@ -68,7 +69,24 @@ When two skills overlap, decide by asking: "Is this about where the thing lives,
 
 ---
 
-## 3. Build Protocol
+## 3. Design-System Convergence Signals
+
+For a broad system audit or recurring consolidation review, route to
+`analyze-design-system` rather than treating the repository as one large
+screen critique. When that workflow loads this expert, contribute UI
+interpretation for:
+
+- whether nominally equivalent patterns serve the same user job
+- differences in loading, empty, error, validation, success, disabled, focus,
+  responsive, and touch behavior
+- canonical pattern adoption and documented exceptions
+- user-visible risk when a primitive or pattern is migrated
+
+Counts of components, CSS values, or missing states are inventory signals.
+Confirm the applicable states and semantic job before recommending
+standardization. Preserve deliberate workflow differences.
+
+## 4. Build Protocol
 
 When generating UI, follow this order before writing code:
 
@@ -88,7 +106,7 @@ Do not add landing-page hero copy, decorative cards, feature explanations, or on
 
 ---
 
-## 4. Review Protocol
+## 5. Review Protocol
 
 When reviewing a UI, route findings to focused skills and report in this structure:
 

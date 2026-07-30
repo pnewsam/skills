@@ -221,6 +221,21 @@ interface InputFieldProps extends React.ComponentPropsWithoutRef<"input"> {
 }
 ```
 
+## Design-system convergence evidence
+
+When `analyze-design-system` routes a component-family signal here, inspect:
+
+- whether components have the same semantic job and consumer expectations
+- canonical, legacy, experimental, and intentionally specialized ownership
+- variant and boolean-prop combinations observed in real consumers
+- wrapper layers that rename or partially expose the same primitive API
+- behavioral, accessibility, responsive, and testing differences
+
+Import counts, file size, prop counts, and similar names are not sufficient
+evidence of duplication. Consolidate only when a canonical target can preserve
+the required behavior and reduce a specific maintenance, migration, or
+consistency risk.
+
 ## When to decompose
 
 Use these questions rather than a line-count threshold:

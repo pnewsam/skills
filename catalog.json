@@ -100,6 +100,18 @@
         "plan-feature"
       ]
     },
+    "design-system-delivery": {
+      "description": "Analyze design-system drift and deliver bounded consolidation work through the shared feature workflow.",
+      "includes": [
+        "design",
+        "ui"
+      ],
+      "skills": [
+        "analyze-design-system",
+        "execute-feature",
+        "plan-feature"
+      ]
+    },
     "python": {
       "description": "Python and FastAPI architecture, tooling, typing, async, persistence, errors, and testing.",
       "skills": [

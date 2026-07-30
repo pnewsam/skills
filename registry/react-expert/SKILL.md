@@ -29,6 +29,7 @@ Load the smallest set of focused skills that covers the task.
 | Error boundaries, route errors, expected data/action failures, recovery | `react-error-handling` | `react-data-fetching`, `react-accessibility` |
 | Semantic HTML, keyboard behavior, ARIA, focus, forms, live regions | `react-accessibility` | `react-component-design`, `react-form-patterns`, `react-error-handling` |
 | Test strategy, integration tests, component tests, mocks, providers | `react-testing` | `react-data-fetching`, `react-routing`, `react-accessibility` |
+| Design-system component adoption, legacy primitives, variants, or migration | `analyze-design-system` | `react-component-design`, `react-accessibility`, `react-testing` |
 
 If a request touches more than four rows, start with `react-architecture`, then
 add the one focused skill closest to the user's immediate task. Add more only
@@ -57,7 +58,22 @@ When two skills overlap, decide by asking: "Is this problem about app wiring, fi
 
 ---
 
-## 3. Build Protocol
+## 3. Design-System Convergence Signals
+
+For a broad component-system audit, route to `analyze-design-system`. When that
+workflow loads this expert, contribute React interpretation for:
+
+- canonical versus legacy imports and consumer migration progress
+- duplicate semantic component families and wrapper layers
+- variant APIs, boolean-mode combinations, invalid states, and unused variants
+- behavioral, accessibility, responsive, and test differences across
+  nominally equivalent components
+
+Component size, prop count, and import frequency are investigation signals.
+Confirm ownership, semantic equivalence, consumer behavior, and external usage
+before recommending consolidation or deletion.
+
+## 4. Build Protocol
 
 When building or refactoring React code, follow this order before editing:
 
@@ -73,7 +89,7 @@ Do not introduce a new library, global store, route structure, or component abst
 
 ---
 
-## 4. Review Protocol
+## 5. Review Protocol
 
 When reviewing React code, route findings to focused skills and report in this structure:
 

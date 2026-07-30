@@ -158,6 +158,7 @@ flowchart TD
 
 | Skill | Type | Phase | Description |
 | --- | --- | --- | --- |
+| [analyze-design-system](registry/analyze-design-system/SKILL.md) | workflow | analyze | Measure token, primitive, component-family, pattern, state, and migration convergence; rank bounded consolidation candidates without editing or planning. |
 | [analyze-quality](registry/analyze-quality/SKILL.md) | workflow | analyze | Measure and interpret quality signals across maintainability, correctness, testing, and reliability; rank bounded feature candidates without editing or planning. |
 | [analyze-security](registry/analyze-security/SKILL.md) | workflow | analyze | Verify and prioritize application-security posture gaps, dependency findings, and code-scanning findings without changing code or creating plans. |
 | [diagnose-failure](registry/diagnose-failure/SKILL.md) | workflow | analyze | Reproduce and localize a software failure, rank hypotheses, and report an evidence-backed cause without editing the project. |
@@ -239,10 +240,15 @@ Reference skills for turning a functional interface into something clearer, calm
 
 Legacy design-system and critique workflows are retained under `archive/` for
 migration history. They are not discoverable or installable. The active design
-taxonomy uses the `design-expert` router and focused `design-*` references.
+taxonomy uses `analyze-design-system` for repository-wide convergence,
+`design-expert` for broad visual judgment, and focused `design-*` references
+for individual decisions.
 
 ```mermaid
 flowchart LR
+    ADS[analyze-design-system] -->|one bounded candidate| PF[plan-feature]
+    PF --> EF[execute-feature]
+    ADS -.->|interprets visual drift with| DX
     DX[design-expert] --> DC[design-composition]
     DX --> VH[visual-hierarchy]
     DX --> DS[design-simplicity]

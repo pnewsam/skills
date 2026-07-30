@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze Design System"
+  short_description: "Measure and prioritize UI system convergence"
+  default_prompt: "Use $analyze-design-system to measure design-system adoption and rank bounded consolidation candidates."
