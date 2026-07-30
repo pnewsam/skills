@@ -1,6 +1,6 @@
 ---
 name: stash
-description: stash in-progress work onto a local wip branch with a descriptive commit and context file. use when you want to preserve uncommitted changes without pushing to origin, shelve work-in-progress for later, save current state before switching tasks, or review previously stashed wip branches. pairs with prepare-pr when you're ready to push.
+description: Preserve related in-progress work on a local wip branch in one descriptive commit with a context note, then return to the original branch. Use to shelve uncommitted work without touching origin, save state before switching tasks, list existing wip branches, or resume one. Never pushes.
 ---
 
 # Stash Work
@@ -82,19 +82,22 @@ If it exists, append `-2`, `-3`, etc. until a free name is found.
 
 Record the original branch name — you will return to it at the end.
 
-Create and switch to the new branch. `git checkout -b` carries uncommitted changes automatically:
+Create and switch to the new branch. `git switch -c` carries uncommitted changes automatically:
 
 ```bash
-git checkout -b wip/<name>
+git switch -c wip/<name>
 ```
 
-### 4. Stage and commit
+### 4. Write context, stage, and commit once
 
-Stage all relevant changes. Avoid `git add .` if there are suspicious or unrelated files; otherwise it is acceptable:
+Before staging, write the context note using
+`references/wip_context_template.md`. Prefer
+`docs/tmp/wip-<name>.md`; if Git ignores that path, use
+`.wip-context-<name>.md` on the WIP branch. Do not change ignore rules merely to
+make the note trackable.
 
-```bash
-git add -A
-```
+Stage the exact related paths and the context note. Use `git add -A` only when
+inspection shows every change belongs to this snapshot.
 
 Verify what is staged:
 
@@ -127,63 +130,28 @@ Search API endpoint returns paginated results. Frontend integration started
 but not wired up. No tests yet.
 ```
 
-Commit:
+Commit the code and context together as one atomic WIP snapshot:
 
 ```bash
 git commit -m "<subject>" -m "<body>"
 ```
 
-### 5. Write the context file
-
-Create a markdown file at `docs/tmp/wip-<name>.md` that serves as a breadcrumb for your future self. Create the `docs/tmp/` directory if it does not exist.
+### 5. Verify the snapshot
 
 ```bash
-mkdir -p docs/tmp
+git status --short
+git show --stat --oneline HEAD
 ```
 
-The file should contain:
-
-```markdown
-# WIP: <title>
-
-**Branch:** `wip/<name>`
-**Stashed from:** `<original-branch>`
-**Date:** <YYYY-MM-DD>
-
-## What was being worked on
-
-<1–3 sentence summary of the goal or motivation>
-
-## Current state
-
-<What works, what's partially done, what's broken>
-
-## Files changed
-
-<List of modified/added/deleted files, grouped by intent>
-
-## Next steps
-
-<What you would do next if you picked this back up>
-
-## Notes
-
-<Any context that would be hard to reconstruct from the code alone — design decisions, rejected approaches, relevant links or conversations>
-```
-
-Commit the context file on the wip branch:
-
-```bash
-git add docs/tmp/wip-<name>.md
-git commit -m "docs: add wip context for <name>"
-```
+Do not return to the original branch if related changes remain unstaged or
+uncommitted. Report suspicious or intentionally excluded files explicitly.
 
 ### 6. Return to the original branch
 
 Switch back to the branch you were on before:
 
 ```bash
-git checkout <original-branch>
+git switch <original-branch>
 ```
 
 Verify the working tree is clean:
@@ -214,7 +182,7 @@ Report:
 - Commit hash and summary
 - Path to the context file
 - The branch you are now on (the original branch)
-- A reminder that the work is local-only and can be resumed with `git checkout wip/<name>`
+- A reminder that the work is local-only and can be resumed with `git switch wip/<name>`
 - List of any other existing wip branches, if present
 
 ## Handling common situations
@@ -237,7 +205,8 @@ If more than ~30 files are modified, group them by directory or intent in the co
 
 ### The docs/tmp directory is gitignored
 
-Check whether `docs/tmp/` is gitignored. If it is, the context file won't be committed — note this to the user and suggest either un-ignoring the specific file or placing the context file elsewhere (e.g. at the repo root as `.wip-context.md`).
+Use `.wip-context-<name>.md` on the WIP branch. Do not edit repository or global
+ignore rules as a side effect.
 
 ### Resuming stashed work
 

@@ -1,20 +1,27 @@
 ---
 name: review-pr
-description: perform a thorough code review of a GitHub pull request and post the review as inline comments on specific lines, with an overall verdict. use when asked to review a PR, leave code review comments, approve a PR, or request changes. analyzes correctness, security, error handling, code quality, test coverage, and performance, then submits a proper GitHub review (with line-level comments) via the GitHub CLI.
+description: Analyze a GitHub pull request for actionable correctness, security, reliability, performance, and test issues, and optionally post a GitHub review with line-level comments. Use when asked to review, approve, comment on, or request changes on a PR. Defaults to analysis only unless posting is explicitly requested.
 ---
 
 # Review PR
 
 ## Overview
 
-Perform a thorough code review of a pull request by reading the actual diff, identifying issues at the line level, and submitting a proper GitHub review that includes inline comments on specific lines plus an overall verdict (APPROVE, REQUEST_CHANGES, or COMMENT).
+Perform a thorough code review of a pull request by reading the actual diff and
+identifying actionable issues at the line level.
+
+Use **Analyze mode** for requests such as "review this PR": return findings and
+a proposed verdict without writing to GitHub. Use **Post mode** only when the
+user explicitly asks to post, submit, approve, comment on, or request changes.
 
 This is a read-first, write-last skill. Read and analyze everything before drafting a single comment. Never invent findings that are not traceable to a specific line in the diff.
 
 ## Safety rules
 
 - Never modify source code, commit history, or branch state. The only write operations are posting the review comment.
-- Do not post a review until the full assessment is complete and confirmed by the user (unless explicitly asked to run automatically).
+- Never post in Analyze mode. In Post mode, complete the full assessment before
+  the single external write; do not require another confirmation unless the
+  target or requested verdict is ambiguous.
 - Only comment on lines that appear in the diff. GitHub rejects inline comments on lines outside the changed hunks.
 - Do not approve a PR that has blocking issues. When in doubt, use COMMENT rather than APPROVE or REQUEST_CHANGES.
 - Do not invent issues. Every comment must cite a specific file and line from the diff.
@@ -108,7 +115,8 @@ Choose one verdict based on the overall findings:
 - **REQUEST_CHANGES**: One or more blocking or major issues found. The author must address at least the blocking items before the PR should merge.
 - **COMMENT**: Non-blocking feedback only, or you are not sure whether the code is correct (e.g. missing domain context). Also use COMMENT when asked not to approve or block.
 
-When multiple findings point in different directions, the most severe single finding determines the verdict.
+Use the most severe *credible, merge-relevant* finding to determine the verdict.
+Uncertain or preference-only feedback must not drive REQUEST_CHANGES.
 
 ## Workflow
 
@@ -146,24 +154,19 @@ Store as `REPO` (e.g. `org/repo-name`).
 
 ### 3. Fetch and parse the diff
 
-First, get a high-level summary of what changed:
+Fetch the PR state and diff without changing local branches or remote-tracking
+refs:
 
 ```bash
-git fetch origin
-git diff --stat origin/<baseRefName>...origin/<headRefName>
-git diff --name-status origin/<baseRefName>...origin/<headRefName>
-```
-
-Then fetch the full diff. For large PRs (100+ files), fetch per file or per module:
-
-```bash
+gh pr view <number> --json files,commits
 gh pr diff <number>
 ```
 
-Or for a specific file:
+For large PRs, use the file list to prioritize by risk and inspect patches in
+bounded groups:
 
 ```bash
-git diff origin/<baseRefName>...origin/<headRefName> -- <path>
+gh api repos/<owner>/<repo>/pulls/<number>/files --paginate
 ```
 
 **Tracking line numbers in the diff:**
@@ -255,55 +258,27 @@ Use this template:
 <Optional: note patterns done well, tests added, clean implementation choices.>
 
 ---
-_Reviewed by Claude Code · <branch> → <base> · <date>_
+_Review scope: <branch> → <base> · <date>_
 ```
 
-### 7. Present for confirmation
+### 7. Present the review
 
 Show the user:
 - The overall verdict
 - The full list of inline comments (file, line, severity, body)
 - The full summary body
 
-Ask for confirmation before posting. If the user asks to adjust comments, revise and re-present.
+Stop here in Analyze mode. In Post mode, proceed after verifying the PR target,
+inline positions, and verdict. If any remain ambiguous, ask before posting.
 
-Skip confirmation only if the user has explicitly requested automatic posting.
+### 8. Post the review via the GitHub API (Post mode only)
 
-### 8. Post the review via the GitHub API
-
-Build the review payload as a JSON file, then post it using `gh api`:
-
-```bash
-# Write the payload to a temp file
-cat > /tmp/pr_review_payload.json << 'PAYLOAD'
-{
-  "body": "<summary body>",
-  "event": "COMMENT",
-  "comments": [
-    {
-      "path": "src/api/auth.ts",
-      "line": 42,
-      "side": "RIGHT",
-      "body": "**Blocking:** ..."
-    },
-    {
-      "path": "src/utils/helpers.ts",
-      "line": 17,
-      "side": "RIGHT",
-      "body": "Nit: ..."
-    }
-  ]
-}
-PAYLOAD
-
-# Post the review
-gh api repos/<REPO>/pulls/<number>/reviews \
-  --method POST \
-  --input /tmp/pr_review_payload.json
-
-# Clean up
-rm /tmp/pr_review_payload.json
-```
+Build one valid JSON payload with `body`, `event`, and `comments`, then send it
+to `gh api repos/<owner>/<repo>/pulls/<number>/reviews --method POST --input -`
+through standard input. Use a structured JSON serializer available in the
+execution environment; do not construct JSON by interpolating review text into
+shell source. Validate every inline position against the current diff before
+the single submission.
 
 Replace `"event"` with the appropriate value:
 - `"APPROVE"` — approves the PR
@@ -312,8 +287,9 @@ Replace `"event"` with the appropriate value:
 
 **If a comment line is rejected:** GitHub returns a 422 if a comment line is not in the diff. If this happens:
 1. Check the exact line number against the diff output
-2. Adjust the line number to the nearest `+` line in the same hunk
-3. Or convert the comment to a general PR comment (not inline)
+2. Do not move it to a different line merely to satisfy the API
+3. Correct the mapping if the intended line is identifiable; otherwise convert
+   it to a general review-body finding
 
 After posting, verify the review appears:
 
@@ -346,11 +322,14 @@ Do not review every file exhaustively. Instead:
 
 ### PR is already merged or closed
 
-Still perform the review and post it — post-merge review is valuable for team learning and catching regressions before they compound. Note the state in the summary.
+Perform the analysis when it is still useful and note the state in the summary.
+Post only when the user explicitly requested a retrospective review.
 
 ### PR authored by the user themselves
 
-Still post the review. Self-review is valid. Use COMMENT rather than APPROVE for self-authored PRs unless the user explicitly asks to self-approve.
+Self-review is valid. In Post mode, use COMMENT rather than APPROVE for a
+self-authored PR unless repository policy clearly permits self-approval and the
+user explicitly requests it.
 
 ### Inline comment line not in diff
 
@@ -366,8 +345,10 @@ A 422 usually means a line number is not in the diff. Fix the line number or mov
 
 ### No issues found
 
-State this clearly. Post an APPROVE review with a brief positive summary. Do not fabricate issues to seem thorough.
+State this clearly and do not fabricate issues. In Analyze mode, propose
+APPROVE. In Post mode, submit a brief evidence-based approval.
 
 ### User asks to approve without a full review
 
-Warn the user that approving without reviewing the diff defeats the purpose. If they confirm, post an APPROVE with a note that the review was not performed.
+Do not use this skill to manufacture an approval without review evidence. Offer
+to post COMMENT noting the limited review, or complete the review first.

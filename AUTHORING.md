@@ -1,80 +1,199 @@
-# Mechanics
+# Authoring and maintaining skills
 
-How the skills system works, how to think about using it, and how to install skills effectively.
+Skills are compact operating manuals for agents. They should add repeatable
+judgment, safe workflow, or domain knowledge that the base model and repository
+instructions do not already provide.
 
-## How skills are loaded
+## Loading model
 
-Skills are installed by symlinking SKILL.md files into a skills directory that the AI tool reads. At session startup, only the **name and description** from each skill's frontmatter are loaded into context. The full skill content is loaded only when the skill is invoked during a session.
+Clients normally discover a skill from its `name` and `description`, then load
+the full `SKILL.md` only when selected. This has two consequences:
 
-This means:
+- Every installed description consumes routing attention even when the skill is
+  never invoked. Prefer a relevant install profile over installing everything.
+- The full skill competes with the task, code, and conversation for context.
+  Keep the main file focused and move optional detail to named resources.
 
-- **Having many skills available is cheap.** 50+ installed skills add only a few thousand tokens of description text at startup. Install liberally.
-- **Invoking a skill is what costs context.** Each invocation loads the full SKILL.md (typically 3,000-8,000 tokens). Invoking 3-5 skills in a session is comfortable; invoking 15 would crowd out working context.
-- **Descriptions matter for routing.** The model uses the one-line description to decide which skill to invoke. As your skill library grows, descriptions must be precise and non-overlapping so the right skill triggers.
+Descriptions are routing contracts, not summaries. State what the skill does,
+concrete trigger phrases or situations, important exclusions, and any material
+effects such as writing files, committing, pushing, or posting externally.
 
-## Where to install
+## Skill kinds
 
-Skills can be installed at two levels:
+Use three kinds. A skill should have one primary kind.
 
-| Level                 | Location                    | Scope                         | Best for                                                                    |
-| --------------------- | --------------------------- | ----------------------------- | --------------------------------------------------------------------------- |
-| **Personal / global** | `~/.claude/skills/`         | Every session, every project  | General-purpose workflow skills (git, session logging, PR prep)             |
-| **Project**           | `<project>/.claude/skills/` | Sessions in this project only | Stack-specific skills (React, security, testing patterns for this codebase) |
+| Kind | Purpose | Typical shape |
+| --- | --- | --- |
+| Router | Select the smallest relevant expert set | Routing table, overlap boundaries, synthesis rules |
+| Workflow | Produce a repeatable outcome | Preconditions, modes/effects, ordered procedure, verification, output |
+| Reference | Supply judgment in one decision domain | Decision rubric, examples, failure modes, review checklist |
 
-**For teams:** Project-level skills committed to the repo (in `.claude/skills/`) are shared with everyone who works on the project. This is the right place for team conventions, stack-specific principles, and project-specific workflows. Personal skills stay in `~/.claude/skills/` and reflect individual preferences.
+An orchestrator is a workflow that invokes other workflows. Keep it only when
+the sequence has durable state and recovery semantics; do not create an
+orchestrator merely to save the user from naming the next obvious skill.
 
-## Skill groups
+## Scope and granularity
 
-The skills in this registry are organized into groups. As the library grows, groups help you install or remove related skills as a unit and reason about which skills are active where.
+A skill should cover one user-recognizable decision domain or one bounded
+workflow outcome.
 
-| Category      | Group               | Skills                                                                                                                                                                                                                                                     | Recommended install                    |
-| ------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| **Product**   | **product-direction** | explore-directions, create-charter, plan-epic, plan-bug-bash, plan-feature, build-feature, advance-epic                                                                                 | Global — when defining product vision  |
-| **Design**    | **design-principles** | design-expert, design-composition, design-hierarchy, design-rhythm, design-simplicity, design-visual-language                                                                                                   | Global or project — when improving visual quality |
-| **Design**    | **frontend-design** | svg-animations, emil-design-eng, color-expert, animation-vocabulary                                                                                | Project — when actively improving UI |
-| **Design**    | **ui-patterns**     | ui-expert, ui-layouts, ui-patterns, ui-forms, ui-feedback, ui-actions, ui-content, ui-visual-hierarchy, ui-spacing, ui-typography, ui-color, ui-depth, ui-responsive, ui-icons, ui-data-viz, ui-onboarding, ui-email                                                                                                                                                                                                              | Global or project — when making UI/UX decisions |
-| **Engineering** | **git-workflow**    | stash-work, save-session, prepare-pr, revise-pr, review-pr, assess-pr-risk                                                                                                                                                                                 | Global — useful in every repo          |
-| **Engineering** | **react-spa**       | react-component-design, react-project-structure, react-spa-architecture, react-hooks-effects, react-form-patterns, react-state-management, react-data-fetching, react-routing, react-performance, react-error-handling, react-accessibility, react-testing | Project — only in React SPA projects   |
-| **Engineering** | **security**        | plan-vulnerability-remediation, remediate-vulnerability, plan-code-scanning-remediation, remediate-code-scanning                                                                                                                                           | Project — when doing security work     |
-| **Engineering** | **browser-testing** | setup-browser-testing, plan-browser-tests, add-browser-test, audit-browser-tests, fix-browser-test, validate-changes, validate-feature                                                                                                                     | Project — where you have browser tests |
+Split a skill when:
 
-## Authoring skills
+- Different requests use disjoint sections.
+- It mixes a reusable knowledge base with a long operational procedure.
+- It has multiple independent external effects or ambiguous stopping points.
+- Its description needs several unrelated trigger clauses.
+- The main file exceeds roughly 500 lines and optional detail can be loaded
+  lazily.
 
-Guidelines for writing and maintaining skills in this registry.
+Keep related material together when splitting would make an ordinary request
+load several tiny skills or when the decisions form one natural cascade.
 
-### Skill scope
+Line count is a diagnostic, not a target. Fifty precise lines can be valuable;
+two hundred repetitive lines are not. Prefer the shortest instructions that
+reliably change agent behavior.
 
-A skill should cover **one decision domain** — a set of related questions a user asks as a unit. The test: can you describe the skill's purpose in a single sentence without using "and"?
+## Required package structure
 
-| Good scope (single domain) | Too broad (multiple domains) |
-| :--- | :--- |
-| "How do I handle loading, empty, and error states?" | "How do I build good UI?" |
-| "Which React hook pattern should I use?" | "How do I write React and TypeScript and CSS?" |
-| "How do I structure form containers and fields?" | "How do I build forms, tables, and modals?" |
+```text
+<skill-name>/
+  SKILL.md                 # required
+  agents/
+    openai.yaml            # recommended client metadata
+  references/              # optional, loaded only when named by SKILL.md
+  scripts/                 # optional deterministic helpers
+  assets/                  # optional output inputs, not prompt material
+```
 
-### Skill length
+Keep `SKILL.md` frontmatter limited to:
 
-- **Target 2,000–6,000 tokens** (roughly 200–600 lines of markdown) for a reference skill. This keeps the invocation cost manageable (see "How skills are loaded" above) while providing enough depth to be useful.
-- **Workflow skills** (plan/execute patterns) are typically shorter — 100–300 lines — since they describe a process rather than a knowledge base.
-- **If a skill exceeds ~500 lines**, it's a strong signal that it covers multiple decision domains and should be split. The `ui-patterns` skill set (4 files) was split from a single 700-line file into focused skills covering data display, forms, feedback, and actions separately.
-- **A skill under ~50 lines** is probably too thin to be worth a separate invocation. Consider merging it into a sibling skill or expanding it.
+```yaml
+---
+name: kebab-case-name
+description: Clear routing contract with triggers, exclusions, and material effects.
+---
+```
 
-### When to split a skill
+The directory and `name` must match. Use a verb phrase for workflows
+(`prepare-pr`) and a decision-domain noun phrase for references
+(`react-state-management`). Router names may use `-expert` when they genuinely
+route among focused children.
 
-Split when:
-- The file exceeds ~500 lines and covers 3+ distinct topics.
-- The description needs an "and" to connect unrelated concepts.
-- Different user questions would trigger different parts of the file — meaning the model wastes context loading sections irrelevant to the query.
-- The skill covers both "how to decide" (reference) and "how to execute" (workflow) for the same domain. These should be separate skills, or the reference should be pulled out.
+## Recommended workflow anatomy
 
-Keep together when:
-- The topics form a natural cascade — the user almost always needs all of them to answer their question.
-- Splitting would force the model to invoke 3 skills to answer what should be a single question.
-- Each section is too thin to stand alone.
+Use only the sections the workflow needs:
 
-### Skill naming
+1. **Outcome** — the observable result and the natural stopping point.
+2. **Use / do not use** — boundaries with neighboring skills.
+3. **Modes and effects** — read-only, local files, local Git, network read, or
+   external write.
+4. **Inputs and preconditions** — required artifacts, tools, and repository
+   state.
+5. **Workflow** — ordered decisions and actions, with proportional detail.
+6. **Safety and idempotency** — what reruns do and how user work is preserved.
+7. **Verification** — evidence required before claiming success.
+8. **Output contract** — what is returned or written, including incomplete work.
 
-- Use **kebab-case, lowercase** for the directory and frontmatter `name` field.
-- Names should suggest the **decision domain**, not the format: prefer `ui-patterns` over `ui-guide`, prefer `react-hooks-effects` over `react-hooks-best-practices`.
-- The name is used for routing, so it must be unique and unambiguous across the entire registry.
-- Reference skills typically use a noun phrase (`color-expert`, `ui-patterns`). Workflow skills typically use a verb phrase (`plan-epic`, `build-feature`).
+Do not encode product-level approval rituals inside a skill. If the user already
+explicitly requested an in-scope action, an extra confirmation is usually noise.
+Ask only when the target, scope, or material consequence remains ambiguous.
+
+For multi-effect workflows, define explicit stop points. For example:
+
+```text
+preview -> local commit -> push -> external PR write
+```
+
+Completion of one stage never authorizes the next stage.
+
+## Recommended reference anatomy
+
+A reference skill should contain:
+
+- A concise position or default.
+- A decision rubric ordered by practical importance.
+- Context-sensitive exceptions and trade-offs.
+- Common failure modes, especially plausible agent mistakes.
+- A review checklist that can be applied to real work.
+- Handoff rules for adjacent domains.
+
+Avoid encyclopedic background that does not alter a decision. Link to
+authoritative primary sources when facts are unstable or precise attribution
+matters; do not copy a documentation corpus into the skill.
+
+## Routers
+
+Routers should:
+
+- Load the smallest set of focused skills needed for the request.
+- Define overlap boundaries and precedence.
+- Preserve disagreements instead of flattening them into generic advice.
+- Synthesize one recommendation and identify the next workflow, if any.
+- Avoid duplicating the child skills' substantive guidance.
+
+Do not include canned "initial response" text. The router is invoked in the
+context of a real task and should respond to that task.
+
+## Progressive disclosure
+
+Keep always-needed instructions in `SKILL.md`. Put optional templates, detailed
+rubrics, examples, and protocol minutiae in `references/`, and link each resource
+from the exact step that needs it.
+
+Rules:
+
+- Do not duplicate a reference inline.
+- Keep references one hop from `SKILL.md`; avoid reference chains.
+- Give references over roughly 100 lines a short contents list.
+- Delete or repair unreferenced and missing resources.
+- Put deterministic, error-prone mechanics in `scripts/` and test them.
+- Keep assets separate when they are copied into output rather than read as
+  instructions.
+
+## What not to put in a skill
+
+- Generic encouragement, role-play, or tone instructions.
+- Facts the base model reliably knows and can apply without help.
+- Repository-specific rules that belong in `AGENTS.md` or project docs.
+- Large command catalogs without decision logic.
+- Destructive defaults, blind staging, force pushes, or unrelated cleanup.
+- Hidden transitions to commit, push, deploy, post, or message.
+- Claims about files, tools, ignore rules, or authentication that were not
+  checked.
+- Broken links, stale skill names, duplicate templates, or recovery-only
+  deprecated skills in the active registry.
+- Multiple competing ways to do the same operation unless the choice itself is
+  the domain knowledge.
+
+## Installation profiles
+
+Keep the globally installed set small and broadly applicable:
+
+- session preservation and local Git workflows
+- PR preparation/review when GitHub is common
+- top-level routers that are frequently useful
+
+Install stack, framework, compliance, platform, and product-delivery families
+at project scope when relevant. A router and all of its children need not be
+globally installed if the domain is rare.
+
+## Validation and evaluation
+
+Every change should pass four layers:
+
+1. **Package validation:** frontmatter, name, metadata, and allowed structure.
+2. **Resource integrity:** every referenced local file exists; every bundled
+   reference or script is reachable from `SKILL.md`.
+3. **Routing checks:** representative positive, negative, and overlap prompts
+   select the intended skill.
+4. **Behavior checks:** dry-run or sandbox scenarios verify stopping points,
+   idempotency, preservation of unrelated work, and truthful completion.
+
+High-effect workflows need regression cases for ambiguous requests, dirty
+working trees, pre-existing destinations, unavailable tools, partial failures,
+and reruns.
+
+When changing a high-use skill, compare representative tasks before and after.
+The useful metric is not whether the prose sounds better; it is whether the
+agent chooses the right skill, takes the right bounded action, and stops in the
+right place.

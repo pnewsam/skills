@@ -1,3 +1,4 @@
 interface:
   display_name: "Advance Epic"
-  short_description: "Plan and build the next epic item."
+  short_description: "Advance one bounded step of a planned epic."
+  default_prompt: "Use $advance-epic to make one bounded step on the next epic child."

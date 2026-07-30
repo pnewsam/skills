@@ -1,3 +1,4 @@
 interface:
   display_name: "Design Expert"
   short_description: "Route visual design judgment."
+  default_prompt: "Use $design-expert to route this visual design question to the smallest relevant expert set."

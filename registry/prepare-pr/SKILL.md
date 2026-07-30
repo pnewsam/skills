@@ -1,24 +1,43 @@
 ---
 name: prepare-pr
-description: prepare a pull request from a local git branch. use when asked to review branch changes, summarize code changes, create a commit message, commit staged or unstaged work, push a branch, or get a branch ready for pr review. this skill guides safe git inspection, change summarization, conventional commit creation, and pushing without destructive operations.
+description: "Inspect a local Git branch and prepare it only as far as the user requests: summarize changes, create a feature branch, stage and commit related work, push, or open a GitHub pull request. Use when asked to prepare, publish, or open a PR. Supports read-only preview, commit, publish, and open-PR modes and never advances to a later effect without explicit user intent."
 ---
 
 # Prepare PR
 
 ## Overview
 
-Prepare a local Git branch for a pull request by inspecting repository state, summarizing the code changes, creating a useful commit message, committing the intended changes, and pushing the branch safely.
+Prepare a local Git branch for review while stopping at the effect boundary the user requested.
 
-This skill assumes the assistant is operating in a local repository through a terminal. Prefer safe, read-only Git commands until the user explicitly asks to commit or push.
+## Modes and stopping point
+
+Infer the narrowest mode that satisfies the request. If the request is ambiguous,
+complete the read-only work and present the proposed next action instead of
+silently advancing.
+
+| Mode | Permitted effects | Stop after |
+| --- | --- | --- |
+| Preview | Read repository and GitHub state | Summary, proposed commit, and PR draft |
+| Commit | Preview plus branch creation, staging, and local commit | Verified local commit |
+| Publish | Commit plus ordinary push | Verified remote branch |
+| Open PR | Publish plus create or update a GitHub PR | Verified PR URL |
+
+A request to "review the branch" means Preview. A request to "commit" does not
+authorize pushing. A request to "push" does not authorize opening a PR. An
+explicit request to "prepare/open/create the PR" authorizes the full Open PR
+sequence, subject to repository permissions.
 
 ## Safety rules
 
 - Never run destructive commands such as `git reset --hard`, `git clean`, `git checkout -- .`, `git restore`, force-push, rebasing, or amending unless the user explicitly asks for that exact operation.
 - Do not commit secrets, credentials, generated build artifacts, dependency folders, editor files, or local environment files. Flag suspicious files before staging or committing.
 - Do not push with `--force` or `--force-with-lease` unless explicitly requested.
-- Before committing, show the proposed commit message and the files that will be included unless the user has already explicitly requested a fully automatic commit.
+- Before committing, inspect the staged patch and report the intended files and
+  message. Do not add an extra confirmation when the user already explicitly
+  requested the commit and the scope is unambiguous.
 - If there are unrelated changes mixed into the working tree, call them out and ask which changes to include rather than guessing.
-- Preserve user intent: if the user says only to summarize, do not commit or push.
+- Preserve the selected mode. Never treat successful completion of one stage as
+  authorization for the next.
 
 ## Workflow
 
@@ -51,15 +70,19 @@ git diff --cached --stat
 
    Keep the description concise (2–5 words, hyphen-separated). Good examples: `feat/user-refresh-tokens`, `fix/empty-search-response`, `chore/update-ci-node-version`.
 
-3. Show the proposed branch name to the user and ask for confirmation unless they have already provided one.
+3. Use a user-provided name when available. Otherwise propose one; create it
+   directly only when the selected mode authorizes branch creation and the name
+   is an unambiguous fit.
 
-4. Once confirmed, create and switch to the new branch. If there are uncommitted changes, carry them across using:
+4. When the selected mode authorizes it, create and switch to the new branch.
+   Uncommitted changes travel with the switch:
 
 ```bash
-git checkout -b <branch-name>
+git switch -c <branch-name>
 ```
 
-   `git checkout -b` preserves all uncommitted working-tree and staged changes on the new branch automatically, so no stashing is needed.
+   `git switch -c` preserves uncommitted working-tree and staged changes on the
+   new branch, so no stashing is needed.
 
 5. Confirm the switch succeeded:
 
@@ -206,7 +229,9 @@ git log --oneline --decorate -n 5
 
 If no changes are staged, do not run `git commit`. Explain that there is nothing staged to commit.
 
-### 7. Push the branch
+### 7. Push the branch (Publish and Open PR modes only)
+
+Stop before this step in Preview or Commit mode.
 
 If the current branch has an upstream:
 
@@ -222,17 +247,23 @@ git push -u origin <current-branch>
 
 Do not push directly to `main`, `master`, or protected release branches unless the user explicitly confirms that is intended.
 
-### 8. Create the pull request with the GitHub CLI
+### 8. Create or update the pull request (Open PR mode only)
 
-Once the branch has been pushed, create the PR using the GitHub CLI. Before running, verify `gh` is available:
+Do not infer permission to create a PR merely because the push succeeded. In
+Open PR mode, check whether the branch already has a PR before creating one:
 
 ```bash
 gh --version
+gh pr view --json number,title,url,state 2>/dev/null
 ```
 
 If `gh` is not installed or not authenticated, stop and instruct the user to install it (`brew install gh` on macOS, or visit https://cli.github.com/) and run `gh auth login`.
 
-Populate the template below with real content derived from the diff summary, then create the PR:
+Use `references/pr_output_templates.md` for the canonical PR body and final
+status formats. Populate it with facts from the diff and actual validation
+results; remove irrelevant placeholders.
+
+If no PR exists, create one:
 
 ```bash
 gh pr create \
@@ -243,58 +274,14 @@ gh pr create \
   --draft
 ```
 
-Always open PRs in draft mode using `--draft`. This allows the author to review the PR before requesting review from others.
+Default to a draft unless the user or repository convention clearly requests a
+ready-for-review PR.
 
 Optional flags to include when relevant:
 
 - `--reviewer <handle>` — request specific reviewers if the user mentions them
 - `--assignee @me` — self-assign the PR
 - `--label <label>` — apply a label if one clearly matches (e.g. `bug`, `enhancement`)
-
-Use this PR body template. Fill in every section from the diff analysis. Remove placeholder lines that do not apply (e.g. remove the `Fixes #issue_number` line if no issue number is known, remove screenshot instructions if there are no UI changes, and delete inapplicable type-of-change checkboxes):
-
-```markdown
-## Description
-
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
-
-Fixes #issue_number
-
-## Screenshots
-
-<!-- Include images of the feature/changes for context. -->
-
-## Type of change
-
-Please delete options that are not relevant.
-
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ⚡ New feature (non-breaking change which adds functionality)
-- [ ] 🚨 Hotfix (non-breaking change which fixes an issue)
-- [ ] 📢 Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] 📄 This change requires a documentation update
-
-## Testing / Verification
-
-<!-- Describe how this change was tested or how reviewers can verify it. -->
-
-Steps to verify:
-
-1.
-2.
-
-<!-- If automated tests cover this change, list the relevant test files or commands. -->
-<!-- If no tests exist, explain why or note what manual verification was done. -->
-
-## Checklist:
-
-- [ ] My code follows the style guidelines of this project
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have checked my code and corrected any misspellings
-- [ ] I have added or updated tests that cover my changes
-```
 
 After the PR is created, `gh` will return a URL. Share that URL with the user.
 
@@ -305,7 +292,7 @@ After preparing the PR, report:
 - Current branch name
 - Commit hash and commit message, if a commit was created
 - Push destination, if pushed
-- PR URL returned by `gh pr create`
+- PR URL, if a PR was created or updated
 - Short summary of changes
 - Anything not included, skipped, or needing user attention
 
@@ -333,13 +320,18 @@ Stop and report the exact problem. Do not attempt risky repair commands. Suggest
 
 ### Tests
 
-Before committing or creating the PR, look for a test command in the repository (README, `package.json` scripts, `Makefile`, `pyproject.toml`, `Cargo.toml`, or similar). If one exists, suggest running it and show the result. Do not invent expensive or destructive test commands.
+Before committing or creating the PR, look for validation commands in the
+repository instructions and build metadata. Run proportionate targeted checks
+when they are safe and within the requested workflow; do not invent expensive
+or destructive commands.
 
-Use the test results to populate the **Testing / Verification** section of the PR body:
+Use the results to populate the **Validation** section of the PR body:
 
 - If automated tests were run and passed, list the command used and note that they passed.
 - If automated tests were run and failed, flag it to the user before pushing and do not proceed until the issue is addressed or the user explicitly overrides.
 - If no automated tests exist, describe the manual verification steps taken (e.g. "Ran the app locally and confirmed the login flow works end-to-end").
 - If tests were not run at all (e.g. the user skipped this step), state that clearly in both the PR body and the final response.
 
-Always fill in the **Testing / Verification** section with something concrete — never leave it empty. At minimum, describe how a reviewer could verify the change themselves.
+Always fill in **Validation** with concrete evidence. If a check was not run,
+state that fact and why; do not turn suggested reviewer steps into claimed
+results.

@@ -1,0 +1,162 @@
+[
+  {
+    "id": "prepare-preview",
+    "prompt": "Review this branch and draft a commit message and PR description, but do not change anything.",
+    "expected_skill": "prepare-pr",
+    "expected_mode": "Preview",
+    "allowed_effects": ["read_local", "network_read"],
+    "forbidden_effects": ["write_files", "git_write", "external_write"]
+  },
+  {
+    "id": "prepare-commit",
+    "prompt": "Commit the related changes on a feature branch. Do not push.",
+    "expected_skill": "prepare-pr",
+    "expected_mode": "Commit",
+    "allowed_effects": ["read_local", "write_files", "git_write"],
+    "forbidden_effects": ["network_write", "external_write"]
+  },
+  {
+    "id": "prepare-publish",
+    "prompt": "Commit these changes and push the branch, but leave opening the PR to me.",
+    "expected_skill": "prepare-pr",
+    "expected_mode": "Publish",
+    "allowed_effects": ["read_local", "write_files", "git_write", "network_write"],
+    "forbidden_effects": ["external_write"]
+  },
+  {
+    "id": "prepare-open-pr",
+    "prompt": "Prepare this work and open a draft pull request.",
+    "expected_skill": "prepare-pr",
+    "expected_mode": "Open PR",
+    "allowed_effects": ["read_local", "write_files", "git_write", "network_write", "external_write"],
+    "forbidden_effects": ["destructive_git"]
+  },
+  {
+    "id": "review-analyze",
+    "prompt": "Review PR 42 and tell me what should block merge. Do not post anything.",
+    "expected_skill": "review-pr",
+    "expected_mode": "Analyze",
+    "allowed_effects": ["read_local", "network_read"],
+    "forbidden_effects": ["git_write", "external_write"]
+  },
+  {
+    "id": "review-post",
+    "prompt": "Review PR 42 and post the resulting GitHub review.",
+    "expected_skill": "review-pr",
+    "expected_mode": "Post",
+    "allowed_effects": ["read_local", "network_read", "external_write"],
+    "forbidden_effects": ["write_files", "git_write"]
+  },
+  {
+    "id": "risk-analyze",
+    "prompt": "How risky is PR 42? Give me the assessment here only.",
+    "expected_skill": "assess-pr-risk",
+    "expected_mode": "Analyze",
+    "allowed_effects": ["read_local", "network_read"],
+    "forbidden_effects": ["git_write", "external_write"]
+  },
+  {
+    "id": "risk-post",
+    "prompt": "Assess PR 42 and post the risk summary as a PR comment.",
+    "expected_skill": "assess-pr-risk",
+    "expected_mode": "Post",
+    "allowed_effects": ["read_local", "network_read", "external_write"],
+    "forbidden_effects": ["write_files", "git_write"]
+  },
+  {
+    "id": "revise-audit",
+    "prompt": "Check whether PR 42's title and body still match the diff.",
+    "expected_skill": "revise-pr",
+    "expected_mode": "Audit",
+    "allowed_effects": ["network_read"],
+    "forbidden_effects": ["git_write", "external_write"]
+  },
+  {
+    "id": "revise-apply",
+    "prompt": "Sync PR 42's title and body to its current diff.",
+    "expected_skill": "revise-pr",
+    "expected_mode": "Apply",
+    "allowed_effects": ["network_read", "external_write"],
+    "forbidden_effects": ["write_files", "git_write"]
+  },
+  {
+    "id": "stash-local-only",
+    "prompt": "Save this related unfinished work locally so I can switch tasks. Do not push it.",
+    "expected_skill": "stash",
+    "expected_mode": "Preserve",
+    "allowed_effects": ["read_local", "write_files", "git_write"],
+    "forbidden_effects": ["network_write", "external_write"]
+  },
+  {
+    "id": "save-session",
+    "prompt": "Save a short handoff for what we did today.",
+    "expected_skill": "save-session",
+    "expected_mode": "Write local note",
+    "allowed_effects": ["read_local", "write_files"],
+    "forbidden_effects": ["git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "build-one-item",
+    "prompt": "Implement the next unchecked item in feature 014, verify it, and stop.",
+    "expected_skill": "build-feature",
+    "expected_mode": "One item",
+    "allowed_effects": ["read_local", "write_files", "git_write"],
+    "forbidden_effects": ["network_write", "external_write"]
+  },
+  {
+    "id": "advance-one-step",
+    "prompt": "Advance epic 006 by one bounded step.",
+    "expected_skill": "advance-epic",
+    "expected_mode": "One step",
+    "allowed_effects": ["read_local", "write_files", "git_write"],
+    "forbidden_effects": ["network_write", "external_write"]
+  },
+  {
+    "id": "validate-no-commit",
+    "prompt": "Validate feature 014 and write the report. Do not commit anything.",
+    "expected_skill": "validate-feature",
+    "expected_mode": "Validate",
+    "allowed_effects": ["read_local", "write_files", "run_tests"],
+    "forbidden_effects": ["git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "router-ui-aesthetic",
+    "prompt": "The settings page works, but it feels visually noisy and generic.",
+    "expected_skill": "design-expert",
+    "expected_mode": "Route",
+    "allowed_effects": ["read_local"],
+    "forbidden_effects": ["write_files", "git_write", "external_write"]
+  },
+  {
+    "id": "router-ui-mechanics",
+    "prompt": "Choose the right layout, form, feedback, and responsive patterns for this onboarding flow.",
+    "expected_skill": "ui-expert",
+    "expected_mode": "Route",
+    "allowed_effects": ["read_local"],
+    "forbidden_effects": ["write_files", "git_write", "external_write"]
+  },
+  {
+    "id": "router-react",
+    "prompt": "I need help deciding component boundaries, server state, and error handling in this React app.",
+    "expected_skill": "react-expert",
+    "expected_mode": "Route",
+    "allowed_effects": ["read_local"],
+    "forbidden_effects": ["write_files", "git_write", "external_write"]
+  },
+  {
+    "id": "router-python",
+    "prompt": "Review this Python service's package layout, typing, async boundaries, and tests.",
+    "expected_skill": "python-expert",
+    "expected_mode": "Route",
+    "allowed_effects": ["read_local"],
+    "forbidden_effects": ["write_files", "git_write", "external_write"]
+  },
+  {
+    "id": "router-cross-domain",
+    "prompt": "Help me shape this product initiative; it spans UI, backend architecture, reliability, and privacy.",
+    "expected_skill": "consult-expert",
+    "expected_mode": "Route and synthesize",
+    "allowed_effects": ["read_local"],
+    "forbidden_effects": ["write_files", "git_write", "external_write"]
+  }
+]

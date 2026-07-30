@@ -42,7 +42,7 @@ Fill in every section from the assessment. Remove dimension rows marked N/A if y
 - <Add more items as needed — keep each one actionable and tied to a specific finding>
 
 ---
-_Assessed by Claude Code · <branch> → <base> · <date>_
+_Assessment scope: <branch> → <base> · <date>_
 ```
 
 ## Final status (Step 9 output)

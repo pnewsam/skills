@@ -1,0 +1,4 @@
+interface:
+  display_name: "Python Expert"
+  short_description: "Route broad Python engineering questions."
+  default_prompt: "Use $python-expert to route this Python request and synthesize the focused guidance."

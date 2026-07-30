@@ -40,11 +40,14 @@ skills install -d /path/to/skills -y
 
 # Force copy mode instead of symlinks
 skills install -a -y --copy
+
+# Explicitly replace an existing destination
+skills install -t codex -y --force
 ```
 
 By default, the CLI creates **symlinks** from each harness's skills directory back to this repo. Edits to skills in the repo are instantly available everywhere — no sync step needed.
 
-Project installs (`-p`) and custom directory installs (`-d`) use copies, since the repo may not be available on other machines.
+Project installs (`-p`) and custom directory installs (`-d`) use copies, since the repo may not be available on other machines. Existing destinations are preserved by default; pass `--force` only when replacement is intentional.
 
 ### `skills status`
 
@@ -56,7 +59,7 @@ skills status
 
 ### `skills unlink <harness>`
 
-Remove all symlinked skills from a harness.
+Remove symlinked skills owned by the active registry source from a harness. Other symlinks are preserved.
 
 ```bash
 skills unlink codex

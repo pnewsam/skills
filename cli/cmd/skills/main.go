@@ -24,6 +24,7 @@ var (
 	flagDir     string
 	flagCopy    bool
 	flagYes     bool
+	flagForce   bool
 	flagSource  string
 )
 
@@ -87,6 +88,7 @@ func init() {
 		cmd.Flags().StringVarP(&flagDir, "dir", "d", "", "Install to a custom directory (copies)")
 		cmd.Flags().BoolVar(&flagCopy, "copy", false, "Force copy mode instead of symlinks")
 		cmd.Flags().BoolVarP(&flagYes, "yes", "y", false, "Skip prompts; install all skills")
+		cmd.Flags().BoolVar(&flagForce, "force", false, "Replace an existing skill destination")
 		cmd.Flags().StringVar(&flagSource, "source", "", "Skills source directory")
 	}
 
@@ -278,6 +280,7 @@ func runInstall(cmd *cobra.Command, args []string) error {
 
 	// Install
 	fmt.Println()
+	failures := 0
 	for _, t := range targets {
 		modeStr := "Symlinking"
 		if t.mode == installer.ModeCopy {
@@ -286,9 +289,10 @@ func runInstall(cmd *cobra.Command, args []string) error {
 		fmt.Printf("%s %d skill(s) into %s ...\n", modeStr, len(selectedSkills), t.dir)
 
 		for _, s := range selectedSkills {
-			r, err := installer.Install(s.Path, t.dir, t.mode)
+			r, err := installer.Install(s.Path, t.dir, t.mode, installer.Options{Force: flagForce})
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "  Error installing %s: %v\n", s.Name, err)
+				failures++
 				continue
 			}
 			fmt.Printf("  %-12s %s\n", r.Action, r.Skill)
@@ -296,6 +300,9 @@ func runInstall(cmd *cobra.Command, args []string) error {
 		fmt.Println()
 	}
 
+	if failures > 0 {
+		return fmt.Errorf("%d skill installation(s) failed", failures)
+	}
 	fmt.Println("Done.")
 	return nil
 }
@@ -333,13 +340,17 @@ func runStatus(cmd *cobra.Command, args []string) error {
 }
 
 func runUnlink(cmd *cobra.Command, args []string) error {
+	sourceDir, err := findSourceDir()
+	if err != nil {
+		return err
+	}
 	harnesses, _ := harness.LoadConfig()
 	h, err := harness.FindByName(harnesses, args[0])
 	if err != nil {
 		return err
 	}
 
-	removed, err := installer.Unlink(h.Dir)
+	removed, err := installer.Unlink(h.Dir, sourceDir)
 	if err != nil {
 		return err
 	}
@@ -363,8 +374,8 @@ func runSetup(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("resolving executable: %w", err)
 	}
 
-	// Remove any stale "skills" binaries elsewhere in PATH that would shadow ours.
-	removeStaleBinaries(exe)
+	// Report other binaries that may shadow this one, but never delete them.
+	warnShadowedBinaries(exe)
 
 	home, _ := os.UserHomeDir()
 	binDir := filepath.Join(home, ".local", "bin")
@@ -373,7 +384,16 @@ func runSetup(cmd *cobra.Command, args []string) error {
 	}
 
 	linkPath := filepath.Join(binDir, "skills")
-	os.Remove(linkPath)
+	if info, err := os.Lstat(linkPath); err == nil {
+		if info.Mode()&os.ModeSymlink == 0 {
+			return fmt.Errorf("%s already exists and is not a symlink; move it before running setup", linkPath)
+		}
+		if err := os.Remove(linkPath); err != nil {
+			return fmt.Errorf("replacing symlink %s: %w", linkPath, err)
+		}
+	} else if !os.IsNotExist(err) {
+		return fmt.Errorf("inspecting %s: %w", linkPath, err)
+	}
 	if err := os.Symlink(exe, linkPath); err != nil {
 		return fmt.Errorf("creating symlink: %w", err)
 	}
@@ -400,9 +420,9 @@ func runSetup(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-// removeStaleBinaries finds other "skills" binaries in PATH that would shadow
-// the canonical one and removes them (with a message).
-func removeStaleBinaries(canonical string) {
+// warnShadowedBinaries reports other "skills" binaries in PATH without
+// modifying them.
+func warnShadowedBinaries(canonical string) {
 	others := findAllInPath("skills")
 	for _, p := range others {
 		resolved, err := filepath.EvalSymlinks(p)
@@ -413,10 +433,7 @@ func removeStaleBinaries(canonical string) {
 		if resolved == canonical {
 			continue
 		}
-		fmt.Printf("  Removing stale binary: %s\n", p)
-		if err := os.Remove(p); err != nil {
-			fmt.Fprintf(os.Stderr, "  Warning: could not remove %s: %v\n", p, err)
-		}
+		fmt.Fprintf(os.Stderr, "Warning: another 'skills' executable exists at %s; PATH order determines which one runs.\n", p)
 	}
 }
 

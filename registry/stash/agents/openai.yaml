@@ -1,3 +1,4 @@
 interface:
   display_name: "Stash Work"
   short_description: "Save WIP on a local branch."
+  default_prompt: "Use $stash to preserve my related uncommitted work locally and return to the current branch."

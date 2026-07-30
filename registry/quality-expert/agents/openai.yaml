@@ -1,3 +1,4 @@
 interface:
   display_name: "Quality Expert"
   short_description: "Route broad code quality, testing, and reliability work."
+  default_prompt: "Use $quality-expert to route this code quality question and synthesize a focused recommendation."

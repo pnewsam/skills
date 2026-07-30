@@ -1,3 +1,4 @@
 interface:
   display_name: "Save Session"
   short_description: "Save a concise working-session summary."
+  default_prompt: "Use $save-session to capture a concise local handoff for this session."

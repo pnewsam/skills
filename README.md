@@ -6,7 +6,10 @@ Use the registry by installing selected skills into the directory your agent cli
 
 ## Repository Layout
 
-This repository is a skills registry. The source skills live under `registry/`, and installers symlink selected `SKILL.md` files into the directory an agent client reads.
+This repository is a skills registry. Active source skills live under
+`registry/`, and installers link or copy each selected skill package into the
+directory an agent client reads. Archived packages live under `archive/` and
+are not discoverable by the installer.
 
 ```text
 skills/
@@ -18,6 +21,7 @@ skills/
       references/           # optional templates, examples, rubrics
       scripts/              # optional helper scripts invoked by the skill
       assets/               # optional supporting files
+  archive/                  # deprecated packages retained for migration history
   cli/                      # installer and registry tooling
   AUTHORING.md              # how to write and install skills
 ```
@@ -33,46 +37,28 @@ Codex or other clients may use analogous roots such as `~/.codex/skills/`, `~/.a
 
 ## Taxonomy
 
-Skills organize around two dimensions, **mode** and **phase**, and come in two types: **workflow** and **reference**.
+Classify a skill on four operational facets:
 
-![mode: divergence](https://img.shields.io/badge/mode-divergence-0ea5e9?style=flat-square)
-![mode: convergence](https://img.shields.io/badge/mode-convergence-f59e0b?style=flat-square)
-![phase: analyze](https://img.shields.io/badge/phase-analyze-8b5cf6?style=flat-square)
-![phase: plan](https://img.shields.io/badge/phase-plan-10b981?style=flat-square)
-![phase: execute](https://img.shields.io/badge/phase-execute-f97316?style=flat-square)
-![type: workflow](https://img.shields.io/badge/type-workflow-475569?style=flat-square)
-![type: reference](https://img.shields.io/badge/type-reference-64748b?style=flat-square)
+| Facet | Values | Why it matters |
+| --- | --- | --- |
+| **Kind** | router, workflow, reference | Determines the skill's expected structure |
+| **Domain** | product, Git/PR, UI, design, React, Python, quality, compliance, platform, testing, and others | Controls installation and routing neighborhoods |
+| **Stage** | discover, decide, plan, implement, validate, review, ship, preserve | Shows where the skill fits in a lifecycle |
+| **Effect** | read-only, local files, local Git, network read, external write | Makes authorization and stopping points explicit |
 
-### Mode
+Use **divergence** and **convergence** as optional product-thinking lenses, not
+as the primary registry hierarchy. A planning skill may contain both; an
+operational Git skill often fits neither.
 
-Initiatives sit between two opposing modes. Divergent work is the outward force: it expands the option space when intent is unclear or several good outcomes are possible. Convergent work is the inward force: it narrows ambiguity when the standard, target, or gap is already known. Healthy projects need both in productive tension.
-
-```mermaid
-flowchart LR
-    D["Divergence<br/>Outward force<br/>Expand possibility<br/>Explore, compare, reframe, choose"]:::divergence <-->|"opposing forces<br/>held in balance over time"| C["Convergence<br/>Inward force<br/>Narrow commitment<br/>Align, repair, complete, validate"]:::convergence
-
-    classDef divergence fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e;
-    classDef convergence fill:#fef3c7,stroke:#d97706,color:#78350f;
-```
-
-### Phase
-
-Most workflow skills move work through the same abstract loop: understand the situation, turn that understanding into scoped plans, then execute and validate the planned work. New evidence, blockers, or review feedback can send the work back through analysis before it proceeds.
+Most workflow skills move through the same broad lifecycle. New evidence,
+blockers, or review feedback can send work back to discovery or planning.
 
 ```mermaid
 flowchart LR
-    A["Analyze<br/>Understand context, evidence, goals, and gaps"]:::analyze --> P["Plan<br/>Choose direction, scope epics/features, define acceptance criteria"]:::plan
-    P --> E["Execute<br/>Implement, verify, validate, and prepare the PR"]:::execute
-    E -.->|new evidence, blockers, or feedback| A
-
-    classDef analyze fill:#ede9fe,stroke:#7c3aed,color:#4c1d95;
-    classDef plan fill:#d1fae5,stroke:#059669,color:#064e3b;
-    classDef execute fill:#ffedd5,stroke:#ea580c,color:#7c2d12;
+flowchart LR
+    D["Discover / decide"] --> P["Plan"] --> I["Implement"] --> V["Validate / review"] --> S["Ship / preserve"]
+    V -.->|"new evidence"| D
 ```
-
-### Type
-
-Workflow skills do work and produce artifacts or code changes. Reference skills provide principles, patterns, and domain guidance.
 
 ## Artifacts
 
@@ -99,7 +85,7 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
       NNN-<slug>-validation.md         # validate-feature report
     tmp/
       session-YYYY-MM-DD-<slug>.md     # saved session notes
-      wip-<name>.md                    # stash-work context breadcrumb
+      wip-<name>.md                    # stash context breadcrumb when trackable
 ```
 
 `docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Projects, refactors, bug bashes, browser-test coverage, component-structure work, security remediation, platform work, and internal quality initiatives should still flow through epics and features rather than separate top-level planning directories or `docs/tmp` queues. `docs/tmp/` is reserved for ephemeral session breadcrumbs and WIP handoff notes.
@@ -147,7 +133,7 @@ flowchart TD
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
 | [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create a structured epic plan that translates a product charter into a quarter-level initiative.                              |
 | [plan-bug-bash](registry/plan-bug-bash/SKILL.md)       | workflow | divergence | analyze, plan | Turn stream-of-consciousness bug observations into a standard bug-bash epic with prioritized child features.            |
-| [plan-feature](registry/plan-feature/SKILL.md)         | workflow | divergence | execute | Create a structured feature plan that defines a 1–2 week deliverable and links it to a parent epic.                           |
+| [plan-feature](registry/plan-feature/SKILL.md)         | workflow | convergence | plan | Create a structured feature plan that defines a 1–2 week deliverable and links it to a parent epic.                           |
 | [build-feature](registry/build-feature/SKILL.md)       | workflow | convergence | execute | Implement one acceptance criterion from a feature plan — write code, verify, commit, and check it off. Run repeatedly until the feature is complete. |
 | [advance-epic](registry/advance-epic/SKILL.md)         | workflow | convergence | execute | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete.    |
 | [ship-epic](registry/ship-epic/SKILL.md)               | workflow | convergence | execute | Complete an epic end-to-end — plan missing features, advance until all child features are complete, validate, and prepare a PR. |
@@ -166,7 +152,7 @@ flowchart LR
 
 | Skill                                              | Type     | Mode        | Phase   | Description                                                                                                         |
 | -------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
-| [stash-work](registry/stash-work/SKILL.md)         | workflow |             | execute | Stash in-progress work onto a local `wip/` branch with a descriptive commit and context file.                       |
+| [stash](registry/stash/SKILL.md)                   | workflow | convergence | preserve | Preserve related in-progress work on a local `wip/` branch in one commit with a context note.                     |
 | [save-session](registry/save-session/SKILL.md)     | workflow |             | analyze | Summarize the current working session and save it to `docs/tmp/`.                                                   |
 | [prepare-pr](registry/prepare-pr/SKILL.md)         | workflow |             | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR.     |
 | [revise-pr](registry/revise-pr/SKILL.md)           | workflow | convergence | execute | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits.        |
@@ -218,7 +204,7 @@ flowchart LR
 | -------------------------------------------------------------------------- | -------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | [setup-browser-testing](registry/setup-browser-testing/SKILL.md)           | workflow | convergence | execute       | Set up the browser testing facility — installs and configures framework, auth helpers, CI workflow with scheduled runs, and conventions docs.  |
 | [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Analyze critical UI flows and produce a standard browser-test coverage epic with child features.                                               |
-| [add-browser-test](registry/add-browser-test/SKILL.md)                     | workflow | divergence  | execute       | Implement one browser integration test from a planned browser-test feature, then verify and update the feature plan.                           |
+| [add-browser-test](registry/add-browser-test/SKILL.md)                     | workflow | convergence | execute       | Implement one browser integration test from a planned browser-test feature, then verify and update the feature plan.                           |
 | [audit-browser-tests](registry/audit-browser-tests/SKILL.md)               | workflow | convergence | analyze       | Audit an existing browser test suite, write an epic audit, and update the browser-test coverage epic.                                          |
 | [fix-browser-test](registry/fix-browser-test/SKILL.md)                     | workflow | convergence | execute       | Repair one broken or flaky browser test from a test failure or planned browser-test feature.                                                   |
 | [validate-changes](registry/validate-changes/SKILL.md)                     | workflow | convergence | execute       | Run targeted validation against recent code changes — maps diff to relevant tests, runs only those, and reports coverage gaps.                 |
@@ -232,7 +218,9 @@ Reference skills provide principles, patterns, conventions, and domain judgment.
 
 Reference skills for turning a functional interface into something clearer, calmer, more elegant, and more visually coherent. Use `design-expert` for broad visual quality work or when the right focused design skill is unclear.
 
-Legacy design-system and critique workflow skills are deprecated for now while the design taxonomy is reorganized around a `design-expert` router and focused `design-*` reference skills. Deprecated skills remain in `registry/` for recovery, but they are not part of the active framework: `create-design-system`, `extract-design-system`, `design-audit`, `design-fix`, `design-review`, `design-polish`, and `plan-design-fixes`.
+Legacy design-system and critique workflows are retained under `archive/` for
+migration history. They are not discoverable or installable. The active design
+taxonomy uses the `design-expert` router and focused `design-*` references.
 
 ```mermaid
 flowchart LR

@@ -1,15 +1,18 @@
 ---
 name: advance-epic
-description: advance an epic by implementing its next incomplete child feature. reads docs/epics/NNN-*.md, finds the next unchecked child feature, ensures a feature plan exists (runs plan-feature if needed), then invokes build-feature to implement it. run repeatedly until the epic is complete. pairs with plan-epic and build-feature.
+description: Advance an epic by coordinating its next incomplete child feature. Use when asked to make one bounded step on a planned epic. Reads docs/epics/NNN-*.md, selects the next child, verifies that a feature plan exists, runs one build-feature step, updates progress only when supported by evidence, then stops. Does not publish or open a PR.
 ---
 
 # Advance Epic
 
 ## Overview
 
-Execute an epic one child feature at a time. This skill reads an epic plan from `docs/epics/NNN-*.md`, identifies the next incomplete child feature, ensures it has a detailed plan, implements it, and marks it as done in the epic.
+Execute one bounded step of an epic. A single invocation selects one child
+feature and runs at most one `build-feature` item. Mark the child complete only
+when its entire feature plan is complete and verified.
 
-The intended automation model is: find the next `ready` feature, run `build-feature` (or `plan-feature` first if unplanned), update the epic's progress, and stop. A loop can then invoke the skill again for the next feature.
+If planning is missing, stop and recommend `plan-feature`; do not silently
+expand a planning request into implementation.
 
 ## Idempotency requirements
 
@@ -89,7 +92,7 @@ If the file exists but is empty or only a stub, recommend running `plan-feature`
 
 ### 4. Run `build-feature`
 
-Invoke `build-feature` for the selected feature plan:
+Invoke `build-feature` once for the selected feature plan:
 
 ```bash
 # The model invokes the build-feature skill conceptually
@@ -102,7 +105,9 @@ If `build-feature` reports a blocker, propagate that blocker to the user and sto
 
 ### 5. Update the epic plan
 
-Once `build-feature` confirms the feature is complete, mark the child feature as done in the epic file:
+Only when `build-feature` reports that the entire feature is complete, mark the
+child feature as done in the epic file. If one item was completed but more
+remain, leave the epic checkbox open and record the current progress.
 
 - Change `- [ ]` to `- [x]`.
 - Append the feature plan file path and the PR or commit reference if available.
@@ -119,7 +124,9 @@ Update a "Progress" section at the bottom of the epic if one exists:
 
 Do not remove other sections.
 
-Commit the epic plan update together with the feature work, or as a separate administrative commit on the epic branch if the team prefers.
+Include the epic update in the current local commit when it belongs to the same
+unit of work. Do not create an extra administrative commit or publish anything
+unless the user explicitly asks.
 
 ### 6. Final response
 
@@ -133,7 +140,8 @@ Report:
 - Recommended next steps:
   - Run `validate-feature` to comprehensively validate the completed child feature.
   - Run `advance-epic` again for the next feature.
-  - If all features are complete, run `validate-feature` on the final feature, then `prepare-pr` for the epic branch.
+  - If all features are complete, recommend the relevant validation pass and
+    `prepare-pr`; do not invoke or publish automatically.
 
 ## Handling common situations
 

@@ -1,3 +1,4 @@
 interface:
   display_name: "Validate Changes"
   short_description: "Run targeted validation from a diff."
+  default_prompt: "Use $validate-changes to run proportionate checks for the current diff."

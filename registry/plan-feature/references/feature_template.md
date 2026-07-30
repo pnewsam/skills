@@ -1,5 +1,13 @@
 # Feature: <Feature Name>
 
+## Contents
+
+- Metadata and alignment
+- User story and acceptance criteria
+- Technical and UI/UX notes
+- Definition of done and tasks
+- Notes
+
 ## Metadata
 
 - **ID:** <NNN>

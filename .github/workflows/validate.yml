@@ -1,0 +1,24 @@
+name: Validate registry
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate skill packages
+        run: python3 scripts/validate_registry.py
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: cli/go.mod
+
+      - name: Test installer
+        working-directory: cli
+        run: go test ./...
