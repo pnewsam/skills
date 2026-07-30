@@ -1,6 +1,6 @@
 ---
 name: assess-pr-risk
-description: Assess a pull request's operational and merge risk across blast radius, security, data, tests, dependencies, and infrastructure, and optionally post the assessment as a PR comment. Use when asked to risk-assess a PR, flag risky changes, or evaluate merge readiness. Defaults to analysis only unless posting is explicitly requested.
+description: Assess a pull request's operational and merge risk through an available authenticated GitHub integration or gh across blast radius, security, data, tests, dependencies, and infrastructure, and optionally post the assessment as a PR comment. Use when asked to risk-assess a PR, flag risky changes, or evaluate merge readiness. Defaults to analysis only unless posting is explicitly requested.
 ---
 
 # Assess PR Risk
@@ -114,17 +114,24 @@ Does the diff touch deployment, CI/CD, environment, or infrastructure config?
 
 ## Workflow
 
-### 1. Verify the GitHub CLI is available
+### 1. Select an authenticated GitHub access path
+
+Prefer an available GitHub connector or app. Otherwise use authenticated `gh`:
 
 ```bash
 gh --version
+gh auth status
 ```
 
-If `gh` is not installed or not authenticated, stop and instruct the user to install it and run `gh auth login`.
+Do not require both. If neither path is authenticated, stop and explain how to
+connect the integration or authenticate `gh`.
 
 ### 2. Identify the target PR
 
 If the user provides a PR number, use that. Otherwise, detect from the current branch:
+
+With a connector, resolve the repository and search open PRs for the current
+head branch, then fetch the selected PR metadata. With `gh`, use:
 
 ```bash
 gh pr view --json number,title,body,baseRefName,headRefName,state,url,author
@@ -139,6 +146,9 @@ gh pr list --state open
 Store: `number`, `title`, `baseRefName`, `headRefName`, `state`, `url`.
 
 ### 3. Fetch the PR evidence
+
+With a connector, fetch the PR and retrieve patches for the exact changed
+filenames in bounded groups. With `gh`, use:
 
 ```bash
 gh pr view <number> --json files,commits
@@ -183,11 +193,19 @@ the target or requested scope is ambiguous.
 
 ### 8. Post the comment (Post mode only)
 
+With a connector, call its top-level PR-comment action once with the repository,
+PR number, and completed assessment body. Otherwise use:
+
 ```bash
 gh pr comment <number> --body "<assessment comment>"
 ```
 
-After posting, verify and share the PR URL.
+After posting, fetch the live conversation through the same access path, verify
+the comment appears, and share the PR URL.
+If the selected access path rejects publication because direct user
+authorization or a content-safety approval is missing, do not retry through
+another path. Report the rejection and preserve the completed assessment for
+the original user-authorized context.
 
 ### 9. Final response
 

@@ -1,6 +1,6 @@
 ---
 name: revise-pr
-description: Audit an existing pull request against its current diff and, when explicitly requested, update its title or body. Use when asked to check, revise, sync, or refresh PR metadata after the branch changes. Defaults to a read-only audit; editing is a separate external-write mode.
+description: Audit an existing pull request through an available authenticated GitHub integration or gh against its current diff and, when explicitly requested, update its title or body. Use when asked to check, revise, sync, or refresh PR metadata after the branch changes. Defaults to a read-only audit; editing is a separate external-write mode.
 ---
 
 # Revise PR
@@ -19,7 +19,8 @@ Always fetch the live PR state and real diff before proposing edits.
 
 ## Safety rules
 
-- Never modify source code, commit history, or branch state. This skill only edits PR metadata via `gh pr edit`.
+- Never modify source code, commit history, or branch state. This skill only
+  edits PR title or body through the selected GitHub access path.
 - Preserve author-written sections and repository-template fields that remain
   accurate. Do not toggle checklist items based only on inference.
 - Do not change the base branch, assignees, labels, or reviewers unless the user explicitly asks.
@@ -29,17 +30,24 @@ Always fetch the live PR state and real diff before proposing edits.
 
 ## Workflow
 
-### 1. Verify the GitHub CLI is available
+### 1. Select an authenticated GitHub access path
+
+Prefer an available GitHub connector or app. Otherwise use authenticated `gh`:
 
 ```bash
 gh --version
+gh auth status
 ```
 
-If `gh` is not installed or not authenticated, stop and instruct the user to install it (`brew install gh` on macOS, or visit https://cli.github.com/) and run `gh auth login`. Do not proceed until this is resolved.
+Do not require both. If neither path is authenticated, stop and explain how to
+connect the integration or authenticate `gh`.
 
 ### 2. Identify the target PR
 
 If the user names a specific PR number, use that. Otherwise, detect the PR associated with the current branch:
+
+With a connector, resolve the repository, search open PRs for the current head,
+and fetch the selected PR metadata. With `gh`, use:
 
 ```bash
 gh pr view --json number,title,body,baseRefName,headRefName,state,url
@@ -64,7 +72,8 @@ Store the following for later comparison:
 ### 3. Inspect the actual changes on the branch
 
 Read the live PR evidence without changing local branches or remote-tracking
-refs:
+refs. With a connector, fetch the PR, list exact changed filenames, and retrieve
+their patches in bounded groups. With `gh`, use:
 
 ```bash
 gh pr view <number> --json files,commits
@@ -135,9 +144,10 @@ Show the user a clear diff of what will change:
 In Audit mode, stop here. In Apply mode, proceed unless the audit exposed an
 ambiguity that would materially change the PR's stated scope.
 
-### 8. Apply the updates with the GitHub CLI (Apply mode only)
+### 8. Apply the updates (Apply mode only)
 
-Once confirmed, apply the edit:
+With a connector, call its update-pull-request action once with the repository,
+PR number, and only the revised title/body fields. Otherwise use:
 
 ```bash
 gh pr edit <number> \
@@ -147,11 +157,16 @@ gh pr edit <number> \
 
 Omit `--title` if the title is unchanged.
 
-After editing, verify the live PR reflects the update:
+After editing, verify the live PR reflects the update through the connector's
+PR-info action or:
 
 ```bash
 gh pr view <number> --json title,body,url
 ```
+
+If the selected access path rejects the write because direct user authorization
+is missing, do not retry through another path. Report the rejection and preserve
+the exact proposed title/body for the original user-authorized context.
 
 ### 9. Final response
 
@@ -189,6 +204,8 @@ Note this to the user. Write the description to cover all of them clearly. Do no
 
 Prioritize summarizing by component or layer rather than listing every file. Focus the description on user-visible and API-level impact, and mention test and config changes briefly.
 
-### `gh pr edit` fails
+### The PR metadata update fails
 
-Report the exact error. Common causes: authentication expired (`gh auth login`), wrong remote, or the PR is locked. Do not retry destructively.
+Report the exact error. Common causes include expired authentication, wrong
+repository, insufficient permissions, or a locked PR. Do not retry
+destructively.

@@ -1,6 +1,6 @@
 ---
 name: review-pr
-description: Analyze a GitHub pull request for actionable correctness, security, reliability, performance, and test issues, and optionally post a GitHub review with line-level comments. Use when asked to review, approve, comment on, or request changes on a PR. Defaults to analysis only unless posting is explicitly requested.
+description: Analyze a GitHub pull request for actionable correctness, security, reliability, performance, and test issues through an available authenticated GitHub integration or gh, and optionally post a review with line-level comments. Use when asked to review, approve, comment on, or request changes on a PR. Defaults to analysis only unless posting is explicitly requested.
 ---
 
 # Review PR
@@ -120,17 +120,27 @@ Uncertain or preference-only feedback must not drive REQUEST_CHANGES.
 
 ## Workflow
 
-### 1. Verify the GitHub CLI is available
+### 1. Select an authenticated GitHub access path
+
+Prefer an available GitHub connector or app. Otherwise use authenticated `gh`:
 
 ```bash
 gh --version
+gh auth status
 ```
 
-If `gh` is not installed or not authenticated, stop and instruct the user to install it (`brew install gh` on macOS) and run `gh auth login`.
+Do not require both. If neither path is authenticated, stop and explain how to
+connect the integration or authenticate `gh`.
 
 ### 2. Identify the target PR
 
 If the user provides a PR number, use that. Otherwise, detect from the current branch:
+
+With a GitHub connector, resolve the repository and search open PRs for the
+current head branch. Fetch the selected PR's number, title, body, base, head,
+state, URL, and author.
+
+With `gh`, use:
 
 ```bash
 gh pr view --json number,title,body,baseRefName,headRefName,state,url,author
@@ -155,7 +165,8 @@ Store as `REPO` (e.g. `org/repo-name`).
 ### 3. Fetch and parse the diff
 
 Fetch the PR state and diff without changing local branches or remote-tracking
-refs:
+refs. With a connector, fetch the PR, list all changed filenames, and request
+the patch for each exact returned path in bounded groups. With `gh`, use:
 
 ```bash
 gh pr view <number> --json files,commits
@@ -273,12 +284,14 @@ inline positions, and verdict. If any remain ambiguous, ask before posting.
 
 ### 8. Post the review via the GitHub API (Post mode only)
 
-Build one valid JSON payload with `body`, `event`, and `comments`, then send it
-to `gh api repos/<owner>/<repo>/pulls/<number>/reviews --method POST --input -`
-through standard input. Use a structured JSON serializer available in the
-execution environment; do not construct JSON by interpolating review text into
-shell source. Validate every inline position against the current diff before
-the single submission.
+Validate every inline line against the current diff before the single
+submission. With a connector, call its add-review action once with the
+repository, PR number, action, summary body, current commit SHA when available,
+and validated file comments. With `gh`, build one valid JSON payload with
+`body`, `event`, and `comments`, then send it to
+`gh api repos/<owner>/<repo>/pulls/<number>/reviews --method POST --input -`
+through standard input. Use a structured JSON serializer; do not construct JSON
+by interpolating review text into shell source.
 
 Replace `"event"` with the appropriate value:
 - `"APPROVE"` — approves the PR
@@ -291,11 +304,17 @@ Replace `"event"` with the appropriate value:
 3. Correct the mapping if the intended line is identifiable; otherwise convert
    it to a general review-body finding
 
-After posting, verify the review appears:
+After posting, verify the review appears through the connector's list-reviews
+action or:
 
 ```bash
 gh pr view <number> --json reviews
 ```
+
+If the selected access path rejects the write because direct user authorization
+or a publication-safety approval is missing, do not retry through another path.
+Report the rejection and preserve the validated review payload for the original
+user-authorized context.
 
 ### 9. Final response
 
@@ -339,7 +358,7 @@ In `src/api/auth.ts` around line 42: <comment body>
 ```
 Add it to the summary body rather than the `comments` array.
 
-### `gh api` fails with 422
+### GitHub rejects a review comment with 422
 
 A 422 usually means a line number is not in the diff. Fix the line number or move the comment to the summary. Do not retry with the same line number.
 

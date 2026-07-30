@@ -1,6 +1,6 @@
 ---
 name: prepare-pr
-description: "Inspect a local Git branch and prepare it only as far as the user requests: summarize changes, create a feature branch, stage and commit related work, push, or open a GitHub pull request. Use when asked to prepare, publish, or open a PR. Supports read-only preview, commit, publish, and open-PR modes and never advances to a later effect without explicit user intent."
+description: "Inspect a local Git branch and prepare it only as far as the user requests: summarize changes, create a feature branch, stage and commit related work, push, or open a GitHub pull request through an available authenticated GitHub integration or gh. Use when asked to prepare, publish, or open a PR. Supports read-only preview, commit, publish, and open-PR modes and never advances to a later effect without explicit user intent."
 ---
 
 # Prepare PR
@@ -279,20 +279,29 @@ Do not push directly to `main`, `master`, or protected release branches unless t
 ### 9. Create or update the pull request (Open PR mode only)
 
 Do not infer permission to create a PR merely because the push succeeded. In
-Open PR mode, check whether the branch already has a PR before creating one:
+Open PR mode, use one authenticated GitHub access path:
 
-```bash
-gh --version
-gh pr view --json number,title,url,state 2>/dev/null
-```
+- Prefer an available GitHub connector or app. Resolve the repository, current
+  head branch, and evidence-backed base branch; search for an existing PR from
+  that head before calling the connector's create-pull-request action.
+- Otherwise use authenticated `gh`:
 
-If `gh` is not installed or not authenticated, stop and instruct the user to install it (`brew install gh` on macOS, or visit https://cli.github.com/) and run `gh auth login`.
+  ```bash
+  gh --version
+  gh auth status
+  gh pr view --json number,title,url,state 2>/dev/null
+  ```
+
+Do not require both paths. If neither is authenticated, stop and explain how to
+connect the available GitHub integration or authenticate `gh`.
 
 Use `references/pr_output_templates.md` for the canonical PR body and final
 status formats. Populate it with facts from the diff and actual validation
 results; remove irrelevant placeholders.
 
-If no PR exists, create one:
+If no PR exists, create it with the selected access path. For the connector,
+provide the repository, title, populated body, base branch, head branch, and
+draft state explicitly. The `gh` fallback is:
 
 ```bash
 gh pr create \
@@ -312,7 +321,11 @@ Optional flags to include when relevant:
 - `--assignee @me` — self-assign the PR
 - `--label <label>` — apply a label if one clearly matches (e.g. `bug`, `enhancement`)
 
-After the PR is created, `gh` will return a URL. Share that URL with the user.
+After creation, fetch the live PR through the same access path and verify its
+number, URL, title, base, head, and draft state before claiming completion.
+If the selected access path rejects the write because direct user authorization
+is missing, do not retry through another path. Report the rejection and preserve
+the prepared PR payload for the original user-authorized context.
 
 ### 10. Final response
 
