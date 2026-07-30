@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Data Visualization"
+  short_description: "Choose effective charts and dashboard patterns."
+  default_prompt: "Use $ui-data-viz to choose a truthful, readable visualization for this data and user decision."

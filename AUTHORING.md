@@ -177,6 +177,11 @@ Install stack, framework, compliance, platform, and product-delivery families
 at project scope when relevant. A router and all of its children need not be
 globally installed if the domain is rare.
 
+Define profile membership and provenance in the root `catalog.json`. Treat
+skills marked `provenance: external` and `policy: preserve` as vendored:
+do not edit their `SKILL.md` locally. Update their origin commit only when
+intentionally importing a new upstream version.
+
 ## Validation and evaluation
 
 Every change should pass four layers:

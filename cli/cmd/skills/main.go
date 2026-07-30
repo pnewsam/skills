@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/paulnewsam/skills/cli/internal/catalog"
 	"github.com/paulnewsam/skills/cli/internal/harness"
 	"github.com/paulnewsam/skills/cli/internal/installer"
 	"github.com/paulnewsam/skills/cli/internal/skill"
@@ -18,14 +19,15 @@ import (
 var buildCommit = "dev"
 
 var (
-	flagTargets []string
-	flagAll     bool
-	flagProject bool
-	flagDir     string
-	flagCopy    bool
-	flagYes     bool
-	flagForce   bool
-	flagSource  string
+	flagTargets  []string
+	flagAll      bool
+	flagProject  bool
+	flagDir      string
+	flagCopy     bool
+	flagYes      bool
+	flagForce    bool
+	flagSource   string
+	flagProfiles []string
 )
 
 func main() {
@@ -51,6 +53,12 @@ var statusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Show installed skills per harness",
 	RunE:  runStatus,
+}
+
+var profilesCmd = &cobra.Command{
+	Use:   "profiles",
+	Short: "List curated skill installation profiles",
+	RunE:  runProfiles,
 }
 
 var unlinkCmd = &cobra.Command{
@@ -87,12 +95,14 @@ func init() {
 		cmd.Flags().BoolVarP(&flagProject, "project", "p", false, "Project install to <cwd>/.claude/skills (copies)")
 		cmd.Flags().StringVarP(&flagDir, "dir", "d", "", "Install to a custom directory (copies)")
 		cmd.Flags().BoolVar(&flagCopy, "copy", false, "Force copy mode instead of symlinks")
-		cmd.Flags().BoolVarP(&flagYes, "yes", "y", false, "Skip prompts; install all skills")
+		cmd.Flags().BoolVarP(&flagYes, "yes", "y", false, "Skip prompts; install all skills when no profile is selected")
 		cmd.Flags().BoolVar(&flagForce, "force", false, "Replace an existing skill destination")
 		cmd.Flags().StringVar(&flagSource, "source", "", "Skills source directory")
+		cmd.Flags().StringSliceVar(&flagProfiles, "profile", nil, "Install a curated profile (repeatable)")
 	}
 
-	rootCmd.AddCommand(installCmd, statusCmd, unlinkCmd, setupCmd, dashboardCmd, versionCmd)
+	profilesCmd.Flags().StringVar(&flagSource, "source", "", "Skills source directory")
+	rootCmd.AddCommand(installCmd, profilesCmd, statusCmd, unlinkCmd, setupCmd, dashboardCmd, versionCmd)
 
 	// Check for updates on every command (non-blocking, best-effort).
 	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
@@ -218,18 +228,12 @@ func runInstall(cmd *cobra.Command, args []string) error {
 
 	var selectedSkills []skill.Skill
 
-	if flagYes {
-		// Non-interactive: install all skills
-		selectedSkills = skills
-		if len(targets) == 0 {
+	if len(targets) == 0 {
+		if flagYes {
 			for _, h := range harnesses {
 				targets = append(targets, target{h.Dir, mode})
 			}
-		}
-	} else {
-		// Interactive mode
-		if len(targets) == 0 && !flagProject && flagDir == "" {
-			// Select harnesses
+		} else if !flagProject && flagDir == "" {
 			harnessLabels := make([]string, len(harnesses))
 			for i, h := range harnesses {
 				harnessLabels[i] = fmt.Sprintf("%s  —  %s", h.Name, h.Dir)
@@ -244,26 +248,51 @@ func runInstall(cmd *cobra.Command, args []string) error {
 				return fmt.Errorf("aborted")
 			}
 
-			for i, s := range sel {
-				if s {
+			for i, selected := range sel {
+				if selected {
 					targets = append(targets, target{harnesses[i].Dir, mode})
 				}
 			}
 		}
+	}
 
-		// Select skills
-		skillNames := make([]string, len(skills))
-		for i, s := range skills {
-			skillNames[i] = s.Name
+	switch {
+	case len(flagProfiles) > 0:
+		registryCatalog, err := catalog.Load(filepath.Join(filepath.Dir(sourceDir), "catalog.json"))
+		if err != nil {
+			return err
+		}
+		availableNames := make([]string, len(skills))
+		skillsByName := make(map[string]skill.Skill, len(skills))
+		for i, availableSkill := range skills {
+			availableNames[i] = availableSkill.Name
+			skillsByName[availableSkill.Name] = availableSkill
+		}
+		selectedNames, err := registryCatalog.Select(flagProfiles, availableNames)
+		if err != nil {
+			return err
+		}
+		for _, name := range selectedNames {
+			selectedSkills = append(selectedSkills, skillsByName[name])
+		}
+	case flagYes:
+		selectedSkills = skills
+	default:
+		skillLabels := make([]string, len(skills))
+		for i, availableSkill := range skills {
+			skillLabels[i] = availableSkill.Name
+			if availableSkill.Description != "" {
+				skillLabels[i] += "  —  " + availableSkill.Description
+			}
 		}
 
-		sel, err := tui.MultiSelect("Select skills to install:", skillNames, nil)
+		sel, err := tui.MultiSelect("Select skills to install:", skillLabels, nil)
 		if err != nil {
 			return fmt.Errorf("aborted")
 		}
 
-		for i, s := range sel {
-			if s {
+		for i, selected := range sel {
+			if selected {
 				selectedSkills = append(selectedSkills, skills[i])
 			}
 		}
@@ -304,6 +333,23 @@ func runInstall(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("%d skill installation(s) failed", failures)
 	}
 	fmt.Println("Done.")
+	return nil
+}
+
+func runProfiles(cmd *cobra.Command, args []string) error {
+	sourceDir, err := findSourceDir()
+	if err != nil {
+		return err
+	}
+	registryCatalog, err := catalog.Load(filepath.Join(filepath.Dir(sourceDir), "catalog.json"))
+	if err != nil {
+		return err
+	}
+
+	for _, name := range registryCatalog.ProfileNames() {
+		profile := registryCatalog.Profiles[name]
+		fmt.Printf("%-20s %3d  %s\n", name, len(profile.Skills), profile.Description)
+	}
 	return nil
 }
 

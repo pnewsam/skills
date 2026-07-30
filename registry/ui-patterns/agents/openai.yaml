@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Patterns"
+  short_description: "Choose conventional interface patterns for tasks."
+  default_prompt: "Use $ui-patterns to choose the simplest conventional pattern for this user task."

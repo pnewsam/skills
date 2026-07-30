@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Content"
+  short_description: "Write concise interface labels and microcopy."
+  default_prompt: "Use $ui-content to make this interface copy clear, concise, and action-oriented."

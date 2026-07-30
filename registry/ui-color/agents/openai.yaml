@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Color"
+  short_description: "Design semantic and accessible interface color."
+  default_prompt: "Use $ui-color to define the semantic color roles and accessible state treatment for this interface."

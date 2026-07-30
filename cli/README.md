@@ -32,6 +32,9 @@ skills install -a -y
 skills install -t claude -y
 skills install -t codex -y
 
+# Install one or more curated profiles
+skills install -t codex --profile core --profile quality
+
 # Project install (copies into <cwd>/.claude/skills)
 skills install -p -y
 
@@ -48,6 +51,18 @@ skills install -t codex -y --force
 By default, the CLI creates **symlinks** from each harness's skills directory back to this repo. Edits to skills in the repo are instantly available everywhere — no sync step needed.
 
 Project installs (`-p`) and custom directory installs (`-d`) use copies, since the repo may not be available on other machines. Existing destinations are preserved by default; pass `--force` only when replacement is intentional.
+
+When `--profile` is present, only the union of the named profiles is installed.
+Use `-y` with profiles to skip harness prompts; it does not expand the selection
+to every skill.
+
+### `skills profiles`
+
+List the curated profiles defined in the registry catalog:
+
+```bash
+skills profiles
+```
 
 ### `skills status`
 
@@ -102,6 +117,7 @@ The CLI finds the `registry/` directory automatically using this priority:
 ```
 cmd/skills/main.go       # cobra root + subcommands
 internal/
+  catalog/catalog.go       # registry catalog and profile selection
   skill/skill.go          # skill discovery, YAML frontmatter parsing
   harness/harness.go      # harness definitions, config loading
   installer/installer.go  # symlink/copy logic

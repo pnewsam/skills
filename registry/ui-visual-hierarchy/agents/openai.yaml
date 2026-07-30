@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Visual Hierarchy"
+  short_description: "Clarify interface priority and reading order."
+  default_prompt: "Use $ui-visual-hierarchy to clarify priority, grouping, and reading order on this screen."

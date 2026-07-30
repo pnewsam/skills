@@ -1,0 +1,4 @@
+interface:
+  display_name: "Python Tooling"
+  short_description: "Choose Python package, lint, type, and test tools."
+  default_prompt: "Use $python-tooling to recommend tooling that fits this Python project's existing conventions."

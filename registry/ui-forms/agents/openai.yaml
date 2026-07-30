@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Forms"
+  short_description: "Structure usable forms, fields, and validation."
+  default_prompt: "Use $ui-forms to structure this form and its validation around the user's task."

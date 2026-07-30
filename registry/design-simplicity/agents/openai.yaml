@@ -1,3 +1,4 @@
 interface:
   display_name: "Design Simplicity"
-  short_description: "Reduce UI clutter."
+  short_description: "Reduce clutter while preserving essential meaning."
+  default_prompt: "Use $design-simplicity to remove nonessential complexity while preserving the design's purpose."

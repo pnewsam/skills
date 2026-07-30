@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Icons"
+  short_description: "Select clear, consistent interface iconography."
+  default_prompt: "Use $ui-icons to choose clear and consistent icons for these interface concepts."

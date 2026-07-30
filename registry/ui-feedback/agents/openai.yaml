@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Feedback"
+  short_description: "Design loading, error, success, and undo states."
+  default_prompt: "Use $ui-feedback to choose the right feedback and recovery pattern for these system states."

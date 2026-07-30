@@ -5,7 +5,7 @@ description: Use when working with color naming, color theory, color spaces, col
 
 # Color Expert
 
-A self-contained knowledge base for color-related work. Load only the sections relevant to the user's medium and decision.
+A comprehensive knowledge base for color-related work. See `references/INDEX.md` for 140+ detailed reference files; this skill file contains the essential knowledge to answer most questions directly.
 
 ## How to Use This Skill
 
@@ -33,7 +33,9 @@ Match the response to the user's explicit request and clearly implied constraint
 - **Harmony-aware generation with muddy-zone avoidance** (pro-color-harmonies) -- adaptive OKLCH harmony with 4 styles x 4 modifiers; skips perceptually muddy regions automatically.
 - **Generation in historical / non-digital color spaces** (RYBitten) -- work in RYB or one of 26 historical color cubes when you want a painterly feel that strict sRGB/OKLCH can't reach.
 
-**General color question** -- "what is OKLCH?", "why does my gradient go gray in the middle?", "is APCA better than WCAG?" Answer directly from this skill and cite an authoritative external source when the user needs precise attribution. Skip tooling unless they're asking how to do something.
+See `references/techniques/` for tyler-hobbs, fontana, mattdesl, iq-cosine, spectraljs, poline, rampensau, pro-color-harmonies, rybitten (these document the techniques, not styles to imitate).
+
+**General color question** -- "what is OKLCH?", "why does my gradient go gray in the middle?", "is APCA better than WCAG?" Answer directly from this skill file or `references/INDEX.md`, and cite the relevant reference. Skip tooling unless they're asking how to do something.
 
 **Building a generator, tool, or palette algorithm** -- "I want to make a palette generator", "how do I generate accessible color scales?", "give me an OKLCH ramp function." Default to recommending an existing library before hand-rolling (Culori, Poline, RampenSau, Spectral.js -- see Recommended Tools). Show working code in the user's stack. Pick the color space that matches the job: palettes/scales -> OKLCH; gradients -> OKLAB; pigment mixing -> spectral / Kubelka-Munk; cross-media matching -> CAM16.
 

@@ -1,3 +1,4 @@
 interface:
   display_name: "Design Hierarchy"
-  short_description: "Tune visual emphasis."
+  short_description: "Clarify visual emphasis and reading order."
+  default_prompt: "Use $design-hierarchy to clarify emphasis, grouping, and reading order in this composition."

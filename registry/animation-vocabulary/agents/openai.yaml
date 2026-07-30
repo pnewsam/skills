@@ -1,0 +1,4 @@
+interface:
+  display_name: "Animation Vocabulary"
+  short_description: "Choose and describe interface motion patterns."
+  default_prompt: "Use $animation-vocabulary to name and compare the motion patterns relevant to this interaction."

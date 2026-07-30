@@ -1,3 +1,4 @@
 interface:
   display_name: "Design Rhythm"
-  short_description: "Shape visual cadence."
+  short_description: "Shape visual cadence, repetition, and variation."
+  default_prompt: "Use $design-rhythm to improve the cadence, repetition, and variation in this design."

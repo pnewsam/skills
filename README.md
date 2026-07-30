@@ -22,6 +22,7 @@ skills/
       scripts/              # optional helper scripts invoked by the skill
       assets/               # optional supporting files
   archive/                  # deprecated packages retained for migration history
+  catalog.json              # provenance policy and curated install profiles
   cli/                      # installer and registry tooling
   AUTHORING.md              # how to write and install skills
 ```
@@ -49,6 +50,11 @@ Classify a skill on four operational facets:
 Use **divergence** and **convergence** as optional product-thinking lenses, not
 as the primary registry hierarchy. A planning skill may contain both; an
 operational Git skill often fits neither.
+
+`catalog.json` is the machine-readable source for curated install profiles and
+external-source preservation policy. Skills not explicitly marked external are
+registry-maintained. Externally sourced skill bodies are validated against their
+origin commit and must be updated from upstream rather than edited locally.
 
 Most workflow skills move through the same broad lifecycle. New evidence,
 blockers, or review feedback can send work back to discovery or planning.

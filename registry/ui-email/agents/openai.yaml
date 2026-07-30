@@ -1,3 +1,4 @@
 interface:
   display_name: "UI Email"
-  short_description: "Design email-safe UI."
+  short_description: "Design robust, accessible email interfaces."
+  default_prompt: "Use $ui-email to design this email for real client constraints and accessibility."

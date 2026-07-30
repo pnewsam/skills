@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Depth"
+  short_description: "Use surfaces, borders, and elevation coherently."
+  default_prompt: "Use $ui-depth to establish a restrained surface and elevation system for this interface."

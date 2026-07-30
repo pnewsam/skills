@@ -1,3 +1,4 @@
 interface:
   display_name: "Setup Browser Testing"
   short_description: "Set up browser testing infrastructure."
+  default_prompt: "Use $setup-browser-testing to establish a working browser-test foundation for this project."

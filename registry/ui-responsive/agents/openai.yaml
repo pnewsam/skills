@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Responsive"
+  short_description: "Adapt interfaces across viewport and input modes."
+  default_prompt: "Use $ui-responsive to define how this interface should adapt across sizes and input modes."

@@ -3,8 +3,9 @@
 
 from __future__ import annotations
 
-import re
 import json
+import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -46,7 +47,9 @@ def frontmatter(text: str) -> tuple[dict[str, str], list[str]]:
     return values, errors
 
 
-def validate_skill(skill_dir: Path) -> tuple[list[str], list[str]]:
+def validate_skill(
+    skill_dir: Path, externally_managed: bool = False
+) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
     skill_file = skill_dir / "SKILL.md"
@@ -81,7 +84,11 @@ def validate_skill(skill_dir: Path) -> tuple[list[str], list[str]]:
     )
     for relative in sorted(mentioned):
         if not (skill_dir / relative).exists():
-            errors.append(f"missing referenced resource: {relative}")
+            message = f"missing referenced resource: {relative}"
+            if externally_managed:
+                warnings.append(message + " (external source preserved)")
+            else:
+                errors.append(message)
 
     for dirname in RESOURCE_DIRS:
         resource_root = skill_dir / dirname
@@ -91,7 +98,11 @@ def validate_skill(skill_dir: Path) -> tuple[list[str], list[str]]:
             relative = resource.relative_to(skill_dir).as_posix()
             parent_prefix = resource.parent.relative_to(skill_dir).as_posix() + "/"
             if relative not in text and parent_prefix not in mentioned:
-                errors.append(f"bundled resource is not linked from SKILL.md: {relative}")
+                message = f"bundled resource is not linked from SKILL.md: {relative}"
+                if externally_managed:
+                    warnings.append(message + " (external source preserved)")
+                else:
+                    errors.append(message)
             if dirname == "references":
                 resource_text = resource.read_text(encoding="utf-8")
                 if len(resource_text.splitlines()) > 100 and "## Contents" not in resource_text:
@@ -102,8 +113,27 @@ def validate_skill(skill_dir: Path) -> tuple[list[str], list[str]]:
         warnings.append("agents/openai.yaml is missing")
     else:
         agent_text = agent_metadata.read_text(encoding="utf-8")
-        if "default_prompt:" not in agent_text:
+        display_match = re.search(r'^\s+display_name:\s+"([^"]+)"\s*$', agent_text, re.M)
+        short_match = re.search(
+            r'^\s+short_description:\s+"([^"]+)"\s*$', agent_text, re.M
+        )
+        prompt_match = re.search(
+            r'^\s+default_prompt:\s+"([^"]+)"\s*$', agent_text, re.M
+        )
+        if not display_match:
+            errors.append("agents/openai.yaml has no quoted display_name")
+        if not short_match:
+            errors.append("agents/openai.yaml has no quoted short_description")
+        elif not 25 <= len(short_match.group(1)) <= 64:
+            errors.append(
+                "agents/openai.yaml short_description must be 25–64 characters"
+            )
+        if not prompt_match:
             warnings.append("agents/openai.yaml has no default_prompt")
+        elif f"${skill_dir.name}" not in prompt_match.group(1):
+            errors.append(
+                f"agents/openai.yaml default_prompt must mention ${skill_dir.name}"
+            )
 
     return errors, warnings
 
@@ -112,16 +142,69 @@ def main() -> int:
     skill_dirs = sorted(path.parent for path in REGISTRY.glob("*/SKILL.md"))
     errors: list[str] = []
     warnings: list[str] = []
+    catalog_file = ROOT / "catalog.json"
+    catalog = json.loads(catalog_file.read_text(encoding="utf-8"))
+    external = {
+        name: metadata
+        for name, metadata in catalog.get("skills", {}).items()
+        if metadata.get("provenance") == "external"
+    }
 
     for skill_dir in skill_dirs:
-        skill_errors, skill_warnings = validate_skill(skill_dir)
+        skill_errors, skill_warnings = validate_skill(
+            skill_dir, externally_managed=skill_dir.name in external
+        )
         errors.extend(f"{skill_dir.name}: {message}" for message in skill_errors)
         warnings.extend(f"{skill_dir.name}: {message}" for message in skill_warnings)
+
+    active_names = {path.name for path in skill_dirs}
+    profiled_names: set[str] = set()
+    for profile_name, profile in catalog.get("profiles", {}).items():
+        profile_skills = profile.get("skills", [])
+        if len(profile_skills) != len(set(profile_skills)):
+            errors.append(f"catalog: profile {profile_name!r} contains duplicate skills")
+        for skill_name in profile_skills:
+            if skill_name not in active_names:
+                errors.append(
+                    f"catalog: profile {profile_name!r} references inactive skill "
+                    f"{skill_name!r}"
+                )
+            profiled_names.add(skill_name)
+    for skill_name in sorted(active_names - profiled_names):
+        warnings.append(f"catalog: active skill {skill_name!r} is not in any profile")
+
+    for skill_name, metadata in external.items():
+        if skill_name not in active_names:
+            errors.append(f"catalog: external skill {skill_name!r} is not active")
+            continue
+        origin_commit = metadata.get("origin_commit")
+        if not origin_commit:
+            errors.append(f"catalog: external skill {skill_name!r} has no origin_commit")
+            continue
+        try:
+            original = subprocess.check_output(
+                [
+                    "git",
+                    "show",
+                    f"{origin_commit}:registry/{skill_name}/SKILL.md",
+                ],
+                cwd=ROOT,
+            )
+        except (OSError, subprocess.CalledProcessError):
+            warnings.append(
+                f"catalog: could not verify external source for {skill_name!r}"
+            )
+            continue
+        current = (REGISTRY / skill_name / "SKILL.md").read_bytes()
+        if current != original:
+            errors.append(
+                f"catalog: external skill {skill_name!r} differs from "
+                f"origin commit {origin_commit}"
+            )
 
     eval_file = ROOT / "evals" / "high_use_cases.json"
     if eval_file.exists():
         cases = json.loads(eval_file.read_text(encoding="utf-8"))
-        active_names = {path.name for path in skill_dirs}
         seen_ids: set[str] = set()
         for case in cases:
             case_id = case.get("id", "<missing>")
