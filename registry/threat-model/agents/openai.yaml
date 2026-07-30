@@ -1,0 +1,4 @@
+interface:
+  display_name: "Threat Model"
+  short_description: "Map trust boundaries, abuse cases, and controls."
+  default_prompt: "Use $threat-model to identify the trust boundaries, abuse cases, and required controls for this change."

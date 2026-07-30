@@ -1,3 +1,4 @@
 interface:
   display_name: "Design Composition"
   short_description: "Balance interface compositions."
+  default_prompt: "Use $design-composition to improve this interface's balance, focal structure, and rhythm."

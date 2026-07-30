@@ -1,3 +1,4 @@
 interface:
   display_name: "Audit Epic"
   short_description: "Find gaps across epic child features."
+  default_prompt: "Use $audit-epic to assess this epic's actual health and unresolved gaps."

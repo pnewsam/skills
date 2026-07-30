@@ -17,20 +17,22 @@ Load the smallest set of focused skills that covers the task.
 
 | User Need | Primary Skill | Secondary Skills |
 | :--- | :--- | :--- |
-| App shell, providers, router setup, feature boundaries, auth/bootstrap, deployment | `react-spa-architecture` | `react-project-structure`, `react-routing`, `react-error-handling` |
-| Component API, decomposition, variants, composition, oversized components | `react-component-design` | `react-project-structure`, `react-performance`, `react-accessibility` |
-| File organization, feature modules, base UI layer, naming, ownership boundaries | `react-project-structure` | `react-spa-architecture`, `react-component-design` |
+| App shell, providers, router setup, feature boundaries, auth/bootstrap, deployment | `react-architecture` | `react-routing`, `react-error-handling` |
+| Component API, decomposition, variants, composition, oversized components | `react-component-design` | `react-architecture`, `react-performance`, `react-accessibility` |
+| File organization, feature modules, shared layers, naming, ownership boundaries | `react-architecture` | `react-component-design` |
 | Effects, dependencies, cleanup, stale closures, refs, custom hooks | `react-hooks-effects` | `react-state-management`, `react-data-fetching` |
 | Forms, validation, field components, dirty state, wizard flow | `react-form-patterns` | `react-state-management`, `react-accessibility`, `react-testing` |
 | Local/global state, derived state, URL state, context, reducers, stores | `react-state-management` | `react-routing`, `react-data-fetching`, `react-hooks-effects` |
 | API data, queries, mutations, invalidation, optimistic updates, pagination | `react-data-fetching` | `react-error-handling`, `react-state-management`, `react-testing` |
-| URL design, route hierarchy, search params, navigation state | `react-routing` | `react-spa-architecture`, `react-state-management` |
+| URL design, route hierarchy, search params, navigation state | `react-routing` | `react-architecture`, `react-state-management` |
 | Slow renders, memoization, virtualization, code splitting, profiling | `react-performance` | `react-component-design`, `react-data-fetching` |
-| Error boundaries, route errors, Suspense fallbacks, recoverable failures | `react-error-handling` | `react-data-fetching`, `react-accessibility` |
+| Error boundaries, route errors, expected data/action failures, recovery | `react-error-handling` | `react-data-fetching`, `react-accessibility` |
 | Semantic HTML, keyboard behavior, ARIA, focus, forms, live regions | `react-accessibility` | `react-component-design`, `react-form-patterns`, `react-error-handling` |
 | Test strategy, integration tests, component tests, mocks, providers | `react-testing` | `react-data-fetching`, `react-routing`, `react-accessibility` |
 
-If a request touches more than four rows, start with `react-spa-architecture`, then add the one focused skill closest to the user's immediate task. Add more only when implementation requires it.
+If a request touches more than four rows, start with `react-architecture`, then
+add the one focused skill closest to the user's immediate task. Add more only
+when implementation requires it.
 
 ---
 
@@ -38,8 +40,8 @@ If a request touches more than four rows, start with `react-spa-architecture`, t
 
 Use these boundaries to prevent conflicting advice:
 
-- `react-spa-architecture` owns app-level wiring: providers, router setup, auth/bootstrap, deployment, app shell.
-- `react-project-structure` owns where files and modules live.
+- `react-architecture` owns app-level wiring, feature boundaries, dependency
+  direction, and where application modules live.
 - `react-component-design` owns component shape, composition, variants, and decomposition.
 - `react-hooks-effects` owns effect correctness and hook boundaries.
 - `react-form-patterns` owns form state, validation, field components, and form flow.

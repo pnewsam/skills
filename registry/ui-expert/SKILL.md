@@ -19,25 +19,27 @@ Load the smallest set of focused skills that covers the task.
 
 | User Need | Primary Skill | Secondary Skills |
 | :--- | :--- | :--- |
-| Whole page, screen, app shell, dashboard, settings page, landing page | `ui-layouts` | `ui-visual-hierarchy`, `ui-spacing`, `ui-responsive` |
+| Whole page, screen, app shell, dashboard, settings page, landing page | `ui-layouts` | `visual-hierarchy`, `ui-spacing`, `ui-responsive` |
 | Collection display: table, list, cards, board, tabs, filters, pagination | `ui-patterns` | `ui-actions`, `ui-feedback`, `ui-responsive` |
 | Create/edit/settings form, field choice, modal/drawer/page/wizard | `ui-forms` | `ui-content`, `ui-feedback`, `ui-actions` |
 | Buttons, row actions, bulk actions, command palette, drag/drop, touch actions | `ui-actions` | `ui-icons`, `ui-feedback`, `ui-responsive` |
 | Empty/loading/error/success states, toasts, banners, confirmations, undo | `ui-feedback` | `ui-content`, `ui-actions` |
 | Button labels, empty state copy, errors, field help, terminology | `ui-content` | `ui-feedback`, `ui-forms` |
-| What should stand out, scanning order, chunking, progressive disclosure | `ui-visual-hierarchy` | `ui-layouts`, `ui-typography`, `ui-spacing` |
-| Gaps, padding, density, proximity, rhythm | `ui-spacing` | `ui-layouts`, `ui-visual-hierarchy` |
-| Font sizes, heading hierarchy, readability, line length | `ui-typography` | `ui-visual-hierarchy`, `ui-spacing` |
-| Palette, semantic tokens, dark mode, contrast, status colors | `ui-color` | `ui-feedback`, `ui-visual-hierarchy` |
-| Surfaces, shadows, elevation, overlays, image crops, text over images | `ui-depth` | `ui-color`, `ui-spacing`, `ui-visual-hierarchy` |
+| What should stand out, scanning order, chunking, progressive disclosure | `visual-hierarchy` | `ui-layouts`, `ui-typography`, `ui-spacing` |
+| Gaps, padding, density, proximity, rhythm | `ui-spacing` | `ui-layouts`, `visual-hierarchy` |
+| Font sizes, heading hierarchy, readability, line length | `ui-typography` | `visual-hierarchy`, `ui-spacing` |
+| Palette, semantic tokens, dark mode, contrast, status colors | `ui-color` | `ui-feedback`, `visual-hierarchy` |
+| Surfaces, shadows, elevation, overlays, image crops, text over images | `ui-depth` | `ui-color`, `ui-spacing`, `visual-hierarchy` |
 | Mobile/tablet adaptation, breakpoints, touch targets, responsive nav | `ui-responsive` | `ui-layouts`, `ui-actions` |
 | Icon selection, icon-only buttons, icon library consistency | `ui-icons` | `ui-actions`, `ui-content` |
 | Charts, metrics, dashboards, choosing chart type vs number | `ui-data-viz` | `ui-layouts`, `ui-color` |
 | First-run experience, activation, tours, checklists, sample data | `ui-onboarding` | `ui-feedback`, `ui-content`, `ui-layouts` |
-| Transactional emails, digests, reports, product updates, lifecycle emails | `ui-email` | `ui-content`, `ui-visual-hierarchy`, `ui-typography`, `ui-color` |
-| Aesthetic quality, composition, elegance, simplicity, visual harmony | `design-expert` | `ui-layouts`, `ui-visual-hierarchy`, `ui-spacing` |
+| Transactional emails, digests, reports, product updates, lifecycle emails | `ui-email` | `ui-content`, `visual-hierarchy`, `ui-typography`, `ui-color` |
+| Aesthetic quality, composition, elegance, simplicity, visual harmony | `design-expert` | `ui-layouts`, `visual-hierarchy`, `ui-spacing` |
 
-If a request touches more than four rows, start with `ui-layouts`, `ui-visual-hierarchy`, and the one domain skill closest to the user's core task. Add more skills only when the work demands them.
+If a request touches more than four rows, start with `ui-layouts`,
+`visual-hierarchy`, and the one domain skill closest to the user's core task.
+Add more skills only when the work demands them.
 
 ---
 
@@ -51,7 +53,8 @@ Use these boundaries to prevent conflicting advice:
 - `ui-actions` owns how users trigger operations: action placement, overflow menus, bulk bars, shortcuts, drag/drop.
 - `ui-feedback` owns system state: empty, loading, error, success, confirmation, undo.
 - `ui-content` owns words: labels, messages, helper text, terminology, tone.
-- `ui-visual-hierarchy` owns importance: what dominates, what recedes, scanning path, chunking.
+- `visual-hierarchy` owns importance: what dominates, what recedes, scanning
+  path, and chunking.
 - `ui-spacing`, `ui-typography`, and `ui-color` own the visual system details.
 - `ui-depth` owns surfaces, shadows, elevation, overlays, and image treatment.
 - `ui-responsive` owns adaptation across viewport and input mode.

@@ -1,6 +1,6 @@
 ---
 name: compliance-expert
-description: Route compliance and external-risk requests to the smallest relevant compliance-* skill set and synthesize the guidance. Use when work spans two or more of security, vulnerability management, accessibility, privacy, GDPR, HIPAA, or auditability, or when applicability is unclear. Prefer one focused compliance-* skill for one clearly bounded concern; pair with stack and UI experts for implementation.
+description: Route compliance and external-risk requests to the smallest relevant compliance-* or threat-model skill set and synthesize the guidance. Use when work spans two or more of security, threat modeling, vulnerability management, accessibility, privacy, GDPR, HIPAA, or auditability, or when applicability is unclear. Prefer one focused skill for one clearly bounded concern; pair with stack and UI experts for implementation.
 ---
 
 # Compliance Expert - Skill Router
@@ -36,13 +36,14 @@ Compliance skills translate external obligations and unacceptable risks into con
 
 | Prompt Signal | Primary Skill | Secondary Skills |
 | :--- | :--- | :--- |
+| New attack surface, assets, actors, trust boundaries, or abuse cases | `threat-model` | `compliance-security`, stack expert |
 | Authn/authz, injection, secrets, session safety, secure defaults | `compliance-security` | stack expert, `quality-correctness` |
 | CVE, dependency advisory, CodeQL/SAST finding, patch risk | `compliance-vulnerability-management` | remediation planning workflows |
 | Keyboard, screen reader, contrast, focus, form errors, WCAG | `compliance-accessibility` | `ui-expert`, `react-accessibility`, `color-expert` |
 | PII, data minimization, retention, deletion, analytics, vendors | `compliance-privacy` | `compliance-gdpr` if EU/UK GDPR applies |
 | GDPR, lawful basis, data subject rights, DPIA, breach notification | `compliance-gdpr` | `compliance-privacy`, legal/policy review |
 | HIPAA, ePHI, covered entity, business associate, safeguards | `compliance-hipaa` | `compliance-security`, legal/policy review |
-| Evidence, audit logs, approvals, exception tracking, traceability | `compliance-auditability` | `prepare-pr`, `assess-pr-risk` |
+| Evidence, audit logs, approvals, exception tracking, traceability | `compliance-auditability` | `prepare-pr`, `review-pr` Risk mode |
 
 ## Do / Don't
 
@@ -63,6 +64,9 @@ Compliance skills translate external obligations and unacceptable risks into con
 
 ## Handoff Rules
 
-- Use `plan-vulnerability-remediation` or `plan-code-scanning-remediation` for multi-step remediation work.
+- Use `plan-security-remediation` for multi-step dependency or code-scanning
+  remediation work.
+- Use `threat-model` before implementation or review when assets, actors, trust
+  boundaries, and plausible abuse paths are not yet explicit.
 - Use `plan-feature` or `plan-epic` when compliance work requires product, workflow, or architecture change.
 - Use stack experts for concrete implementation and tests.

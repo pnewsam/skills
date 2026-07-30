@@ -348,7 +348,11 @@ func runProfiles(cmd *cobra.Command, args []string) error {
 
 	for _, name := range registryCatalog.ProfileNames() {
 		profile := registryCatalog.Profiles[name]
-		fmt.Printf("%-20s %3d  %s\n", name, len(profile.Skills), profile.Description)
+		expanded, err := registryCatalog.ExpandedSkillNames([]string{name})
+		if err != nil {
+			return err
+		}
+		fmt.Printf("%-20s %3d  %s\n", name, len(expanded), profile.Description)
 	}
 	return nil
 }

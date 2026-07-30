@@ -1,3 +1,4 @@
 interface:
   display_name: "React Error Handling"
-  short_description: "Place React error and loading states."
+  short_description: "Contain React failures and design recovery."
+  default_prompt: "Use $react-error-handling to contain these React failures and give users a safe recovery path."

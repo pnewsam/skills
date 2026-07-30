@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagnose Failure"
+  short_description: "Find an evidence-backed failure cause."
+  default_prompt: "Use $diagnose-failure to reproduce this problem and identify its cause without changing the code."

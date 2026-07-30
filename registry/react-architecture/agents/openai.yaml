@@ -1,0 +1,4 @@
+interface:
+  display_name: "React Architecture"
+  short_description: "Structure React apps and feature boundaries."
+  default_prompt: "Use $react-architecture to structure this React application around explicit app and feature boundaries."

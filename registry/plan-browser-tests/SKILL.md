@@ -1,111 +1,127 @@
 ---
 name: plan-browser-tests
-description: analyze an application to identify its most critical browser/UI flows and create or update a standard docs/epics browser-test coverage epic with prioritized child features. use when asked to plan integration tests, browser tests, e2e tests, or identify high-value automated UI coverage. pairs with plan-feature, add-browser-test, advance-epic, and ship-epic.
+description: Plan or audit high-value browser and end-to-end test coverage by mapping critical user flows, existing tests, stale or flaky patterns, and coverage gaps into the standard epic and feature-planning flow. Use when asked to plan browser tests, integration tests, or E2E coverage; identify critical UI flows; audit an existing browser suite; or refresh browser-test priorities. Writes only local planning and audit artifacts, not test code.
 ---
 
 # Plan Browser Tests
 
-## Overview
+## Outcome
 
-Analyze an application's UI, routes, and business logic to identify high-value browser test coverage. The durable artifact is a normal epic in `docs/epics/`, not a separate test-plan file.
+Create an evidence-backed browser-test coverage epic, or audit an existing suite
+and update that epic conservatively. Keep durable work in the normal
+`docs/epics/` and `docs/features/` planning flow.
 
-Browser test coverage should flow through the same planning spine as other work: a browser-test epic, child features, then implementation.
+## Modes
 
-## Goals
+- **Plan:** identify critical flows and create or refresh a browser-test
+  coverage epic. This is the default for new coverage planning.
+- **Audit:** compare the current application, suite, and coverage epic; write an
+  audit and update the epic with verified coverage and prioritized gaps. Use
+  when asked to audit, review, refresh, find stale tests, or find flakes.
 
-- Identify critical user flows worth browser coverage.
-- Avoid duplicate coverage by reading existing tests first.
-- Group flows into independently plannable child features.
-- Create or update a `docs/epics/NNN-<slug>.md` browser-test coverage epic.
-- Preserve enough flow detail for `plan-feature` and `add-browser-test` to implement tests later.
+Both modes may write local planning artifacts. Neither may edit test or source
+code, install packages, change Git state, or write to external systems.
 
-## What Makes A Flow Critical
+## What deserves browser coverage
 
-Prioritize flows with high regression cost:
+Prioritize flows with expensive regressions:
 
-- Authentication, authorization, and session boundaries.
-- Core value-proposition workflows.
-- Signup, onboarding, checkout, purchase, or activation paths.
-- Data creation, editing, deletion, import, export, or persistence.
-- Error recovery with visible user impact.
-- Workflows with complex branching, permissions, or prior bugs.
+- authentication, authorization, session, and tenant boundaries
+- the product's primary value-producing workflow
+- signup, onboarding, purchase, activation, and destructive operations
+- creation, editing, deletion, import, export, and persistence
+- permissions, branching workflows, and error recovery
+- regressions that lower-level tests did not reliably prevent
 
-Avoid browser tests for static content, purely cosmetic styling, or behavior already covered well by lower-level tests.
+Do not prioritize static content, purely visual polish, or behavior already
+verified more cheaply and reliably below the browser layer.
 
-## Safety Rules
+## Shared discovery
 
-- Do not run the application, install packages, or modify source files during planning.
-- Do not write test code during planning.
-- Do not create separate queues or plans outside the epic/feature flow.
-- If `docs/CHARTER.md` is missing, note the gap. Browser-test planning may still proceed when the user explicitly asks for engineering coverage, but the epic must document that charter alignment is provisional.
+Inspect:
 
-## Workflow
+- product charter and relevant feature or epic plans
+- routes, forms, controls, navigation, and permission gates
+- browser-test framework and configuration
+- representative tests, fixtures, selectors, authentication, and data setup
+- CI commands and browser-test conventions
 
-### 1. Understand The App And Test Stack
+If no framework exists, describe the required capability and use
+`setup-browser-testing` for implementation planning. Recommend a named framework
+only after considering project language, runtime, team conventions, and current
+official support.
 
-Inspect the project using read-only commands:
+Do not run the application or test suite in Plan mode. In Audit mode, run the
+existing suite only when the user requested execution or the environment is
+already available and the run is safe and proportionate.
 
-```bash
-cat package.json 2>/dev/null
-ls src/ app/ pages/ routes/ 2>/dev/null
-ls playwright.config.* cypress.config.* 2>/dev/null
-find . -name "*.spec.ts" -o -name "*.spec.js" -o -name "*.cy.ts" -o -name "*.cy.js" | grep -v node_modules | sort
-```
+## Plan mode
 
-Detect whether Playwright, Cypress, or another browser-test framework is already present. If none is present, recommend Playwright unless the project clearly prefers another tool.
+1. Map navigable screens and user-visible workflows.
+2. Identify business-critical, security-sensitive, state-changing, and
+   historically fragile flows.
+3. Read existing tests to avoid duplicating coverage.
+4. Group related flows into independently plannable child features.
+5. Create or update `docs/epics/NNN-<slug>.md` using
+   `references/plan_template.md`.
 
-### 2. Discover Routes And Interactions
+Preserve existing child-feature checkboxes and verified inventory entries.
+Do not create feature plans unless the user also asks to plan the children.
 
-Map navigable pages and interactive flows:
+Each proposed child feature should name:
 
-```bash
-rg -n "path=|<Route|router\\.|app\\.(get|post|put|delete)|onClick|onSubmit|<form|<button|<Button|<input|<Input" src app pages routes 2>/dev/null
-```
+- user outcome and route or surface
+- setup and identity/permission needs
+- happy path and material failure path
+- stable observable result
+- prerequisite fixture or environment work
 
-Look for forms, wizards, CRUD flows, tables, filters, uploads, modals, auth gates, and role-based behavior.
+## Audit mode
 
-### 3. Read Existing Tests
+Read `references/audit_template.md`, then:
 
-Read representative existing tests and helpers. Capture:
+1. Locate the browser-test coverage epic and relevant feature plans.
+2. Catalog test files and map each test to the user behavior it actually
+   exercises.
+3. Compare that behavior with the current routes, controls, product rules, and
+   critical-flow inventory.
+4. Identify missing coverage, stale routes/selectors, weak assertions, hidden
+   dependencies, duplicate coverage, skipped tests, and credible flaky patterns.
+5. If the suite was run, distinguish reproducible failures from static risk
+   signals. A hardcoded wait is a flake risk, not proof of a flake by itself.
+6. Write `docs/epics/NNN-<slug>-audit.md`.
+7. Update the epic conservatively:
+   - mark a flow covered only when a test verifies its intended outcome
+   - preserve child-feature completion and notes
+   - add missing or broken flow clusters as child candidates
+   - do not create feature plans or test code
 
-- Covered flows.
-- Test framework and file conventions.
-- Selectors and fixtures used.
-- Auth/test-data setup patterns.
-- Obvious missing or duplicated coverage.
+If no browser-test epic exists, create one in the same pass when the user asked
+to establish the plan. Otherwise write a clearly provisional audit and
+recommend Plan mode.
 
-### 4. Group Coverage Into Child Features
+## Prioritization
 
-Group related flows into child features. Good child feature shapes:
+Rank a flow by:
 
-- "Add auth boundary browser coverage"
-- "Cover checkout happy path and validation"
-- "Cover dashboard filtering and empty states"
-- "Cover project CRUD browser flows"
+- consequence of regression
+- likelihood of regression or past instability
+- absence of cheaper verification
+- breadth of users and data affected
+- feasibility and determinism of browser setup
 
-Each child feature should be small enough to plan with `plan-feature` and implement incrementally. A child feature may contain several related tests when they share setup and verification.
+Avoid pretending that every flow should be browser-tested. State why lower-level
+coverage is sufficient when that is the better choice.
 
-### 5. Write Or Update The Epic
+## Final report
 
-Create or update a normal browser-test epic in `docs/epics/`. Assign the next available numeric ID if creating a new file:
+Return:
 
-```bash
-mkdir -p docs/epics
-ls docs/epics/ | grep -E '^[0-9]+' | sort | tail -1
-```
-
-Use `references/plan_template.md`. Fill all required fields and remove unused
-optional sections instead of leaving placeholders.
-
-Do not create `docs/features/` files unless the user asks to plan the child features now.
-
-## Final Response
-
-Report:
-
-- Browser-test epic path.
-- Framework detected or recommended.
-- Number of critical flows identified.
-- Proposed child features.
-- Highest-priority flow cluster.
-- Recommended next step: run `plan-feature` for the first child feature, or `ship-epic` to plan and advance the browser-test epic end to end.
+- mode used
+- epic and audit paths written
+- framework detected
+- suite status when actually run
+- number of critical flows and test files mapped
+- highest-priority missing, broken, or flaky flow clusters
+- next step: `plan-feature`, `add-browser-test`, `fix-browser-test`, or
+  `setup-browser-testing`

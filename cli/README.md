@@ -52,13 +52,19 @@ By default, the CLI creates **symlinks** from each harness's skills directory ba
 
 Project installs (`-p`) and custom directory installs (`-d`) use copies, since the repo may not be available on other machines. Existing destinations are preserved by default; pass `--force` only when replacement is intentional.
 
-When `--profile` is present, only the union of the named profiles is installed.
-Use `-y` with profiles to skip harness prompts; it does not expand the selection
-to every skill.
+When `--profile` is present, only the union of the named profiles and any
+profiles they include is installed. Use `-y` with profiles to skip harness
+prompts; it does not expand the selection to every skill.
+
+`core` is the intentionally small daily set. `advisory` composes the maintained
+backend, platform, compliance, Python, React, quality, UI, and design profiles
+for broad consultation. Externally sourced creative references remain a
+separate opt-in profile.
 
 ### `skills profiles`
 
-List the curated profiles defined in the registry catalog:
+List the curated profiles defined in the registry catalog. Counts include
+skills inherited through profile composition:
 
 ```bash
 skills profiles

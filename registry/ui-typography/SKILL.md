@@ -5,7 +5,7 @@ description: Typography principles for web applications — type scale construct
 
 # UI Typography — Type Systems & Readability
 
-A decision engine for building and applying a typographic system. Covers type scale construction, font selection, hierarchy, line length, and context-specific typography patterns. For visual hierarchy across a full page, see `ui-visual-hierarchy`. For spacing between typographic elements, see `ui-spacing`.
+A decision engine for building and applying a typographic system. Covers type scale construction, font selection, hierarchy, line length, and context-specific typography patterns. For visual hierarchy across a full page, see `visual-hierarchy`. For spacing between typographic elements, see `ui-spacing`.
 
 ## Initial Response
 

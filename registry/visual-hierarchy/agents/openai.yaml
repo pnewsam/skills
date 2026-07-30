@@ -1,0 +1,4 @@
+interface:
+  display_name: "Visual Hierarchy"
+  short_description: "Clarify priority, emphasis, and scanning order."
+  default_prompt: "Use $visual-hierarchy to make the intended priority and reading order visually clear."

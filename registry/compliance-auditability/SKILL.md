@@ -1,6 +1,6 @@
 ---
 name: compliance-auditability
-description: Auditability and evidence guidance for compliance-sensitive systems. Use when designing traceability, change records, approval evidence, audit logs, remediation proof, access records, decision records, exception ownership, and verifiable controls. Pair with prepare-pr, assess-pr-risk, and remediation workflows for PR and evidence artifacts.
+description: Auditability and evidence guidance for compliance-sensitive systems. Use when designing traceability, change records, approval evidence, audit logs, remediation proof, access records, decision records, exception ownership, and verifiable controls. Pair with prepare-pr, review-pr Risk mode, and remediation workflows for PR and evidence artifacts.
 ---
 
 # Compliance Auditability
@@ -57,6 +57,6 @@ If it was not captured, linked, and preserved, it is weak evidence. Create evide
 
 ## Handoff Rules
 
-- Use `prepare-pr`, `review-pr`, and `assess-pr-risk` for PR evidence.
+- Use `prepare-pr` and `review-pr` Review or Risk mode for PR evidence.
 - Use remediation workflow skills for scanner/advisory evidence.
 - Use stack experts for concrete audit log implementation.

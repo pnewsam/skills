@@ -1,13 +1,16 @@
 ---
 name: design-composition
-description: "Visual composition principles for digital interfaces: balance, alignment, proportion, focal point, spatial structure, grouping, figure-ground, and visual weight. Use when a UI feels awkward, lopsided, poorly arranged, visually unstable, or structurally disharmonious after the correct UI patterns are already known."
+description: "Visual composition principles for digital interfaces: balance, alignment, proportion, focal point, spatial structure, grouping, figure-ground, visual weight, rhythm, repetition, and cadence. Use when a UI feels awkward, lopsided, poorly arranged, visually unstable, choppy, monotonous, or structurally disharmonious after the correct UI patterns are already known."
 ---
 
 # Design Composition
 
 Use this skill to arrange interface elements so the screen feels stable, intentional, and easy to scan. Composition is about how parts relate as a whole.
 
-For page archetypes, app shells, and standard page anatomy, use `ui-layouts`. For spacing scale values, use `ui-spacing`. This skill owns balance, proportion, focal point, alignment, grouping, and visual weight.
+For page archetypes, app shells, and standard page anatomy, use `ui-layouts`.
+For spacing scale values, use `ui-spacing`. This skill owns balance, proportion,
+focal point, alignment, grouping, visual weight, and the cadence created by
+repeated visual structures.
 
 ## Core Principles
 
@@ -95,6 +98,30 @@ Users should be able to tell foreground from background.
 - Overlays must visually sit above persistent surfaces.
 - Background decoration must not compete with content.
 
+### 7. Build Rhythm Through Repetition And Variation
+
+Rhythm is the pattern users feel as modules, gaps, alignments, and visual roles
+repeat. Establish a recognizable cadence, then break it only to signal a real
+change in meaning or priority.
+
+Use:
+
+- consistent internal slots across repeated cards, rows, or sections
+- a small spacing ladder rather than unrelated gaps
+- recurring heading, body, metadata, and action roles
+- intentional pauses around major transitions
+- restrained variation for milestones, exceptions, or focal content
+
+Avoid:
+
+- arbitrary alternation that makes equivalent content look unrelated
+- identical emphasis for every repeated item
+- one-off spacing that has no semantic reason
+- overly uniform modules that hide important changes in state
+
+`ui-spacing` owns the actual tokens and density values. Composition owns how
+those values create cadence across the whole surface.
+
 ## Measurable Heuristics
 
 Use these as diagnostic guardrails, not universal laws.
@@ -149,6 +176,8 @@ Before implementation, check:
 - Are major layout splits clearly equal or clearly unequal?
 - Does the focal point benefit from a thirds-grid or deliberate symmetry check?
 - Are groups clear without excess containers?
+- Do repeated modules establish a useful cadence?
+- Are rhythm breaks justified by a change in meaning or priority?
 - Does the page feel stable at a glance?
 
 ## Review Format

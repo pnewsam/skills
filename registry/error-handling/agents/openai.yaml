@@ -1,3 +1,4 @@
 interface:
   display_name: "Error Handling"
   short_description: "Model JavaScript and TypeScript errors."
+  default_prompt: "Use $error-handling to design a clear and safe failure contract for this code."

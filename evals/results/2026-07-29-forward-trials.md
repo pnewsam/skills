@@ -8,12 +8,16 @@ session, and routing skills. Preserve raw state after each task. Make external
 writes only for explicitly designated sandbox cases, verify them live, and
 never merge the fixture pull requests.
 
-Current regression suite:
+Baseline regression suite at the time of this run:
 
 - 25 declarative cases
 - 25 cases exercised
 - 7 GitHub-dependent cases exercised against `pnewsam/apollo-sandbox`
 - 0 fixture pull requests merged
+
+The registry was subsequently consolidated and expanded to 31 declarative
+cases. See `2026-07-29-portfolio-consolidation.md` for focused forward trials of
+the new and merged boundaries.
 
 ## First-pass findings
 

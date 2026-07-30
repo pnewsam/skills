@@ -14,12 +14,10 @@
   },
   "profiles": {
     "core": {
-      "description": "Broadly useful local Git, PR, session, validation, quality, and intake workflows.",
+      "description": "Minimal daily workflows for diagnosis, local Git, pull requests, sessions, and validation.",
       "skills": [
-        "assess-pr-risk",
-        "consult-expert",
+        "diagnose-failure",
         "prepare-pr",
-        "quality-expert",
         "review-pr",
         "revise-pr",
         "save-session",
@@ -33,23 +31,20 @@
         "advance-epic",
         "audit-epic",
         "build-feature",
-        "consult-expert",
         "create-charter",
         "document-architecture",
         "explore-directions",
         "plan-bug-bash",
         "plan-epic",
-        "plan-epic-gaps",
         "plan-feature",
         "ship-epic",
         "validate-feature"
       ]
     },
     "browser-testing": {
-      "description": "Browser-test setup, coverage planning, implementation, repair, audit, and validation.",
+      "description": "Browser-test setup, coverage planning and audit, implementation, repair, and validation.",
       "skills": [
         "add-browser-test",
-        "audit-browser-tests",
         "fix-browser-test",
         "plan-browser-tests",
         "setup-browser-testing",
@@ -81,7 +76,7 @@
       ]
     },
     "compliance": {
-      "description": "Accessibility, auditability, privacy, security, GDPR, HIPAA, and vulnerability-management guidance.",
+      "description": "Accessibility, auditability, privacy, security, GDPR, HIPAA, vulnerability management, and threat modeling.",
       "skills": [
         "compliance-accessibility",
         "compliance-auditability",
@@ -90,14 +85,14 @@
         "compliance-hipaa",
         "compliance-privacy",
         "compliance-security",
-        "compliance-vulnerability-management"
+        "compliance-vulnerability-management",
+        "threat-model"
       ]
     },
     "security-delivery": {
       "description": "Planning and implementing dependency and code-scanning remediations.",
       "skills": [
-        "plan-code-scanning-remediation",
-        "plan-vulnerability-remediation",
+        "plan-security-remediation",
         "remediate-code-scanning",
         "remediate-vulnerability"
       ]
@@ -117,9 +112,10 @@
       ]
     },
     "react": {
-      "description": "React SPA architecture and focused component, hooks, state, data, routing, quality, and testing guidance.",
+      "description": "React architecture and focused component, hooks, state, data, routing, quality, and testing guidance.",
       "skills": [
         "react-accessibility",
+        "react-architecture",
         "react-component-design",
         "react-data-fetching",
         "react-error-handling",
@@ -127,19 +123,16 @@
         "react-form-patterns",
         "react-hooks-effects",
         "react-performance",
-        "react-project-structure",
         "react-routing",
-        "react-spa-architecture",
         "react-state-management",
         "react-testing"
       ]
     },
     "quality": {
-      "description": "Language-agnostic correctness, clarity, modularity, reliability, testing, refactoring, and TypeScript guidance.",
+      "description": "Language-agnostic correctness, clarity, modularity, reliability, testing, refactoring, async, errors, and TypeScript guidance.",
       "skills": [
         "async-patterns",
         "error-handling",
-        "functional-patterns",
         "quality-code-clarity",
         "quality-correctness",
         "quality-expert",
@@ -169,20 +162,34 @@
         "ui-responsive",
         "ui-spacing",
         "ui-typography",
-        "ui-visual-hierarchy"
+        "visual-hierarchy"
       ]
     },
     "design": {
-      "description": "Visual composition, hierarchy, rhythm, simplicity, animation vocabulary, and SVG motion.",
+      "description": "Visual composition, hierarchy, simplicity, visual language, and SVG motion.",
       "skills": [
-        "animation-vocabulary",
         "design-composition",
         "design-expert",
-        "design-hierarchy",
-        "design-rhythm",
         "design-simplicity",
         "design-visual-language",
-        "svg-animations"
+        "svg-animations",
+        "visual-hierarchy"
+      ]
+    },
+    "advisory": {
+      "description": "Broad cross-domain consultation with every locally maintained specialist router and reference profile.",
+      "includes": [
+        "backend",
+        "platform",
+        "compliance",
+        "python",
+        "react",
+        "quality",
+        "ui",
+        "design"
+      ],
+      "skills": [
+        "consult-expert"
       ]
     },
     "external-creative": {
