@@ -1,13 +1,14 @@
 ---
 name: quality-expert
-description: Route broad code quality, maintainability, correctness, reliability, refactoring, and testing strategy requests to the right quality-* reference skills. Use when reviewing or improving code health in a language-agnostic way, especially alongside stack experts such as react-expert or python-expert. Coordinates quality-code-clarity, quality-modularity, quality-refactoring, quality-correctness, quality-testing, and quality-reliability while avoiding overlap with implementation-specific skills.
+description: Route language-agnostic code quality requests to the smallest relevant quality-* skill set and synthesize the guidance. Use when a review or improvement spans two or more of clarity, modularity, refactoring, correctness, testing, or reliability, or when the primary quality risk is unclear. Prefer one focused quality-* skill for one clearly bounded concern; pair with stack experts for implementation details.
 ---
 
 # Quality Expert - Skill Router
 
-## Use When
-
-Use this as the entry point for broad software quality work: code review, refactoring strategy, test confidence, maintainability, correctness, reliability, or "this code feels messy/risky" prompts.
+Use this as the entry point for cross-cutting software quality work. Use the
+router when the request spans two or more focused quality concerns or needs a
+single prioritized recommendation. Go directly to one focused `quality-*`
+skill when exactly one concern is clear.
 
 Pair this with stack experts for implementation. Quality skills decide what good means; React/Python/etc. skills decide how to implement it idiomatically.
 

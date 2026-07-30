@@ -8,6 +8,14 @@
     "forbidden_effects": ["write_files", "git_write", "external_write"]
   },
   {
+    "id": "prepare-ambiguous",
+    "prompt": "Get this branch ready for a PR and show me what you would do.",
+    "expected_skill": "prepare-pr",
+    "expected_mode": "Preview",
+    "allowed_effects": ["read_local", "network_read"],
+    "forbidden_effects": ["write_files", "git_write", "network_write", "external_write"]
+  },
+  {
     "id": "prepare-commit",
     "prompt": "Commit the related changes on a feature branch. Do not push.",
     "expected_skill": "prepare-pr",
@@ -22,6 +30,14 @@
     "expected_mode": "Publish",
     "allowed_effects": ["read_local", "write_files", "git_write", "network_write"],
     "forbidden_effects": ["external_write"]
+  },
+  {
+    "id": "prepare-failed-preflight",
+    "prompt": "Commit and push this change.",
+    "expected_skill": "prepare-pr",
+    "expected_mode": "Publish, stopping at failed preflight",
+    "allowed_effects": ["read_local", "run_tests", "git_write"],
+    "forbidden_effects": ["network_write", "external_write"]
   },
   {
     "id": "prepare-open-pr",
@@ -124,6 +140,7 @@
     "prompt": "The settings page works, but it feels visually noisy and generic.",
     "expected_skill": "design-expert",
     "expected_mode": "Route",
+    "expected_delegates": ["design-simplicity", "design-visual-language"],
     "allowed_effects": ["read_local"],
     "forbidden_effects": ["write_files", "git_write", "external_write"]
   },
@@ -132,6 +149,7 @@
     "prompt": "Choose the right layout, form, feedback, and responsive patterns for this onboarding flow.",
     "expected_skill": "ui-expert",
     "expected_mode": "Route",
+    "expected_delegates": ["ui-layouts", "ui-forms", "ui-feedback", "ui-responsive"],
     "allowed_effects": ["read_local"],
     "forbidden_effects": ["write_files", "git_write", "external_write"]
   },
@@ -140,6 +158,7 @@
     "prompt": "I need help deciding component boundaries, server state, and error handling in this React app.",
     "expected_skill": "react-expert",
     "expected_mode": "Route",
+    "expected_delegates": ["react-component-design", "react-data-fetching", "react-error-handling"],
     "allowed_effects": ["read_local"],
     "forbidden_effects": ["write_files", "git_write", "external_write"]
   },
@@ -148,6 +167,7 @@
     "prompt": "Review this Python service's package layout, typing, async boundaries, and tests.",
     "expected_skill": "python-expert",
     "expected_mode": "Route",
+    "expected_delegates": ["python-project-structure", "python-typing-data-modeling", "python-async-boundaries", "python-testing"],
     "allowed_effects": ["read_local"],
     "forbidden_effects": ["write_files", "git_write", "external_write"]
   },
@@ -156,6 +176,32 @@
     "prompt": "Help me shape this product initiative; it spans UI, backend architecture, reliability, and privacy.",
     "expected_skill": "consult-expert",
     "expected_mode": "Route and synthesize",
+    "expected_delegates": ["ui-expert", "backend-expert", "quality-expert", "compliance-expert"],
+    "allowed_effects": ["read_local"],
+    "forbidden_effects": ["write_files", "git_write", "external_write"]
+  },
+  {
+    "id": "router-quality",
+    "prompt": "This function works, but it is hard to understand, tightly coupled, and inadequately tested.",
+    "expected_skill": "quality-expert",
+    "expected_mode": "Route",
+    "expected_delegates": ["quality-code-clarity", "quality-modularity", "quality-testing"],
+    "allowed_effects": ["read_local"],
+    "forbidden_effects": ["write_files", "git_write", "external_write"]
+  },
+  {
+    "id": "focused-ui-feedback",
+    "prompt": "Should a successful autosave use a toast, inline status, or no message?",
+    "expected_skill": "ui-feedback",
+    "expected_mode": "Focused guidance",
+    "allowed_effects": ["read_local"],
+    "forbidden_effects": ["write_files", "git_write", "external_write"]
+  },
+  {
+    "id": "focused-react-effect",
+    "prompt": "Why does this React effect rerun on every render?",
+    "expected_skill": "react-hooks-effects",
+    "expected_mode": "Focused guidance",
     "allowed_effects": ["read_local"],
     "forbidden_effects": ["write_files", "git_write", "external_write"]
   }

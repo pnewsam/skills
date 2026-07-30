@@ -218,6 +218,25 @@ def main() -> int:
                 )
             if not case.get("prompt") or not case.get("expected_mode"):
                 errors.append(f"evals: {case_id} is missing a prompt or expected mode")
+            delegates = case.get("expected_delegates", [])
+            duplicate_delegates = sorted(
+                name for name in set(delegates) if delegates.count(name) > 1
+            )
+            if duplicate_delegates:
+                errors.append(
+                    f"evals: {case_id} repeats delegates "
+                    f"{', '.join(duplicate_delegates)}"
+                )
+            inactive_delegates = sorted(set(delegates) - active_names)
+            if inactive_delegates:
+                errors.append(
+                    f"evals: {case_id} references inactive delegates "
+                    f"{', '.join(inactive_delegates)}"
+                )
+            if case.get("expected_skill") in delegates:
+                errors.append(
+                    f"evals: {case_id} lists its router as a delegate"
+                )
             allowed = set(case.get("allowed_effects", []))
             forbidden = set(case.get("forbidden_effects", []))
             unknown = sorted((allowed | forbidden) - EFFECTS)

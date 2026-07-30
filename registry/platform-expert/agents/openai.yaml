@@ -1,3 +1,4 @@
 interface:
   display_name: "Platform Expert"
   short_description: "Route platform engineering work."
+  default_prompt: "Use $platform-expert to route this cross-cutting platform request and synthesize the guidance."

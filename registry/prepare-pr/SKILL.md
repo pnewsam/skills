@@ -23,9 +23,10 @@ silently advancing.
 | Open PR | Publish plus create or update a GitHub PR | Verified PR URL |
 
 A request to "review the branch" means Preview. A request to "commit" does not
-authorize pushing. A request to "push" does not authorize opening a PR. An
-explicit request to "prepare/open/create the PR" authorizes the full Open PR
-sequence, subject to repository permissions.
+authorize pushing. A request to "push" does not authorize opening a PR. Only an
+explicit request to "open" or "create" a PR authorizes the full Open PR
+sequence. Treat "prepare this for a PR" without an explicit effect as
+ambiguous: complete Preview and propose the next action.
 
 ## Safety rules
 
@@ -111,11 +112,14 @@ git diff --name-status @{u}...HEAD
 git diff --stat @{u}...HEAD
 ```
 
-If there is no upstream branch, compare against the likely base branch. Try `origin/main`, then `origin/master`, then ask or infer from the repository conventions:
+If there is no upstream branch, identify the remote default and common local
+base branches instead of assuming `main`:
 
 ```bash
-git diff --name-status origin/main...HEAD
-git diff --stat origin/main...HEAD
+git symbolic-ref --quiet --short refs/remotes/origin/HEAD
+git branch --list main master develop
+git diff --name-status <base-ref>...HEAD
+git diff --stat <base-ref>...HEAD
 ```
 
 Also inspect uncommitted changes:
@@ -148,7 +152,32 @@ For larger branches, group changes by intent:
 
 When summarizing, mention both committed branch changes and uncommitted working-tree changes. Keep separate what is already committed from what is about to be committed.
 
-### 4. Decide what to stage
+### 4. Validate the candidate change
+
+In Preview mode, inspect existing validation evidence but do not run commands
+that may create caches, reports, or other files unless the user asks.
+
+In Commit, Publish, and Open PR modes, find the repository's actual validation
+commands in its instructions, build metadata, or CI configuration. Run the
+smallest safe checks that cover the candidate change before staging:
+
+- focused tests for the affected behavior
+- lint or type checks when configured and relevant
+- a broader regression check only when the blast radius warrants it
+
+Do not install dependencies or invent a command. If no applicable check exists
+or the environment cannot run it, continue only with an explicit
+`not run` result and reason.
+
+If a relevant check fails, stop before committing. A local commit may proceed
+only when the user explicitly asks to preserve the failing state. Never publish
+or open a PR with a known failure unless the user explicitly overrides the
+failure after seeing it.
+
+Treat an obvious mismatch between changed behavior, existing tests, and a
+governing feature plan as a failed preflight even if no test command was run.
+
+### 5. Decide what to stage
 
 If the user asks to prepare the branch and uncommitted changes are clearly related, stage the relevant files:
 
@@ -160,7 +189,7 @@ Avoid blind `git add .` when the working tree includes unfamiliar, generated, ig
 
 If all modified and new files are clearly part of one coherent change and there are no suspicious files, `git add -A` is acceptable.
 
-### 5. Write the commit message
+### 6. Write the commit message
 
 Prefer this format:
 
@@ -205,7 +234,7 @@ Move shared setup into a helper so connector tests can reuse the same initializa
 
 Avoid generic messages such as `update code`, `fix stuff`, `changes`, or `wip` unless the user explicitly requests them.
 
-### 6. Commit safely
+### 7. Commit safely
 
 After staging, verify staged content:
 
@@ -229,7 +258,7 @@ git log --oneline --decorate -n 5
 
 If no changes are staged, do not run `git commit`. Explain that there is nothing staged to commit.
 
-### 7. Push the branch (Publish and Open PR modes only)
+### 8. Push the branch (Publish and Open PR modes only)
 
 Stop before this step in Preview or Commit mode.
 
@@ -247,7 +276,7 @@ git push -u origin <current-branch>
 
 Do not push directly to `main`, `master`, or protected release branches unless the user explicitly confirms that is intended.
 
-### 8. Create or update the pull request (Open PR mode only)
+### 9. Create or update the pull request (Open PR mode only)
 
 Do not infer permission to create a PR merely because the push succeeded. In
 Open PR mode, check whether the branch already has a PR before creating one:
@@ -285,7 +314,7 @@ Optional flags to include when relevant:
 
 After the PR is created, `gh` will return a URL. Share that URL with the user.
 
-### 9. Final response
+### 10. Final response
 
 After preparing the PR, report:
 
@@ -294,6 +323,7 @@ After preparing the PR, report:
 - Push destination, if pushed
 - PR URL, if a PR was created or updated
 - Short summary of changes
+- Validation commands and results, including anything not run
 - Anything not included, skipped, or needing user attention
 
 ## Handling common situations
@@ -318,17 +348,14 @@ Group files by likely intent and ask which group to commit. Do not create one br
 
 Stop and report the exact problem. Do not attempt risky repair commands. Suggest the safest next command, such as inspecting conflicted files or fetching the base branch.
 
-### Tests
+### Validation evidence
 
-Before committing or creating the PR, look for validation commands in the
-repository instructions and build metadata. Run proportionate targeted checks
-when they are safe and within the requested workflow; do not invent expensive
-or destructive commands.
-
-Use the results to populate the **Validation** section of the PR body:
+Use the results from Step 4 to populate the **Validation** section of the PR
+body:
 
 - If automated tests were run and passed, list the command used and note that they passed.
-- If automated tests were run and failed, flag it to the user before pushing and do not proceed until the issue is addressed or the user explicitly overrides.
+- If automated tests failed, stop before committing or publishing unless the
+  user explicitly authorizes the applicable failing-state action.
 - If no automated tests exist, describe the manual verification steps taken (e.g. "Ran the app locally and confirmed the login flow works end-to-end").
 - If tests were not run at all (e.g. the user skipped this step), state that clearly in both the PR body and the final response.
 

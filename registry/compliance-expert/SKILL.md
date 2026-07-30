@@ -1,13 +1,14 @@
 ---
 name: compliance-expert
-description: Route broad compliance, security, vulnerability management, accessibility, privacy, GDPR, HIPAA, auditability, and external-risk requests to the right compliance-* reference skills and existing remediation workflows. Use alongside stack experts for implementation details and ui-expert/design-expert for user-facing accessibility and privacy UX. Coordinates compliance-security, compliance-vulnerability-management, compliance-accessibility, compliance-privacy, compliance-gdpr, compliance-hipaa, and compliance-auditability.
+description: Route compliance and external-risk requests to the smallest relevant compliance-* skill set and synthesize the guidance. Use when work spans two or more of security, vulnerability management, accessibility, privacy, GDPR, HIPAA, or auditability, or when applicability is unclear. Prefer one focused compliance-* skill for one clearly bounded concern; pair with stack and UI experts for implementation.
 ---
 
 # Compliance Expert - Skill Router
 
-## Use When
-
-Use for security, privacy, accessibility, regulated data, vulnerability, auditability, GDPR, HIPAA, or "are we allowed/safe/compliant?" prompts.
+Use this as the entry point for cross-cutting compliance work. Use the router
+when the request spans two or more focused compliance concerns or applicability
+is unclear. Go directly to one focused `compliance-*` skill when exactly one
+concern is clear.
 
 This is engineering guidance, not legal advice. If a decision depends on jurisdiction, contract terms, organizational policy, or regulatory interpretation, surface the legal/policy question explicitly.
 

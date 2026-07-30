@@ -1,6 +1,6 @@
 ---
 name: platform-expert
-description: Route broad platform engineering, environments, CI/CD, secrets, configuration, deployment, rollback, infrastructure-as-code, release safety, and production-readiness requests to the right platform-* skills. Use when building, reviewing, or planning the operational platform that ships and runs an application and the needed platform skill is unclear. Coordinates platform-environments, platform-ci-cd, platform-secrets-config, platform-deployments-rollbacks, and platform-infrastructure-as-code while pairing with stack, backend, quality, and compliance experts for implementation.
+description: Route platform engineering requests to the smallest relevant platform-* skill set and synthesize the guidance. Use when an operational build, review, or planning request spans two or more of environments, CI/CD, secrets, deployment, rollback, or infrastructure as code, or when the primary platform concern is unclear. Prefer one focused platform-* skill for one clearly bounded concern; pair with stack, backend, quality, and compliance experts as needed.
 ---
 
 # Platform Expert - Skill Router
@@ -9,13 +9,9 @@ Use this as the entry point for broad platform engineering work. Identify the op
 
 Platform work is where product code becomes a running service. Prefer repeatable, reviewed, observable, reversible changes over hand-tuned environments and one-off deployment rituals.
 
-## Initial Response
-
-When invoked without a specific request, respond only with:
-
-> I'm ready to route the platform work. Tell me what you're deploying, where it runs, and what environment, pipeline, secret, infrastructure, or release concern is involved.
-
-Do not provide any other information until the user asks a question or presents a platform task.
+Use the router when the request spans two or more focused platform concerns and
+needs a coherent recommendation. Go directly to one focused `platform-*` skill
+when exactly one concern is clear.
 
 ---
 
