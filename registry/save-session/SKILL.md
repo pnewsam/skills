@@ -1,6 +1,6 @@
 ---
 name: save-session
-description: summarize the current working session and save it as a markdown file in docs/tmp for future reference. use when wrapping up a session, when you've solved a tricky problem worth remembering, when you want to capture decisions and context before switching tasks, or when asked to log or document what was done.
+description: Summarize the current working session and save a concise markdown handoff in docs/tmp for future reference. Use when wrapping up, preserving a tricky diagnosis or decision, switching tasks, or explicitly asked to log the session. Writes local notes only and never commits or pushes them.
 ---
 
 # Save Session
@@ -121,7 +121,9 @@ Read back the summary and check:
 
 ### 6. Save the file
 
-Write the summary to `docs/tmp/`. Do not commit it — the user's global gitignore handles `docs/tmp/` by default, and committing is a separate decision.
+Write the summary to `docs/tmp/`. Do not assume that directory is ignored; check
+`git status --short` after writing and clearly report whether the note is
+tracked, untracked, or ignored. Never commit it as part of this skill.
 
 ### 7. Final response
 
@@ -129,7 +131,7 @@ Report:
 
 - The file path of the saved summary
 - A one-line description of what was captured
-- A reminder that the file is in `docs/tmp/` and won't be committed unless explicitly added
+- Whether Git currently treats the file as tracked, untracked, or ignored
 
 ## Handling common situations
 

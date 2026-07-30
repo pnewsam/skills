@@ -1,6 +1,6 @@
 ---
 name: validate-feature
-description: run a comprehensive validation pass after build-feature completes a feature. reads the feature plan, runs targeted tests via validate-changes, runs the full browser test suite, verifies acceptance criteria against the running app, and produces a validation report attached to the feature plan. use after build-feature finishes all items in a feature, before prepare-pr, or when the user wants a thorough validation of a completed feature.
+description: Run a comprehensive validation pass after build-feature completes a feature. Reads the plan, runs proportionate targeted and regression tests, verifies acceptance criteria, and writes a validation report plus a plan reference. Use before prepare-pr or when asked for feature-level QA. Does not fix failures, commit, push, or open a PR.
 ---
 
 # Validate Feature
@@ -18,6 +18,8 @@ This is broader than `validate-changes` (which is a fast spot-check) and narrowe
 - If a test failure indicates a regression, flag it — do not silently note it.
 - If the app is not running or cannot be reached, document what was tested and what was skipped.
 - Do not run destructive commands or modify the feature plan's content beyond adding the validation report.
+- Write the report and plan reference, but do not commit them unless the user
+  explicitly asks for a commit.
 
 ## Prerequisites
 
@@ -210,7 +212,8 @@ Append a "Validation" section to the feature plan (or update the existing one if
 Validated: <date> | Report: `docs/features/<NNN>-<slug>-validation.md` | Result: READY TO SHIP / SHIP WITH CAVEATS / DO NOT SHIP
 ```
 
-Commit the validation report and updated feature plan.
+Leave the validation report and feature-plan reference in the working tree.
+Commit them only when the user explicitly asks.
 
 ### 8. Final response
 

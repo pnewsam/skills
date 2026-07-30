@@ -1,3 +1,4 @@
 interface:
   display_name: "Revise PR"
-  short_description: "Update a PR description from branch changes."
+  short_description: "Audit or update PR metadata from its diff."
+  default_prompt: "Use $revise-pr to compare this PR metadata with its current diff."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Consult Expert"
+  short_description: "Route broad cross-domain product questions."
+  default_prompt: "Use $consult-expert to select the smallest expert set and synthesize this broad request."

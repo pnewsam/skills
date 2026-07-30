@@ -1,3 +1,4 @@
 interface:
   display_name: "Prepare PR"
-  short_description: "Summarize, commit, push, and open a PR."
+  short_description: "Prepare a branch to the requested Git effect."
+  default_prompt: "Use $prepare-pr to inspect this branch and prepare it only as far as I request."

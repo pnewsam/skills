@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Expert"
+  short_description: "Route broad UI and UX decisions."
+  default_prompt: "Use $ui-expert to route this UI or UX question to the smallest focused skill set."

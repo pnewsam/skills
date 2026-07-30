@@ -1,6 +1,6 @@
 ---
 name: python-expert
-description: Route broad Python architecture, project structure, tooling, typing, data modeling, async boundaries, error handling, database, testing, and FastAPI implementation requests to the right python-* or fastapi-* skills. Use when building, reviewing, refactoring, or debugging Python code and the needed Python skill is unclear. Coordinates python-tooling, python-project-structure, python-testing, python-typing-data-modeling, python-async-boundaries, python-error-handling, python-database-patterns, and fastapi-architecture while avoiding overlap with backend-expert for language-agnostic backend architecture.
+description: Route broad or cross-cutting Python engineering requests to the smallest relevant python-* or fastapi-* skill set and synthesize the guidance. Use when building, reviewing, refactoring, or debugging Python and the primary decision domain is unclear. Use backend-expert for language-agnostic service architecture.
 ---
 
 # Python Expert - Skill Router
@@ -8,16 +8,6 @@ description: Route broad Python architecture, project structure, tooling, typing
 Use this as the entry point for broad Python work. Identify the actual engineering problem, load only the focused Python skills needed, and keep changes aligned with the project's existing package layout, tooling, runtime model, and test conventions.
 
 For language-agnostic backend architecture such as API contract shape, service boundary strategy, persistence lifecycle, background jobs, external integrations, or auth boundary placement, use `backend-expert` first, then return to `python-expert` for Python/FastAPI implementation details.
-
-## Initial Response
-
-When invoked without a specific request, respond only with:
-
-> I'm ready to route the Python work. Tell me what you're building, reviewing, or debugging, and what part of the codebase is involved.
-
-Do not provide any other information until the user asks a question or presents a Python task.
-
----
 
 ## 1. Routing Table
 

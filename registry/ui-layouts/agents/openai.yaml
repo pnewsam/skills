@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Layouts"
+  short_description: "Choose page-level layout and information structure."
+  default_prompt: "Use $ui-layouts to choose the page archetype and information layout for this screen."

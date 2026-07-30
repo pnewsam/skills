@@ -1,22 +1,30 @@
 ---
 name: revise-pr
-description: revise an existing pull request to ensure the title, description, type of change, and checklist accurately reflect the latest code changes. use when asked to update a pr, sync a pr description, review whether a pr body is accurate, or refresh pr metadata after new commits have been pushed.
+description: Audit an existing pull request against its current diff and, when explicitly requested, update its title or body. Use when asked to check, revise, sync, or refresh PR metadata after the branch changes. Defaults to a read-only audit; editing is a separate external-write mode.
 ---
 
 # Revise PR
 
 ## Overview
 
-Audit an open pull request by comparing its current title and description against the actual code changes on the branch, then update the PR metadata so everything is accurate and complete.
+Audit an open pull request by comparing its current title and description against
+the actual code changes on the branch.
 
-This skill is read-first: always fetch the live PR state and the real diff before proposing any edits. Never guess at what the description says or what the code does — derive both from ground truth.
+- **Audit mode:** Report discrepancies and draft a replacement. This is the
+  default for "review" or "check" requests.
+- **Apply mode:** Audit, edit PR metadata, and verify the live result. Use only
+  when the user asks to update, revise, sync, refresh, or apply.
+
+Always fetch the live PR state and real diff before proposing edits.
 
 ## Safety rules
 
 - Never modify source code, commit history, or branch state. This skill only edits PR metadata via `gh pr edit`.
-- Do not overwrite checklist items that the author has already ticked. Preserve their checked state unless the underlying code evidence clearly contradicts it.
+- Preserve author-written sections and repository-template fields that remain
+  accurate. Do not toggle checklist items based only on inference.
 - Do not change the base branch, assignees, labels, or reviewers unless the user explicitly asks.
-- Always show the proposed new title and body to the user and get confirmation before applying the edit, unless the user has explicitly asked for a fully automatic update.
+- Do not add a redundant confirmation when the user has already explicitly
+  requested Apply mode and the proposed changes stay within that scope.
 - If the PR is already merged or closed, stop and inform the user. Do not edit closed PRs.
 
 ## Workflow
@@ -55,29 +63,12 @@ Store the following for later comparison:
 
 ### 3. Inspect the actual changes on the branch
 
-Fetch the latest remote state before diffing:
+Read the live PR evidence without changing local branches or remote-tracking
+refs:
 
 ```bash
-git fetch origin
-```
-
-Diff the feature branch against the base to see what is actually in the PR:
-
-```bash
-git diff --stat origin/<baseRefName>...origin/<headRefName>
-git diff --name-status origin/<baseRefName>...origin/<headRefName>
-```
-
-For a narrative view of commits:
-
-```bash
-git log --oneline origin/<baseRefName>..origin/<headRefName>
-```
-
-For targeted file-level diffs when you need to understand intent:
-
-```bash
-git diff origin/<baseRefName>...origin/<headRefName> -- <path>
+gh pr view <number> --json files,commits
+gh pr diff <number>
 ```
 
 Group the changed files by intent as you read them:
@@ -93,37 +84,21 @@ Build a clear mental model of what the branch actually does before moving to the
 
 ### 4. Audit the existing PR description
 
-Compare the current PR body (from Step 2) against the real diff (from Step 3). For each section of the template, assess accuracy:
+Compare the current PR body against the diff and the repository's own PR
+template, if present. Check:
 
-#### Description section
-- Does it correctly describe what was changed and why?
-- Are there significant changes in the diff that are not mentioned?
-- Does it mention anything that is not present in the diff (e.g. a feature that was removed or never implemented)?
-- If a `Fixes #<number>` line is present, is the issue number plausible given the changes?
-
-#### Screenshots section
-- If UI files (templates, CSS, component files) were modified, is the Screenshots section present?
-- If no UI files were touched, the Screenshots section can be removed or left as a placeholder comment.
-
-#### Type of change section
-- Based on the diff, which type(s) of change accurately apply?
-  - 🐛 Bug fix — patches a defect without changing external behavior
-  - ⚡ New feature — adds new user-visible functionality
-  - 🚨 Hotfix — urgent patch, typically targeting a release branch
-  - 📢 Breaking change — alters existing public interfaces or behavior
-  - 📄 Documentation update required — public-facing docs need updating
-- Are the correct boxes checked? Are any wrong boxes checked?
-- Note: preserve any boxes the author has already checked (`[x]`) unless the diff clearly contradicts the selection.
-
-#### Testing / Verification section
-- Is the section present? If the PR body predates this template, it may be missing entirely — add it.
-- Do the verification steps described match what the diff actually does? Update any steps that are stale or missing.
-- If test files are present in the diff, ensure the section references the relevant test command or test files.
-- If the section is empty or only contains placeholder comments, flag it as needing content and propose concrete steps based on the diff.
-
-#### Checklist section
-- Do not change items the author has already checked.
-- If unchecked items are clearly satisfied by the diff (e.g. tests are present, no new warnings visible in changed files), you may note this to the user but do not auto-check them.
+- **Summary and motivation:** Does the body describe the actual outcome, why it
+  exists, and any linked issue without unsupported claims?
+- **Change inventory:** Are material API, schema, dependency, migration,
+  configuration, documentation, and compatibility changes represented?
+- **Validation evidence:** Are commands and results factual and current? Never
+  infer that a test passed because a test file exists.
+- **Risk and rollout:** Are breaking behavior, data risk, feature flags,
+  migrations, rollout, and rollback needs stated when relevant?
+- **Visual evidence:** For user-visible UI changes, is useful before/after
+  evidence present or explicitly left for the author?
+- **Repository fields:** Preserve accurate custom sections and checklist state;
+  do not replace a repository template with the fallback template.
 
 ### 5. Identify discrepancies
 
@@ -131,8 +106,10 @@ Produce a plain-English gap analysis before drafting any edits. List:
 
 - **Missing from description** — changes in the diff that the body does not mention
 - **Stale or inaccurate** — claims in the body that are not supported by the diff
-- **Wrong type of change** — checkboxes that do not match what the diff shows
-- **Missing or empty Testing / Verification** — section is absent, placeholder-only, or describes steps that don't match the diff
+- **Missing validation evidence** — commands, results, or manual checks are
+  absent, placeholder-only, or inconsistent with the diff
+- **Missing risk or rollout context** — material operational consequences are
+  not disclosed
 - **Title mismatch** — if the title no longer reflects the scope of changes
 - **No issues found** — explicitly state this if the description is already accurate
 
@@ -140,59 +117,14 @@ If no issues are found, tell the user and stop. Do not make edits for the sake o
 
 ### 6. Draft the revised PR body
 
-Using the gap analysis from Step 5, write an updated version of the full PR body. Follow the template below. Keep all content that is already accurate. Only change what needs to change.
-
-Fill in every section from the diff analysis. Remove placeholder lines that do not apply:
-- Remove `Fixes #issue_number` if no linked issue is known
-- Remove the Screenshots section body if there are no UI changes (keep the heading as a placeholder comment if the PR author included it)
-- Delete type-of-change checkboxes that clearly do not apply
-
-```markdown
-## Description
-
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
-
-Fixes #issue_number
-
-## Screenshots
-
-<!-- Include images of the feature/changes for context. -->
-
-## Type of change
-
-Please delete options that are not relevant.
-
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ⚡ New feature (non-breaking change which adds functionality)
-- [ ] 🚨 Hotfix (non-breaking change which fixes an issue)
-- [ ] 📢 Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] 📄 This change requires a documentation update
-
-## Testing / Verification
-
-<!-- Describe how this change was tested or how reviewers can verify it. -->
-
-Steps to verify:
-
-1.
-2.
-
-<!-- If automated tests cover this change, list the relevant test files or commands. -->
-<!-- If no tests exist, explain why or note what manual verification was done. -->
-
-## Checklist:
-
-- [ ] My code follows the style guidelines of this project
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have checked my code and corrected any misspellings
-- [ ] I have added or updated tests that cover my changes
-```
+Using the gap analysis from Step 5, write an updated version of the full PR
+body. Use `references/pr_output_templates.md` for the canonical audit, preview,
+body, and final-status formats. Keep accurate content and change only what the
+diff supports.
 
 Also draft a revised title if the current title is inaccurate or too vague.
 
-### 7. Present the proposed changes for confirmation
+### 7. Present the proposed changes
 
 Show the user a clear diff of what will change:
 
@@ -200,11 +132,10 @@ Show the user a clear diff of what will change:
 - **Gap analysis summary** — bullet list of what was wrong or missing
 - **Full proposed PR body** — the complete revised markdown
 
-Ask the user to confirm before applying. If they ask for adjustments, incorporate their feedback and re-present before applying.
+In Audit mode, stop here. In Apply mode, proceed unless the audit exposed an
+ambiguity that would materially change the PR's stated scope.
 
-Skip confirmation only if the user has explicitly requested a fully automatic update (e.g. "just update it").
-
-### 8. Apply the updates with the GitHub CLI
+### 8. Apply the updates with the GitHub CLI (Apply mode only)
 
 Once confirmed, apply the edit:
 
@@ -229,7 +160,8 @@ Report:
 - PR number and URL
 - What was changed (title, which sections of the body were updated)
 - A one-line summary of what the PR now accurately describes
-- Anything left for the author to address (e.g. Screenshots still needed, checklist items to tick)
+- Anything left for the author to address, such as screenshots or unavailable
+  validation evidence
 
 ## Handling common situations
 

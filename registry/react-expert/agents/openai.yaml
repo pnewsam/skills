@@ -1,0 +1,4 @@
+interface:
+  display_name: "React Expert"
+  short_description: "Route broad React architecture questions."
+  default_prompt: "Use $react-expert to route this React request and synthesize the focused guidance."

@@ -1,6 +1,6 @@
 ---
 name: ui-expert
-description: Route broad UI, UX, page design, interaction, responsive, visual hierarchy, email UI, and frontend product-interface requests to the right ui-* skills. Use when designing or reviewing a full screen, page, app flow, email template, design system decision, or when the needed UI skill is unclear. Coordinates ui-layouts, ui-patterns, ui-forms, ui-actions, ui-feedback, ui-content, ui-visual-hierarchy, ui-spacing, ui-typography, ui-color, ui-depth, ui-responsive, ui-icons, ui-data-viz, ui-onboarding, ui-email, and hands off aesthetic/compositional quality concerns to design-expert while avoiding overlap.
+description: Route broad UI and UX requests to the smallest relevant ui-* skill set. Use for a full screen, page, flow, responsive experience, or when the needed interface pattern is unclear. Owns functional interface decisions; hand purely aesthetic or compositional concerns to design-expert.
 ---
 
 # UI Expert - Skill Router
@@ -8,16 +8,6 @@ description: Route broad UI, UX, page design, interaction, responsive, visual hi
 Use this as the entry point for broad UI work. Your job is to identify the actual interface problem, load only the focused `ui-*` skills needed, and produce or review UI that is intuitive, conventional, simple, and polished.
 
 If the user says the UI is ugly, clunky, disharmonious, visually awkward, generic, too busy, or not elegant, route aesthetic and compositional judgment to `design-expert` after identifying the functional UI pattern.
-
-## Initial Response
-
-When invoked without a specific request, respond only with:
-
-> I'm ready to route the UI work. Tell me what you're designing or reviewing, who uses it, and what the user needs to accomplish.
-
-Do not provide any other information until the user asks a question or presents a UI task.
-
----
 
 ## 1. Routing Table
 

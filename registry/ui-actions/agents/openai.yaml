@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Actions"
+  short_description: "Choose buttons, menus, and action affordances."
+  default_prompt: "Use $ui-actions to choose the clearest affordance and hierarchy for these user actions."

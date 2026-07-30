@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Onboarding"
+  short_description: "Design effective first-run and activation flows."
+  default_prompt: "Use $ui-onboarding to design the shortest useful path from first run to user value."

@@ -1,3 +1,4 @@
 interface:
   display_name: "Validate Feature"
   short_description: "Validate a completed feature end to end."
+  default_prompt: "Use $validate-feature to verify this completed feature and document the evidence."

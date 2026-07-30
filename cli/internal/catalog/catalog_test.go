@@ -1,0 +1,89 @@
+package catalog
+
+import (
+	"os"
+	"path/filepath"
+	"reflect"
+	"testing"
+)
+
+func TestLoadAndSelectProfiles(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "catalog.json")
+	data := []byte(`{
+  "version": 1,
+  "profiles": {
+    "core": {"description": "Core", "skills": ["beta", "alpha"]},
+    "extra": {"description": "Extra", "skills": ["gamma", "beta"]}
+  }
+}`)
+	if err := os.WriteFile(path, data, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	catalog, err := Load(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := catalog.Select(
+		[]string{"core", "extra"},
+		[]string{"alpha", "beta", "gamma"},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := []string{"alpha", "beta", "gamma"}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("Select() = %#v, want %#v", got, want)
+	}
+}
+
+func TestSelectRejectsUnknownProfile(t *testing.T) {
+	catalog := Catalog{Version: 1, Profiles: map[string]Profile{"core": {}}}
+	if _, err := catalog.Select([]string{"missing"}, []string{"alpha"}); err == nil {
+		t.Fatal("expected unknown profile error")
+	}
+}
+
+func TestSelectRejectsUnavailableSkill(t *testing.T) {
+	catalog := Catalog{
+		Version: 1,
+		Profiles: map[string]Profile{
+			"core": {Skills: []string{"missing"}},
+		},
+	}
+	if _, err := catalog.Select([]string{"core"}, []string{"alpha"}); err == nil {
+		t.Fatal("expected unavailable skill error")
+	}
+}
+
+func TestRepositoryCatalogResolvesEveryProfile(t *testing.T) {
+	repoRoot := filepath.Clean(filepath.Join("..", "..", ".."))
+	registryDir := filepath.Join(repoRoot, "registry")
+	entries, err := os.ReadDir(registryDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var available []string
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		if _, err := os.Stat(filepath.Join(registryDir, entry.Name(), "SKILL.md")); err == nil {
+			available = append(available, entry.Name())
+		}
+	}
+
+	registryCatalog, err := Load(filepath.Join(repoRoot, "catalog.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, profileName := range registryCatalog.ProfileNames() {
+		selected, err := registryCatalog.Select([]string{profileName}, available)
+		if err != nil {
+			t.Fatalf("profile %s: %v", profileName, err)
+		}
+		if len(selected) == 0 {
+			t.Fatalf("profile %s resolved no skills", profileName)
+		}
+	}
+}

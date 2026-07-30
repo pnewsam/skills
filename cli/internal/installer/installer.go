@@ -21,8 +21,14 @@ type Result struct {
 	Action string // "Linking", "Updating", "Replacing", "Installing", etc.
 }
 
+type Options struct {
+	// Force permits replacing an existing destination that is not already a
+	// symlink to the requested source.
+	Force bool
+}
+
 // Install installs a single skill into the destination directory.
-func Install(skillPath, destDir string, mode Mode) (Result, error) {
+func Install(skillPath, destDir string, mode Mode, opts Options) (Result, error) {
 	skillName := filepath.Base(skillPath)
 	dst := filepath.Join(destDir, skillName)
 
@@ -30,46 +36,65 @@ func Install(skillPath, destDir string, mode Mode) (Result, error) {
 		return Result{}, fmt.Errorf("creating destination: %w", err)
 	}
 
-	info, err := os.Lstat(dst)
-	existsAsLink := err == nil && info.Mode()&os.ModeSymlink != 0
-	existsAsDir := err == nil && info.IsDir()
-
 	r := Result{Skill: skillName}
+	info, err := os.Lstat(dst)
+	exists := err == nil
+	if err != nil && !os.IsNotExist(err) {
+		return r, fmt.Errorf("inspecting destination: %w", err)
+	}
+	existsAsLink := exists && info.Mode()&os.ModeSymlink != 0
 
 	if mode == ModeLink {
-		switch {
-		case existsAsLink:
-			os.Remove(dst)
-			r.Action = "Updating"
-		case existsAsDir:
-			os.RemoveAll(dst)
+		if existsAsLink && sameLinkTarget(dst, skillPath) {
+			r.Action = "Current"
+			return r, nil
+		}
+		if exists && !opts.Force {
+			return r, fmt.Errorf("destination %s already exists; use --force to replace it", dst)
+		}
+		if exists {
+			if err := removeDestination(dst, info); err != nil {
+				return r, err
+			}
 			r.Action = "Replacing"
-		default:
+		} else {
 			r.Action = "Linking"
 		}
 		if err := os.Symlink(skillPath, dst); err != nil {
 			return r, fmt.Errorf("creating symlink: %w", err)
 		}
 	} else {
-		switch {
-		case existsAsLink:
-			os.Remove(dst)
+		if exists && !opts.Force {
+			return r, fmt.Errorf("destination %s already exists; use --force to replace it", dst)
+		}
+
+		tmp, err := os.MkdirTemp(destDir, "."+skillName+".tmp-")
+		if err != nil {
+			return r, fmt.Errorf("creating temporary destination: %w", err)
+		}
+		defer os.RemoveAll(tmp)
+
+		if err := copyDir(skillPath, tmp); err != nil {
+			return r, fmt.Errorf("copying skill: %w", err)
+		}
+		if exists {
+			if err := removeDestination(dst, info); err != nil {
+				return r, err
+			}
 			r.Action = "Replacing"
-		case existsAsDir:
-			r.Action = "Updating"
-		default:
+		} else {
 			r.Action = "Installing"
 		}
-		if err := copyDir(skillPath, dst); err != nil {
-			return r, fmt.Errorf("copying skill: %w", err)
+		if err := os.Rename(tmp, dst); err != nil {
+			return r, fmt.Errorf("activating copied skill: %w", err)
 		}
 	}
 
 	return r, nil
 }
 
-// Unlink removes all symlinks from the given directory.
-func Unlink(dir string) (int, error) {
+// Unlink removes only symlinks that point into sourceDir.
+func Unlink(dir, sourceDir string) (int, error) {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -86,6 +111,16 @@ func Unlink(dir string) (int, error) {
 			continue
 		}
 		if info.Mode()&os.ModeSymlink != 0 {
+			target, err := os.Readlink(fullPath)
+			if err != nil {
+				continue
+			}
+			if !filepath.IsAbs(target) {
+				target = filepath.Join(filepath.Dir(fullPath), target)
+			}
+			if !isWithin(sourceDir, target) {
+				continue
+			}
 			if err := os.Remove(fullPath); err != nil {
 				return removed, fmt.Errorf("removing %s: %w", fullPath, err)
 			}
@@ -94,6 +129,72 @@ func Unlink(dir string) (int, error) {
 		}
 	}
 	return removed, nil
+}
+
+func sameLinkTarget(linkPath, requestedTarget string) bool {
+	current, err := filepath.EvalSymlinks(linkPath)
+	if err != nil {
+		return false
+	}
+	requested, err := filepath.EvalSymlinks(requestedTarget)
+	if err != nil {
+		requested, err = filepath.Abs(requestedTarget)
+		if err != nil {
+			return false
+		}
+	}
+	return filepath.Clean(current) == filepath.Clean(requested)
+}
+
+func isWithin(parent, child string) bool {
+	parentAbs, err := canonicalPath(parent)
+	if err != nil {
+		return false
+	}
+	childAbs, err := canonicalPath(child)
+	if err != nil {
+		return false
+	}
+	rel, err := filepath.Rel(parentAbs, childAbs)
+	return err == nil && rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator))
+}
+
+func canonicalPath(path string) (string, error) {
+	abs, err := filepath.Abs(path)
+	if err != nil {
+		return "", err
+	}
+
+	current := filepath.Clean(abs)
+	var missing []string
+	for {
+		resolved, evalErr := filepath.EvalSymlinks(current)
+		if evalErr == nil {
+			for i := len(missing) - 1; i >= 0; i-- {
+				resolved = filepath.Join(resolved, missing[i])
+			}
+			return filepath.Clean(resolved), nil
+		}
+		parent := filepath.Dir(current)
+		if parent == current {
+			return filepath.Clean(abs), nil
+		}
+		missing = append(missing, filepath.Base(current))
+		current = parent
+	}
+}
+
+func removeDestination(path string, info fs.FileInfo) error {
+	if info.IsDir() && info.Mode()&os.ModeSymlink == 0 {
+		if err := os.RemoveAll(path); err != nil {
+			return fmt.Errorf("removing existing directory %s: %w", path, err)
+		}
+		return nil
+	}
+	if err := os.Remove(path); err != nil {
+		return fmt.Errorf("removing existing destination %s: %w", path, err)
+	}
+	return nil
 }
 
 func copyDir(src, dst string) error {

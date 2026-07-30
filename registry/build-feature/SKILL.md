@@ -1,6 +1,6 @@
 ---
 name: build-feature
-description: implement one acceptance criterion or task from a feature plan produced by plan-feature. use when building a planned feature. reads docs/features/NNN-*.md, picks the next unchecked item, implements the code change, verifies it against the criterion, commits on a feature branch, and marks the item as complete in the plan. run repeatedly until the feature is complete. when all items are done, invokes prepare-pr to push the branch to GitHub and open a pull request. pairs with plan-feature.
+description: Implement one acceptance criterion or task from a feature plan produced by plan-feature. Use when building a planned feature. Reads docs/features/NNN-*.md, picks one unchecked item, implements and verifies it, commits the related code and plan update on a feature branch, then stops. Run repeatedly until complete; validation and PR publication remain separate explicit steps.
 ---
 
 # Build Feature
@@ -19,7 +19,8 @@ Before starting work on an item:
 
 1. Scan the plan for `[ ]` list items.
 2. If the first unchecked item is already partially addressed in the working tree, resume from there rather than starting over.
-3. If all items are `[x]`, report that the feature is complete and recommend running `prepare-pr`.
+3. If all items are `[x]`, report that the feature is complete and stop. Suggest
+   `validate-feature`; do not invoke another skill automatically.
 
 If the current branch already contains commits for this feature but no PR exists yet, continue committing to the same branch.
 
@@ -98,8 +99,9 @@ Scan the feature plan for checklist items (`- [ ]`). Pick the first one.
 If all items are checked:
 
 1. Report that the feature is complete.
-2. Invoke `prepare-pr` to push the feature branch to GitHub and open a pull request.
-3. Stop.
+2. Recommend `validate-feature`, or `prepare-pr` if validation is already
+   documented.
+3. Stop without pushing or opening a PR.
 
 If the plan does not contain checklists, treat each acceptance criterion as a single item and track progress in a "Progress" section at the bottom of the file.
 
@@ -231,7 +233,9 @@ Report:
 - How many items remain unchecked in the plan.
 - Recommended next steps:
   - If items remain: run `build-feature` again for the next item.
-  - If the feature is complete: run `validate-feature` for a comprehensive validation pass, then invoke `prepare-pr` to push the branch to GitHub and open a pull request.
+  - If the feature is complete: recommend `validate-feature`, then
+    `prepare-pr` when the user is ready to publish. Do not invoke either
+    automatically.
   - If changes touched UI, routing, or shared components: consider running `validate-changes` for targeted regression testing.
 
 ## Handling common situations

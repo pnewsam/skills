@@ -2,6 +2,13 @@
 
 Use these templates when presenting results after revising a PR.
 
+## Contents
+
+- Gap analysis
+- Proposed edit preview
+- Final status
+- PR body template
+
 ## Gap analysis (Step 5 output)
 
 Present this before proposing any edits.
@@ -15,11 +22,11 @@ Present this before proposing any edits.
 **Stale or inaccurate:**
 - <claim in body not supported by the diff>
 
-**Type of change:**
-- <current selection> → <correct selection based on diff>
+**Missing validation evidence:**
+- <missing / placeholder-only / inconsistent command or result>
 
-**Testing / Verification:**
-- <missing / placeholder-only / steps don't match diff — describe what needs to change>
+**Missing risk or rollout context:**
+- <material consequence not disclosed>
 
 **Title:**
 - Current: `<current title>`
@@ -49,7 +56,7 @@ Show this to the user before applying the update.
 <full revised PR body here>
 ---
 
-Shall I apply these changes?
+<In Audit mode, stop here. In Apply mode, continue if the target and scope are unambiguous.>
 ```
 
 ## Final status (Step 9 output)
@@ -60,57 +67,45 @@ Updated PR #<number> — <url>
 Changes applied:
 - <title updated to "..."> (omit if unchanged)
 - <Description section: added mention of X, removed stale reference to Y>
-- <Type of change: checked ⚡ New feature, removed 🐛 Bug fix>
+- <Validation: replaced a stale claim with the actual command and result>
 
 Remaining for author:
 - <e.g. Screenshots section still needs images>
-- <e.g. Checklist items to tick once verified>
+- <e.g. Validation evidence the author still needs to collect>
 ```
 
 ## PR body template
 
-The canonical template used for both writing and auditing PR descriptions.
-Fill in every section from the diff analysis. Remove placeholder lines that do not apply.
+Use the repository's PR template when present. Otherwise audit against this
+evidence-oriented shape and remove unused optional sections.
 
 ```markdown
-## Description
+## Summary
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
+- <user-visible or operational outcome>
+- <important implementation boundary>
 
-Fixes #issue_number
+## Why
+
+<Problem, motivation, or linked issue. Use `Closes #<number>` only when known.>
+
+## Changes
+
+- <coherent change>
+- <tests, migration, documentation, or dependency change>
+
+## Validation
+
+- `<command>` — passed / failed
+- <manual verification and observed result>
+- Not run: <check and reason>
+
+## Risk and rollout
+
+<Risk, compatibility, migration, feature flag, rollout, or rollback notes. Omit
+only when genuinely not applicable.>
 
 ## Screenshots
 
-<!-- Include images of the feature/changes for context. -->
-
-## Type of change
-
-Please delete options that are not relevant.
-
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ⚡ New feature (non-breaking change which adds functionality)
-- [ ] 🚨 Hotfix (non-breaking change which fixes an issue)
-- [ ] 📢 Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] 📄 This change requires a documentation update
-
-## Testing / Verification
-
-<!-- Describe how this change was tested or how reviewers can verify it. -->
-
-Steps to verify:
-
-1.
-2.
-
-<!-- If automated tests cover this change, list the relevant test files or commands. -->
-<!-- If no tests exist, explain why or note what manual verification was done. -->
-
-## Checklist:
-
-- [ ] My code follows the style guidelines of this project
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have checked my code and corrected any misspellings
-- [ ] I have added or updated tests that cover my changes
+<Before/after evidence for UI changes. Omit for non-visual changes.>
 ```

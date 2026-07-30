@@ -1,21 +1,11 @@
 ---
 name: react-expert
-description: Route broad React SPA architecture, component design, hooks, forms, state, data fetching, routing, performance, error handling, accessibility, and testing requests to the right react-* skills. Use when building, reviewing, refactoring, or debugging a React app and the needed React skill is unclear. Coordinates react-spa-architecture, react-component-design, react-project-structure, react-hooks-effects, react-form-patterns, react-state-management, react-data-fetching, react-routing, react-performance, react-error-handling, react-accessibility, and react-testing while avoiding overlap.
+description: Route broad or cross-cutting React application requests to the smallest relevant react-* skill set and synthesize the guidance. Use when building, reviewing, refactoring, or debugging React and the primary decision domain is unclear. Prefer a focused React skill when the problem is already specific.
 ---
 
 # React Expert - Skill Router
 
 Use this as the entry point for broad React work. Identify the actual engineering problem, load only the focused `react-*` skills needed, and keep the implementation aligned with the app's existing framework, file structure, and component conventions.
-
-## Initial Response
-
-When invoked without a specific request, respond only with:
-
-> I'm ready to route the React work. Tell me what you're building, reviewing, or debugging, and what part of the app is involved.
-
-Do not provide any other information until the user asks a question or presents a React task.
-
----
 
 ## 1. Routing Table
 

@@ -1,3 +1,4 @@
 interface:
   display_name: "Compliance Expert"
-  short_description: "Route security, privacy, GDPR, HIPAA, accessibility, and audit work."
+  short_description: "Route broad privacy, security, and compliance work."
+  default_prompt: "Use $compliance-expert to route this compliance request and identify the governing constraints."

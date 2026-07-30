@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Typography"
+  short_description: "Design readable interface type hierarchy."
+  default_prompt: "Use $ui-typography to create a readable, restrained type hierarchy for this interface."

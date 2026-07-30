@@ -1,6 +1,6 @@
 ---
 name: plan-bug-bash
-description: process stream-of-consciousness bug, issue, and app-feedback observations into a standard docs/epics bug-bash epic with prioritized child features. use when asked to triage dictated notes, organize bug bash observations, process app feedback, or convert a wall of issues into the directions -> epics -> features workflow. pairs with plan-feature, advance-epic, build-feature, and ship-epic.
+description: Process stream-of-consciousness bug, issue, and app-feedback observations into a standard docs/epics bug-bash epic with prioritized child features. Use when asked to triage dictated notes, organize bug bash observations, process app feedback, or convert a wall of issues into the directions, epics, and features workflow. Pairs with plan-feature, advance-epic, build-feature, and ship-epic.
 ---
 
 # Plan Bug Bash

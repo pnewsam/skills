@@ -1,531 +1,190 @@
 ---
 name: setup-browser-testing
-description: set up the browser testing facility for a project. installs and configures Playwright (or Cypress if already present), creates directory scaffold, auth helpers, CI workflow with scheduled runs, and a conventions README. use when a project has no browser tests yet, when onboarding a new project to browser testing, or when the testing facility needs to be initialized before running plan-browser-tests or add-browser-test.
+description: Initialize or repair a project's browser-test foundation using its existing package manager and CI conventions. Use when a Node-based app has no viable Playwright or Cypress setup, or when configuration, smoke coverage, authentication fixtures, CI, or test documentation is incomplete. Installs local development dependencies and writes test-infrastructure files, but never commits, pushes, adds secrets, or modifies product behavior.
 ---
 
 # Setup Browser Testing
 
-## Overview
+## Outcome
 
-Initialize the complete browser testing facility for a project. This skill handles framework installation, configuration, directory scaffolding, authentication helpers, CI integration with scheduled runs, and documentation — everything needed so that `plan-browser-tests` and `add-browser-test` can operate.
+Leave one project or monorepo package with a working, documented browser-test
+foundation:
 
-Run this once per project. It is idempotent: re-running will fill in missing pieces without overwriting existing work.
+- an existing framework preserved, or Playwright selected when none exists
+- package and browser dependencies installed locally
+- configuration aligned with the real dev server
+- one deterministic smoke test
+- authentication support only when its contract is known
+- CI aligned with repository conventions
+- commands and structure documented
 
-## Safety rules
+This is a local-files workflow. It may change dependency manifests, lockfiles,
+test configuration, CI, ignore rules, and test documentation. It does not
+commit, push, create a PR, configure live secrets, or change application
+behavior.
 
-- Do not modify application source code. Only create or modify test infrastructure files.
-- Do not overwrite existing config files without asking. If `playwright.config.ts` or `cypress.config.ts` already exists, read it first and offer to extend rather than replace.
-- Do not install packages globally. Always use the project's package manager.
-- Do not commit secrets or credentials to the CI workflow file. Use GitHub Secrets references.
-- If the project has no `package.json`, stop and inform the user — browser testing requires a Node.js project.
+## Safety and idempotency
 
-## Prerequisites
-
-Verify the project is a Node.js project:
-
-```bash
-cat package.json
-```
-
-If `package.json` does not exist, stop. This skill requires a Node.js project.
+- Require a Node project or a selected Node workspace package. Do not force a
+  browser framework into a non-Node project.
+- Preserve the package manager selected by the repository lockfile.
+- Read existing configuration before editing it. Extend compatible setup; do
+  not replace it with a generic template.
+- Do not modify application source except for a user-approved stable selector
+  when no semantic selector is possible.
+- Never write credentials, session state, or secret values to tracked files.
+- Do not add schedules, notifications, third-party CI integrations, or
+  production test targets without explicit requirements.
+- Reruns should fill verified gaps and leave equivalent existing behavior
+  unchanged.
+- Stop when a correct setup depends on an unknown app route, credential
+  contract, workspace target, or dev-server command that cannot be discovered.
 
 ## Workflow
 
-### 1. Detect the project setup
+### 1. Select the project boundary
 
-Read the project configuration to understand the stack:
-
-```bash
-cat package.json
-```
-
-Note:
-- **Package manager**: `npm`, `yarn`, `pnpm`, or `bun` (check for `yarn.lock`, `pnpm-lock.yaml`, `bun.lockb`)
-- **Framework**: React, Next.js, Vue, Svelte, Angular, or plain HTML/JS
-- **Dev server command**: check `scripts.dev` or `scripts.start` in `package.json`
-- **Default port**: infer from framework (Next.js: 3000, Create React App: 3000, Vite: 5173, Angular: 4200)
-
-Check for an existing browser test framework:
+Read repository instructions and locate manifests and workspace configuration:
 
 ```bash
-ls playwright.config.* cypress.config.* 2>/dev/null
-cat package.json | grep -E "playwright|cypress|@playwright"
+rg --files -g 'package.json' -g 'pnpm-workspace.yaml' -g 'yarn.lock' \
+  -g 'pnpm-lock.yaml' -g 'package-lock.json' -g 'bun.lock*'
 ```
 
-Decision:
-- If **Playwright** is already in `package.json` or `playwright.config.*` exists → use Playwright
-- If **Cypress** is already in `package.json` or `cypress.config.*` exists → use Cypress
-- If **neither** is present → use Playwright (recommended default)
+For a monorepo, identify the app/package that owns the browser experience. If
+the user's target is not discoverable, ask before installing anything.
 
-### 2. Install the framework
+Read the selected `package.json`, its lockfile, relevant framework
+configuration, and existing CI.
 
-#### Playwright
+Determine:
 
-Use the detected package manager:
+- package manager and frozen-install command
+- framework and verified dev-server command
+- local URL and port
+- repository Node version
+- default branch and CI conventions
+- existing Playwright, Cypress, or other browser-test setup
+
+### 2. Inventory before changing
 
 ```bash
-# npm
-npm init playwright@latest -- --no-install --quiet -- --typescript --tests=tests --github
-
-# yarn
-yarn create playwright --no-install --typescript --tests=tests --github
-
-# pnpm
-pnpm create playwright --no-install --typescript --tests=tests --github
-
-# If the init command fails, install manually:
-npm install --save-dev @playwright/test
-npx playwright install
+rg --files -g 'playwright.config.*' -g 'cypress.config.*' \
+  -g '*.{spec,cy}.{ts,tsx,js,jsx}' -g '.github/workflows/*'
+rg -n 'playwright|cypress|test:e2e|test:browser' package.json '**/package.json'
 ```
 
-If the `npm init playwright` wizard creates unwanted files, clean up and install manually:
+Classify each expected element as present and usable, present but incomplete,
+or missing:
+
+1. dependency and executable
+2. framework configuration
+3. test directory and helpers
+4. smoke test
+5. authentication fixture, when required
+6. CI job
+7. ignored generated/auth state
+8. test documentation
+
+Do not reinstall or regenerate usable elements.
+
+### 3. Choose and configure the framework
+
+- Preserve Playwright when present.
+- Preserve Cypress when present.
+- When neither exists, prefer Playwright unless repository instructions or the
+  user choose otherwise.
+
+Read `references/framework_setup.md` only for the selected framework and the
+authentication/smoke sections that apply. Replace every template placeholder
+with repository evidence before writing files.
+
+Install through the detected package manager. Verify the installed executable
+and record the version.
+
+### 4. Decide the authentication boundary
+
+Search for real auth routes, middleware, test users, fixtures, and environment
+contracts:
 
 ```bash
-npm install --save-dev @playwright/test
-npx playwright install --with-deps chromium
+rg -n 'login|sign.?in|auth|session|storageState|cy\\.session' \
+  src app pages tests cypress package.json 2>/dev/null
 ```
 
-Verify installation:
+Add auth support only when an authenticated smoke or future critical flow needs
+it. Follow the authentication guidance in
+`references/framework_setup.md`. Never generate a helper from guessed selectors
+or credentials.
+
+If auth exists but its test contract is unknown, complete the unauthenticated
+foundation and report the precise missing inputs.
+
+### 5. Add CI proportionately
+
+Read all relevant workflow files first. Use `references/ci_template.md` to add
+the smallest compatible job.
+
+Default to pull-request, default-branch, and manual triggers. Treat schedules,
+notifications, and external service credentials as separate explicitly owned
+decisions.
+
+### 6. Document the facility
+
+Use `references/conventions_template.md` to create or update the test README.
+Document only commands, paths, environment variables, and conventions that now
+exist.
+
+### 7. Verify
+
+Run checks in increasing cost:
+
+1. framework version command
+2. configuration discovery or list command
+3. smoke test with the repository's normal dev-server integration
+4. the exact CI test command when practical
+
+Examples:
 
 ```bash
 npx playwright --version
-```
-
-#### Cypress
-
-```bash
-npm install --save-dev cypress
-npx cypress install
-```
-
-Verify installation:
-
-```bash
-npx cypress --version
-```
-
-### 3. Create the framework configuration
-
-#### Playwright config
-
-If `playwright.config.ts` does not exist, create it. If it exists, read it and only add missing sections.
-
-Minimal config template:
-
-```typescript
-import { defineConfig, devices } from '@playwright/test';
-
-export default defineConfig({
-  testDir: './tests',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: [
-    ['html', { open: 'never' }],
-    ['list'],
-  ],
-  use: {
-    baseURL: '<inferred-base-url>',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-  },
-  projects: [
-    // Auth setup (if the app has authentication)
-    {
-      name: 'setup',
-      testMatch: /auth\.setup\.ts/,
-    },
-    {
-      name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        // storageState: 'tests/.auth/user.json', // depends on setup project
-      },
-      // dependencies: ['setup'], // depends on setup project
-    },
-  ],
-  webServer: {
-    command: '<dev-server-command>',
-    url: '<inferred-base-url>',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
-  },
-});
-```
-
-**baseURL**: Infer from the framework and port. Read `next.config.*`, `vite.config.*`, or `package.json` scripts. Default to `http://localhost:3000`.
-
-**webServer.command**: Use the dev command from `package.json` scripts. If multiple exist, prefer `dev` over `start`.
-
-**Authentication projects**: Only add the `setup` project and `storageState` if the application has authentication (detected by searching for login/signin routes, auth hooks, or auth middleware in Step 4).
-
-#### Cypress config
-
-If `cypress.config.ts` does not exist, create it:
-
-```typescript
-import { defineConfig } from 'cypress';
-
-export default defineConfig({
-  e2e: {
-    baseUrl: '<inferred-base-url>',
-    supportFile: 'cypress/support/e2e.ts',
-    specPattern: 'cypress/e2e/**/*.cy.ts',
-    video: false,
-    screenshotOnRunFailure: true,
-  },
-});
-```
-
-### 4. Detect authentication requirements
-
-Check if the application has authentication:
-
-```bash
-grep -r -l "useAuth\|isAuthenticated\|requireAuth\|ProtectedRoute\|withAuth\|middleware\|login\|Login\|signin\|SignIn\|sign-in" src/ app/ pages/ --include="*.tsx" --include="*.ts" --include="*.jsx" --include="*.js" | head -10
-```
-
-Also check for auth-related routes:
-
-```bash
-grep -r -l "login\|signin\|sign-in\|auth" pages/ app/ src/pages/ src/app/ --include="*.tsx" --include="*.jsx" 2>/dev/null | head -10
-```
-
-If auth is detected, create authentication helpers.
-
-### 5. Create directory scaffold
-
-#### Playwright
-
-```bash
-mkdir -p tests/helpers tests/.auth
-```
-
-Create `tests/.auth/.gitkeep`:
-
-```bash
-touch tests/.auth/.gitkeep
-```
-
-Add `.auth/` to `.gitignore` to prevent committing auth state:
-
-```bash
-grep -q "tests/.auth" .gitignore 2>/dev/null || echo "tests/.auth/" >> .gitignore
-```
-
-#### Cypress
-
-```bash
-mkdir -p cypress/e2e cypress/support cypress/fixtures
-```
-
-### 6. Create authentication helpers
-
-Only if auth was detected in Step 4.
-
-#### Playwright auth setup
-
-Create `tests/auth.setup.ts`:
-
-```typescript
-import { test as setup } from '@playwright/test';
-import path from 'path';
-
-const authFile = path.join(__dirname, '.auth/user.json');
-
-setup('authenticate', async ({ page }) => {
-  // Navigate to login
-  await page.goto('/login');
-
-  // Fill credentials from environment variables
-  await page.getByLabel(/email/i).fill(process.env.TEST_EMAIL || '');
-  await page.getByLabel(/password/i).fill(process.env.TEST_PASSWORD || '');
-  await page.getByRole('button', { name: /sign in|log in|login/i }).click();
-
-  // Wait for post-login redirect
-  await page.waitForURL('**/dashboard', { timeout: 10000 }).catch(() => {
-    // If /dashboard doesn't exist, wait for any non-login URL
-    page.waitForURL((url) => !url.pathname.includes('login'), { timeout: 10000 });
-  });
-
-  // Save auth state
-  await page.context().storageState({ path: authFile });
-});
-```
-
-Update `playwright.config.ts` to reference this setup if it wasn't already configured in Step 3.
-
-Create a `tests/helpers/auth.ts` helper:
-
-```typescript
-import { Page } from '@playwright/test';
-
-export async function loginAsUser(page: Page) {
-  // For tests that need to log in programmatically.
-  // Prefer storageState via the setup project for most tests.
-  await page.goto('/login');
-  await page.getByLabel(/email/i).fill(process.env.TEST_EMAIL || '');
-  await page.getByLabel(/password/i).fill(process.env.TEST_PASSWORD || '');
-  await page.getByRole('button', { name: /sign in|log in/i }).click();
-  await page.waitForURL((url) => !url.pathname.includes('login'));
-}
-```
-
-#### Cypress auth commands
-
-Create or extend `cypress/support/commands.ts`:
-
-```typescript
-Cypress.Commands.add('login', (email?: string, password?: string) => {
-  const userEmail = email || Cypress.env('TEST_EMAIL');
-  const userPassword = password || Cypress.env('TEST_PASSWORD');
-
-  cy.session([userEmail, userPassword], () => {
-    cy.visit('/login');
-    cy.get('[data-testid="email-input"], input[name="email"]').type(userEmail || '');
-    cy.get('[data-testid="password-input"], input[name="password"]').type(userPassword || '');
-    cy.get('[data-testid="login-button"], button[type="submit"]').click();
-    cy.url().should('not.include', '/login');
-  });
-});
-
-// Type declaration
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      login(email?: string, password?: string): Chainable<void>;
-    }
-  }
-}
-```
-
-Create or extend `cypress/support/e2e.ts`:
-
-```typescript
-import './commands';
-```
-
-### 7. Create the CI workflow
-
-#### GitHub Actions with scheduled runs
-
-Create `.github/workflows/browser-tests.yml`:
-
-```yaml
-name: Browser Tests
-
-on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
-  schedule:
-    # Run every 4 hours during business days (Mon-Fri)
-    - cron: '0 */4 * * 1-5'
-  workflow_dispatch:  # Allow manual trigger
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: '<package-manager>'
-
-      - name: Install dependencies
-        run: <install-command>
-
-      - name: Install <framework> browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Run browser tests
-        run: npx playwright test
-        env:
-          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: |
-            test-results/
-            playwright-report/
-          retention-days: 7
-```
-
-Tailor `<package-manager>`, `<install-command>`, and `<framework>` to the detected project setup.
-
-For the scheduled run, add a separate job or condition so it can notify on failure:
-
-```yaml
-  notify:
-    needs: test
-    if: failure() && github.event_name == 'schedule'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify on scheduled failure
-        uses: slackapi/slack-github-action@v1
-        with:
-          payload: |
-            {
-              "text": "Scheduled browser tests failed on ${{ github.repository }}: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-```
-
-### 8. Create a smoke test
-
-Create `tests/smoke.spec.ts` (Playwright) or `cypress/e2e/smoke.cy.ts` (Cypress) with a basic page-load test:
-
-**Playwright:**
-
-```typescript
-import { test, expect } from '@playwright/test';
-
-test.describe('Smoke', () => {
-  test('home page loads', async ({ page }) => {
-    const response = await page.goto('/');
-    expect(response?.ok()).toBeTruthy();
-  });
-});
-```
-
-**Cypress:**
-
-```typescript
-describe('Smoke', () => {
-  it('home page loads', () => {
-    cy.visit('/');
-    cy.get('body').should('be.visible');
-  });
-});
-```
-
-### 9. Write the test conventions README
-
-Create `tests/README.md`:
-
-```markdown
-# Browser Tests
-
-## Framework
-
-<Playwright | Cypress>
-
-## Directory structure
-
-- `tests/` — all test files (`.spec.ts`)
-- `tests/helpers/` — shared test utilities and page objects
-- `tests/.auth/` — auth state files (gitignored)
-- `tests/smoke.spec.ts` — basic page-load smoke tests
-
-## Running tests
-
-\`\`\`bash
-# All tests
-npx playwright test
-
-# Single file
-npx playwright test tests/smoke.spec.ts
-
-# Debug mode (headed browser)
-npx playwright test --debug
-
-# UI mode
-npx playwright test --ui
-\`\`\`
-
-## Conventions
-
-- Use `data-testid` attributes for stable selectors. Fall back to ARIA roles and labels.
-- Each test file covers one user flow. One describe block per flow, one test per scenario.
-- Use the auth setup project (`tests/auth.setup.ts`) for authenticated tests — do not repeat login steps.
-- Seed test data explicitly in `beforeEach`. Do not depend on database state from other tests.
-- Tests must be independent and runnable in any order.
-
-## CI
-
-Tests run on every push and PR to main, and on a schedule (every 4 hours, Mon-Fri).
-See `.github/workflows/browser-tests.yml`.
-
-## Adding new tests
-
-1. Run `plan-browser-tests` to identify critical flows.
-2. Run `add-browser-test` to implement one flow at a time.
-3. Run `validate-changes` after making changes to verify nothing broke.
-```
-
-### 10. Verify the setup
-
-Run the smoke test to confirm everything works:
-
-**Playwright:**
-
-```bash
+npx playwright test --list
 npx playwright test tests/smoke.spec.ts --reporter=line
 ```
 
-**Cypress:**
+or:
 
 ```bash
+npx cypress --version
 npx cypress run --spec cypress/e2e/smoke.cy.ts
 ```
 
-If the dev server is not running, note the start command and tell the user to start it first.
+If the app cannot start, distinguish framework/configuration validation from
+the unverified runtime smoke test. Do not claim the facility works end to end.
 
-If the smoke test passes, the facility is ready.
+Inspect the final diff for secrets, guessed placeholders, unrelated changes,
+duplicate configuration, and generated artifacts.
 
-### 11. Final response
+## Final response
 
 Report:
-- Framework installed and version
-- Files created:
-  - Config: `playwright.config.ts` or `cypress.config.ts`
-  - Auth setup: `tests/auth.setup.ts` (if auth detected)
-  - Auth helpers: `tests/helpers/auth.ts` (if auth detected)
-  - CI workflow: `.github/workflows/browser-tests.yml`
-  - Smoke test: `tests/smoke.spec.ts`
-  - Conventions: `tests/README.md`
-- CI schedule configured (e.g., every 4 hours Mon-Fri)
-- Environment variables needed in GitHub Secrets: `TEST_EMAIL`, `TEST_PASSWORD` (and `SLACK_WEBHOOK_URL` for failure notifications)
-- Next step: run `plan-browser-tests` to identify critical flows, then `add-browser-test` to implement them
 
-## Handling common situations
+- selected app/package, framework, and version
+- files created or extended
+- dependency and lockfile changes
+- auth support added, skipped, or blocked
+- CI triggers and required secret *names*
+- commands run and their results
+- anything not verified
+- next step: `plan-browser-tests` for coverage planning or `add-browser-test`
+  for an already planned flow
 
-### Playwright init wizard fails or is blocked
+## Common boundaries
 
-Install manually:
-
-```bash
-npm install --save-dev @playwright/test
-npx playwright install chromium
-```
-
-Then write `playwright.config.ts` by hand using the template in Step 3.
-
-### Project uses a non-standard dev server
-
-Read `package.json` scripts, `Makefile`, `docker-compose.yml`, or any dev tooling config. Ask the user for the correct dev server command if it's not obvious.
-
-### Project already has some test infrastructure
-
-If config files exist, read them first. Only add what's missing (smoke test, CI workflow, auth helpers, README). Do not overwrite existing configuration.
-
-For CI: if a workflow file already exists, check if it includes browser tests. If not, offer to add a browser test job to the existing workflow.
-
-### Monorepo
-
-Check for multiple `package.json` files or a workspace config. Ask the user which package/app to set up browser testing for. Use the relevant package's directory and dev server command.
-
-### No authentication detected
-
-Skip Step 6 (auth helpers) and the `setup` project in the Playwright config. Note in the final response that auth helpers were skipped and can be added later if needed.
+- If a partial setup already exists, repair only the missing or broken pieces.
+- If both Playwright and Cypress are present, preserve both unless the user asks
+  for consolidation; choose the one already used by the target app.
+- If the dev server is nonstandard, derive its command from project tooling.
+  Ask only when multiple plausible targets remain.
+- If package installation or browser downloads require approval or network
+  access, obtain it through the execution environment and resume verification.

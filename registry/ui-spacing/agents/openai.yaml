@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Spacing"
+  short_description: "Build consistent spacing and proximity systems."
+  default_prompt: "Use $ui-spacing to establish a consistent spacing rhythm and clarify visual grouping."

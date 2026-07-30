@@ -1,3 +1,4 @@
 interface:
   display_name: "Assess PR Risk"
   short_description: "Rate PR risk across key dimensions."
+  default_prompt: "Use $assess-pr-risk to assess this pull request without posting unless I ask."

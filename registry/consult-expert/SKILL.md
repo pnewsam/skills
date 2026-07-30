@@ -1,21 +1,11 @@
 ---
 name: consult-expert
-description: Route broad, ambiguous product or engineering prompts to the right domain expert skills, synthesize their recommendations, and produce one or more epic briefs suitable for plan-epic, plan-feature, and build-feature workflows. Use when the user asks for strategic direction, product/app planning, cross-domain architecture, backend architecture, platform engineering, quality, compliance, GDPR, HIPAA, or when the correct expert/domain is unclear. Coordinates expert router skills such as ui-expert, design-expert, react-expert, backend-expert, platform-expert, python-expert, quality-expert, compliance-expert, color-expert, and focused domain skills such as ui-email.
+description: Route broad, ambiguous, or cross-domain product and engineering requests to the smallest relevant expert set, synthesize trade-offs, and produce epic-ready briefs. Use for strategic intake spanning multiple domains or when the correct expert is unclear. Do not use when one focused domain or implementation task is already known.
 ---
 
 # Consult Expert - Cross-Domain Intake
 
 Use this as the entry point for ambiguous, strategic, or cross-domain work. Your job is to route the prompt to the right expert skills, synthesize their guidance, and produce epic-ready planning briefs. Do not implement code or write production plans directly unless the user asks for the downstream planning skill afterward.
-
-## Initial Response
-
-When invoked without a specific request, respond only with:
-
-> I'm ready to consult the right experts. Share the prompt, product context, constraints, and what kind of outcome you want.
-
-Do not provide any other information until the user provides a prompt or asks a question.
-
----
 
 ## 1. Routing Table
 

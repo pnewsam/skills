@@ -1,21 +1,25 @@
 ---
 name: assess-pr-risk
-description: assess the risk level of a pull request and post the assessment as a PR comment. use when asked to risk-assess a PR, flag risky changes, evaluate blast radius, or check whether a PR is safe to merge. analyzes blast radius, security sensitivity, test coverage, dependencies, and infrastructure changes, then posts a structured comment via the GitHub CLI.
+description: Assess a pull request's operational and merge risk across blast radius, security, data, tests, dependencies, and infrastructure, and optionally post the assessment as a PR comment. Use when asked to risk-assess a PR, flag risky changes, or evaluate merge readiness. Defaults to analysis only unless posting is explicitly requested.
 ---
 
 # Assess PR Risk
 
 ## Overview
 
-Evaluate the risk level of a pull request by inspecting the diff, commit history, and PR metadata. Produce a structured risk assessment across key dimensions and post it as a comment on the PR via the GitHub CLI.
+Evaluate the risk level of a pull request by inspecting the diff, commit history,
+and PR metadata. Use **Analyze mode** by default. Use **Post mode** only when the
+user explicitly asks to comment or post the result.
 
 This skill is read-only with respect to source code and branch state. The only write operation is posting the comment.
 
 ## Safety rules
 
 - Never modify source code, commit history, branch state, or PR metadata. This skill only posts a comment.
-- Do not post a comment until the full assessment is complete and the user has confirmed (unless explicitly asked to run automatically).
-- If the PR is merged or closed, still assess and post — the comment may inform retrospectives or future work.
+- Never post in Analyze mode. In Post mode, complete the assessment before the
+  single external write.
+- If the PR is merged or closed, assess it when useful but do not post unless the
+  user explicitly asked for a retrospective comment.
 - Do not invent risk factors. Every finding must be traceable to specific files or lines in the diff.
 
 ## Risk levels
@@ -29,7 +33,9 @@ Assign one of four levels based on the combined weight of risk factors:
 | 3 | High | Large blast radius, security-adjacent changes, schema/API changes, or missing tests on critical paths |
 | 4 | Critical | Auth or permission bypass risk, destructive data operations, production config changes, or secrets exposure |
 
-When multiple dimensions point in different directions, use the **highest** single-dimension rating as the overall level. Explain the deciding factor clearly.
+Use the highest **credible** single-dimension rating as the default overall
+level, then calibrate it with evidence and confidence. Numeric thresholds are
+signals, not substitutes for understanding dependency reach or runtime impact.
 
 ## Risk dimensions
 
@@ -132,24 +138,18 @@ gh pr list --state open
 
 Store: `number`, `title`, `baseRefName`, `headRefName`, `state`, `url`.
 
-### 3. Fetch the diff
+### 3. Fetch the PR evidence
 
 ```bash
-git fetch origin
-git diff --stat origin/<baseRefName>...origin/<headRefName>
-git diff --name-status origin/<baseRefName>...origin/<headRefName>
+gh pr view <number> --json files,commits
+gh pr diff <number>
 ```
 
-For targeted inspection of sensitive or large files:
+For large PRs, inspect file patches in bounded groups without modifying local
+Git refs:
 
 ```bash
-git diff origin/<baseRefName>...origin/<headRefName> -- <path>
-```
-
-For a narrative view of commits:
-
-```bash
-git log --oneline origin/<baseRefName>..origin/<headRefName>
+gh api repos/<owner>/<repo>/pulls/<number>/files --paginate
 ```
 
 ### 4. Assess each risk dimension
@@ -161,7 +161,9 @@ Work through all seven dimensions. For each one:
 
 ### 5. Determine the overall risk level
 
-The overall level is the **highest** level across all dimensions. State which dimension drove the overall rating and why.
+The overall level is the highest credible level across all dimensions. State
+which evidence drove it, how confident the assessment is, and any information
+that could materially lower or raise the rating.
 
 ### 6. Draft the assessment comment
 
@@ -174,11 +176,12 @@ Use the template in `references/output_templates.md`. Fill in:
 
 Remove any dimension rows that are not applicable (e.g. no dependency changes → omit the Dependencies row, or mark it N/A).
 
-### 7. Confirm before posting
+### 7. Present the assessment
 
-Show the full comment to the user and ask for confirmation unless they have explicitly asked for automatic posting.
+Stop here in Analyze mode. In Post mode, verify the target PR and proceed unless
+the target or requested scope is ambiguous.
 
-### 8. Post the comment
+### 8. Post the comment (Post mode only)
 
 ```bash
 gh pr comment <number> --body "<assessment comment>"
@@ -198,18 +201,21 @@ Report:
 
 ### PR is already merged or closed
 
-Note the state but still complete the assessment and post the comment. Risk assessments on merged PRs are useful for post-merge review and team learning.
+Note the state and complete the assessment. Post only when the user explicitly
+requested a retrospective comment.
 
 ### Very large diff (500+ files)
 
 Do not attempt to read every file. Instead:
-1. Use `git diff --stat` to identify the highest-churn files and areas
+1. Use the PR file metadata to identify the highest-churn files and areas
 2. Sample representative files from each affected module
 3. Note in the comment that the assessment is based on a sample due to diff size, and flag the size itself as a High blast-radius indicator
 
 ### No tests in the repository at all
 
-Note this explicitly in the test coverage dimension. Do not penalize the PR for the absence of tests if the repository has no testing infrastructure — instead flag it as a repo-level risk.
+Note this explicitly in the test coverage dimension. Distinguish PR-local
+responsibility from repository-level debt, but still count the resulting lack of
+evidence in the risk assessment.
 
 ### Conflicting signals
 

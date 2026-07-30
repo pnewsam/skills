@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "skills": {
+    "color-expert": {
+      "provenance": "external",
+      "origin_commit": "3612234",
+      "policy": "preserve"
+    },
+    "emil-design-eng": {
+      "provenance": "external",
+      "origin_commit": "3612234",
+      "policy": "preserve"
+    }
+  },
+  "profiles": {
+    "core": {
+      "description": "Broadly useful local Git, PR, session, validation, quality, and intake workflows.",
+      "skills": [
+        "assess-pr-risk",
+        "consult-expert",
+        "prepare-pr",
+        "quality-expert",
+        "review-pr",
+        "revise-pr",
+        "save-session",
+        "stash",
+        "validate-changes"
+      ]
+    },
+    "product-delivery": {
+      "description": "Product direction, durable planning, incremental delivery, architecture documentation, and feature validation.",
+      "skills": [
+        "advance-epic",
+        "audit-epic",
+        "build-feature",
+        "consult-expert",
+        "create-charter",
+        "document-architecture",
+        "explore-directions",
+        "plan-bug-bash",
+        "plan-epic",
+        "plan-epic-gaps",
+        "plan-feature",
+        "ship-epic",
+        "validate-feature"
+      ]
+    },
+    "browser-testing": {
+      "description": "Browser-test setup, coverage planning, implementation, repair, audit, and validation.",
+      "skills": [
+        "add-browser-test",
+        "audit-browser-tests",
+        "fix-browser-test",
+        "plan-browser-tests",
+        "setup-browser-testing",
+        "validate-changes",
+        "validate-feature"
+      ]
+    },
+    "backend": {
+      "description": "Language-agnostic backend architecture and focused server-side decision guidance.",
+      "skills": [
+        "backend-api-design",
+        "backend-auth-boundaries",
+        "backend-expert",
+        "backend-integrations",
+        "backend-jobs-queues",
+        "backend-persistence",
+        "backend-service-boundaries"
+      ]
+    },
+    "platform": {
+      "description": "Platform engineering, CI/CD, deployments, environments, infrastructure, and secrets.",
+      "skills": [
+        "platform-ci-cd",
+        "platform-deployments-rollbacks",
+        "platform-environments",
+        "platform-expert",
+        "platform-infrastructure-as-code",
+        "platform-secrets-config"
+      ]
+    },
+    "compliance": {
+      "description": "Accessibility, auditability, privacy, security, GDPR, HIPAA, and vulnerability-management guidance.",
+      "skills": [
+        "compliance-accessibility",
+        "compliance-auditability",
+        "compliance-expert",
+        "compliance-gdpr",
+        "compliance-hipaa",
+        "compliance-privacy",
+        "compliance-security",
+        "compliance-vulnerability-management"
+      ]
+    },
+    "security-delivery": {
+      "description": "Planning and implementing dependency and code-scanning remediations.",
+      "skills": [
+        "plan-code-scanning-remediation",
+        "plan-vulnerability-remediation",
+        "remediate-code-scanning",
+        "remediate-vulnerability"
+      ]
+    },
+    "python": {
+      "description": "Python and FastAPI architecture, tooling, typing, async, persistence, errors, and testing.",
+      "skills": [
+        "fastapi-architecture",
+        "python-async-boundaries",
+        "python-database-patterns",
+        "python-error-handling",
+        "python-expert",
+        "python-project-structure",
+        "python-testing",
+        "python-tooling",
+        "python-typing-data-modeling"
+      ]
+    },
+    "react": {
+      "description": "React SPA architecture and focused component, hooks, state, data, routing, quality, and testing guidance.",
+      "skills": [
+        "react-accessibility",
+        "react-component-design",
+        "react-data-fetching",
+        "react-error-handling",
+        "react-expert",
+        "react-form-patterns",
+        "react-hooks-effects",
+        "react-performance",
+        "react-project-structure",
+        "react-routing",
+        "react-spa-architecture",
+        "react-state-management",
+        "react-testing"
+      ]
+    },
+    "quality": {
+      "description": "Language-agnostic correctness, clarity, modularity, reliability, testing, refactoring, and TypeScript guidance.",
+      "skills": [
+        "async-patterns",
+        "error-handling",
+        "functional-patterns",
+        "quality-code-clarity",
+        "quality-correctness",
+        "quality-expert",
+        "quality-modularity",
+        "quality-refactoring",
+        "quality-reliability",
+        "quality-testing",
+        "typescript-types"
+      ]
+    },
+    "ui": {
+      "description": "Functional UI and UX routing, layout, patterns, content, feedback, responsive behavior, and visual-system implementation.",
+      "skills": [
+        "ui-actions",
+        "ui-color",
+        "ui-content",
+        "ui-data-viz",
+        "ui-depth",
+        "ui-email",
+        "ui-expert",
+        "ui-feedback",
+        "ui-forms",
+        "ui-icons",
+        "ui-layouts",
+        "ui-onboarding",
+        "ui-patterns",
+        "ui-responsive",
+        "ui-spacing",
+        "ui-typography",
+        "ui-visual-hierarchy"
+      ]
+    },
+    "design": {
+      "description": "Visual composition, hierarchy, rhythm, simplicity, animation vocabulary, and SVG motion.",
+      "skills": [
+        "animation-vocabulary",
+        "design-composition",
+        "design-expert",
+        "design-hierarchy",
+        "design-rhythm",
+        "design-simplicity",
+        "design-visual-language",
+        "svg-animations"
+      ]
+    },
+    "external-creative": {
+      "description": "Externally sourced color and design-engineering references preserved without local edits.",
+      "skills": [
+        "color-expert",
+        "emil-design-eng"
+      ]
+    }
+  }
+}
