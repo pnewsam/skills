@@ -1,6 +1,6 @@
 ---
 name: remediate-code-scanning
-description: implement one planned code scanning remediation feature or user-supplied CodeQL/SAST alert group, apply the smallest safe source fix, verify it, commit, push, and create or update a pull request. use after plan-code-scanning-remediation or plan-feature. for dependency vulnerabilities, use remediate-vulnerability instead.
+description: implement one planned code scanning remediation feature or user-supplied CodeQL/SAST alert group, apply the smallest safe source fix, verify it, commit, push, and create or update a pull request. use after plan-security-remediation or plan-feature. for dependency vulnerabilities, use remediate-vulnerability instead.
 ---
 
 # Remediate Code Scanning
@@ -37,7 +37,8 @@ Prefer a feature plan with:
 - verification commands
 - risk notes
 
-If no plan exists and there are multiple unrelated alerts, ask the user to run `plan-code-scanning-remediation` and `plan-feature` first.
+If no plan exists and there are multiple unrelated alerts, ask the user to run
+`plan-security-remediation` in Code-scanning mode and `plan-feature` first.
 
 ## Safety Rules
 

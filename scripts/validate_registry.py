@@ -158,18 +158,59 @@ def main() -> int:
         warnings.extend(f"{skill_dir.name}: {message}" for message in skill_warnings)
 
     active_names = {path.name for path in skill_dirs}
+    profiles = catalog.get("profiles", {})
     profiled_names: set[str] = set()
-    for profile_name, profile in catalog.get("profiles", {}).items():
+    resolved_profiles: dict[str, set[str]] = {}
+    reported_profile_errors: set[str] = set()
+
+    def report_profile_error(message: str) -> None:
+        if message not in reported_profile_errors:
+            errors.append(message)
+            reported_profile_errors.add(message)
+
+    def resolve_profile(profile_name: str, stack: tuple[str, ...] = ()) -> set[str]:
+        if profile_name in resolved_profiles:
+            return resolved_profiles[profile_name]
+        if profile_name in stack:
+            cycle = " -> ".join((*stack[stack.index(profile_name) :], profile_name))
+            report_profile_error(f"catalog: profile include cycle: {cycle}")
+            return set()
+
+        profile = profiles.get(profile_name)
+        if profile is None:
+            report_profile_error(
+                f"catalog: profile references unknown profile {profile_name!r}"
+            )
+            return set()
+
+        resolved = set(profile.get("skills", []))
+        for included_name in profile.get("includes", []):
+            resolved.update(resolve_profile(included_name, (*stack, profile_name)))
+        resolved_profiles[profile_name] = resolved
+        return resolved
+
+    for profile_name, profile in profiles.items():
         profile_skills = profile.get("skills", [])
         if len(profile_skills) != len(set(profile_skills)):
             errors.append(f"catalog: profile {profile_name!r} contains duplicate skills")
+        included_profiles = profile.get("includes", [])
+        if len(included_profiles) != len(set(included_profiles)):
+            errors.append(
+                f"catalog: profile {profile_name!r} contains duplicate includes"
+            )
+        for included_name in included_profiles:
+            if included_name not in profiles:
+                report_profile_error(
+                    f"catalog: profile {profile_name!r} includes unknown profile "
+                    f"{included_name!r}"
+                )
         for skill_name in profile_skills:
             if skill_name not in active_names:
                 errors.append(
                     f"catalog: profile {profile_name!r} references inactive skill "
                     f"{skill_name!r}"
                 )
-            profiled_names.add(skill_name)
+        profiled_names.update(resolve_profile(profile_name))
     for skill_name in sorted(active_names - profiled_names):
         warnings.append(f"catalog: active skill {skill_name!r} is not in any profile")
 

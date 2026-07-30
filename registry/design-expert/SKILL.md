@@ -19,12 +19,12 @@ Load the smallest set of focused skills that covers the design problem.
 
 | User Need | Primary Skill | Secondary Skills |
 | :--- | :--- | :--- |
-| Page feels unbalanced, awkward, visually lopsided, poorly structured | `design-composition` | `design-hierarchy`, `design-rhythm` |
-| User cannot tell what matters, everything competes, emphasis feels wrong | `design-hierarchy` | `design-simplicity`, `design-composition` |
-| UI feels uneven, choppy, monotonous, cramped, or lacking flow | `design-rhythm` | `design-composition`, `design-simplicity` |
-| UI is cluttered, busy, over-explained, over-decorated, or mentally heavy | `design-simplicity` | `design-hierarchy`, `design-rhythm` |
-| UI feels generic, mismatched, off-brand, or aesthetically incoherent | `design-visual-language` | `design-composition`, `design-hierarchy` |
-| Broad "make this elegant/simple/beautiful" request | `design-simplicity` | `design-composition`, `design-hierarchy`, `design-visual-language` |
+| Page feels unbalanced, awkward, visually lopsided, poorly structured | `design-composition` | `visual-hierarchy` |
+| User cannot tell what matters, everything competes, emphasis feels wrong | `visual-hierarchy` | `design-simplicity`, `design-composition` |
+| UI feels uneven, choppy, monotonous, cramped, or lacking flow | `design-composition` | `ui-spacing`, `design-simplicity` |
+| UI is cluttered, busy, over-explained, over-decorated, or mentally heavy | `design-simplicity` | `visual-hierarchy`, `design-composition` |
+| UI feels generic, mismatched, off-brand, or aesthetically incoherent | `design-visual-language` | `design-composition`, `visual-hierarchy` |
+| Broad "make this elegant/simple/beautiful" request | `design-simplicity` | `design-composition`, `visual-hierarchy`, `design-visual-language` |
 
 If the task also requires choosing a UI pattern, route through `ui-expert` first or alongside this skill. If the task requires implementing React components, route through `react-expert` after the design direction is clear.
 
@@ -35,8 +35,12 @@ If the task also requires choosing a UI pattern, route through `ui-expert` first
 Use these boundaries:
 
 - `ui-layouts` owns page archetypes, app shell, page zones, and chrome. `design-composition` owns balance, proportion, focal point, and spatial harmony within that structure.
-- `ui-visual-hierarchy` owns task priority, scanning order, chunking, and progressive disclosure. `design-hierarchy` owns visual dominance, contrast, de-emphasis, and how emphasis feels.
-- `ui-spacing` owns spacing scales, padding, gaps, density values, and context-specific spacing mechanics. `design-rhythm` owns cadence, repetition, pauses, and the felt tempo of the screen.
+- `visual-hierarchy` owns task priority, scanning order, visual dominance,
+  contrast, and de-emphasis across both interface and general visual-design
+  contexts.
+- `ui-spacing` owns spacing scales, padding, gaps, and density values.
+  `design-composition` owns the cadence, repetition, pauses, and felt tempo
+  those values create across a composition.
 - `ui-color`, `ui-typography`, and `ui-depth` own implementation systems and semantic roles. `design-visual-language` owns aesthetic direction, mood, coherence, and expressive fit.
 - `ui-content` owns words and microcopy. `design-simplicity` owns whether the total surface has too many words, options, decorations, or competing ideas.
 
@@ -62,8 +66,8 @@ Run this pass when the request is broad, subjective, or asks for elegance, beaut
 | Check | Skill | What To Look For |
 | :--- | :--- | :--- |
 | Focal point and layout ratio | `design-composition` | rule-of-thirds fit when relevant, stable axis balance, clear equal/unequal proportions |
-| Emphasis budget | `design-hierarchy` | one visual lead, one primary action, max 2-3 prominent type sizes, limited accents |
-| Rhythm ladder | `design-rhythm` | `1x/2x/3x/4x` gap relationships, repeated module slots, justified rhythm breaks |
+| Emphasis budget | `visual-hierarchy` | one visual lead, one primary action, limited prominent type roles and accents |
+| Rhythm ladder | `design-composition` + `ui-spacing` | related gap values, repeated module slots, justified rhythm breaks |
 | Reduction budget | `design-simplicity` | action count, group size, container count, copy amount |
 | Visual-language budget | `design-visual-language` | 60/30/10 accent use, OKLCH-like ramp logic, hue relationships, contrast gates |
 

@@ -56,11 +56,15 @@ external-source preservation policy. Skills not explicitly marked external are
 registry-maintained. Externally sourced skill bodies are validated against their
 origin commit and must be updated from upstream rather than edited locally.
 
+Profiles may include other profiles. `core` intentionally stays small and
+operational; install `advisory` when broad cross-domain routing is useful. The
+advisory profile composes the maintained specialist profiles but deliberately
+does not include externally sourced references.
+
 Most workflow skills move through the same broad lifecycle. New evidence,
 blockers, or review feedback can send work back to discovery or planning.
 
 ```mermaid
-flowchart LR
 flowchart LR
     D["Discover / decide"] --> P["Plan"] --> I["Implement"] --> V["Validate / review"] --> S["Ship / preserve"]
     V -.->|"new evidence"| D
@@ -85,10 +89,12 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
     epics/
       NNN-<slug>.md                    # quarter-level epic plans
       NNN-<slug>-audit.md              # audit-epic findings
-      NNN-<slug>-gap-closure.md        # plan-epic-gaps punch list
+      NNN-<slug>-gap-closure.md        # optional audit-epic closure plan
     features/
       NNN-<slug>.md                    # feature plans
       NNN-<slug>-validation.md         # validate-feature report
+    security/
+      threat-model-<scope>.md          # optional threat-model document
     tmp/
       session-YYYY-MM-DD-<slug>.md     # saved session notes
       wip-<name>.md                    # stash context breadcrumb when trackable
@@ -128,8 +134,9 @@ flowchart TD
     PE --> AE[advance-epic]
     AE -.->|orchestrates| PF
     AE -.->|orchestrates| BF
-    AE2[audit-epic] -->|produces audit report| PEG[plan-epic-gaps]
-    PEG -.->|informs revisions to| PE
+    AE2[audit-epic] -->|Audit mode writes report| AR[epic audit]
+    AE2 -->|Closure mode writes punch list| GC[gap closure plan]
+    GC -.->|informs revisions to| PE
 ```
 
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
@@ -143,17 +150,22 @@ flowchart TD
 | [build-feature](registry/build-feature/SKILL.md)       | workflow | convergence | execute | Implement one acceptance criterion from a feature plan — write code, verify, commit, and check it off. Run repeatedly until the feature is complete. |
 | [advance-epic](registry/advance-epic/SKILL.md)         | workflow | convergence | execute | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete.    |
 | [ship-epic](registry/ship-epic/SKILL.md)               | workflow | convergence | execute | Complete an epic end-to-end — plan missing features, advance until all child features are complete, validate, and prepare a PR. |
-| [audit-epic](registry/audit-epic/SKILL.md)             | workflow | convergence | analyze | Audit an epic to find missing, inconsistent, or incomplete child features — cross-references feature plans against the epic and reports gaps. |
-| [plan-epic-gaps](registry/plan-epic-gaps/SKILL.md)     | workflow | convergence | plan    | Create a prioritized plan to close gaps found by audit-epic — maps each gap to a concrete action and produces a structured punch list.        |
+| [audit-epic](registry/audit-epic/SKILL.md)             | workflow | convergence | analyze, plan | Audit an epic against its feature plans; optionally turn the findings into a prioritized, progress-preserving gap-closure plan. |
+
+### Engineering Diagnosis
+
+| Skill | Type | Phase | Description |
+| --- | --- | --- | --- |
+| [diagnose-failure](registry/diagnose-failure/SKILL.md) | workflow | analyze | Reproduce and localize a software failure, rank hypotheses, and report an evidence-backed cause without editing the project. |
 
 ### Git And PR Workflow
 
 ```mermaid
 flowchart LR
     PP[prepare-pr] -->|creates PR| RP[review-pr]
-    PP -->|creates PR| APR[assess-pr-risk]
+    RP -->|Review intent| CR[code-review verdict]
+    RP -->|Risk intent| RA[merge-risk assessment]
     RP --> RVP[revise-pr]
-    APR --> RVP
 ```
 
 | Skill                                              | Type     | Mode        | Phase   | Description                                                                                                         |
@@ -162,8 +174,7 @@ flowchart LR
 | [save-session](registry/save-session/SKILL.md)     | workflow |             | analyze | Summarize the current working session and save it to `docs/tmp/`.                                                   |
 | [prepare-pr](registry/prepare-pr/SKILL.md)         | workflow |             | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR.     |
 | [revise-pr](registry/revise-pr/SKILL.md)           | workflow | convergence | execute | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits.        |
-| [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze | Review a pull request and post inline code review comments with an overall verdict.                                 |
-| [assess-pr-risk](registry/assess-pr-risk/SKILL.md) | workflow |             | analyze | Assess the risk level of a pull request across blast radius, security sensitivity, test coverage, and dependencies. |
+| [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze, review | Review a pull request for actionable defects or assess operational and merge risk; post only when explicitly requested. |
 
 ### Architecture Documentation
 
@@ -180,18 +191,18 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    PVR[plan-vulnerability-remediation] -->|produces security epic| PF1[plan-feature]
-    PCSR[plan-code-scanning-remediation] -->|produces security epic| PF1
+    TM[threat-model] -->|may identify work| PSR[plan-security-remediation]
+    PSR -->|produces security epic| PF1[plan-feature]
     PF1 --> RV[remediate-vulnerability]
     PF1 --> RCS[remediate-code-scanning]
 ```
 
-| Skill                                                                              | Type     | Mode        | Phase         | Description                                                                                                  |
-| ---------------------------------------------------------------------------------- | -------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------ |
-| [plan-vulnerability-remediation](registry/plan-vulnerability-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CVEs, Dependabot alerts, and audit findings into a standard vulnerability remediation epic.           |
-| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md)               | workflow | convergence | execute       | Execute one planned dependency vulnerability remediation feature, verify the fix, commit, push, and open a PR. |
-| [plan-code-scanning-remediation](registry/plan-code-scanning-remediation/SKILL.md) | workflow | convergence | analyze, plan | Triage CodeQL and SAST alerts into a standard code-scanning remediation epic.                                |
-| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md)               | workflow | convergence | execute       | Execute one planned CodeQL/SAST remediation feature, verify the fix, and create or update a pull request.    |
+| Skill | Type | Mode | Phase | Description |
+| --- | --- | --- | --- | --- |
+| [threat-model](registry/threat-model/SKILL.md) | workflow | divergence | analyze, document | Map assets, actors, data flows, trust boundaries, abuse cases, controls, and residual risk; save a document only when requested. |
+| [plan-security-remediation](registry/plan-security-remediation/SKILL.md) | workflow | convergence | analyze, plan | Verify and group dependency, CodeQL, SAST, or mixed findings into a standard, idempotent security-remediation epic. |
+| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md) | workflow | convergence | execute | Execute one planned dependency vulnerability remediation feature, verify the fix, commit, push, and open a PR. |
+| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md) | workflow | convergence | execute | Execute one planned CodeQL/SAST remediation feature, verify the fix, and create or update a pull request. |
 
 ### Testing Workflows
 
@@ -199,7 +210,7 @@ flowchart LR
 flowchart LR
     SBT[setup-browser-testing] --> PBT[plan-browser-tests]
     PBT -->|produces browser-test epic| PF2[plan-feature]
-    ABT2[audit-browser-tests] -->|writes epic audit| PBT
+    PBT -->|Audit mode writes epic audit| AUD[browser-test audit]
     PF2 --> ABT[add-browser-test]
     PF2 --> FBT[fix-browser-test]
     BF2[build-feature] --> VC[validate-changes]
@@ -209,9 +220,8 @@ flowchart LR
 | Skill                                                                      | Type     | Mode        | Phase         | Description                                                                                                                                    |
 | -------------------------------------------------------------------------- | -------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | [setup-browser-testing](registry/setup-browser-testing/SKILL.md)           | workflow | convergence | execute       | Set up the browser testing facility — installs and configures framework, auth helpers, CI workflow with scheduled runs, and conventions docs.  |
-| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Analyze critical UI flows and produce a standard browser-test coverage epic with child features.                                               |
+| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Plan critical UI coverage or audit the current browser suite, write an epic audit, and update the coverage epic conservatively.                 |
 | [add-browser-test](registry/add-browser-test/SKILL.md)                     | workflow | convergence | execute       | Implement one browser integration test from a planned browser-test feature, then verify and update the feature plan.                           |
-| [audit-browser-tests](registry/audit-browser-tests/SKILL.md)               | workflow | convergence | analyze       | Audit an existing browser test suite, write an epic audit, and update the browser-test coverage epic.                                          |
 | [fix-browser-test](registry/fix-browser-test/SKILL.md)                     | workflow | convergence | execute       | Repair one broken or flaky browser test from a test failure or planned browser-test feature.                                                   |
 | [validate-changes](registry/validate-changes/SKILL.md)                     | workflow | convergence | execute       | Run targeted validation against recent code changes — maps diff to relevant tests, runs only those, and reports coverage gaps.                 |
 | [validate-feature](registry/validate-feature/SKILL.md)                     | workflow | convergence | execute       | Comprehensive post-build validation — targeted tests, full browser suite, acceptance criteria verification, and structured ship/no-ship report. |
@@ -231,18 +241,16 @@ taxonomy uses the `design-expert` router and focused `design-*` references.
 ```mermaid
 flowchart LR
     DX[design-expert] --> DC[design-composition]
-    DX --> DH[design-hierarchy]
-    DX --> DR[design-rhythm]
+    DX --> VH[visual-hierarchy]
     DX --> DS[design-simplicity]
     DX --> DVL[design-visual-language]
 ```
 
 | Skill                                                | Type      | Description                                                                                                                                           |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [design-expert](registry/design-expert/SKILL.md)     | reference | Router for visual design judgment - coordinates focused `design-*` skills for composition, hierarchy, rhythm, simplicity, and visual language.        |
-| [design-composition](registry/design-composition/SKILL.md) | reference | Composition principles - balance, alignment, proportion, focal point, spatial structure, grouping, figure-ground, and visual weight.                  |
-| [design-hierarchy](registry/design-hierarchy/SKILL.md) | reference | Visual hierarchy principles - dominance, emphasis, contrast, de-emphasis, foreground/background, and calm visual priority.                            |
-| [design-rhythm](registry/design-rhythm/SKILL.md)     | reference | Rhythm principles - cadence, repetition, variation, whitespace, density flow, and visual tempo.                                                       |
+| [design-expert](registry/design-expert/SKILL.md)     | reference | Router for visual design judgment - coordinates composition, hierarchy, simplicity, and visual-language guidance.                                     |
+| [design-composition](registry/design-composition/SKILL.md) | reference | Composition principles - balance, alignment, proportion, focal point, grouping, visual weight, repetition, and rhythm.                                |
+| [visual-hierarchy](registry/visual-hierarchy/SKILL.md) | reference | Unified hierarchy guidance for task priority, scanning, visual dominance, contrast, grouping, and de-emphasis.                                        |
 | [design-simplicity](registry/design-simplicity/SKILL.md) | reference | Simplicity principles - restraint, reduction, decluttering, focus, and reducing visual/cognitive load without removing needed capability.             |
 | [design-visual-language](registry/design-visual-language/SKILL.md) | reference | Visual language principles - aesthetic direction, mood, personality, cohesion, materiality, brand fit, and avoiding generic or mismatched styling.    |
 
@@ -253,7 +261,6 @@ flowchart LR
 | [svg-animations](registry/svg-animations/SKILL.md)   | reference | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
 | [color-expert](registry/color-expert/SKILL.md)       | reference | Color science expert — color theory, accessibility standards, palette generation, and practical color tools.                                          | [meodai](https://github.com/meodai/skill.color-expert)                                     |
 | [emil-design-eng](registry/emil-design-eng/SKILL.md) | reference | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great.                | [emilkowalski](https://github.com/emilkowalski/skill)                                      |
-| [animation-vocabulary](registry/animation-vocabulary/SKILL.md) | reference | Glossary of animation patterns and terminology — entrances, exits, easing, springs, scroll effects, feedback interactions, and performance concepts. | [emilkowalski](https://animations.dev/vocabulary) |
 
 ### UI Patterns
 
@@ -267,7 +274,7 @@ flowchart LR
     UX --> A[ui-actions]
     UX --> FB[ui-feedback]
     UX --> C[ui-content]
-    UX --> VH[ui-visual-hierarchy]
+    UX --> VH[visual-hierarchy]
     UX --> S[ui-spacing]
     UX --> T[ui-typography]
     UX --> CL[ui-color]
@@ -288,7 +295,7 @@ flowchart LR
 | [ui-feedback](registry/ui-feedback/SKILL.md)         | reference | Feedback patterns — empty states, loading states (skeleton vs spinner vs optimistic), error handling, toast vs banner vs modal alerts, confirmation vs undo. |
 | [ui-actions](registry/ui-actions/SKILL.md)           | reference | Action affordances — row actions (inline vs overflow), bulk operations, hover vs static visibility, keyboard shortcuts, drag-and-drop, mobile touch adaptations. |
 | [ui-content](registry/ui-content/SKILL.md)           | reference | UX writing and microcopy — button labels, empty states, errors, field help, terminology, confirmations, success messages, and tone.                    |
-| [ui-visual-hierarchy](registry/ui-visual-hierarchy/SKILL.md) | reference | Visual hierarchy — size, weight, color, position, chunking, progressive disclosure, scanning patterns, and action hierarchy.                 |
+| [visual-hierarchy](registry/visual-hierarchy/SKILL.md) | reference | Visual hierarchy — task priority, size, weight, color, position, chunking, scanning, action hierarchy, and responsive reflow.                    |
 | [ui-spacing](registry/ui-spacing/SKILL.md)           | reference | Spacing and proximity — spacing scale, density, negative space, rhythm, and context-specific spacing for forms, tables, cards, lists, and pages.      |
 | [ui-typography](registry/ui-typography/SKILL.md)     | reference | Typography — type scales, font choices, line length, heading hierarchy, contrast, numeric figures, and context-specific text treatment.               |
 | [ui-color](registry/ui-color/SKILL.md)               | reference | Color systems — palettes, semantic tokens, neutral scales, dark mode, contrast, status colors, and brand color selection.                              |
@@ -334,6 +341,7 @@ flowchart LR
     CX --> CG[compliance-gdpr]
     CX --> CH[compliance-hipaa]
     CX --> CAT[compliance-auditability]
+    CX --> TM[threat-model]
 ```
 
 | Skill                                                                                      | Type      | Description                                                                                                                         |
@@ -346,6 +354,7 @@ flowchart LR
 | [compliance-gdpr](registry/compliance-gdpr/SKILL.md)                                       | reference | GDPR-specific principles, lawful basis, data subject rights, retention, breach escalation, DPIA triggers, and design/default.       |
 | [compliance-hipaa](registry/compliance-hipaa/SKILL.md)                                     | reference | HIPAA-oriented ePHI, safeguards, access controls, audit controls, integrity, transmission security, risk review, and vendor review. |
 | [compliance-auditability](registry/compliance-auditability/SKILL.md)                       | reference | Traceability, change records, approval evidence, audit logs, remediation proof, access records, and verifiable controls.            |
+| [threat-model](registry/threat-model/SKILL.md)                                             | workflow  | Scoped assets, actors, trust boundaries, abuse cases, controls, verification, and residual-risk analysis.                           |
 
 ### Core Language
 
@@ -353,10 +362,9 @@ TypeScript and JavaScript best practices — reference skills that inform how co
 
 | Skill                                                        | Type      | Description                                                                                                                  |
 | ------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| [functional-patterns](registry/functional-patterns/SKILL.md) | reference | Immutability, pure functions, array methods over imperative loops, composition over inheritance, avoiding side effects.      |
 | [typescript-types](registry/typescript-types/SKILL.md)       | reference | No `any`, discriminated unions, type narrowing, `satisfies`, branded types, deriving types from values.                      |
-| [error-handling](registry/error-handling/SKILL.md)           | reference | Error as values (Result types), typed errors, throw for exceptional cases only, catch at system boundaries.                  |
-| [async-patterns](registry/async-patterns/SKILL.md)           | reference | async/await over raw promises, `Promise.all` for concurrency, AbortController, race condition guards, limiting concurrency.  |
+| [error-handling](registry/error-handling/SKILL.md)           | reference | Failure classification, explicit results or typed exceptions, boundary translation, causal context, cleanup, retries, and safe reporting. |
+| [async-patterns](registry/async-patterns/SKILL.md)           | reference | Dependency-aware concurrency, cancellation, stale-result guards, bounded parallelism, promise ownership, timeouts, and cleanup. |
 
 ### Platform
 
@@ -400,13 +408,12 @@ flowchart LR
 | [backend-integrations](registry/backend-integrations/SKILL.md)           | reference | Third-party APIs, webhooks, external clients, sync flows, provider rate limits, outbox/inbox patterns, and partial failure handling.     |
 | [backend-auth-boundaries](registry/backend-auth-boundaries/SKILL.md)     | reference | Authentication and authorization placement, identity propagation, tenant isolation, sessions, tokens, permission checks, and access tests. |
 
-### React SPA
+### React
 
 ```mermaid
 flowchart LR
-    RX[react-expert] --> RSA[react-spa-architecture]
+    RX[react-expert] --> RAR[react-architecture]
     RX --> RCD[react-component-design]
-    RX --> RPS[react-project-structure]
     RX --> RHE[react-hooks-effects]
     RX --> RFP[react-form-patterns]
     RX --> RSM[react-state-management]
@@ -421,16 +428,15 @@ flowchart LR
 | Skill                                                                | Type      | Description                                                                                                                                |
 | -------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | [react-expert](registry/react-expert/SKILL.md)                       | reference | Router for broad React work - coordinates focused React skills across architecture, components, hooks, forms, state, data, routing, performance, errors, accessibility, and tests. |
+| [react-architecture](registry/react-architecture/SKILL.md)           | reference | App shell, providers, routes, environment and platform adapters, feature ownership, public APIs, dependency direction, and incremental structural migration. |
 | [react-component-design](registry/react-component-design/SKILL.md)   | reference | Component size, single responsibility, compositional patterns, and "branch early" — prefer distinct components over prop-toggled behavior. |
-| [react-project-structure](registry/react-project-structure/SKILL.md) | reference | Base UI as a design system layer, domain components in `src/features/`, naming conventions, and feature module boundaries.                 |
-| [react-spa-architecture](registry/react-spa-architecture/SKILL.md)   | reference | App entrypoints, provider composition, routing setup, environment config, API clients, auth bootstrap, and SPA deployment concerns.        |
 | [react-hooks-effects](registry/react-hooks-effects/SKILL.md)         | reference | Effects as escape hatches, dependency arrays, cleanup, stale closures, refs vs state, Strict Mode, and custom hook boundaries.             |
 | [react-form-patterns](registry/react-form-patterns/SKILL.md)         | reference | Form-library contexts for non-trivial forms, reusable field components, schema-level validation, dirty tracking, and wizards.              |
 | [react-state-management](registry/react-state-management/SKILL.md)   | reference | Keep state low, minimize global state, treat URL/form/server/local state differently, derive don't sync.                                   |
 | [react-data-fetching](registry/react-data-fetching/SKILL.md)         | reference | Server-state fetching, query keys, colocated API clients, mutations, invalidation, optimistic updates, pagination, and prefetching.        |
 | [react-routing](registry/react-routing/SKILL.md)                     | reference | RESTful URL design, new views = new URLs, URL as source of truth for navigational state.                                                   |
 | [react-performance](registry/react-performance/SKILL.md)             | reference | Profile first, then optimize — React.memo, useMemo/useCallback, code splitting, virtualization, concurrent features.                       |
-| [react-error-handling](registry/react-error-handling/SKILL.md)       | reference | Error Boundaries at feature boundaries, Suspense for loading states, fallback UI design, route-level error handling.                       |
+| [react-error-handling](registry/react-error-handling/SKILL.md)       | reference | Render and route error boundaries, expected data and mutation failures, reset behavior, recovery, and user-safe reporting.                 |
 | [react-accessibility](registry/react-accessibility/SKILL.md)         | reference | Semantic HTML first, keyboard navigation, ARIA patterns, focus management, accessible forms, live regions, color/contrast.                 |
 | [react-testing](registry/react-testing/SKILL.md)                     | reference | Integration tests for critical flows, unit tests for business logic, minimal component tests — test ROI over coverage percentage.          |
 
@@ -451,7 +457,7 @@ flowchart LR
 | Skill                                                                                  | Type      | Description                                                                                                                           |
 | -------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | [python-expert](registry/python-expert/SKILL.md)                                       | reference | Router for broad Python work - coordinates focused Python and FastAPI skills across tooling, structure, typing, async, errors, database, testing, and API architecture. |
-| [python-tooling](registry/python-tooling/SKILL.md)                                     | reference | Preferred Python tooling stack — uv for package management, ruff for linting/formatting, mypy for type checking, pytest, pre-commit, and just. |
+| [python-tooling](registry/python-tooling/SKILL.md)                                     | reference | Context-sensitive Python environment, dependency, packaging, lint, format, typing, test, task, CI, and migration decisions.                |
 | [python-project-structure](registry/python-project-structure/SKILL.md)                 | reference | Organize Python packages, modules, entrypoints, configuration, imports, scripts, services, utilities, and tests.                       |
 | [python-testing](registry/python-testing/SKILL.md)                                     | reference | Pytest suites, fixtures, dependency overrides, async tests, mocks, factories, integration tests, and regression coverage.              |
 | [python-typing-data-modeling](registry/python-typing-data-modeling/SKILL.md)           | reference | Type hints, Pydantic models, dataclasses, DTOs, `TypedDict`, `Protocol`, validation boundaries, and serialization.                     |

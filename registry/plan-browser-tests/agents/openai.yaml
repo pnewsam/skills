@@ -1,3 +1,4 @@
 interface:
   display_name: "Plan Browser Tests"
-  short_description: "Plan critical browser test coverage."
+  short_description: "Plan or audit critical browser test coverage."
+  default_prompt: "Use $plan-browser-tests to plan or audit high-value browser test coverage for this application."

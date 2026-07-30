@@ -176,18 +176,21 @@ Rules:
 
 Keep the globally installed set small and broadly applicable:
 
+- read-only diagnosis
 - session preservation and local Git workflows
 - PR preparation/review when GitHub is common
-- top-level routers that are frequently useful
 
 Install stack, framework, compliance, platform, and product-delivery families
-at project scope when relevant. A router and all of its children need not be
-globally installed if the domain is rare.
+at project scope when relevant. Use the `advisory` profile when broad
+cross-domain routing is genuinely useful; a router and all of its children need
+not be globally installed by default.
 
-Define profile membership and provenance in the root `catalog.json`. Treat
-skills marked `provenance: external` and `policy: preserve` as vendored:
-do not edit their `SKILL.md` locally. Update their origin commit only when
-intentionally importing a new upstream version.
+Define profile membership, profile composition, and provenance in the root
+`catalog.json`. Keep includes acyclic and use them for semantic composition,
+not as a substitute for deciding what belongs in a profile. Treat skills marked
+`provenance: external` and `policy: preserve` as vendored: do not edit their
+`SKILL.md` locally. Update their origin commit only when intentionally importing
+a new upstream version.
 
 ## Validation and evaluation
 

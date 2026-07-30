@@ -5,17 +5,7 @@ description: Surface, elevation, shadow, layering, and image-treatment principle
 
 # UI Depth - Surfaces, Elevation & Media
 
-A decision engine for adding depth without visual clutter. Covers elevation systems, shadow usage, layered surfaces, subtle borders, image treatment, and media safety. For page structure, see `ui-layouts`. For visual importance, see `ui-visual-hierarchy`.
-
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help with depth, surfaces, shadows, layering, or image treatment. What surface or media element are you working on, and what should feel raised, recessed, or visually separated?
-
-Do not provide any other information until the user asks a question or presents a UI to review.
-
----
+A decision engine for adding depth without visual clutter. Covers elevation systems, shadow usage, layered surfaces, subtle borders, image treatment, and media safety. For page structure, see `ui-layouts`. For visual importance, see `visual-hierarchy`.
 
 ## 1. Elevation Is Meaning
 

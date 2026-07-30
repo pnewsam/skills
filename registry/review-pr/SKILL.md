@@ -1,373 +1,170 @@
 ---
 name: review-pr
-description: Analyze a GitHub pull request for actionable correctness, security, reliability, performance, and test issues through an available authenticated GitHub integration or gh, and optionally post a review with line-level comments. Use when asked to review, approve, comment on, or request changes on a PR. Defaults to analysis only unless posting is explicitly requested.
+description: Review a GitHub pull request for actionable correctness, security, reliability, performance, test, and maintainability issues, or assess its operational and merge risk across blast radius, data, dependencies, infrastructure, and verification. Use when asked to review, approve, comment on, risk-assess, flag risky changes in, or evaluate the merge readiness of a PR. Defaults to analysis only; posts a review or risk comment only when explicitly requested.
 ---
 
 # Review PR
 
-## Overview
-
-Perform a thorough code review of a pull request by reading the actual diff and
-identifying actionable issues at the line level.
+## Outcome
 
-Use **Analyze mode** for requests such as "review this PR": return findings and
-a proposed verdict without writing to GitHub. Use **Post mode** only when the
-user explicitly asks to post, submit, approve, comment on, or request changes.
+Provide an evidence-backed code review or merge-risk assessment of the actual
+pull-request diff. Keep findings specific, calibrated, and useful to the merge
+decision.
 
-This is a read-first, write-last skill. Read and analyze everything before drafting a single comment. Never invent findings that are not traceable to a specific line in the diff.
+This skill never edits source, branches, commits, or PR metadata.
 
-## Safety rules
+## Choose two independent modes
 
-- Never modify source code, commit history, or branch state. The only write operations are posting the review comment.
-- Never post in Analyze mode. In Post mode, complete the full assessment before
-  the single external write; do not require another confirmation unless the
-  target or requested verdict is ambiguous.
-- Only comment on lines that appear in the diff. GitHub rejects inline comments on lines outside the changed hunks.
-- Do not approve a PR that has blocking issues. When in doubt, use COMMENT rather than APPROVE or REQUEST_CHANGES.
-- Do not invent issues. Every comment must cite a specific file and line from the diff.
+### Intent
 
-## Review dimensions
+- **Review:** find actionable defects and determine a proposed review verdict.
+  This is the default for requests to review, approve, or request changes.
+- **Risk:** characterize operational and merge risk, even when no code defect is
+  proven. Use when asked about blast radius, risk, safety, or merge readiness.
+  Read `references/risk_assessment.md`.
 
-Evaluate each dimension for every changed file. Focus effort on changed lines, but note issues in unchanged surrounding context if they are clearly relevant.
+When both are requested, perform both analyses but do not treat a high-risk
+change as defective merely because it is risky.
 
-### 1. Correctness and logic
+### Effect
 
-Look for:
-- Off-by-one errors, incorrect boundary conditions
-- Incorrect boolean logic, flipped conditions
-- Unreachable code paths
-- Incorrect assumptions about input types or ranges
-- Race conditions or incorrect ordering of operations
-- Missing null/undefined checks where the value could plausibly be absent
+- **Analyze:** return the completed assessment in chat. This is the default.
+- **Post:** perform one GitHub write only when the user explicitly asks to post,
+  submit, approve, comment, or request changes.
 
-### 2. Security
+In Review Post mode, submit a GitHub review. In Risk Post mode, add one
+top-level PR comment. If both are requested, prefer one review whose summary
+contains the risk assessment unless the user explicitly asks for separate
+artifacts.
 
-Look for:
-- Injection vulnerabilities (SQL, shell, HTML, path traversal)
-- Hardcoded secrets, tokens, or credentials
-- Insecure deserialization
-- Missing authentication or authorization checks on new endpoints/routes
-- Overly permissive CORS, CSP, or access control settings
-- Logging of sensitive data (passwords, tokens, PII)
-- Use of deprecated or known-insecure cryptographic functions
+## Safety
 
-### 3. Error handling
+- Read and analyze the complete relevant evidence before drafting a write.
+- Never post in Analyze mode.
+- Verify the repository, PR number, current head SHA, and PR state immediately
+  before posting.
+- Every defect must be traceable to the diff and relevant context.
+- Only attach an inline comment to a valid changed line. Put broader findings in
+  the summary.
+- Do not approve when credible blocking defects remain.
+- A missing signal is uncertainty, not evidence that a defect exists.
+- If the selected GitHub path rejects a write, do not retry through another path
+  to bypass the rejection.
 
-Look for:
-- Empty or swallowed catch blocks (`catch (e) {}`)
-- Errors caught but not logged or surfaced
-- Exceptions thrown where callers cannot reasonably handle them
-- Async errors not awaited or not propagated
-- Resource leaks (file handles, connections, locks) in error paths
+## Evidence
 
-### 4. Code quality
+Prefer an available authenticated GitHub connector. Otherwise use authenticated
+`gh`. Do not require both.
 
-Look for:
-- Functions that are too long or do too many things (suggest decomposition)
-- Duplicated logic that could be extracted
-- Unnecessary complexity: nested ternaries, overly clever one-liners
-- Magic numbers or strings that should be named constants
-- Misleading or inaccurate variable/function names
-- Dead code, commented-out code, debug statements left in
+Collect:
 
-### 5. Performance
+- PR title, body, author, state, base, head, head SHA, and commit list
+- complete changed-file list and patches
+- relevant surrounding code and repository guidance
+- tests and validation changed or referenced by the PR
+- existing review conversation when it affects whether a finding is current
+- CI status when the merge decision depends on it
 
-Look for:
-- N+1 query patterns (database calls inside loops)
-- Unnecessary re-computation in hot paths
-- Blocking synchronous I/O where async is expected
-- Large objects allocated or copied unnecessarily
-- Missing indexes for new query patterns (if schema is visible)
+Fetch large diffs in bounded groups. For very large PRs, prioritize
+security-sensitive, data, infrastructure, public-interface, and high-churn
+areas; disclose the sampling boundary and list areas not reviewed in depth.
 
-### 6. Test coverage
+## Review workflow
 
-Look for:
-- New code paths with no corresponding test
-- Tests that only test the happy path, missing error cases
-- Test assertions that are too loose (e.g. `expect(result).toBeTruthy()`)
-- Mocks that make the test pass regardless of implementation
+### 1. Understand the change
 
-### 7. Documentation and clarity
+Restate the intended behavior, affected boundaries, and claims made in the PR
+description. Note mismatches between the stated and actual scope.
 
-Look for:
-- Public API changes with no documentation update
-- Misleading or outdated comments on changed lines
-- Missing JSDoc/docstrings on exported functions with non-obvious behavior
-- Commit message or PR description that doesn't match the code
+### 2. Inspect every relevant hunk
 
-## Severity levels
+Evaluate:
 
-Assign one severity to each comment:
+- correctness, edge cases, ordering, concurrency, and state transitions
+- authentication, authorization, input handling, secrets, and sensitive data
+- error propagation, cleanup, recovery, and observability
+- public contracts, compatibility, migrations, and rollback behavior
+- performance on plausible hot paths
+- tests for new behavior, failures, and regressions
+- maintainability issues only when they create a concrete future failure mode
 
-| Severity | Meaning | Effect on verdict |
-|----------|---------|-------------------|
-| Blocking | Must be fixed before merge — correctness, security, data integrity | Drives REQUEST_CHANGES |
-| Major | Should be fixed — significant quality issue, but edge cases or non-critical paths | Drives REQUEST_CHANGES unless few and acknowledged |
-| Minor | Should consider fixing — style, clarity, minor improvement | Does not block approval |
-| Nit | Optional — personal preference, very small style point | Prefix with "Nit:" |
-| Praise | Something done well — highlight positive patterns | Does not affect verdict |
+Read enough unchanged context to understand the hunk. Do not report an issue in
+unrelated pre-existing code unless the PR makes it reachable or materially
+worse.
 
-## Verdict logic
+### 3. Record findings
 
-Choose one verdict based on the overall findings:
+For each finding capture:
 
-- **APPROVE**: No blocking or major issues. Only minor/nit feedback or praise. Use sparingly — approval signals readiness to merge.
-- **REQUEST_CHANGES**: One or more blocking or major issues found. The author must address at least the blocking items before the PR should merge.
-- **COMMENT**: Non-blocking feedback only, or you are not sure whether the code is correct (e.g. missing domain context). Also use COMMENT when asked not to approve or block.
+- exact file and valid new-file line when inline
+- severity: Blocking, Major, Minor, or Nit
+- concise issue statement
+- concrete consequence
+- smallest useful repair or question
+- confidence and missing context when uncertain
 
-Use the most severe *credible, merge-relevant* finding to determine the verdict.
-Uncertain or preference-only feedback must not drive REQUEST_CHANGES.
+Praise may appear in the summary but should not dilute actionable findings.
 
-## Workflow
+### 4. Determine the proposed verdict
 
-### 1. Select an authenticated GitHub access path
+- **REQUEST_CHANGES:** at least one credible Blocking issue, or a Major issue
+  that makes the PR unsafe to merge.
+- **COMMENT:** non-blocking feedback, unresolved uncertainty, or a self-review
+  where approval is inappropriate.
+- **APPROVE:** no credible merge-blocking issues and enough evidence was
+  inspected to support approval.
 
-Prefer an available GitHub connector or app. Otherwise use authenticated `gh`:
+Use the most severe credible merge-relevant finding. Style preference must not
+drive REQUEST_CHANGES.
 
-```bash
-gh --version
-gh auth status
-```
+### 5. Present the review
 
-Do not require both. If neither path is authenticated, stop and explain how to
-connect the integration or authenticate `gh`.
+Return the proposed verdict, findings ordered by severity, the evidence or scope
+reviewed, and the full proposed summary. If there are no findings, say so
+directly.
 
-### 2. Identify the target PR
+## Posting
 
-If the user provides a PR number, use that. Otherwise, detect from the current branch:
+### Review Post
 
-With a GitHub connector, resolve the repository and search open PRs for the
-current head branch. Fetch the selected PR's number, title, body, base, head,
-state, URL, and author.
+Before the single submission:
 
-With `gh`, use:
+1. refresh the PR head and diff
+2. verify each inline position belongs to the current diff
+3. ensure the summary and verdict still match the evidence
+4. submit one review with `APPROVE`, `REQUEST_CHANGES`, or `COMMENT`
+5. fetch the live review and verify it appears
 
-```bash
-gh pr view --json number,title,body,baseRefName,headRefName,state,url,author
-```
+If an inline position is invalid, correct it only when the intended changed line
+is unambiguous; otherwise move the finding to the review body.
 
-If no PR is found, list open PRs:
+For a self-authored PR, use COMMENT unless repository policy permits
+self-approval and the user explicitly requests it.
 
-```bash
-gh pr list --state open
-```
+### Risk Post
 
-Store: `number`, `title`, `baseRefName`, `headRefName`, `state`, `url`.
+Refresh the PR, verify the assessment still matches its head, add one top-level
+comment using the risk template, and fetch the live conversation to verify it.
 
-Also fetch the repo identity for API calls:
+For a merged or closed PR, analyze when useful but post only when the user
+explicitly requests a retrospective comment.
 
-```bash
-gh repo view --json nameWithOwner -q '.nameWithOwner'
-```
+## Final report
 
-Store as `REPO` (e.g. `org/repo-name`).
+Include:
 
-### 3. Fetch and parse the diff
-
-Fetch the PR state and diff without changing local branches or remote-tracking
-refs. With a connector, fetch the PR, list all changed filenames, and request
-the patch for each exact returned path in bounded groups. With `gh`, use:
-
-```bash
-gh pr view <number> --json files,commits
-gh pr diff <number>
-```
-
-For large PRs, use the file list to prioritize by risk and inspect patches in
-bounded groups:
-
-```bash
-gh api repos/<owner>/<repo>/pulls/<number>/files --paginate
-```
-
-**Tracking line numbers in the diff:**
-
-The unified diff format includes `@@` hunk headers like:
-
-```
-@@ -10,6 +10,8 @@
-```
-
-The second pair (`+10,8`) means: the new file starts at line 10, and this hunk covers 8 lines. Track the current line number in the new file as you read each hunk. Lines starting with `+` (additions) and ` ` (context) advance the new-file line counter. Lines starting with `-` (deletions) do not. Only additions (`+` lines) and their surrounding context lines can receive inline comments.
-
-**Important**: Record the exact new-file line number for every `+` line where you might want to leave a comment. You cannot comment on lines that are not in the diff.
-
-### 4. Analyze the diff
-
-Work through the diff systematically. For each changed file:
-
-1. Read the file-level context: what is this file's purpose?
-2. Read each hunk and understand what the change does
-3. For each finding, record:
-   - **file**: path relative to repo root (exactly as it appears in the diff header, e.g. `src/api/auth.ts`)
-   - **line**: the new-file line number of the specific line the comment applies to
-   - **severity**: Blocking / Major / Minor / Nit / Praise
-   - **dimension**: which of the 7 dimensions this falls under
-   - **comment body**: what the issue is, why it matters, and (where appropriate) how to fix it
-
-Also record findings that apply to the PR as a whole (for the summary) but that cannot be pinned to a specific line.
-
-### 5. Determine the overall verdict
-
-Based on the findings:
-- Any Blocking finding → REQUEST_CHANGES
-- Any Major finding → REQUEST_CHANGES (unless context clearly justifies COMMENT)
-- Minor / Nit / Praise only → APPROVE or COMMENT based on confidence
-- No findings → APPROVE (state this explicitly)
-
-### 6. Draft the review
-
-**Inline comments:** Each comment body should be concise, direct, and actionable. Follow this structure:
-
-```
-[Severity prefix, if not implicit]: <the issue>
-
-<why it matters or what could go wrong>
-
-<optional: suggested fix or alternative>
-```
-
-Example:
-```
-**Blocking:** This catch block swallows the error silently.
-
-If the database write fails, the caller will receive a success response with no indication that the write was lost, leading to data inconsistency.
-
-Consider: re-throwing the error, or returning an error result that the caller must handle.
-```
-
-Prefix nits explicitly: `Nit: ...`
-Prefix praise explicitly: `Nice: ...` or `Good: ...`
-
-**Summary body:** Write a concise overall review summary that:
-- States the overall verdict and the single most important finding
-- Groups any inline comments that share a theme
-- Notes anything positive about the PR
-- Adds any overall observations that couldn't be pinned to a line
-
-Use this template:
-
-```markdown
-## Code Review
-
-**Verdict: <APPROVE / REQUEST_CHANGES / COMMENT>**
-
-<One paragraph overall assessment. Name the key finding that drove the verdict. Be specific.>
-
-### Summary of findings
-
-| Severity | File | Issue |
-|----------|------|-------|
-| Blocking | `path/to/file.ts:42` | <brief description> |
-| Major | `path/to/file.ts:87` | <brief description> |
-| Minor | `path/to/file.ts:15` | <brief description> |
-
-<If no findings: "No issues found. Code looks good to merge.">
-
-### What's working well
-
-<Optional: note patterns done well, tests added, clean implementation choices.>
-
----
-_Review scope: <branch> → <base> · <date>_
-```
-
-### 7. Present the review
-
-Show the user:
-- The overall verdict
-- The full list of inline comments (file, line, severity, body)
-- The full summary body
-
-Stop here in Analyze mode. In Post mode, proceed after verifying the PR target,
-inline positions, and verdict. If any remain ambiguous, ask before posting.
-
-### 8. Post the review via the GitHub API (Post mode only)
-
-Validate every inline line against the current diff before the single
-submission. With a connector, call its add-review action once with the
-repository, PR number, action, summary body, current commit SHA when available,
-and validated file comments. With `gh`, build one valid JSON payload with
-`body`, `event`, and `comments`, then send it to
-`gh api repos/<owner>/<repo>/pulls/<number>/reviews --method POST --input -`
-through standard input. Use a structured JSON serializer; do not construct JSON
-by interpolating review text into shell source.
-
-Replace `"event"` with the appropriate value:
-- `"APPROVE"` — approves the PR
-- `"REQUEST_CHANGES"` — requests changes
-- `"COMMENT"` — submits without approval or change request
-
-**If a comment line is rejected:** GitHub returns a 422 if a comment line is not in the diff. If this happens:
-1. Check the exact line number against the diff output
-2. Do not move it to a different line merely to satisfy the API
-3. Correct the mapping if the intended line is identifiable; otherwise convert
-   it to a general review-body finding
-
-After posting, verify the review appears through the connector's list-reviews
-action or:
-
-```bash
-gh pr view <number> --json reviews
-```
-
-If the selected access path rejects the write because direct user authorization
-or a publication-safety approval is missing, do not retry through another path.
-Report the rejection and preserve the validated review payload for the original
-user-authorized context.
-
-### 9. Final response
-
-Report:
 - PR number and URL
-- Verdict posted (APPROVE / REQUEST_CHANGES / COMMENT)
-- Count of inline comments by severity
-- The single most important finding
-- Any comments that could not be posted inline (and why)
+- Review verdict, overall risk, or both
+- most important finding or risk driver
+- number of inline comments by severity, when applicable
+- whether anything was posted and verified
+- any evidence limitations that materially affect confidence
 
-## Handling common situations
+## Common traps
 
-### PR has no diff (no changes)
-
-Stop and inform the user. There is nothing to review.
-
-### Very large PR (100+ files)
-
-Do not review every file exhaustively. Instead:
-1. Prioritize files that touch security, auth, data access, or public APIs
-2. Do a lighter pass on test files and config changes
-3. Note in the summary that due to PR size, review focused on high-risk areas
-4. List the files that were not reviewed in depth
-
-### PR is already merged or closed
-
-Perform the analysis when it is still useful and note the state in the summary.
-Post only when the user explicitly requested a retrospective review.
-
-### PR authored by the user themselves
-
-Self-review is valid. In Post mode, use COMMENT rather than APPROVE for a
-self-authored PR unless repository policy clearly permits self-approval and the
-user explicitly requests it.
-
-### Inline comment line not in diff
-
-Convert the comment to a general comment referencing the file and line by name:
-```
-In `src/api/auth.ts` around line 42: <comment body>
-```
-Add it to the summary body rather than the `comments` array.
-
-### GitHub rejects a review comment with 422
-
-A 422 usually means a line number is not in the diff. Fix the line number or move the comment to the summary. Do not retry with the same line number.
-
-### No issues found
-
-State this clearly and do not fabricate issues. In Analyze mode, propose
-APPROVE. In Post mode, submit a brief evidence-based approval.
-
-### User asks to approve without a full review
-
-Do not use this skill to manufacture an approval without review evidence. Offer
-to post COMMENT noting the limited review, or complete the review first.
+- Do not invent findings to justify a review.
+- Do not equate file count with risk without considering dependency reach.
+- Do not average away a credible critical risk.
+- Do not call missing tests a defect without explaining the unverified behavior.
+- Do not post a review based on a stale head SHA.
+- Do not move a comment to an unrelated diff line merely to satisfy GitHub.

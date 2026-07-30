@@ -11,6 +11,7 @@ import (
 type Profile struct {
 	Description string   `json:"description"`
 	Skills      []string `json:"skills"`
+	Includes    []string `json:"includes,omitempty"`
 }
 
 type Catalog struct {
@@ -46,22 +47,77 @@ func (c Catalog) ProfileNames() []string {
 	return names
 }
 
-// Select returns the available skill names included in one or more profiles.
-// Results follow availableNames order so installation output stays stable.
-func (c Catalog) Select(profileNames, availableNames []string) ([]string, error) {
+// ExpandedSkillNames returns the unique skills included directly or transitively
+// by one or more profiles. The result is sorted for stable display and testing.
+func (c Catalog) ExpandedSkillNames(profileNames []string) ([]string, error) {
 	selected := make(map[string]bool)
-	for _, profileName := range profileNames {
+	state := make(map[string]int)
+	var stack []string
+
+	var visit func(string) error
+	visit = func(profileName string) error {
 		profile, ok := c.Profiles[profileName]
 		if !ok {
-			return nil, fmt.Errorf(
+			return fmt.Errorf(
 				"unknown profile %q (known: %s)",
 				profileName,
 				strings.Join(c.ProfileNames(), ", "),
 			)
 		}
+		switch state[profileName] {
+		case 1:
+			start := 0
+			for i, name := range stack {
+				if name == profileName {
+					start = i
+					break
+				}
+			}
+			cycle := append(append([]string{}, stack[start:]...), profileName)
+			return fmt.Errorf("profile include cycle: %s", strings.Join(cycle, " -> "))
+		case 2:
+			return nil
+		}
+
+		state[profileName] = 1
+		stack = append(stack, profileName)
+		for _, includedName := range profile.Includes {
+			if err := visit(includedName); err != nil {
+				return err
+			}
+		}
 		for _, skillName := range profile.Skills {
 			selected[skillName] = true
 		}
+		stack = stack[:len(stack)-1]
+		state[profileName] = 2
+		return nil
+	}
+
+	for _, profileName := range profileNames {
+		if err := visit(profileName); err != nil {
+			return nil, err
+		}
+	}
+
+	result := make([]string, 0, len(selected))
+	for name := range selected {
+		result = append(result, name)
+	}
+	sort.Strings(result)
+	return result, nil
+}
+
+// Select returns the available skill names included in one or more profiles.
+// Results follow availableNames order so installation output stays stable.
+func (c Catalog) Select(profileNames, availableNames []string) ([]string, error) {
+	expanded, err := c.ExpandedSkillNames(profileNames)
+	if err != nil {
+		return nil, err
+	}
+	selected := make(map[string]bool, len(expanded))
+	for _, name := range expanded {
+		selected[name] = true
 	}
 
 	available := make(map[string]bool, len(availableNames))

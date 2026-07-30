@@ -1,231 +1,142 @@
 ---
 name: async-patterns
-description: principles for writing asynchronous JavaScript and TypeScript. covers async/await over raw promises, Promise.all for concurrency, avoiding sequential awaits, AbortController for cancellation, race condition guards, and async function coloring. reference this skill when writing async code, reviewing promise usage, or debugging concurrency issues.
+description: Design or review asynchronous JavaScript and TypeScript control flow, including dependency-aware concurrency, cancellation, stale-result prevention, bounded parallelism, promise ownership, timeouts, and cleanup. Use when writing or diagnosing promise-based code, race conditions, hanging work, unhandled rejections, accidental serialization, or resource overload. Follow the project's runtime and framework conventions.
 ---
 
 # Async Patterns
 
-## Overview
+## Outcome
 
-This skill defines the principles for writing asynchronous code in JavaScript and TypeScript. The core philosophy: make async control flow as readable as sync, run independent work concurrently, and always handle cancellation and error propagation.
+Make asynchronous ownership, ordering, cancellation, failure, and resource use
+explicit. Optimize concurrency only after identifying which operations are
+independent and what failure semantics the caller needs.
 
-## Principles
+## Model the operation
 
-### 1. Prefer async/await over raw promise chains
+Before choosing a pattern, answer:
 
-`async`/`await` reads like synchronous code. Promise chains (`.then().catch()`) are harder to follow, especially with branching or loops.
+- Which work depends on earlier results?
+- Which work may run concurrently?
+- Who owns completion or cancellation?
+- What happens when one operation fails?
+- Can partial results be used?
+- What resource limits apply?
+- Can a late result overwrite newer state?
 
-```ts
-// Bad: promise chain — hard to trace the data flow
-function loadDashboard(userId: string): Promise<Dashboard> {
-  return fetchUser(userId)
-    .then((user) =>
-      Promise.all([fetchInvoices(user.id), fetchNotifications(user.id)])
-    )
-    .then(([invoices, notifications]) => ({
-      user: /* lost access to user */,
-      invoices,
-      notifications,
-    }));
-}
+## Patterns
 
-// Good: async/await — data flow is linear and clear
-async function loadDashboard(userId: string): Promise<Dashboard> {
-  const user = await fetchUser(userId);
-  const [invoices, notifications] = await Promise.all([
-    fetchInvoices(user.id),
-    fetchNotifications(user.id),
-  ]);
-  return { user, invoices, notifications };
-}
-```
+### Use the clearest control flow
 
-### 2. Run independent work concurrently
+`async`/`await` is usually clearest for multi-step logic. Promise composition
+can be clearer for direct transforms or library APIs. Consistency within one
+operation matters more than banning `.then()`.
 
-When multiple async calls don't depend on each other, run them concurrently with `Promise.all` (or `Promise.allSettled` when partial failure is acceptable).
+Do not add `async` merely to wrap a synchronous result unless an interface
+requires a promise.
+
+### Express dependency and concurrency honestly
+
+Await dependent work in order. Start independent operations together:
 
 ```ts
-// Bad: sequential — each await blocks the next
-async function loadPage() {
-  const user = await fetchUser();
-  const config = await fetchConfig(); // waits for user unnecessarily
-  const announcements = await fetchAnnouncements(); // waits for both
-  return { user, config, announcements };
-}
-
-// Good: concurrent — independent calls run in parallel
-async function loadPage() {
-  const [user, config, announcements] = await Promise.all([
-    fetchUser(),
-    fetchConfig(),
-    fetchAnnouncements(),
-  ]);
-  return { user, config, announcements };
-}
-```
-
-Use `Promise.allSettled` when you want all results regardless of individual failures:
-
-```ts
-const results = await Promise.allSettled([
-  fetchAnalytics(),
-  fetchRecommendations(),
-  fetchNotifications(),
+const user = await loadUser(userId);
+const [orders, preferences] = await Promise.all([
+  loadOrders(user.id),
+  loadPreferences(user.id),
 ]);
-
-for (const result of results) {
-  if (result.status === "fulfilled") {
-    // result.value
-  } else {
-    // result.reason
-  }
-}
 ```
 
-### 3. Don't mix `await` and `.then()` in the same function
+`Promise.all` fails fast from the caller's perspective, but it does not cancel
+the remaining operations. Ensure abandoned work is harmless or pass a shared
+cancellation signal.
 
-Pick one style per function.
+Use `Promise.allSettled` only when the product can meaningfully process partial
+success and every rejection will be inspected.
 
-```ts
-// Bad: mixing styles
-async function getData() {
-  const user = await fetchUser();
-  return fetchInvoices(user.id).then((invoices) => ({ user, invoices }));
-}
+### Propagate cancellation
 
-// Good: consistent async/await
-async function getData() {
-  const user = await fetchUser();
-  const invoices = await fetchInvoices(user.id);
-  return { user, invoices };
-}
-```
-
-### 4. Use AbortController for cancellable operations
-
-Any async operation that might become irrelevant (user navigates away, types more characters, changes a filter) should be cancellable.
+Make cancellation part of the operation contract when work can become
+irrelevant:
 
 ```ts
-// Example: search-as-you-type with cancellation
-async function search(query: string, signal: AbortSignal): Promise<Result[]> {
-  const response = await fetch(`/api/search?q=${query}`, { signal });
+async function search(query: string, signal: AbortSignal) {
+  const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, {
+    signal,
+  });
   return response.json();
 }
 
-// In a React component or event handler:
-const controller = new AbortController();
+let activeController: AbortController | undefined;
 
-async function handleInput(value: string) {
-  controller.abort(); // cancel the previous search
-  const newController = new AbortController();
+async function handleInput(query: string) {
+  activeController?.abort();
+  const controller = new AbortController();
+  activeController = controller;
+
   try {
-    const results = await search(value, newController.signal);
-    setResults(results);
+    const results = await search(query, controller.signal);
+    if (activeController === controller) setResults(results);
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      return; // expected — the request was cancelled
-    }
-    throw error;
+    if (!isAbortError(error)) throw error;
+  } finally {
+    if (activeController === controller) activeController = undefined;
   }
 }
 ```
 
-### 5. Guard against race conditions from out-of-order responses
+Abort only work owned by the caller. Propagate the signal through internal
+layers rather than creating unrelated controllers at each function.
 
-When a fast request follows a slow one, the slow response can overwrite the fast one. Cancel the previous request or track the request id.
+### Guard stale results
 
-```ts
-// Using an id to ignore stale responses
-let nextRequestId = 0;
+Cancellation may be unavailable or arrive too late. Use a generation, request
+identity, or framework-native mechanism to prevent an older result from
+overwriting current state.
 
-async function fetchResults(query: string) {
-  const requestId = ++nextRequestId;
-  const results = await searchAPI(query);
+The guard protects state; cancellation additionally saves resources. They may
+both be needed.
 
-  // Ignore if a newer request was made while this one was in flight
-  if (requestId !== nextRequestId) return;
+### Bound parallelism
 
-  setResults(results);
-}
-```
+Do not apply `Promise.all(items.map(...))` to an unbounded collection. Choose a
+limit based on the downstream service, connection pool, memory, file handles,
+and rate limits. Prefer an existing project utility or library over a naive
+batch loop when fairness, ordering, or continuous scheduling matters.
 
-Prefer `AbortController` over request-id tracking — it's cleaner and also cancels the network request.
+### Own every promise
 
-### 6. Don't make functions async that don't need to be
+Every promise should be:
 
-If a function doesn't use `await`, don't mark it `async`. An `async` function wraps the return value in a Promise, adding overhead and forcing callers to handle a promise.
+- awaited
+- returned to a caller that owns it
+- collected into an explicit group
+- or intentionally detached with rejection reporting
 
-```ts
-// Bad: unnecessary async
-async function getUserName(user: User): Promise<string> {
-  return user.name;
-}
+For detached work, record failure and shutdown behavior. `void task()` documents
+that the result is ignored; it does not handle rejection by itself.
 
-// Good: synchronous
-function getUserName(user: User): string {
-  return user.name;
-}
-```
+### Timeouts and cleanup
 
-The exception is when implementing an interface or callback that requires returning a Promise — then `async` is appropriate even without `await`.
+A timeout should cancel or otherwise retire the underlying work, not merely
+stop waiting for it. Release timers, listeners, locks, streams, and other
+resources in `finally` or the runtime's structured cleanup mechanism.
 
-### 7. Handle Promise rejections at the boundary
+### Loops
 
-Just like synchronous errors, async errors should be caught at system boundaries, not at every call site.
+Use `for...of` with `await` for intentional sequencing. Use a mapped promise
+group or concurrency limiter for intentional parallelism. Avoid async
+`forEach`, whose returned promises are not collected.
 
-```ts
-// Good: catch at the boundary
-app.get("/api/users/:id", async (req, res) => {
-  try {
-    const user = await getUser(req.params.id);
-    res.json(user);
-  } catch (error) {
-    if (error instanceof NotFoundError) {
-      res.status(404).json({ error: "User not found" });
-    } else {
-      res.status(500).json({ error: "Internal server error" });
-    }
-  }
-});
-```
+## Review checklist
 
-The internal `getUser` function can throw or return a Result — either way, the boundary handler is the right place to map errors to responses.
+- Are actual dependencies serialized and independent tasks concurrent?
+- Does failure behavior match all-or-nothing versus partial-success needs?
+- Is cancellation owned and propagated?
+- Can stale work mutate current state?
+- Is parallelism bounded for large inputs?
+- Are detached promises observed?
+- Do timeouts retire work and cleanup resources?
+- Are retry and idempotency handled by the correct boundary?
 
-### 8. Limit concurrency for resource-heavy operations
-
-`Promise.all` on a large array fires all requests at once, which can overwhelm APIs, databases, or file handles. Use batching or a concurrency limit.
-
-```ts
-async function processBatch<T, R>(
-  items: T[],
-  fn: (item: T) => Promise<R>,
-  concurrency: number = 5,
-): Promise<R[]> {
-  const results: R[] = [];
-  for (let i = 0; i < items.length; i += concurrency) {
-    const batch = items.slice(i, i + concurrency);
-    const batchResults = await Promise.all(batch.map(fn));
-    results.push(...batchResults);
-  }
-  return results;
-}
-```
-
-### 9. Prefer `for...of` with `await` over `forEach` with async callbacks
-
-`forEach` does not wait for async callbacks. Use a `for...of` loop when you need sequential async work.
-
-```ts
-// Bug: forEach fires all promises but doesn't await them
-items.forEach(async (item) => {
-  await processItem(item); // these run concurrently, not awaited
-});
-// Code here runs before any processItem completes
-
-// Good: for...of awaits each iteration
-for (const item of items) {
-  await processItem(item);
-}
-```
-
-If you want concurrent execution, use `Promise.all(items.map(fn))` — that makes the concurrency intent explicit.
+Use `error-handling` for the failure contract and `react-hooks-effects` for
+React effect lifecycles.

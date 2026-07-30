@@ -1,3 +1,4 @@
 interface:
   display_name: "Async Patterns"
   short_description: "Write clearer async JavaScript."
+  default_prompt: "Use $async-patterns to make this asynchronous control flow explicit, bounded, and safely cancellable."
