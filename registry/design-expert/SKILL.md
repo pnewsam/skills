@@ -1,6 +1,6 @@
 ---
 name: design-expert
-description: Route broad visual-design and aesthetic-quality requests to the smallest relevant design-* skill set. Use when a functional interface feels clunky, noisy, generic, disharmonious, or visually unresolved. Owns composition and visual language; hand interface mechanics to ui-expert.
+description: Route visual-design and aesthetic-quality requests to the smallest relevant design-* skill set and synthesize the guidance. Use when a functional interface feels clunky, noisy, generic, disharmonious, or visually unresolved and the request spans two or more design concerns, or when the primary concern is unclear. Prefer one focused design-* skill for one clearly bounded concern. Owns composition and visual language; hand interface mechanics to ui-expert.
 ---
 
 # Design Expert - Skill Router
@@ -8,6 +8,10 @@ description: Route broad visual-design and aesthetic-quality requests to the sma
 Use this as the entry point for visual design judgment. The goal is to make a functional interface feel intentional, clear, harmonious, and refined.
 
 This skill does not replace `ui-expert`. Use `ui-expert` for interface mechanics: page archetypes, forms, actions, feedback states, data display, responsive behavior, copy, icons, and concrete visual-system implementation. Use `design-expert` when the problem is that the UI feels busy, clunky, disharmonious, unfocused, generic, heavy, or visually unresolved.
+
+Use the router when the request needs synthesis across two or more focused
+design concerns or the dominant concern is unclear. Go directly to one focused
+`design-*` skill when exactly one concern is clear.
 
 ## 1. Routing Table
 

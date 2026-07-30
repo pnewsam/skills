@@ -1,6 +1,6 @@
 ---
 name: build-feature
-description: Implement one acceptance criterion or task from a feature plan produced by plan-feature. Use when building a planned feature. Reads docs/features/NNN-*.md, picks one unchecked item, implements and verifies it, commits the related code and plan update on a feature branch, then stops. Run repeatedly until complete; validation and PR publication remain separate explicit steps.
+description: Implement one acceptance criterion or task from a feature plan produced by plan-feature. Use when building a planned feature. Reads docs/features/NNN-*.md, picks one unchecked item, implements and verifies it, commits the related code and plan update on a repository-compliant feature branch, then stops. Run repeatedly until complete; validation and PR publication remain separate explicit steps.
 ---
 
 # Build Feature
@@ -76,19 +76,20 @@ git branch --show-current
 git remote -v
 ```
 
-Determine the feature branch. Use the plan ID or slug:
+Determine the feature branch in this order:
 
-```text
-feat/<feature-slug>
-```
+1. Use a branch the user named.
+2. Follow branch naming or prefix rules in `AGENTS.md`, repository
+   documentation, or existing branch conventions.
+3. Otherwise use `feat/<feature-slug>`.
 
 If the current branch is `main`, `master`, or a protected branch, create and switch to the feature branch:
 
 ```bash
-git checkout -b feat/<feature-slug>
+git switch -c <feature-branch>
 ```
 
-If already on `feat/<feature-slug>`, continue.
+If already on the feature branch, continue.
 
 If on a different branch, ask the user whether to switch or stay.
 
@@ -174,16 +175,19 @@ Do not mark the item complete if verification fails. Fix the issue or mark it as
 Mark the item as complete in the plan file:
 
 - Change `- [~]` or `- [ ]` to `- [x]`.
-- Append a brief note: what was changed, files touched, verification result, and commit hash.
+- Append a brief note: what was changed, files touched, and verification
+  result.
 
-Update a "Progress" section at the bottom of the plan if one exists:
+Update a "Progress" section at the bottom of the plan if one exists. Do not try
+to place the hash of the not-yet-created commit inside that same commit; use an
+evidence description such as `recorded in this commit`.
 
 ```markdown
 ## Progress
 
-| Criterion | Status | Commit | Notes |
-|-----------|--------|--------|-------|
-| ...       | [x]    | abc123 | ...   |
+| Criterion | Status | Evidence | Notes |
+|-----------|--------|----------|-------|
+| ...       | [x]    | recorded in this commit | ... |
 ```
 
 Do not remove other sections or alter unchecked items.
@@ -221,6 +225,9 @@ git commit -m "feat(<scope>): <title>" -m "<body>" -m "Feature: <plan-id>"
 
 If there are no staged changes, report that the item may already be implemented or that no safe change was found.
 
+After committing, capture the actual hash for the final response. Do not amend
+the commit merely to write its own hash into the plan.
+
 ### 9. Final response
 
 Report:
@@ -242,7 +249,9 @@ Report:
 
 ### Item is already implemented
 
-Verify via code inspection or tests. Mark it as `[x]` in the plan with a note and skip to the next item.
+Verify via code inspection or tests. Mark it as `[x]` in the plan with the
+existing evidence, commit only the plan update when appropriate, and stop. Do
+not continue to the next unchecked item in the same invocation.
 
 ### Item requires a plan update
 

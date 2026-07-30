@@ -21,7 +21,9 @@ Rerunning this skill for the same epic must not re-implement features that are a
 Before starting work on a child feature:
 
 1. Check the epic for `[ ]` or incomplete child features.
-2. If the next feature already has a corresponding `docs/features/NNN-*.md` file with all items checked, mark the epic as complete for that feature and move on.
+2. If the next feature already has a corresponding `docs/features/NNN-*.md`
+   file with all items checked, verify the evidence, mark that epic child
+   complete, commit the bookkeeping update, and stop.
 3. If all child features are complete, report that the epic is done.
 
 ## Inputs
@@ -107,7 +109,8 @@ If `build-feature` reports a blocker, propagate that blocker to the user and sto
 
 Only when `build-feature` reports that the entire feature is complete, mark the
 child feature as done in the epic file. If one item was completed but more
-remain, leave the epic checkbox open and record the current progress.
+remain, leave the epic unchanged; the feature plan is the source of truth for
+partial progress.
 
 - Change `- [ ]` to `- [x]`.
 - Append the feature plan file path and the PR or commit reference if available.
@@ -124,18 +127,24 @@ Update a "Progress" section at the bottom of the epic if one exists:
 
 Do not remove other sections.
 
-Include the epic update in the current local commit when it belongs to the same
-unit of work. Do not create an extra administrative commit or publish anything
-unless the user explicitly asks.
+Because `build-feature` has already committed its bounded implementation step,
+do not amend or rewrite that commit. Stage only the epic-plan update and create
+one local bookkeeping commit:
+
+```text
+docs(epic): record <feature-name> completion
+```
+
+Do not push or publish either commit.
 
 ### 6. Final response
 
 Report:
 
 - Which epic was advanced.
-- Which child feature was completed.
+- Which child feature was advanced, and whether it became complete.
 - The feature plan file path.
-- Whether a PR exists for the feature.
+- Implementation and bookkeeping commit hashes, when created.
 - How many child features remain incomplete.
 - Recommended next steps:
   - Run `validate-feature` to comprehensively validate the completed child feature.
@@ -147,7 +156,10 @@ Report:
 
 ### Child feature is already complete
 
-If the feature is already shipped or all acceptance criteria are checked in its plan, mark the epic checkbox as `[x]` and move to the next feature.
+If the feature is already shipped or all acceptance criteria are checked in
+its plan, verify the evidence, mark the epic checkbox as `[x]`, create the
+bookkeeping commit described in Step 5, and stop. Do not advance another child
+in the same invocation.
 
 ### Child feature plan is missing
 

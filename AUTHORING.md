@@ -126,6 +126,10 @@ matters; do not copy a documentation corpus into the skill.
 Routers should:
 
 - Load the smallest set of focused skills needed for the request.
+- Activate when the dominant child is unclear or the request spans two or more
+  child domains that need synthesis.
+- Yield directly to one focused child when exactly one bounded concern is
+  clear.
 - Define overlap boundaries and precedence.
 - Preserve disagreements instead of flattening them into generic advice.
 - Synthesize one recommendation and identify the next workflow, if any.
@@ -133,6 +137,9 @@ Routers should:
 
 Do not include canned "initial response" text. The router is invoked in the
 context of a real task and should respond to that task.
+
+A router must add synthesis value; it should not become a mandatory tax on
+every request in its family.
 
 ## Progressive disclosure
 

@@ -1,6 +1,6 @@
 ---
 name: backend-expert
-description: Route broad backend architecture, API design, service boundary, persistence, background job, integration, authentication, authorization, and server-side system design requests to the right backend-* skills. Use when building, reviewing, refactoring, or planning server-side behavior and the needed backend skill is unclear. Coordinates backend-api-design, backend-service-boundaries, backend-persistence, backend-jobs-queues, backend-integrations, and backend-auth-boundaries while pairing with stack experts for implementation.
+description: Route backend engineering requests to the smallest relevant backend-* skill set and synthesize the guidance. Use when a server-side build, review, refactor, or planning request spans two or more of API design, service boundaries, persistence, jobs, integrations, or auth, or when the primary backend concern is unclear. Prefer one focused backend-* skill for one clearly bounded concern; pair with stack experts for implementation.
 ---
 
 # Backend Expert - Skill Router
@@ -9,13 +9,9 @@ Use this as the entry point for broad backend work. Identify the server-side res
 
 Backend engineering is not governed by one standards body. Use protocol standards where they apply, and otherwise prefer canonical pattern literature, mature vendor architecture guidance, and production-proven provider documentation.
 
-## Initial Response
-
-When invoked without a specific request, respond only with:
-
-> I'm ready to route the backend work. Tell me what you're building, reviewing, or debugging, and what server-side boundary is involved.
-
-Do not provide any other information until the user asks a question or presents a backend task.
+Use the router when the request spans two or more focused backend concerns and
+needs a coherent recommendation. Go directly to one focused `backend-*` skill
+when exactly one concern is clear.
 
 ---
 

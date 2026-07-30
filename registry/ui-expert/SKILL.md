@@ -1,6 +1,6 @@
 ---
 name: ui-expert
-description: Route broad UI and UX requests to the smallest relevant ui-* skill set. Use for a full screen, page, flow, responsive experience, or when the needed interface pattern is unclear. Owns functional interface decisions; hand purely aesthetic or compositional concerns to design-expert.
+description: Route UI and UX requests to the smallest relevant ui-* skill set and synthesize the guidance. Use for a full screen, page, or flow that spans two or more interface concerns, or when the needed pattern is unclear. Prefer one focused ui-* skill for one clearly bounded concern. Owns functional interface decisions; hand purely aesthetic or compositional concerns to design-expert.
 ---
 
 # UI Expert - Skill Router
@@ -8,6 +8,10 @@ description: Route broad UI and UX requests to the smallest relevant ui-* skill 
 Use this as the entry point for broad UI work. Your job is to identify the actual interface problem, load only the focused `ui-*` skills needed, and produce or review UI that is intuitive, conventional, simple, and polished.
 
 If the user says the UI is ugly, clunky, disharmonious, visually awkward, generic, too busy, or not elegant, route aesthetic and compositional judgment to `design-expert` after identifying the functional UI pattern.
+
+Use the router when the request spans two or more focused UI concerns or needs
+a unified screen/flow recommendation. Go directly to one focused `ui-*` skill
+when exactly one concern is clear.
 
 ## 1. Routing Table
 

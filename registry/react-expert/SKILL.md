@@ -1,11 +1,15 @@
 ---
 name: react-expert
-description: Route broad or cross-cutting React application requests to the smallest relevant react-* skill set and synthesize the guidance. Use when building, reviewing, refactoring, or debugging React and the primary decision domain is unclear. Prefer a focused React skill when the problem is already specific.
+description: Route React application requests to the smallest relevant react-* skill set and synthesize the guidance. Use when a React build, review, refactor, or debugging request spans two or more concerns, or when the primary concern is unclear. Prefer one focused react-* skill for one clearly bounded concern.
 ---
 
 # React Expert - Skill Router
 
 Use this as the entry point for broad React work. Identify the actual engineering problem, load only the focused `react-*` skills needed, and keep the implementation aligned with the app's existing framework, file structure, and component conventions.
+
+Use the router when the request spans two or more focused React concerns and
+needs a coherent recommendation. Go directly to one focused `react-*` skill
+when exactly one concern is clear.
 
 ## 1. Routing Table
 

@@ -1,3 +1,4 @@
 interface:
   display_name: "Backend Expert"
   short_description: "Route broad backend architecture work."
+  default_prompt: "Use $backend-expert to route this cross-cutting backend request and synthesize the guidance."
