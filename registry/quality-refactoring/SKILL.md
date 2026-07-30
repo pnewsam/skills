@@ -38,6 +38,20 @@ Refactoring is behavior-preserving structural change. If behavior changes, it is
 | Misleading abstraction                       | Inline Function/Class or Remove Middle Man.                                                    |
 | Flag argument controls separate behaviors    | Remove Flag Argument; expose explicit operations.                                              |
 
+## Evidence Signals
+
+Prioritize refactoring where change pressure and structural friction overlap:
+
+- high relative churn plus high complexity or reading cost
+- repeated bug fixes or reverts in the same area
+- files that repeatedly change together across an unclear boundary
+- duplicated decisions or competing patterns with active usage
+- an upcoming change that is difficult because of the current structure
+
+Do not refactor solely to improve a dashboard value. Name the next change or
+risk the refactor should make easier, preserve behavior, and stop when that
+objective is met.
+
 ## Do / Don't
 
 | Do                                              | Don't                                                 |

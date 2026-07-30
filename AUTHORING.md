@@ -79,6 +79,18 @@ The directory and `name` must match. Use a verb phrase for workflows
 (`react-state-management`). Router names may use `-expert` when they genuinely
 route among focused children.
 
+For repeatable convergence families, use consistent stage verbs:
+
+- `analyze-<domain>` examines evidence and produces ranked candidates.
+- `plan-feature` creates one bounded product or convergence work unit.
+- `execute-feature` performs and verifies one planned item.
+
+Name an analysis workflow for the domain or condition it examines, not for a
+generic repository container. Prefer `analyze-quality` or `analyze-security`
+over `analyze-codebase`. Add a domain-specific planning or execution workflow
+only when it has materially different artifacts, effects, recovery semantics,
+or proof obligations that cannot be expressed through the feature workflow.
+
 ## Recommended workflow anatomy
 
 Use only the sections the workflow needs:
@@ -105,6 +117,25 @@ preview -> local commit -> push -> external PR write
 ```
 
 Completion of one stage never authorizes the next stage.
+
+Keep a normal linear workflow to no more than three top-level phases. Approval
+is a gate, not a phase. Put proportionate verification inside execution; keep
+publication, deployment, or external writes as separately authorized delivery
+actions. Internal substeps may be more detailed when they clarify a fragile
+decision without creating additional lifecycle stages.
+
+For metric-driven analysis and convergence planning, preserve this contract:
+
+- baseline
+- target
+- guardrails or invariants
+- reproducible measurement method and window
+- exclusions, confidence, and limitations
+- before/after evidence
+
+Metrics identify investigation candidates; they do not establish defects by
+themselves. Prefer repository-relative trends and corroborating signals over
+universal thresholds or composite quality scores.
 
 ## Recommended reference anatomy
 

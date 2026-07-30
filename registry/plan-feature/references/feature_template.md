@@ -2,112 +2,133 @@
 
 ## Contents
 
-- Metadata and alignment
-- User story and acceptance criteria
-- Technical and UI/UX notes
-- Definition of done and tasks
-- Notes
+- Metadata
+- Outcome and context
+- Evidence or product alignment
+- Acceptance criteria
+- Technical notes and risks
+- Verification and tasks
+- Progress
 
 ## Metadata
 
 - **ID:** <NNN>
+- **Mode:** product | convergence
 - **Status:** draft
 - **Created:** <date>
-- **Owner:** <role or person>
-- **Parent Epic:** <epic ID and link — `../epics/NNN-epic-name.md`>
 - **Last updated:** <date>
+- **Owner:** <role or person>
+- **Parent Epic:** <optional in convergence mode>
+- **Product Basis:** <charter and parent epic; Product mode only>
+- **Source Analysis:** <analyze-* result or stable finding IDs; Convergence mode only>
 
-## Parent Alignment
+Omit the metadata field that does not apply to the selected mode.
 
-### Epic Reference
-- **Epic goal advanced:** <quote the epic goal this feature serves>
-- **Epic success criterion affected:** <which criterion and how>
+## Outcome
 
-### Charter Alignment Check
-- [ ] This feature advances charter principle: <quote principle>
-- [ ] This feature affects north star metric: <which metric — even indirectly>
-- [ ] This feature does not violate charter non-goal: <quote non-goal>
-- [ ] If partially misaligned, the exception is justified and documented below.
+<One independently verifiable result.>
 
-<If misaligned: explain the exception here.>
+## Context
 
-## User Story
+<Why this change matters and what is true today.>
 
-As a <type of user>, I want <goal> so that <benefit>.
+## Product Alignment
 
-### Context
+<Required in Product mode; omit in Convergence mode.>
 
-<What does the user do before, during, and after this feature? What is their mental model? 2–4 sentences.>
+- **User story:** As a <user>, I want <goal> so that <benefit>.
+- **Epic goal advanced:** <goal and link>
+- **Charter principle advanced:** <principle>
+- **North-star or product metric affected:** <metric, if applicable>
+- **Relevant non-goal:** <constraint>
+
+## Convergence Evidence
+
+<Required in Convergence mode; omit in Product mode.>
+
+| Field | Value |
+| --- | --- |
+| Finding or group ID | <stable identifier> |
+| Affected scope | <files, components, packages, routes, controls, or tests> |
+| Baseline | <current measured value or condition> |
+| Target | <expected value or condition> |
+| Method and window | <reproducible measurement> |
+| Exclusions | <generated, vendored, snapshot, environment, or other limits> |
+| Confidence and limitations | <high/medium/low and missing evidence> |
+
+### Invariants and guardrails
+
+- <Behavior, interface, data, visual state, or security control to preserve>
+- <Metric or outcome that must not regress>
 
 ## Acceptance Criteria
 
-<Each criterion must be testable and unambiguous. A QA engineer should be able to verify it without asking questions.>
+### Must Have
 
-### Must-Have (MVP)
-- [ ] <Criterion 1 — specific, testable condition>
-- [ ] <Criterion 2>
-- [ ] <Criterion 3>
+- [ ] <Specific, testable condition>
+- [ ] <Specific, testable condition>
 
-### Should-Have (if time permits)
-- [ ] <Criterion 4>
-- [ ] <Criterion 5>
+### Should Have
 
-### Won't-Have (explicitly out of scope for this feature)
-- [ ] <What is deferred to a future iteration>
-
-## Technical Notes
-
-### Open Questions
-- <Technical or product question that needs resolution before implementation>
-- <Another open question>
-
-### Architecture / Data Model
-- <Any API changes, DB schema changes, or new services>
-- <Data flow or state management considerations>
-
-### Dependencies
-- <What this feature depends on that is not in this feature's scope>
-- <Other features, infrastructure, vendor services, etc.>
-
-### Risk & Mitigation
-| Risk | Likelihood | Impact | Mitigation |
-| ---- | ---------- | ------ | ---------- |
-| <Risk 1> | low/medium/high | low/medium/high | <how to reduce or handle> |
-
-## UI / UX Notes
-
-- <Link to designs, wireframes, or Figma>
-- <Key interaction patterns>
-- <Accessibility considerations>
-- <Responsive behavior>
+- [ ] <Optional condition that does not expand the core outcome>
 
 ## Out of Scope
 
-<What is explicitly not part of this feature, even if it seems related. Be specific enough to prevent scope creep.>
+- <Adjacent cleanup, redesign, hardening, migration, or behavior change>
 
-- <Item 1>
-- <Item 2>
+## Technical Notes
+
+- **Affected boundaries:** <API, component, data, dependency, platform, or module>
+- **Dependencies:** <required prior work or external constraints>
+- **Compatibility and rollout:** <migration, sequencing, or release considerations>
+- **Rollback or recovery:** <how to reverse or contain failure>
+
+### Security evidence when relevant
+
+- **Findings:** <CVE/GHSA/alert/rule/control IDs>
+- **Reachability and exposure:** <verified path and affected actors>
+- **Fix or control:** <smallest intended remediation>
+- **Negative verification:** <test or evidence that unsafe behavior is rejected>
+- **Resolution evidence:** <scanner, dependency graph, test, or focused review>
+
+### UI and accessibility evidence when relevant
+
+- **Canonical pattern or primitive:** <target>
+- **Affected variants and states:** <hover/focus/error/loading/mobile/etc.>
+- **Visual and accessibility checks:** <screenshots, regression, keyboard, semantics>
+
+## Risks
+
+| Risk | Likelihood | Impact | Mitigation |
+| --- | --- | --- | --- |
+| <Risk> | low/medium/high | low/medium/high | <Mitigation> |
+
+## Verification
+
+- <Targeted automated checks>
+- <Manual, visual, scanner, or runtime checks when required>
+- <Before/after measurement for Convergence mode>
 
 ## Definition of Done
 
 - [ ] All must-have acceptance criteria pass.
-- [ ] Code is reviewed and merged to the main branch.
-- [ ] Feature is tested in a staging environment.
-- [ ] No regression in existing critical flows.
-- [ ] Documentation updated (API docs, user-facing help, or internal wiki).
-- [ ] Analytics / metrics instrumented, if applicable.
-- [ ] Parent epic's feature checkbox is updated.
+- [ ] Required invariants and guardrails hold.
+- [ ] Verification evidence is recorded.
+- [ ] No unrelated changes are included.
+- [ ] Relevant documentation is updated.
 
 ## Tasks
 
-<Breakdown of implementation steps. Each task should be 1–3 days of work.>
+<Use one to three tasks. Each task is a vertical, independently committable
+implementation and verification unit that leaves required checks passing.
+Keep a failing regression test, its implementation, documentation, and final
+proof in the same task when they are coupled. Prefer one task for a small
+atomic feature.>
 
-- [ ] <Task 1 — e.g., scaffold API endpoint>
-- [ ] <Task 2 — e.g., build UI component>
-- [ ] <Task 3 — e.g., integrate frontend and backend>
-- [ ] <Task 4 — e.g., write tests>
-- [ ] <Task 5 — e.g., QA and bug fixes>
+- [ ] <Implement one bounded behavior or convergence change, add its focused
+  coverage and documentation, run required checks, and record evidence>
 
-## Notes
+## Progress
 
-<Open questions, decisions made, or references to discussions.>
+| Criterion or task | Status | Evidence | Notes |
+| --- | --- | --- | --- |

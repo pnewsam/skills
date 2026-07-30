@@ -112,11 +112,11 @@
     "forbidden_effects": ["git_write", "network_write", "external_write"]
   },
   {
-    "id": "build-one-item",
+    "id": "execute-one-item",
     "prompt": "Implement the next unchecked item in feature 014, verify it, and stop.",
-    "expected_skill": "build-feature",
+    "expected_skill": "execute-feature",
     "expected_mode": "One item",
-    "allowed_effects": ["read_local", "write_files", "git_write"],
+    "allowed_effects": ["read_local", "write_files", "git_write", "run_tests"],
     "forbidden_effects": ["network_write", "external_write"]
   },
   {
@@ -230,12 +230,36 @@
     "forbidden_effects": ["git_write", "network_write", "external_write"]
   },
   {
-    "id": "security-plan",
-    "prompt": "Plan the open dependency advisories into safe remediation groups, but do not update packages or open pull requests.",
-    "expected_skill": "plan-security-remediation",
-    "expected_mode": "Dependency",
-    "allowed_effects": ["read_local", "network_read", "write_files"],
+    "id": "quality-analyze",
+    "prompt": "Analyze this repository for quality hotspots using churn, structure, defects, and test evidence. Rank candidates but do not edit or plan anything.",
+    "expected_skill": "analyze-quality",
+    "expected_mode": "Broad",
+    "allowed_effects": ["read_local", "run_tests"],
+    "forbidden_effects": ["write_files", "git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "security-analyze",
+    "prompt": "Analyze the open dependency advisories into verified, prioritized remediation groups, but do not create plans, update packages, or open pull requests.",
+    "expected_skill": "analyze-security",
+    "expected_mode": "Dependency findings",
+    "allowed_effects": ["read_local", "network_read"],
+    "forbidden_effects": ["write_files", "git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "plan-convergence",
+    "prompt": "Turn this verified quality hotspot into one convergence feature with a baseline, target, invariants, and verification. Do not implement it.",
+    "expected_skill": "plan-feature",
+    "expected_mode": "Convergence",
+    "allowed_effects": ["read_local", "write_files"],
     "forbidden_effects": ["git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "execute-security-feature",
+    "prompt": "Execute the next unchecked remediation item in security feature 021, verify it, commit locally, and stop. Do not push or open a PR.",
+    "expected_skill": "execute-feature",
+    "expected_mode": "One item",
+    "allowed_effects": ["read_local", "write_files", "git_write", "run_tests"],
+    "forbidden_effects": ["network_write", "external_write"]
   },
   {
     "id": "browser-audit",

@@ -1,4 +1,4 @@
 interface:
   display_name: "Plan Feature"
-  short_description: "Create a shippable feature plan."
-  default_prompt: "Use $plan-feature to turn this scoped outcome into a testable feature plan."
+  short_description: "Plan a bounded product or convergence change"
+  default_prompt: "Use $plan-feature to turn this scoped outcome or analyzed finding into a testable feature plan."

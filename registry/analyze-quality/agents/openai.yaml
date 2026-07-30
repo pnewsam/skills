@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze Quality"
+  short_description: "Measure and prioritize software quality risks"
+  default_prompt: "Use $analyze-quality to measure and rank quality risks in this repository."

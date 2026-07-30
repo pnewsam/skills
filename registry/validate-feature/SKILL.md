@@ -1,6 +1,6 @@
 ---
 name: validate-feature
-description: Run a comprehensive validation pass after build-feature completes a feature. Reads the plan, runs proportionate targeted and regression tests, verifies acceptance criteria, and writes a validation report plus a plan reference. Use before prepare-pr or when asked for feature-level QA. Does not fix failures, commit, push, or open a PR.
+description: Run a comprehensive validation pass after execute-feature completes a feature. Reads the plan, runs proportionate targeted and regression tests, verifies acceptance criteria, and writes a validation report plus a plan reference. Use before prepare-pr or when asked for feature-level QA. Does not fix failures, commit, push, or open a PR.
 ---
 
 # Validate Feature
@@ -8,7 +8,7 @@ description: Run a comprehensive validation pass after build-feature completes a
 ## Overview
 
 Comprehensive post-build validation of a completed feature. This skill takes
-the feature plan from `build-feature`, runs targeted checks for the changed
+the feature plan from `execute-feature`, runs targeted checks for the changed
 areas, runs a surface-appropriate regression suite, verifies each acceptance
 criterion with the strongest available evidence, and produces a validation
 report that can be attached to the feature plan or PR.

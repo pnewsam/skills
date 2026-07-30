@@ -37,6 +37,18 @@ Test risk, not files. Coverage percentage is a weak proxy. A good test would fai
 | Bug fix | Test at the level where the bug was observable; add lower-level test if broad test exposed missing coverage. |
 | Refactor only | Existing tests should pass; add characterization tests if behavior is risky or unclear. |
 
+## Evidence Signals
+
+- Same-code pass/fail frequency is the primary flakiness signal.
+- Old skips or quarantines, retry dependence, repeated failure clusters, and
+  high duration variance indicate an unreliable suite.
+- Changed production behavior without corresponding tests identifies a review
+  candidate, not an automatic coverage failure.
+- Coverage percentage is a weak proxy. Prefer whether the test would fail for
+  a meaningful regression at the cheapest reliable level.
+- Compare runtime and failure trends only across compatible environments and
+  workloads.
+
 ## Do / Don't
 
 | Do | Don't |

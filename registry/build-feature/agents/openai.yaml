@@ -1,4 +1,0 @@
-interface:
-  display_name: "Build Feature"
-  short_description: "Implement one feature plan item."
-  default_prompt: "Use $build-feature to implement and verify one unchecked item, then stop."

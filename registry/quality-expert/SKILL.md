@@ -1,6 +1,6 @@
 ---
 name: quality-expert
-description: Route language-agnostic code quality requests to the smallest relevant quality-* skill set and synthesize the guidance. Use when a review or improvement spans two or more of clarity, modularity, refactoring, correctness, testing, or reliability, or when the primary quality risk is unclear. Prefer one focused quality-* skill for one clearly bounded concern; pair with stack experts for implementation details.
+description: Route language-agnostic code quality requests and measured quality evidence to the smallest relevant quality-* skill set and synthesize the guidance. Use when a review, improvement, or analyze-quality result spans two or more of clarity, modularity, refactoring, correctness, testing, or reliability, or when the primary quality risk is unclear. Prefer one focused quality-* skill for one clearly bounded concern; pair with stack experts for implementation details.
 ---
 
 # Quality Expert - Skill Router
@@ -36,6 +36,23 @@ Quality is not polish. Quality is the degree to which code can be understood, ch
 
 If more than three rows apply, start with `quality-modularity` and `quality-correctness`, then add the most immediate risk skill.
 
+## Evidence Routing
+
+Treat metrics as investigation signals, not verdicts:
+
+| Evidence | Primary Skill | Corroborate With |
+| :--- | :--- | :--- |
+| High churn plus high local complexity or reading cost | `quality-refactoring` | `quality-code-clarity`, recent change intent |
+| Frequent co-change, dependency cycles, broad fan-out, structural outliers | `quality-modularity` | ownership and likely next changes |
+| Long functions, deep nesting, dense branching, large parameter surfaces | `quality-code-clarity` | change frequency and defect history |
+| Reverts, repeated bug fixes, invariant failures, boundary incidents | `quality-correctness` | `quality-testing`, runtime evidence |
+| Untested churn, flakes, old skips, retries, duration variance | `quality-testing` | test purpose and failure classification |
+| Incidents, timeout/retry volume, queue growth, weak recovery evidence | `quality-reliability` | workload and environment context |
+
+Do not create a composite quality score or enforce universal thresholds. Prefer
+repository-relative trends and at least two corroborating signals unless direct
+defect or incident evidence is strong.
+
 ## Common Agent Mistakes
 
 - Treating quality as subjective style instead of change risk, defect risk, and operability.
@@ -64,4 +81,7 @@ If more than three rows apply, start with `quality-modularity` and `quality-corr
 
 - Use `react-expert`, `python-expert`, or another stack expert for idiomatic implementation details.
 - Use `compliance-expert` when the risk involves security, privacy, accessibility, regulated data, or audit evidence.
-- Use `plan-feature` or `plan-epic` when the improvement is too large for a local change.
+- Use `analyze-quality` when the user wants a recurring or repository-wide
+  evidence-gathering pass rather than focused guidance.
+- Use `plan-feature` in Convergence mode for one verified improvement; use
+  `plan-epic` only for a deliberately managed larger program.

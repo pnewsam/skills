@@ -30,9 +30,9 @@
       "skills": [
         "advance-epic",
         "audit-epic",
-        "build-feature",
         "create-charter",
         "document-architecture",
+        "execute-feature",
         "explore-directions",
         "plan-bug-bash",
         "plan-epic",
@@ -78,6 +78,7 @@
     "compliance": {
       "description": "Accessibility, auditability, privacy, security, GDPR, HIPAA, vulnerability management, and threat modeling.",
       "skills": [
+        "analyze-security",
         "compliance-accessibility",
         "compliance-auditability",
         "compliance-expert",
@@ -90,11 +91,13 @@
       ]
     },
     "security-delivery": {
-      "description": "Planning and implementing dependency and code-scanning remediations.",
+      "description": "Analyze security findings and deliver one verified remediation through the shared feature workflow.",
       "skills": [
-        "plan-security-remediation",
-        "remediate-code-scanning",
-        "remediate-vulnerability"
+        "analyze-security",
+        "compliance-security",
+        "compliance-vulnerability-management",
+        "execute-feature",
+        "plan-feature"
       ]
     },
     "python": {
@@ -131,6 +134,7 @@
     "quality": {
       "description": "Language-agnostic correctness, clarity, modularity, reliability, testing, refactoring, async, errors, and TypeScript guidance.",
       "skills": [
+        "analyze-quality",
         "async-patterns",
         "error-handling",
         "quality-code-clarity",

@@ -1,3 +1,0 @@
-interface:
-  display_name: "Remediate Code Scanning"
-  short_description: "Fix planned code scanning alerts."

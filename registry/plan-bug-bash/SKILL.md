@@ -1,15 +1,15 @@
 ---
 name: plan-bug-bash
-description: Process stream-of-consciousness bug, issue, and app-feedback observations into a standard docs/epics bug-bash epic with prioritized child features. Use when asked to triage dictated notes, organize bug bash observations, process app feedback, or convert a wall of issues into the directions, epics, and features workflow. Pairs with plan-feature, advance-epic, build-feature, and ship-epic.
+description: Process stream-of-consciousness bug, issue, and app-feedback observations into a standard docs/epics bug-bash epic with prioritized child features. Use when asked to triage dictated notes, organize bug bash observations, process app feedback, or convert a wall of issues into the directions, epics, and features workflow. Pairs with plan-feature, advance-epic, execute-feature, and ship-epic.
 ---
 
 # Plan Bug Bash
 
 ## Overview
 
-Take unstructured bug bash input — often dictated while clicking through an app — and transform it into a normal epic plan under `docs/epics/`. A bug bash is not a separate queue or tracker type. It is an epic with child features, and each child feature can later be expanded with `plan-feature` and executed with `advance-epic`, `build-feature`, or `ship-epic`.
+Take unstructured bug bash input — often dictated while clicking through an app — and transform it into a normal epic plan under `docs/epics/`. A bug bash is not a separate queue or tracker type. It is an epic with child features, and each child feature can later be expanded with `plan-feature` and executed with `advance-epic`, `execute-feature`, or `ship-epic`.
 
-Do not create a separate bug-bash tracker. Execution belongs to `plan-feature`, `advance-epic`, `build-feature`, and `ship-epic`.
+Do not create a separate bug-bash tracker. Execution belongs to `plan-feature`, `advance-epic`, `execute-feature`, and `ship-epic`.
 
 ## Goals
 
