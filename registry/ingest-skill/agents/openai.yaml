@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ingest Skill"
+  short_description: "Evaluate and assimilate an external skill"
+  default_prompt: "Use $ingest-skill to evaluate this external skill and apply the best local registry change."
