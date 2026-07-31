@@ -1,6 +1,6 @@
 ---
 name: revise-pr
-description: Audit an existing pull request through an available authenticated GitHub integration or gh against its current diff and, when explicitly requested, update its title or body. Use when asked to check, revise, sync, or refresh PR metadata after the branch changes. Defaults to a read-only audit; editing is a separate external-write mode.
+description: Audit an existing pull request through an available authenticated GitHub integration or gh against its current diff and, when explicitly requested, update its title or body so the metadata accurately reflects the branch. Use when asked to check, revise, sync, or refresh PR metadata after code changes. Defaults to a read-only audit; editing is a separate external-write mode. Use polish-pr instead for language-only clarity and tone improvements.
 ---
 
 # Revise PR
@@ -9,6 +9,9 @@ description: Audit an existing pull request through an available authenticated G
 
 Audit an open pull request by comparing its current title and description against
 the actual code changes on the branch.
+
+Use `polish-pr` when the existing metadata is substantively accurate and only
+its clarity, concision, tone, or human readability needs improvement.
 
 - **Audit mode:** Report discrepancies and draft a replacement. This is the
   default for "review" or "check" requests.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Execute Feature"
+  short_description: "Implement and verify one planned feature item"
+  default_prompt: "Use $execute-feature to implement and verify the next unchecked item, then stop."

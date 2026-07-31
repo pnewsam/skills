@@ -1,0 +1,11 @@
+interface:
+  display_name: "Polish Linear Issue"
+  short_description: "Make a Linear issue clear and human-readable."
+  default_prompt: "Use $polish-issue to make this Linear issue clearer without changing its meaning."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "linear"
+      description: "Linear MCP server"
+      transport: "streamable_http"
+      url: "https://mcp.linear.app/mcp"

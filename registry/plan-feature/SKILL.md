@@ -1,138 +1,126 @@
 ---
 name: plan-feature
-description: create a structured feature plan that defines a 1–2 week deliverable and links it to a parent epic. use when scoping a concrete, implementable body of work. produces a markdown feature document in docs/features/ with user stories, acceptance criteria, and technical notes. enforces charter and epic alignment via mandatory checks.
+description: Create or update a structured plan for one bounded, independently verifiable product feature or convergence improvement. Use after product direction is clear or after an analyze-* workflow identifies a quality, security, design-system, defect, dependency, testing, or other maintenance candidate. Product mode aligns to a charter and parent epic; Convergence mode consumes evidence directly and records a baseline, target, invariants, guardrails, and verification. Writes local docs/features planning artifacts only and never implements, commits, pushes, or publishes.
 ---
 
 # Plan Feature
 
-## Overview
+## Outcome
 
-Translate an epic-level initiative into a concrete feature plan: a 1–2 week deliverable with clear user stories, acceptance criteria, and a definition of done.
+Produce one implementation-ready `docs/features/NNN-<slug>.md` plan for a
+bounded change. A feature is the durable unit consumed by `execute-feature`;
+it may deliver user value or converge an existing system toward a measurable
+known-good state.
 
-A feature plan is the handoff document between product and engineering. It should be detailed enough that an engineer can read it and begin implementation without asking clarifying questions about scope or intent.
+Use `references/feature_template.md` when writing the plan.
 
-Every feature must reference a parent epic and pass alignment checks. If no parent epic exists, stop and recommend `plan-epic`; if no charter exists, recommend `create-charter` first. Refactors, projects, platform work, and internal quality initiatives should still be planned as epics and features rather than using separate top-level planning directories.
+## Modes and effects
 
-## Goals
+- **Product mode:** plan a user-facing or enabling capability. Require a
+  relevant charter and parent epic, and preserve their goals and non-goals.
+- **Convergence mode:** plan one evidence-backed improvement from
+  `analyze-quality`, `analyze-security`, another `analyze-*` workflow, or
+  equivalent user-supplied evidence. A parent epic is optional. Do not invent a
+  user story when the real outcome is maintainability, security, reliability,
+  consistency, or defect reduction.
 
-- Define a feature small enough to ship in 1–2 weeks.
-- Write user stories from the user's perspective, not the system's.
-- Specify acceptance criteria that are unambiguous and testable.
-- Identify technical considerations and dependencies before implementation starts.
-- Enforce alignment with the parent epic and charter.
+This workflow may create or update one local feature plan. It must not modify
+source or configuration, create branches or commits, push, publish, or update
+external trackers.
 
-## Safety rules
+## Inputs
 
-- Do not modify source code, configuration, or branches.
-- Do not create a feature plan without reading its parent epic and `docs/CHARTER.md` first.
-- Do not invent parent plan content — reference it by section.
-- Features must be shippable independently. If the feature cannot be shipped without other work, it is not a feature — it is a task within a larger feature.
-- Acceptance criteria must be specific enough that a QA engineer could verify them without asking questions.
+Product mode needs:
+
+- the product outcome and user or enabling value
+- `docs/CHARTER.md` and the relevant parent epic
+- available designs, contracts, dependencies, and constraints
+
+Convergence mode needs:
+
+- the analyzed finding or equivalent evidence
+- affected scope and current baseline
+- expected target or condition
+- behavior, interfaces, or controls that must remain invariant
+- measurement method, window, exclusions, and confidence when metrics are used
+- verification and rollback or recovery expectations
+
+If the evidence is unverified, ambiguous, or still a long inventory, stop and
+recommend the relevant `analyze-*` workflow. If the work contains independent
+outcomes, plan only one and leave the others for separate invocations.
 
 ## Workflow
 
-### 1. Read the parent plan
+### 1. Establish context and boundary
 
-```bash
-cat docs/CHARTER.md 2>/dev/null
-cat docs/epics/*.md 2>/dev/null | head -100
-ls docs/epics/ 2>/dev/null
-```
+Inspect existing feature plans and relevant repository documentation to avoid
+duplication. In Product mode, read the charter and parent epic and name the
+goal and non-goal this feature advances. In Convergence mode, inspect the
+finding evidence, existing work, and any relevant quality, compliance, design,
+stack, or platform references.
 
-Identify the parent epic this feature belongs to. If multiple epics exist, ask the user which one this feature advances.
+Define one independently verifiable outcome. Keep the implementation and review
+surface focused; split unrelated findings, ecosystems, controls, component
+families, or behavior changes. Prefer work that can be completed in days to two
+weeks. Use an epic only when the user is deliberately managing a larger program.
 
-If no charter or epic exists:
+### 2. Define the plan and proof
 
-1. Stop.
-2. Inform the user that features must align to a parent epic and charter.
-3. Recommend running `create-charter` first when `docs/CHARTER.md` is missing, then `plan-epic` before planning features.
+Write:
 
-Read the parent plan fully. Note:
+- outcome, context, scope, and explicit non-goals
+- testable acceptance criteria and one to three implementation tasks
+- dependencies, affected boundaries, and compatibility risks
+- verification, rollback or recovery, and definition of done
 
-- The epic's goals and success criteria.
-- The charter principles this epic serves.
-- Any non-goals that constrain this feature's scope.
-- Whether this feature fills a checkbox in the epic's "Child Features" section.
+Make every task a vertical, independently committable implementation and
+verification unit. Include its focused tests, documentation, and evidence in
+the same task when they are required for that change. Do not create separate
+sequential tasks for a failing test, its implementation, and final
+verification: an `execute-feature` run must not stop with required checks
+failing. For a small feature that must land atomically, prefer one task.
 
-### 2. Understand the feature
+For Product mode, include the user story and charter/epic alignment.
 
-Ask the user to describe the feature. Gather:
+For Convergence mode, include:
 
-- What user problem does this feature solve?
-- What does the user do today without this feature?
-- What is the smallest version of this that would still be valuable? (MVP scope)
-- Are there existing designs, wireframes, or user flows?
-- Are there API contracts, data models, or external dependencies?
-- What does "done" mean? When would we feel confident shipping this?
+- source finding or stable evidence marker
+- baseline and target
+- metric method, window, exclusions, confidence, and limitations
+- behavior or control invariants
+- guardrails that must not regress
+- negative tests, scanner rechecks, visual checks, or runtime evidence when
+  relevant
 
-If the user describes something larger than 2 weeks, recommend breaking it into multiple features or using `plan-epic`.
+Use at most three primary success metrics. Metrics are evidence, not goals to
+game. A structural change must identify the change or risk it makes easier.
 
-### 3. Explore existing features
+### 3. Write, validate, and report
 
-Check for prior feature plans:
+Assign the next available feature ID and create or update the feature plan. On
+update, preserve its ID, completed work, evidence, and accurate history.
 
-```bash
-ls docs/features/ 2>/dev/null
-find . -path "*/features/*.md" | head -20
-```
+Validate that:
 
-Read related features to avoid duplication and ensure consistent patterns.
+- the outcome is one coherent, independently reviewable change
+- every must-have criterion is objectively verifiable
+- Product mode aligns with its charter and parent epic
+- Convergence mode has evidence, a baseline, a target, invariants, and a
+  proportionate proof method
+- non-goals prevent adjacent cleanup or unrelated hardening
+- each task can finish with its required checks passing and a reviewable commit
+- `execute-feature` can perform the next unchecked item without rediscovering
+  the intent or depending on a later task to make the repository healthy
 
-### 4. Draft the feature plan
+Report the path, mode, outcome, size, evidence or alignment concerns, and the
+recommended `execute-feature` invocation.
 
-Write the feature document using the template in `references/feature_template.md`. Store it at `docs/features/NNN-feature-name.md`.
+## Safety and idempotency
 
-### 5. Validate the feature plan
-
-Before finalizing, run these checks:
-
-- **Parent coherence check:** Can you draw a straight line from this feature's user story to the parent epic's goals? If not, the feature is misaligned or the epic needs revision.
-- **Size check:** Can this feature reasonably be coded, reviewed, and tested in 1–2 weeks by 1–2 engineers? If not, decompose into multiple features.
-- **Acceptance criteria check:** Is each criterion verifiable without subjective judgment? "It feels fast" is not a criterion. "Page load completes in < 200ms on 3G" is.
-- **Independence check:** Can this feature be shipped and rolled out without waiting for other in-flight features? If not, identify the dependency and decide whether to merge features or accept the coupling.
-- **Non-goal check:** Does the out-of-scope section protect against scope creep? Would a reasonable stakeholder ask for one of the listed out-of-scope items? If not, the section is too weak.
-
-If any check fails, flag it to the user and propose a revision.
-
-### 6. Write the file
-
-```bash
-mkdir -p docs/features
-```
-
-Assign the next available ID:
-
-```bash
-ls docs/features/ | grep -E '^[0-9]+' | sort | tail -1
-```
-
-Write the finalized feature plan to `docs/features/NNN-<slug>.md`.
-
-If the parent epic has a "Child Features" section, prompt the user to update the epic's checkbox to link to this feature plan.
-
-### 7. Final response
-
-Report:
-
-- Confirmation that the feature plan has been written.
-- The assigned feature ID and file path.
-- A one-sentence summary of the user story.
-- Size and independence assessment — is this truly a 1–2 week feature?
-- Any alignment concerns or scope warnings flagged during validation.
-- Recommended next step: begin implementation, or run `plan-feature` again for the next feature in the epic.
-
-## Idempotency
-
-If `docs/features/NNN-<slug>.md` already exists:
-
-1. Read the existing feature plan fully.
-2. Ask the user whether they want to update the existing plan or create a new one.
-3. If updating, preserve the ID and metadata, update changed sections, and refresh the "Last updated" field.
-4. If creating a new feature, assign the next available ID.
-
-## When not to use this skill
-
-- Do not use this skill for work estimated at >2 weeks — use `plan-epic` instead.
-- Do not use this skill without a parent epic and `docs/CHARTER.md` — the alignment step will fail.
-- Do not use this skill for isolated tech-debt tasks with no epic-level goal — use a task tracker or direct implementation instead.
-- Do not use this skill to produce a detailed implementation spec — acceptance criteria are the boundary; implementation details belong in code review and architecture discussions.
+- Preserve unrelated plans and working-tree changes.
+- Never include secrets, credentials, private scanner logs, or sensitive raw
+  data in the plan.
+- Reuse an existing plan when its outcome and evidence match; do not duplicate
+  work that already has a credible owner.
+- Do not silently convert an analysis inventory into multiple plans.
+- Do not advance to implementation without explicit user intent.

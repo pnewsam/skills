@@ -44,7 +44,7 @@ Classify a skill on four operational facets:
 | --- | --- | --- |
 | **Kind** | router, workflow, reference | Determines the skill's expected structure |
 | **Domain** | product, Git/PR, UI, design, React, Python, quality, compliance, platform, testing, and others | Controls installation and routing neighborhoods |
-| **Stage** | discover, decide, plan, implement, validate, review, ship, preserve | Shows where the skill fits in a lifecycle |
+| **Stage** | analyze, plan, execute, review, preserve | Shows where the skill fits in a lifecycle |
 | **Effect** | read-only, local files, local Git, network read, external write | Makes authorization and stopping points explicit |
 
 Use **divergence** and **convergence** as optional product-thinking lenses, not
@@ -59,15 +59,18 @@ origin commit and must be updated from upstream rather than edited locally.
 Profiles may include other profiles. `core` intentionally stays small and
 operational; install `advisory` when broad cross-domain routing is useful. The
 advisory profile composes the maintained specialist profiles but deliberately
-does not include externally sourced references.
+does not include externally sourced references. Install `linear-ops` for the
+focused Linear issue and project creation workflows.
 
-Most workflow skills move through the same broad lifecycle. New evidence,
-blockers, or review feedback can send work back to discovery or planning.
+Routine convergence workflows use no more than three linear stages. Approval is
+a gate between planning and execution, validation belongs inside execution, and
+publication remains a separate delivery action. New evidence can send work back
+to analysis or planning.
 
 ```mermaid
 flowchart LR
-    D["Discover / decide"] --> P["Plan"] --> I["Implement"] --> V["Validate / review"] --> S["Ship / preserve"]
-    V -.->|"new evidence"| D
+    A["Analyze domain"] --> P["Plan feature"] --> E["Execute feature"]
+    E -.->|"new evidence"| A
 ```
 
 ## Artifacts
@@ -100,7 +103,7 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
       wip-<name>.md                    # stash context breadcrumb when trackable
 ```
 
-`docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Projects, refactors, bug bashes, browser-test coverage, component-structure work, security remediation, platform work, and internal quality initiatives should still flow through epics and features rather than separate top-level planning directories or `docs/tmp` queues. `docs/tmp/` is reserved for ephemeral session breadcrumbs and WIP handoff notes.
+`docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Product programs and deliberately managed multi-feature initiatives flow through epics. Bounded refactors, security remediations, design-system consolidation, defect fixes, dependency work, and other convergence improvements may go directly from an `analyze-*` result to `plan-feature`; a parent epic is optional in Convergence mode. `docs/tmp/` is reserved for ephemeral session breadcrumbs and WIP handoff notes.
 
 ## Workflow Skills
 
@@ -129,11 +132,11 @@ flowchart TD
     SP -->|plans missing features| PF
     SP -->|advances until complete| AE
     SP -->|prepares PR| PPR[prepare-pr]
-    PF -->|produces docs/features/| BF[build-feature]
-    BF -->|validates with| VF[validate-feature]
+    PF -->|produces docs/features/| EF[execute-feature]
+    EF -->|may receive final audit from| VF[validate-feature]
     PE --> AE[advance-epic]
     AE -.->|orchestrates| PF
-    AE -.->|orchestrates| BF
+    AE -.->|orchestrates| EF
     AE2[audit-epic] -->|Audit mode writes report| AR[epic audit]
     AE2 -->|Closure mode writes punch list| GC[gap closure plan]
     GC -.->|informs revisions to| PE
@@ -146,16 +149,30 @@ flowchart TD
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
 | [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create a structured epic plan that translates a product charter into a quarter-level initiative.                              |
 | [plan-bug-bash](registry/plan-bug-bash/SKILL.md)       | workflow | divergence | analyze, plan | Turn stream-of-consciousness bug observations into a standard bug-bash epic with prioritized child features.            |
-| [plan-feature](registry/plan-feature/SKILL.md)         | workflow | convergence | plan | Create a structured feature plan that defines a 1–2 week deliverable and links it to a parent epic.                           |
-| [build-feature](registry/build-feature/SKILL.md)       | workflow | convergence | execute | Implement one acceptance criterion from a feature plan — write code, verify, commit, and check it off. Run repeatedly until the feature is complete. |
+| [plan-feature](registry/plan-feature/SKILL.md)         | workflow | convergence | plan | Plan one bounded product feature or evidence-backed convergence improvement; parent epics are optional in Convergence mode. |
+| [execute-feature](registry/execute-feature/SKILL.md)   | workflow | convergence | execute | Implement and verify one unchecked item from any product or convergence feature plan, create one local commit, and stop. |
 | [advance-epic](registry/advance-epic/SKILL.md)         | workflow | convergence | execute | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete.    |
 | [ship-epic](registry/ship-epic/SKILL.md)               | workflow | convergence | execute | Complete an epic end-to-end — plan missing features, advance until all child features are complete, validate, and prepare a PR. |
 | [audit-epic](registry/audit-epic/SKILL.md)             | workflow | convergence | analyze, plan | Audit an epic against its feature plans; optionally turn the findings into a prioritized, progress-preserving gap-closure plan. |
 
-### Engineering Diagnosis
+### Linear Operations
+
+Focused workflows for creating or polishing one verified Linear record and
+stopping. Install the `linear-ops` profile when a team uses Linear.
 
 | Skill | Type | Phase | Description |
 | --- | --- | --- | --- |
+| [create-issue](registry/create-issue/SKILL.md) | workflow | plan | Resolve live workspace fields, create one Linear issue, verify it, and stop. |
+| [create-project](registry/create-project/SKILL.md) | workflow | plan | Resolve live workspace fields, create one Linear project, verify it, and stop. |
+| [polish-issue](registry/polish-issue/SKILL.md) | workflow | edit | Improve an issue's language without changing its substance or properties. |
+
+### Analysis Workflows
+
+| Skill | Type | Phase | Description |
+| --- | --- | --- | --- |
+| [analyze-design-system](registry/analyze-design-system/SKILL.md) | workflow | analyze | Measure token, primitive, component-family, pattern, state, and migration convergence; rank bounded consolidation candidates without editing or planning. |
+| [analyze-quality](registry/analyze-quality/SKILL.md) | workflow | analyze | Measure and interpret quality signals across maintainability, correctness, testing, and reliability; rank bounded feature candidates without editing or planning. |
+| [analyze-security](registry/analyze-security/SKILL.md) | workflow | analyze | Verify and prioritize application-security posture gaps, dependency findings, and code-scanning findings without changing code or creating plans. |
 | [diagnose-failure](registry/diagnose-failure/SKILL.md) | workflow | analyze | Reproduce and localize a software failure, rank hypotheses, and report an evidence-backed cause without editing the project. |
 
 ### Git And PR Workflow
@@ -173,6 +190,7 @@ flowchart LR
 | [stash](registry/stash/SKILL.md)                   | workflow | convergence | preserve | Preserve related in-progress work on a local `wip/` branch in one commit with a context note.                     |
 | [save-session](registry/save-session/SKILL.md)     | workflow |             | analyze | Summarize the current working session and save it to `docs/tmp/`.                                                   |
 | [prepare-pr](registry/prepare-pr/SKILL.md)         | workflow |             | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR.     |
+| [polish-pr](registry/polish-pr/SKILL.md)           | workflow | convergence | edit | Improve a PR's language without changing its substance, template, or checklist state. |
 | [revise-pr](registry/revise-pr/SKILL.md)           | workflow | convergence | execute | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits.        |
 | [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze, review | Review a pull request for actionable defects or assess operational and merge risk; post only when explicitly requested. |
 
@@ -187,22 +205,21 @@ flowchart LR
 | ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | [document-architecture](registry/document-architecture/SKILL.md) | workflow | convergence | analyze | Create or refresh derived `docs/architecture/ARCHITECTURE.md` from the codebase, including Mermaid diagrams for system context, runtime flows, boundaries, and data shape. |
 
-### Security Remediation Workflows
+### Security Analysis And Shared Delivery
 
 ```mermaid
 flowchart LR
-    TM[threat-model] -->|may identify work| PSR[plan-security-remediation]
-    PSR -->|produces security epic| PF1[plan-feature]
-    PF1 --> RV[remediate-vulnerability]
-    PF1 --> RCS[remediate-code-scanning]
+    TM[threat-model] -->|may identify controls| AS[analyze-security]
+    AS -->|one verified group| PF1[plan-feature]
+    PF1 --> EF1[execute-feature]
 ```
 
 | Skill | Type | Mode | Phase | Description |
 | --- | --- | --- | --- | --- |
 | [threat-model](registry/threat-model/SKILL.md) | workflow | divergence | analyze, document | Map assets, actors, data flows, trust boundaries, abuse cases, controls, and residual risk; save a document only when requested. |
-| [plan-security-remediation](registry/plan-security-remediation/SKILL.md) | workflow | convergence | analyze, plan | Verify and group dependency, CodeQL, SAST, or mixed findings into a standard, idempotent security-remediation epic. |
-| [remediate-vulnerability](registry/remediate-vulnerability/SKILL.md) | workflow | convergence | execute | Execute one planned dependency vulnerability remediation feature, verify the fix, commit, push, and open a PR. |
-| [remediate-code-scanning](registry/remediate-code-scanning/SKILL.md) | workflow | convergence | execute | Execute one planned CodeQL/SAST remediation feature, verify the fix, and create or update a pull request. |
+| [analyze-security](registry/analyze-security/SKILL.md) | workflow | convergence | analyze | Verify, normalize, group, and prioritize posture gaps, dependency advisories, and code-scanning findings. |
+| [plan-feature](registry/plan-feature/SKILL.md) | workflow | convergence | plan | Record one verified remediation group with baseline, target, invariants, guardrails, and resolution evidence. |
+| [execute-feature](registry/execute-feature/SKILL.md) | workflow | convergence | execute | Apply and verify one planned security item using conditionally loaded security safeguards, then commit locally and stop. |
 
 ### Testing Workflows
 
@@ -213,8 +230,8 @@ flowchart LR
     PBT -->|Audit mode writes epic audit| AUD[browser-test audit]
     PF2 --> ABT[add-browser-test]
     PF2 --> FBT[fix-browser-test]
-    BF2[build-feature] --> VC[validate-changes]
-    BF2 --> VF2[validate-feature]
+    EF2[execute-feature] --> VC[validate-changes]
+    EF2 --> VF2[validate-feature]
 ```
 
 | Skill                                                                      | Type     | Mode        | Phase         | Description                                                                                                                                    |
@@ -236,10 +253,15 @@ Reference skills for turning a functional interface into something clearer, calm
 
 Legacy design-system and critique workflows are retained under `archive/` for
 migration history. They are not discoverable or installable. The active design
-taxonomy uses the `design-expert` router and focused `design-*` references.
+taxonomy uses `analyze-design-system` for repository-wide convergence,
+`design-expert` for broad visual judgment, and focused `design-*` references
+for individual decisions.
 
 ```mermaid
 flowchart LR
+    ADS[analyze-design-system] -->|one bounded candidate| PF[plan-feature]
+    PF --> EF[execute-feature]
+    ADS -.->|interprets visual drift with| DX
     DX[design-expert] --> DC[design-composition]
     DX --> VH[visual-hierarchy]
     DX --> DS[design-simplicity]

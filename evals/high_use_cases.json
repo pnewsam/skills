@@ -112,11 +112,11 @@
     "forbidden_effects": ["git_write", "network_write", "external_write"]
   },
   {
-    "id": "build-one-item",
+    "id": "execute-one-item",
     "prompt": "Implement the next unchecked item in feature 014, verify it, and stop.",
-    "expected_skill": "build-feature",
+    "expected_skill": "execute-feature",
     "expected_mode": "One item",
-    "allowed_effects": ["read_local", "write_files", "git_write"],
+    "allowed_effects": ["read_local", "write_files", "git_write", "run_tests"],
     "forbidden_effects": ["network_write", "external_write"]
   },
   {
@@ -230,12 +230,44 @@
     "forbidden_effects": ["git_write", "network_write", "external_write"]
   },
   {
-    "id": "security-plan",
-    "prompt": "Plan the open dependency advisories into safe remediation groups, but do not update packages or open pull requests.",
-    "expected_skill": "plan-security-remediation",
-    "expected_mode": "Dependency",
-    "allowed_effects": ["read_local", "network_read", "write_files"],
+    "id": "quality-analyze",
+    "prompt": "Analyze this repository for quality hotspots using churn, structure, defects, and test evidence. Rank candidates but do not edit or plan anything.",
+    "expected_skill": "analyze-quality",
+    "expected_mode": "Broad",
+    "allowed_effects": ["read_local", "run_tests"],
+    "forbidden_effects": ["write_files", "git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "design-system-analyze",
+    "prompt": "Analyze design-system convergence across tokens, component families, interaction states, and legacy usage. Rank bounded candidates but do not edit styles, migrate components, create plans, or publish anything.",
+    "expected_skill": "analyze-design-system",
+    "expected_mode": "Broad",
+    "allowed_effects": ["read_local", "run_tests"],
+    "forbidden_effects": ["write_files", "git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "security-analyze",
+    "prompt": "Analyze the open dependency advisories into verified, prioritized remediation groups, but do not create plans, update packages, or open pull requests.",
+    "expected_skill": "analyze-security",
+    "expected_mode": "Dependency findings",
+    "allowed_effects": ["read_local", "network_read"],
+    "forbidden_effects": ["write_files", "git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "plan-convergence",
+    "prompt": "Turn this verified quality hotspot into one convergence feature with a baseline, target, invariants, and verification. Do not implement it.",
+    "expected_skill": "plan-feature",
+    "expected_mode": "Convergence",
+    "allowed_effects": ["read_local", "write_files"],
     "forbidden_effects": ["git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "execute-security-feature",
+    "prompt": "Execute the next unchecked remediation item in security feature 021, verify it, commit locally, and stop. Do not push or open a PR.",
+    "expected_skill": "execute-feature",
+    "expected_mode": "One item",
+    "allowed_effects": ["read_local", "write_files", "git_write", "run_tests"],
+    "forbidden_effects": ["network_write", "external_write"]
   },
   {
     "id": "browser-audit",
@@ -252,5 +284,45 @@
     "expected_mode": "Focused guidance",
     "allowed_effects": ["read_local"],
     "forbidden_effects": ["write_files", "git_write", "external_write"]
+  },
+  {
+    "id": "create-linear-issue",
+    "prompt": "Create one Linear issue for the ENG team to add an expired-session recovery screen, with the acceptance criteria from this conversation.",
+    "expected_skill": "create-issue",
+    "expected_mode": "Create one",
+    "allowed_effects": ["network_read", "external_write"],
+    "forbidden_effects": ["write_files", "git_write"]
+  },
+  {
+    "id": "create-linear-project",
+    "prompt": "Create a Linear project for the Web team called Checkout Reliability, targeted for the end of Q3. Do not create its issues yet.",
+    "expected_skill": "create-project",
+    "expected_mode": "Create one",
+    "allowed_effects": ["network_read", "external_write"],
+    "forbidden_effects": ["write_files", "git_write"]
+  },
+  {
+    "id": "polish-pr-preview",
+    "prompt": "Show me a clearer, more human-readable version of PR 42's title and description, but do not update GitHub.",
+    "expected_skill": "polish-pr",
+    "expected_mode": "Preview",
+    "allowed_effects": ["network_read"],
+    "forbidden_effects": ["write_files", "git_write", "external_write"]
+  },
+  {
+    "id": "polish-pr-apply",
+    "prompt": "Polish PR 42 so it reads naturally for reviewers, preserve all facts and checkboxes, and apply the edit.",
+    "expected_skill": "polish-pr",
+    "expected_mode": "Apply",
+    "allowed_effects": ["network_read", "external_write"],
+    "forbidden_effects": ["write_files", "git_write"]
+  },
+  {
+    "id": "polish-linear-issue",
+    "prompt": "Clean up the wording in Linear issue ENG-123 and apply it without changing its requirements, status, or properties.",
+    "expected_skill": "polish-issue",
+    "expected_mode": "Apply",
+    "allowed_effects": ["network_read", "external_write"],
+    "forbidden_effects": ["write_files", "git_write"]
   }
 ]

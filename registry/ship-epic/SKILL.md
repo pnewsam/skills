@@ -7,7 +7,7 @@ description: Complete an epic end-to-end by planning all missing child features,
 
 ## Overview
 
-Drive one epic from planned initiative to PR-ready branch. This skill is an orchestrator: it does not replace `plan-feature`, `advance-epic`, `build-feature`, `validate-feature`, or `prepare-pr`; it runs them in the right order until the epic is complete or a blocker requires user input.
+Drive one epic from planned initiative to PR-ready branch. This skill is an orchestrator: it does not replace `plan-feature`, `advance-epic`, `execute-feature`, `validate-feature`, or `prepare-pr`; it runs them in the right order until the epic is complete or a blocker requires user input.
 
 Use this when the user wants the full sequence:
 
@@ -20,11 +20,11 @@ Use this when the user wants the full sequence:
 
 - Do not start without an epic plan from `docs/epics/` unless the user explicitly provides another epic source.
 - Do not invent child feature scope. Missing or unclear feature scope must go through `plan-feature`.
-- Do not implement directly. Delegate feature implementation to `advance-epic`, which delegates to `build-feature`.
+- Do not implement directly. Delegate feature implementation to `advance-epic`, which delegates to `execute-feature`.
 - Do not create duplicate feature plans. Reuse existing `docs/features/` files when they match a child feature.
 - Do not run `prepare-pr` until the epic is complete or the user explicitly asks for a partial PR.
 - Stop if the working tree contains unrelated changes and ask what should be included.
-- Stop on any blocker reported by `plan-feature`, `advance-epic`, `build-feature`, `validate-feature`, or `prepare-pr`.
+- Stop on any blocker reported by `plan-feature`, `advance-epic`, `execute-feature`, `validate-feature`, or `prepare-pr`.
 - Keep a progress summary after every loop so the run can resume safely if interrupted.
 
 ## Workflow
@@ -76,7 +76,7 @@ After each completed child feature:
 
 1. Confirm the epic checkbox or progress entry was updated.
 2. Confirm the feature plan reflects completed acceptance criteria.
-3. Run targeted validation recommended by `advance-epic` or `build-feature`.
+3. Run targeted validation recommended by `advance-epic` or `execute-feature`.
 4. Re-read the epic to find remaining incomplete features.
 
 Stop the loop when:

@@ -153,6 +153,7 @@ without erasing unresolved ownership.
   boundaries.
 - Use `compliance-privacy`, `compliance-gdpr`, or `compliance-hipaa` for
   applicable data obligations.
-- Use `plan-security-remediation` when the model produces multiple concrete
-  remediation workstreams.
+- Use `analyze-security` when the model should be compared with current
+  controls or combined with dependency and code-scanning evidence.
+- Use `plan-feature` in Convergence mode for one concrete remediation outcome.
 - Use `review-pr` Risk mode when evaluating the implementation diff.

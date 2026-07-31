@@ -1,6 +1,6 @@
 ---
 name: validate-changes
-description: run targeted validation against recent code changes. reads the git diff, identifies which areas of the app changed, finds the relevant tests, runs only those tests, and reports what was validated and what gaps remain. use for spot-checking after making changes, before committing, after build-feature completes an item, or anytime you want fast targeted feedback on whether recent changes broke anything.
+description: run targeted validation against recent code changes. reads the git diff, identifies which areas of the app changed, finds the relevant tests, runs only those tests, and reports what was validated and what gaps remain. use for spot-checking after making changes, before committing, during or after execute-feature, or anytime you want fast targeted feedback on whether recent changes broke anything.
 ---
 
 # Validate Changes
@@ -20,7 +20,7 @@ If no tests exist that cover the changed areas, the skill runs existing smoke te
 
 ## When to use
 
-- After `build-feature` completes an item: validate the specific changes
+- During or after `execute-feature`: validate the specific changes
 - Before committing: quick spot-check
 - After merging a branch: verify nothing broke
 - Anytime you want fast, targeted feedback on recent changes

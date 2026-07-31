@@ -1,6 +1,6 @@
 ---
 name: advance-epic
-description: Advance an epic by coordinating its next incomplete child feature. Use when asked to make one bounded step on a planned epic. Reads docs/epics/NNN-*.md, selects the next child, verifies that a feature plan exists, runs one build-feature step, updates progress only when supported by evidence, then stops. Does not publish or open a PR.
+description: Advance an epic by coordinating its next incomplete child feature. Use when asked to make one bounded step on a planned epic. Reads docs/epics/NNN-*.md, selects the next child, verifies that a feature plan exists, runs one execute-feature step, updates progress only when supported by evidence, then stops. Does not publish or open a PR.
 ---
 
 # Advance Epic
@@ -8,7 +8,7 @@ description: Advance an epic by coordinating its next incomplete child feature. 
 ## Overview
 
 Execute one bounded step of an epic. A single invocation selects one child
-feature and runs at most one `build-feature` item. Mark the child complete only
+feature and runs at most one `execute-feature` item. Mark the child complete only
 when its entire feature plan is complete and verified.
 
 If planning is missing, stop and recommend `plan-feature`; do not silently
@@ -38,8 +38,8 @@ If no epic plans exist, stop and tell the user to run `plan-epic` first.
 
 ## Safety rules
 
-- Do not modify source code directly — delegate implementation to `build-feature`.
-- Do not mark a child feature as complete unless `build-feature` reports it done.
+- Do not modify source code directly — delegate implementation to `execute-feature`.
+- Do not mark a child feature as complete unless `execute-feature` reports it done.
 - Do not create duplicate feature plans if one already exists.
 - Do not skip child features out of order unless the user explicitly requests it.
 - If working tree is dirty with unrelated changes, stop and ask which changes to include.
@@ -92,22 +92,22 @@ If the file does **not** exist:
 
 If the file exists but is empty or only a stub, recommend running `plan-feature` to flesh it out before proceeding.
 
-### 4. Run `build-feature`
+### 4. Run `execute-feature`
 
-Invoke `build-feature` once for the selected feature plan:
+Invoke `execute-feature` once for the selected feature plan:
 
 ```bash
-# The model invokes the build-feature skill conceptually
+# The model invokes the execute-feature skill conceptually
 # Read the plan at docs/features/NNN-<feature-slug>.md and proceed
 ```
 
-If `build-feature` reports that the feature is already complete, proceed to step 5.
+If `execute-feature` reports that the feature is already complete, proceed to step 5.
 
-If `build-feature` reports a blocker, propagate that blocker to the user and stop.
+If `execute-feature` reports a blocker, propagate that blocker to the user and stop.
 
 ### 5. Update the epic plan
 
-Only when `build-feature` reports that the entire feature is complete, mark the
+Only when `execute-feature` reports that the entire feature is complete, mark the
 child feature as done in the epic file. If one item was completed but more
 remain, leave the epic unchanged; the feature plan is the source of truth for
 partial progress.
@@ -127,7 +127,7 @@ Update a "Progress" section at the bottom of the epic if one exists:
 
 Do not remove other sections.
 
-Because `build-feature` has already committed its bounded implementation step,
+Because `execute-feature` has already committed its bounded implementation step,
 do not amend or rewrite that commit. Stage only the epic-plan update and create
 one local bookkeeping commit:
 
@@ -167,7 +167,7 @@ Stop and recommend `plan-feature`. Do not guess at scope.
 
 ### Child feature is too large
 
-If running `build-feature` reveals the feature exceeds its 1–2 week estimate, flag it to the user. Recommend splitting the feature into smaller features and updating both the epic and the feature plan.
+If running `execute-feature` reveals the feature exceeds its estimate, flag it to the user. Recommend splitting the feature into smaller features and updating both the epic and the feature plan.
 
 ### Epic contradicts the charter
 

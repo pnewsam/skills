@@ -25,7 +25,7 @@ Useful mappings:
 | Gap | Action |
 | --- | --- |
 | Missing feature plan | `plan-feature` |
-| Required criterion incomplete | `build-feature` for that criterion |
+| Required criterion incomplete | `execute-feature` for that criterion |
 | Checkbox or status mismatch | Verify evidence, then manually update the incorrect record |
 | Tracking drift | Verify which criteria the existing work satisfies; build or validate the remainder |
 | Incomplete definition of done | Perform the named verification or a focused DoD review |

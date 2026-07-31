@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze Security"
+  short_description: "Analyze and prioritize software security risks"
+  default_prompt: "Use $analyze-security to analyze and prioritize security risks in this repository."

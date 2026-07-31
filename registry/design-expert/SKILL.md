@@ -25,6 +25,7 @@ Load the smallest set of focused skills that covers the design problem.
 | UI is cluttered, busy, over-explained, over-decorated, or mentally heavy | `design-simplicity` | `visual-hierarchy`, `design-composition` |
 | UI feels generic, mismatched, off-brand, or aesthetically incoherent | `design-visual-language` | `design-composition`, `visual-hierarchy` |
 | Broad "make this elegant/simple/beautiful" request | `design-simplicity` | `design-composition`, `visual-hierarchy`, `design-visual-language` |
+| Repository-wide visual-system drift, token exceptions, or consolidation | `analyze-design-system` | `design-visual-language`, relevant `ui-*` skills |
 
 If the task also requires choosing a UI pattern, route through `ui-expert` first or alongside this skill. If the task requires implementing React components, route through `react-expert` after the design direction is clear.
 
@@ -48,7 +49,24 @@ When two skills overlap, ask: "Is this a conventional interface-pattern decision
 
 ---
 
-## 3. Design Review Protocol
+## 3. Design-System Convergence Signals
+
+For repository-wide analysis, use `analyze-design-system`. When that workflow
+loads this expert, interpret whether measured variation is coherent expression
+or accidental drift. Examine:
+
+- whether semantic tokens and repeated treatments support one named direction
+- whether exceptions correspond to product, brand, editorial, data, or theme
+  needs
+- whether duplicate values express the same visual role
+- whether consolidation would improve coherence without flattening useful
+  hierarchy or product character
+
+Raw-value counts and value equality do not establish design duplication.
+Semantic role, context, theming, and intended visual direction decide whether a
+shared token or treatment is appropriate.
+
+## 4. Design Review Protocol
 
 When reviewing a UI through design skills:
 
@@ -59,7 +77,7 @@ When reviewing a UI through design skills:
 5. **Separate design direction from UI implementation.** First decide what should change visually. Then use `ui-*` or `react-*` skills to implement with the right pattern and code.
 6. **Prefer subtraction before addition.** Remove, demote, align, group, or simplify before adding color, shadow, decoration, copy, or new components.
 
-## 4. Measurable Design Pass
+## 5. Measurable Design Pass
 
 Run this pass when the request is broad, subjective, or asks for elegance, beauty, simplicity, or polish.
 
@@ -73,7 +91,7 @@ Run this pass when the request is broad, subjective, or asks for elegance, beaut
 
 Do not force every heuristic onto every UI. Use the checks that match the surface. For example, a dense settings page needs action, grouping, and rhythm checks more than rule-of-thirds composition.
 
-## 5. Output Format
+## 6. Output Format
 
 For critique or recommendations, respond with:
 

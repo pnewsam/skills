@@ -1,4 +1,0 @@
-interface:
-  display_name: "Plan Security Remediation"
-  short_description: "Plan dependency and code-scanning remediation."
-  default_prompt: "Use $plan-security-remediation to group these security findings into safe remediation work."
