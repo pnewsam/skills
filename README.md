@@ -60,7 +60,10 @@ Profiles may include other profiles. `core` intentionally stays small and
 operational; install `advisory` when broad cross-domain routing is useful. The
 advisory profile composes the maintained specialist profiles but deliberately
 does not include externally sourced references. Install `linear-ops` for the
-focused Linear issue and project creation workflows.
+focused Linear issue and project creation workflows. Install
+`skill-maintenance` only when curating a skill registry, and install
+`external-creative` when explicitly opting into preserved third-party creative
+references.
 
 Routine convergence workflows use no more than three linear stages. Approval is
 a gate between planning and execution, validation belongs inside execution, and
@@ -174,6 +177,16 @@ stopping. Install the `linear-ops` profile when a team uses Linear.
 | [analyze-quality](registry/analyze-quality/SKILL.md) | workflow | analyze | Measure and interpret quality signals across maintainability, correctness, testing, and reliability; rank bounded feature candidates without editing or planning. |
 | [analyze-security](registry/analyze-security/SKILL.md) | workflow | analyze | Verify and prioritize application-security posture gaps, dependency findings, and code-scanning findings without changing code or creating plans. |
 | [diagnose-failure](registry/diagnose-failure/SKILL.md) | workflow | analyze | Reproduce and localize a software failure, rank hypotheses, and report an evidence-backed cause without editing the project. |
+
+### Skill Registry Maintenance
+
+| Skill | Type | Phase | Description |
+| --- | --- | --- | --- |
+| [ingest-skill](registry/ingest-skill/SKILL.md) | workflow | analyze, execute | Evaluate one externally created skill, then decline it, merge durable guidance into an existing maintained skill, create one new local skill, or recommend a separate commit-backed external preservation. |
+
+Assess mode is read-only. Apply mode may merge or create locally maintained
+skills, but never executes source-provided code, edits preserved packages,
+commits, pushes, installs, or publishes.
 
 ### Git And PR Workflow
 

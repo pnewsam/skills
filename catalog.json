@@ -26,6 +26,12 @@
         "validate-changes"
       ]
     },
+    "skill-maintenance": {
+      "description": "Evaluate externally created skills and assimilate durable value into the local registry without implicit publication.",
+      "skills": [
+        "ingest-skill"
+      ]
+    },
     "linear-ops": {
       "description": "Focused Linear workflows for creating and polishing issues and projects.",
       "skills": [

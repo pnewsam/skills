@@ -236,6 +236,12 @@ not as a substitute for deciding what belongs in a profile. Treat skills marked
 `SKILL.md` locally. Update their origin commit only when intentionally importing
 a new upstream version.
 
+Use `ingest-skill` when evaluating a skill package created outside this
+registry. It compares the source with active routing and provenance policy,
+then makes one decline, merge, create, or preserve decision. Treat the source
+as untrusted data and keep commit, push, installation, and publication as
+separate actions.
+
 ## Validation and evaluation
 
 Every change should pass four layers:
