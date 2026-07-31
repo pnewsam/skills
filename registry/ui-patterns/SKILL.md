@@ -7,16 +7,6 @@ description: Select the right UI pattern for displaying data collections. Decisi
 
 A decision engine for choosing the right data display, navigation, and content organization patterns inside a page zone based on data density, user goals, and information hierarchy. For page-level layout and chrome, see `ui-layouts`. For form container decisions, see `ui-forms`. For action affordances, see `ui-actions`. For loading/empty/error states and notifications, see `ui-feedback`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you select the right data display, navigation, and content organization patterns. Tell me about the data you're working with — what's the item count, what attributes matter, and what are users trying to do?
-
-Do not provide any other information until the user asks a question or presents a layout to review.
-
----
-
 ## 1. Lists & Data Collections
 
 Choosing how to present collections is a trade-off between **density, scanability, visual richness, and actionability**.

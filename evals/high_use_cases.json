@@ -128,6 +128,14 @@
     "forbidden_effects": ["network_write", "external_write"]
   },
   {
+    "id": "plan-epic-observation-input",
+    "prompt": "Turn these dictated bug-bash and app-feedback observations into one standard epic. Deduplicate them, preserve ambiguity, group them into coherent child features, and do not implement anything.",
+    "expected_skill": "plan-epic",
+    "expected_mode": "Observation-driven epic",
+    "allowed_effects": ["read_local", "write_files"],
+    "forbidden_effects": ["git_write", "network_write", "external_write"]
+  },
+  {
     "id": "validate-no-commit",
     "prompt": "Validate feature 014 and write the report. Do not commit anything.",
     "expected_skill": "validate-feature",

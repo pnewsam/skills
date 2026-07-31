@@ -15,11 +15,13 @@ active replacement and adding routing tests for that boundary.
 | `design-review` | `design-expert` |
 | `design-polish` | `design-expert` plus focused design/UI skills |
 | `plan-design-fixes` | Standard `plan-epic` and `plan-feature` workflow |
+| `plan-bug-bash` | `plan-epic` observation-driven input handling |
+| `audit-epic` | Direct read-only inspection for status questions; `ship-epic` when execution is requested |
 | `assess-pr-risk` | `review-pr` Risk mode |
 | `audit-browser-tests` | `plan-browser-tests` Audit mode |
 | `plan-code-scanning-remediation` | `plan-security-remediation` Code-scanning mode |
 | `plan-vulnerability-remediation` | `plan-security-remediation` Dependency mode |
-| `plan-epic-gaps` | `audit-epic` Closure mode |
+| `plan-epic-gaps` | `plan-feature` for one bounded gap or `plan-epic` for multi-feature work |
 | `react-project-structure` | `react-architecture` |
 | `react-spa-architecture` | `react-architecture` |
 | `design-hierarchy` | `visual-hierarchy` |

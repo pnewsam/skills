@@ -68,6 +68,13 @@ Be more specific than the charter. This is the charter's problem statement narro
 - [ ] <Feature 2> — <one-line description>
 - [ ] <Feature 3> — <one-line description>
 
+## Issue Inventory (include only for observation-driven epics)
+| Observation | Category | Severity | Effort | Confidence | Child feature or disposition |
+| ----------- | -------- | -------- | ------ | ---------- | ---------------------------- |
+| <short observation> | <category> | <severity> | <effort> | <confidence> | <child feature or out-of-scope reason> |
+
+## Source Notes (include only for observation-driven epics)
+<Preserve concise source wording, reproduction clues, and unresolved ambiguity needed for later feature planning. Remove this section for ordinary strategic epics.>
 ## Dependencies & Risks
 
 ### Dependencies

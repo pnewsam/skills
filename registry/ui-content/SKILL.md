@@ -7,16 +7,6 @@ description: UX writing and microcopy patterns — button labels, empty state me
 
 A decision engine for writing clear, helpful, consistent text throughout the UI. Covers button labels, empty states, error messages, field descriptions, and terminology. For which feedback pattern to use (toast vs banner vs modal), see `ui-feedback`. For empty state layout and placement, see `ui-feedback`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you with UI text — button labels, empty states, error messages, field help, or terminology. What text are you working on, and what's the context?
-
-Do not provide any other information until the user asks a question or presents text to review.
-
----
-
 ## 1. Button Labels
 
 Button labels are the most important microcopy in the UI — they're where the user commits to an action. Bad labels cause hesitation; good labels make the next step obvious.

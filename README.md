@@ -94,8 +94,6 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
       NNN-<slug>.md                    # strategic options from explore-directions
     epics/
       NNN-<slug>.md                    # quarter-level epic plans
-      NNN-<slug>-audit.md              # audit-epic findings
-      NNN-<slug>-gap-closure.md        # optional audit-epic closure plan
     features/
       NNN-<slug>.md                    # feature plans
       NNN-<slug>-validation.md         # validate-feature report
@@ -130,7 +128,6 @@ flowchart TD
     CC[create-charter] -->|produces docs/CHARTER.md| ED[explore-directions]
     ED -->|produces docs/directions/| PE[plan-epic]
     PE -->|produces docs/epics/| PF[plan-feature]
-    PBB[plan-bug-bash] -->|produces bug-bash epic| PF
     PE --> SP[ship-epic]
     SP -->|plans missing features| PF
     SP -->|advances until complete| AE
@@ -140,23 +137,18 @@ flowchart TD
     PE --> AE[advance-epic]
     AE -.->|orchestrates| PF
     AE -.->|orchestrates| EF
-    AE2[audit-epic] -->|Audit mode writes report| AR[epic audit]
-    AE2 -->|Closure mode writes punch list| GC[gap closure plan]
-    GC -.->|informs revisions to| PE
 ```
 
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
 | ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [consult-expert](registry/consult-expert/SKILL.md)     | workflow | divergence | analyze, plan | Route broad product, engineering, backend, platform, quality, or compliance prompts to domain experts, synthesize recommendations, and produce epic briefs. |
+| [consult-expert](registry/consult-expert/SKILL.md)     | router | divergence | analyze, plan | Route broad product, engineering, backend, platform, quality, or compliance prompts to domain experts, synthesize recommendations, and produce epic briefs. |
 | [explore-directions](registry/explore-directions/SKILL.md) | workflow | divergence | analyze | Analyze the product's current state and generate 3–5 distinct strategic directions with evidence and trade-offs for review. |
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
-| [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create a structured epic plan that translates a product charter into a quarter-level initiative.                              |
-| [plan-bug-bash](registry/plan-bug-bash/SKILL.md)       | workflow | divergence | analyze, plan | Turn stream-of-consciousness bug observations into a standard bug-bash epic with prioritized child features.            |
+| [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create or update one charter-aligned epic, including deduplicating bug-bash or app-feedback observations into coherent child features. |
 | [plan-feature](registry/plan-feature/SKILL.md)         | workflow | convergence | plan | Plan one bounded product feature or evidence-backed convergence improvement; parent epics are optional in Convergence mode. |
 | [execute-feature](registry/execute-feature/SKILL.md)   | workflow | convergence | execute | Implement and verify one unchecked item from any product or convergence feature plan, create one local commit, and stop. |
 | [advance-epic](registry/advance-epic/SKILL.md)         | workflow | convergence | execute | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete.    |
 | [ship-epic](registry/ship-epic/SKILL.md)               | workflow | convergence | execute | Complete an epic end-to-end — plan missing features, advance until all child features are complete, validate, and prepare a PR. |
-| [audit-epic](registry/audit-epic/SKILL.md)             | workflow | convergence | analyze, plan | Audit an epic against its feature plans; optionally turn the findings into a prioritized, progress-preserving gap-closure plan. |
 
 ### Linear Operations
 
@@ -256,9 +248,12 @@ flowchart LR
 | [validate-changes](registry/validate-changes/SKILL.md)                     | workflow | convergence | execute       | Run targeted validation against recent code changes — maps diff to relevant tests, runs only those, and reports coverage gaps.                 |
 | [validate-feature](registry/validate-feature/SKILL.md)                     | workflow | convergence | execute       | Comprehensive post-build validation — targeted tests, full browser suite, acceptance criteria verification, and structured ship/no-ship report. |
 
-## Reference Skills
+## Expert Routers And Reference Skills
 
-Reference skills provide principles, patterns, conventions, and domain judgment. They guide agents while workflow skills perform the actual planning, implementation, validation, and delivery.
+Expert routers select and synthesize the smallest relevant specialist set.
+Reference skills provide principles, patterns, conventions, and domain
+judgment. Both guide agents while workflow skills perform planning,
+implementation, validation, and delivery.
 
 ### Design Principles
 
@@ -283,13 +278,17 @@ flowchart LR
 
 | Skill                                                | Type      | Description                                                                                                                                           |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [design-expert](registry/design-expert/SKILL.md)     | reference | Router for visual design judgment - coordinates composition, hierarchy, simplicity, and visual-language guidance.                                     |
+| [design-expert](registry/design-expert/SKILL.md)     | router | Router for visual design judgment - coordinates composition, hierarchy, simplicity, and visual-language guidance.                                     |
 | [design-composition](registry/design-composition/SKILL.md) | reference | Composition principles - balance, alignment, proportion, focal point, grouping, visual weight, repetition, and rhythm.                                |
 | [visual-hierarchy](registry/visual-hierarchy/SKILL.md) | reference | Unified hierarchy guidance for task priority, scanning, visual dominance, contrast, grouping, and de-emphasis.                                        |
 | [design-simplicity](registry/design-simplicity/SKILL.md) | reference | Simplicity principles - restraint, reduction, decluttering, focus, and reducing visual/cognitive load without removing needed capability.             |
 | [design-visual-language](registry/design-visual-language/SKILL.md) | reference | Visual language principles - aesthetic direction, mood, personality, cohesion, materiality, brand fit, and avoiding generic or mismatched styling.    |
 
-### Design References
+### External Design References
+
+These packages retain upstream bodies and are available through the
+`external-creative` profile rather than the maintained `design` or `advisory`
+profiles.
 
 | Skill                                                | Type      | Description                                                                                                                                           | Origin                                                                                     |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -323,7 +322,7 @@ flowchart LR
 
 | Skill                                                | Type      | Description                                                                                                                                           |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ui-expert](registry/ui-expert/SKILL.md)             | reference | Router for broad UI work — coordinates the focused `ui-*` skills and prevents overlap across layout, patterns, forms, actions, states, surfaces, and visual system decisions. |
+| [ui-expert](registry/ui-expert/SKILL.md)             | router | Router for broad UI work — coordinates the focused `ui-*` skills and prevents overlap across layout, patterns, forms, actions, states, surfaces, and visual system decisions. |
 | [ui-layouts](registry/ui-layouts/SKILL.md)           | reference | Page-level layout patterns — app shell, page chrome, content zoning, standard page archetypes, scroll behavior, and responsive layout adaptation.      |
 | [ui-patterns](registry/ui-patterns/SKILL.md)         | reference | Data display patterns — tables vs cards vs lists, pagination, search/filter placement, detail views, navigation, tabs vs accordions, content organization. |
 | [ui-forms](registry/ui-forms/SKILL.md)               | reference | Form patterns — container selection (modal vs drawer vs page), field type heuristics, wizard design, settings page organization.                      |
@@ -357,7 +356,7 @@ flowchart LR
 
 | Skill                                                              | Type      | Description                                                                                                                  |
 | ------------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| [quality-expert](registry/quality-expert/SKILL.md)                 | reference | Router for broad code quality work - coordinates clarity, modularity, refactoring, correctness, testing, and reliability.    |
+| [quality-expert](registry/quality-expert/SKILL.md)                 | router | Router for broad code quality work - coordinates clarity, modularity, refactoring, correctness, testing, and reliability.    |
 | [quality-code-clarity](registry/quality-code-clarity/SKILL.md)     | reference | Naming, readability, local reasoning, intention-revealing code, control flow, comments, and removal of cleverness.          |
 | [quality-modularity](registry/quality-modularity/SKILL.md)         | reference | Cohesion, coupling, responsibility boundaries, dependency direction, abstractions, module seams, and change isolation.       |
 | [quality-refactoring](registry/quality-refactoring/SKILL.md)       | reference | Code smells, safe incremental transformations, behavior preservation, cleanup sequencing, and validation of refactors.       |
@@ -381,7 +380,7 @@ flowchart LR
 
 | Skill                                                                                      | Type      | Description                                                                                                                         |
 | ------------------------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [compliance-expert](registry/compliance-expert/SKILL.md)                                   | reference | Router for security, vulnerability management, accessibility, privacy, GDPR, HIPAA, auditability, and external-risk work.           |
+| [compliance-expert](registry/compliance-expert/SKILL.md)                                   | router | Router for security, vulnerability management, accessibility, privacy, GDPR, HIPAA, auditability, and external-risk work.           |
 | [compliance-security](registry/compliance-security/SKILL.md)                               | reference | OWASP/NIST-anchored secure coding, auth/authz, injection, secrets, sessions, logging, supply chain, CI/CD, and secure defaults.     |
 | [compliance-vulnerability-management](registry/compliance-vulnerability-management/SKILL.md) | reference | CVE and advisory triage, exploitability, remediation sequencing, patch risk, risk acceptance, and evidence.                         |
 | [compliance-accessibility](registry/compliance-accessibility/SKILL.md)                     | reference | WCAG 2.2-oriented keyboard access, semantic structure, accessible names, focus order, contrast, forms, errors, and motion.          |
@@ -414,7 +413,7 @@ flowchart LR
 
 | Skill                                                                            | Type      | Description                                                                                                                       |
 | -------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| [platform-expert](registry/platform-expert/SKILL.md)                             | reference | Router for broad platform work - coordinates environment, CI/CD, secrets/config, deployment/rollback, and infrastructure-as-code guidance. |
+| [platform-expert](registry/platform-expert/SKILL.md)                             | router | Router for broad platform work - coordinates environment, CI/CD, secrets/config, deployment/rollback, and infrastructure-as-code guidance. |
 | [platform-environments](registry/platform-environments/SKILL.md)                 | reference | Local, preview, staging, and production parity; backing services, runtime config, feature flags, promotion, and readiness.        |
 | [platform-ci-cd](registry/platform-ci-cd/SKILL.md)                               | reference | Build/test/deploy pipelines, artifacts, workflow permissions, gates, provenance, supply-chain hardening, and release automation.  |
 | [platform-secrets-config](registry/platform-secrets-config/SKILL.md)             | reference | Secrets, credentials, env vars, config schemas, secret stores, runtime injection, rotation, redaction, and leakage prevention.    |
@@ -435,7 +434,7 @@ flowchart LR
 
 | Skill                                                                    | Type      | Description                                                                                                                              |
 | ------------------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| [backend-expert](registry/backend-expert/SKILL.md)                       | reference | Router for broad backend work - coordinates focused server-side skills across APIs, service boundaries, persistence, jobs, integrations, and auth boundaries. |
+| [backend-expert](registry/backend-expert/SKILL.md)                       | router | Router for broad backend work - coordinates focused server-side skills across APIs, service boundaries, persistence, jobs, integrations, and auth boundaries. |
 | [backend-api-design](registry/backend-api-design/SKILL.md)               | reference | API contracts, resource modeling, request/response shapes, validation, errors, pagination, filtering, versioning, and idempotency.       |
 | [backend-service-boundaries](registry/backend-service-boundaries/SKILL.md) | reference | Server-side ownership for handlers, services, use cases, domain behavior, transaction placement, dependency direction, and side effects. |
 | [backend-persistence](registry/backend-persistence/SKILL.md)             | reference | Data modeling, migrations, transactions, consistency, repositories, query boundaries, indexing, retention, and safe schema evolution.    |
@@ -462,7 +461,7 @@ flowchart LR
 
 | Skill                                                                | Type      | Description                                                                                                                                |
 | -------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| [react-expert](registry/react-expert/SKILL.md)                       | reference | Router for broad React work - coordinates focused React skills across architecture, components, hooks, forms, state, data, routing, performance, errors, accessibility, and tests. |
+| [react-expert](registry/react-expert/SKILL.md)                       | router | Router for broad React work - coordinates focused React skills across architecture, components, hooks, forms, state, data, routing, performance, errors, accessibility, and tests. |
 | [react-architecture](registry/react-architecture/SKILL.md)           | reference | App shell, providers, routes, environment and platform adapters, feature ownership, public APIs, dependency direction, and incremental structural migration. |
 | [react-component-design](registry/react-component-design/SKILL.md)   | reference | Component size, single responsibility, compositional patterns, and "branch early" — prefer distinct components over prop-toggled behavior. |
 | [react-hooks-effects](registry/react-hooks-effects/SKILL.md)         | reference | Effects as escape hatches, dependency arrays, cleanup, stale closures, refs vs state, Strict Mode, and custom hook boundaries.             |
@@ -491,7 +490,7 @@ flowchart LR
 
 | Skill                                                                                  | Type      | Description                                                                                                                           |
 | -------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| [python-expert](registry/python-expert/SKILL.md)                                       | reference | Router for broad Python work - coordinates focused Python and FastAPI skills across tooling, structure, typing, async, errors, database, testing, and API architecture. |
+| [python-expert](registry/python-expert/SKILL.md)                                       | router | Router for broad Python work - coordinates focused Python and FastAPI skills across tooling, structure, typing, async, errors, database, testing, and API architecture. |
 | [python-tooling](registry/python-tooling/SKILL.md)                                     | reference | Context-sensitive Python environment, dependency, packaging, lint, format, typing, test, task, CI, and migration decisions.                |
 | [python-project-structure](registry/python-project-structure/SKILL.md)                 | reference | Organize Python packages, modules, entrypoints, configuration, imports, scripts, services, utilities, and tests.                       |
 | [python-testing](registry/python-testing/SKILL.md)                                     | reference | Pytest suites, fixtures, dependency overrides, async tests, mocks, factories, integration tests, and regression coverage.              |

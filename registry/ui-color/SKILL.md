@@ -7,16 +7,6 @@ description: Color system principles for UI — building a coherent palette, sem
 
 A decision engine for building and applying a color system. Covers palette construction, semantic roles, color for hierarchy, dark mode, and contrast. For naming colors, see `color-expert`. For which feedback pattern a color belongs to (error, success, warning states), see `ui-feedback`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you with color — building a palette, assigning semantic roles, fixing contrast, or setting up dark mode. What are you working on, and what's the color challenge?
-
-Do not provide any other information until the user asks a question or presents a color decision.
-
----
-
 ## 1. The Color Palette Structure
 
 A UI color system has two layers: the **palette** (raw colors) and **semantic tokens** (what each color means in context). The palette is the "what"; the semantic tokens are the "when and why."

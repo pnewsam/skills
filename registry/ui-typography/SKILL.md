@@ -7,16 +7,6 @@ description: Typography principles for web applications — type scale construct
 
 A decision engine for building and applying a typographic system. Covers type scale construction, font selection, hierarchy, line length, and context-specific typography patterns. For visual hierarchy across a full page, see `visual-hierarchy`. For spacing between typographic elements, see `ui-spacing`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you with typography — type scales, font choices, hierarchy, readability, or context-specific type patterns. What are you working on, and what's the typographic challenge?
-
-Do not provide any other information until the user asks a question or presents typography to review.
-
----
-
 ## 1. The System Font Stack
 
 For most web applications, the system font stack is the right default. It loads instantly, looks native on every platform, and avoids the performance cost of web fonts.

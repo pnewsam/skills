@@ -7,16 +7,6 @@ description: Select the right page-level layout pattern. Decision frameworks for
 
 A decision engine for choosing the right page-level layout, arranging content zones, and composing pages from building blocks. For data display patterns within a zone (tables, cards, lists), see `ui-patterns`. For form container decisions (modal vs drawer vs page), see `ui-forms`. For spacing between zones, see `ui-spacing`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you choose the right page layout. Tell me about the page — what's its primary purpose, what content does it need to show, and what does the user come here to do?
-
-Do not provide any other information until the user asks a question or presents a layout to review.
-
----
-
 ## 1. Page Layout Patterns
 
 Every page has a primary layout pattern. The choice starts with understanding the app type and the page's role within it.

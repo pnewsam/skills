@@ -7,16 +7,6 @@ description: Data visualization and dashboard patterns — chart type selection 
 
 A decision engine for presenting quantitative data visually. Covers chart type selection, dashboard card patterns, and data-ink principles. For the layout of dashboards within a page, see `ui-layouts`. For using color in charts, see `ui-color`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you with data visualization — choosing chart types, designing dashboard cards, or presenting metrics clearly. What data are you working with, and what question should the visualization answer?
-
-Do not provide any other information until the user asks a question or presents a visualization to review.
-
----
-
 ## 1. Before You Visualize: The Number Test
 
 The most important data visualization decision is whether to visualize at all. A well-formatted number often communicates more clearly than a chart.

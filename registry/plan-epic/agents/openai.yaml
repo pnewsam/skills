@@ -1,3 +1,4 @@
 interface:
   display_name: "Plan Epic"
-  short_description: "Create a structured product epic."
+  short_description: "Plan a charter-aligned multi-feature epic"
+  default_prompt: "Use $plan-epic to turn this initiative or bug-bash input into one charter-aligned epic plan."
