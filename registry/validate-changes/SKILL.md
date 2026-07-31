@@ -236,7 +236,10 @@ Report:
 
 ### No browser tests exist at all
 
-Run unit tests, lint, and typecheck only. In the report, flag that the project has no browser test facility and recommend running `setup-browser-testing` followed by `plan-browser-tests`.
+Run unit tests, lint, and typecheck only. In the report, flag that the project
+has no browser-test facility. Recommend `plan-browser-tests` when coverage
+priorities need analysis; otherwise describe framework setup as an ordinary
+implementation prerequisite rather than routing to a permanent setup skill.
 
 ### No tests cover the changed area
 

@@ -44,6 +44,9 @@ into a universal score.
 - Does it add decision logic, fragile mechanics, or domain knowledge beyond a
   capable base agent?
 - Would likely users know when to ask for it?
+- Is it merely one-time setup or scaffolding that a direct prompt and current
+  framework documentation can handle? If so, what unusual safety or reusable
+  asset justifies permanent routing attention?
 
 ### Distinctness
 
@@ -88,9 +91,10 @@ than vendoring.
 ### Decline
 
 Prefer decline when most durable value is already covered, the task is too
-rare or vague to route, the content is generic advice, or the package depends
-on unsafe/unavailable behavior. Record any one or two useful observations that
-could inform later work without modifying the registry.
+rare or vague to route, the content is generic advice, the workflow is ordinary
+one-time scaffolding, or the package depends on unsafe/unavailable behavior.
+Record any one or two useful observations that could inform later work without
+modifying the registry.
 
 ### Merge into an existing skill
 

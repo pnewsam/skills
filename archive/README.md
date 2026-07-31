@@ -17,6 +17,9 @@ active replacement and adding routing tests for that boundary.
 | `plan-design-fixes` | Standard `plan-epic` and `plan-feature` workflow |
 | `plan-bug-bash` | `plan-epic` observation-driven input handling |
 | `audit-epic` | Direct read-only inspection for status questions; `ship-epic` when execution is requested |
+| `setup-browser-testing` | A bespoke setup request or a normal `plan-feature` / `execute-feature` item when setup needs durable planning |
+| `save-session` | Built-in task continuity or a direct request for a local handoff note |
+| `color-expert` | `ui-color` and `design-visual-language`; re-import only if the complete upstream package is available |
 | `assess-pr-risk` | `review-pr` Risk mode |
 | `audit-browser-tests` | `plan-browser-tests` Audit mode |
 | `plan-code-scanning-remediation` | `plan-security-remediation` Code-scanning mode |

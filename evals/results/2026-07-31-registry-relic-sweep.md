@@ -2,6 +2,10 @@
 
 Date: 2026-07-31
 
+Follow-up: the later evergreen retention audit archived `color-expert` intact
+because the complete upstream reference package was unavailable. See
+`2026-07-31-evergreen-retention-audit.md` for the superseding decision.
+
 ## Scope
 
 Audit the active registry, README, catalog, and routing evaluations for:

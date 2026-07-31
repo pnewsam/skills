@@ -100,11 +100,10 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
     security/
       threat-model-<scope>.md          # optional threat-model document
     tmp/
-      session-YYYY-MM-DD-<slug>.md     # saved session notes
       wip-<name>.md                    # stash context breadcrumb when trackable
 ```
 
-`docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Product programs and deliberately managed multi-feature initiatives flow through epics. Bounded refactors, security remediations, design-system consolidation, defect fixes, dependency work, and other convergence improvements may go directly from an `analyze-*` result to `plan-feature`; a parent epic is optional in Convergence mode. `docs/tmp/` is reserved for ephemeral session breadcrumbs and WIP handoff notes.
+`docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Product programs and deliberately managed multi-feature initiatives flow through epics. Bounded refactors, security remediations, design-system consolidation, defect fixes, dependency work, and other convergence improvements may go directly from an `analyze-*` result to `plan-feature`; a parent epic is optional in Convergence mode. `docs/tmp/` is reserved for ephemeral WIP handoff notes.
 
 ## Workflow Skills
 
@@ -193,7 +192,6 @@ flowchart LR
 | Skill                                              | Type     | Mode        | Phase   | Description                                                                                                         |
 | -------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
 | [stash](registry/stash/SKILL.md)                   | workflow | convergence | preserve | Preserve related in-progress work on a local `wip/` branch in one commit with a context note.                     |
-| [save-session](registry/save-session/SKILL.md)     | workflow |             | analyze | Summarize the current working session and save it to `docs/tmp/`.                                                   |
 | [prepare-pr](registry/prepare-pr/SKILL.md)         | workflow |             | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR.     |
 | [polish-pr](registry/polish-pr/SKILL.md)           | workflow | convergence | edit | Improve a PR's language without changing its substance, template, or checklist state. |
 | [revise-pr](registry/revise-pr/SKILL.md)           | workflow | convergence | execute | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits.        |
@@ -230,9 +228,8 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    SBT[setup-browser-testing] --> PBT[plan-browser-tests]
     PBT -->|produces browser-test epic| PF2[plan-feature]
-    PBT -->|Audit mode writes epic audit| AUD[browser-test audit]
+    PBT -.->|Audit mode reports findings| AUD[read-only coverage audit]
     PF2 --> ABT[add-browser-test]
     PF2 --> FBT[fix-browser-test]
     EF2[execute-feature] --> VC[validate-changes]
@@ -241,8 +238,7 @@ flowchart LR
 
 | Skill                                                                      | Type     | Mode        | Phase         | Description                                                                                                                                    |
 | -------------------------------------------------------------------------- | -------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| [setup-browser-testing](registry/setup-browser-testing/SKILL.md)           | workflow | convergence | execute       | Set up the browser testing facility — installs and configures framework, auth helpers, CI workflow with scheduled runs, and conventions docs.  |
-| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Plan critical UI coverage or audit the current browser suite, write an epic audit, and update the coverage epic conservatively.                 |
+| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Plan critical UI coverage or audit the current browser suite; planning writes an epic, while audit is read-only unless an epic refresh is requested. |
 | [add-browser-test](registry/add-browser-test/SKILL.md)                     | workflow | convergence | execute       | Implement one browser integration test from a planned browser-test feature, then verify and update the feature plan.                           |
 | [fix-browser-test](registry/fix-browser-test/SKILL.md)                     | workflow | convergence | execute       | Repair one broken or flaky browser test from a test failure or planned browser-test feature.                                                   |
 | [validate-changes](registry/validate-changes/SKILL.md)                     | workflow | convergence | execute       | Run targeted validation against recent code changes — maps diff to relevant tests, runs only those, and reports coverage gaps.                 |
@@ -293,7 +289,6 @@ profiles.
 | Skill                                                | Type      | Description                                                                                                                                           | Origin                                                                                     |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | [svg-animations](registry/svg-animations/SKILL.md)   | reference | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
-| [color-expert](registry/color-expert/SKILL.md)       | reference | Color science expert — color theory, accessibility standards, palette generation, and practical color tools.                                          | [meodai](https://github.com/meodai/skill.color-expert)                                     |
 | [emil-design-eng](registry/emil-design-eng/SKILL.md) | reference | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great.                | [emilkowalski](https://github.com/emilkowalski/skill)                                      |
 
 ### UI Patterns

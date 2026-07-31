@@ -18,6 +18,40 @@ Descriptions are routing contracts, not summaries. State what the skill does,
 concrete trigger phrases or situations, important exclusions, and any material
 effects such as writing files, committing, pushing, or posting externally.
 
+## Admission and retention test
+
+Every active skill consumes routing attention and maintenance capacity. Keep a
+skill only when it has a plausible recurring audience and earns its permanent
+place in at least one of these ways:
+
+- **Recurring workflow:** it adds non-obvious decisions, fragile mechanics,
+  safety boundaries, state recovery, or verification to a task people perform
+  repeatedly.
+- **Evergreen reference:** it materially improves repeated engineering or
+  product decisions with durable domain judgment the base model should not be
+  expected to reconstruct each time.
+- **Necessary router:** it resolves real overlap among a maintained specialist
+  family and adds synthesis that the child descriptions cannot provide alone.
+
+The package must also be complete, maintainable, distinct from neighboring
+skills, and proportionate to its routing cost. Archive or decline it when it is
+primarily:
+
+- one-time project setup or generic scaffolding recoverable from current
+  framework documentation;
+- a prompt template, conversational ritual, or ordinary capable-agent behavior;
+- a narrow executor already owned by a shared workflow with the same effects
+  and proof obligations;
+- incomplete, stale, or dependent on missing resources;
+- useful only for one historical repository incident with no transferable
+  decision logic.
+
+Do not use frequency alone. A lower-frequency skill may still earn its place
+when the operation is high-risk, externally effectful, or unusually dependent
+on consistent evidence. Re-run this retention test periodically; a skill that
+was once useful can become redundant as the base agent, tools, or shared
+workflows improve.
+
 ## Skill kinds
 
 Use three kinds. A skill should have one primary kind.
@@ -221,7 +255,7 @@ Rules:
 Keep the globally installed set small and broadly applicable:
 
 - read-only diagnosis
-- session preservation and local Git workflows
+- safe local Git preservation workflows
 - PR preparation/review when GitHub is common
 
 Install stack, framework, compliance, platform, and product-delivery families
