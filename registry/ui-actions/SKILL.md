@@ -7,16 +7,6 @@ description: Select the right affordance pattern for user actions. Decision fram
 
 A decision engine for choosing how users trigger actions on data. For data display patterns, see `ui-patterns`. For form containers and fields, see `ui-forms`. For empty/loading/error states and notifications, see `ui-feedback`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you design action affordances — where to place buttons, how to reveal actions, and how to handle bulk operations, keyboard access, and touch interactions. What actions are users performing, and on what kind of items?
-
-Do not provide any other information until the user asks a question or presents an interaction to review.
-
----
-
 ## 1. Single-Row Actions (Tables, Lists, Cards)
 
 Where to put actions, and how to reveal them, dictates perceived robustness and visual clutter.

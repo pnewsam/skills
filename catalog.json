@@ -10,6 +10,11 @@
       "provenance": "external",
       "origin_commit": "3612234",
       "policy": "preserve"
+    },
+    "svg-animations": {
+      "provenance": "external",
+      "origin_commit": "f6165ea",
+      "policy": "preserve"
     }
   },
   "profiles": {
@@ -44,12 +49,10 @@
       "description": "Product direction, durable planning, incremental delivery, architecture documentation, and feature validation.",
       "skills": [
         "advance-epic",
-        "audit-epic",
         "create-charter",
         "document-architecture",
         "execute-feature",
         "explore-directions",
-        "plan-bug-bash",
         "plan-epic",
         "plan-feature",
         "ship-epic",
@@ -197,13 +200,12 @@
       ]
     },
     "design": {
-      "description": "Visual composition, hierarchy, simplicity, visual language, and SVG motion.",
+      "description": "Visual composition, hierarchy, simplicity, and visual language.",
       "skills": [
         "design-composition",
         "design-expert",
         "design-simplicity",
         "design-visual-language",
-        "svg-animations",
         "visual-hierarchy"
       ]
     },
@@ -224,10 +226,11 @@
       ]
     },
     "external-creative": {
-      "description": "Externally sourced color and design-engineering references preserved without local edits.",
+      "description": "Externally sourced color, design-engineering, and SVG-animation references preserved without local edits.",
       "skills": [
         "color-expert",
-        "emil-design-eng"
+        "emil-design-eng",
+        "svg-animations"
       ]
     }
   }

@@ -7,16 +7,6 @@ description: Responsive design patterns for web applications — mobile-first wo
 
 A decision engine for making UIs work across screen sizes. Covers breakpoint strategy, responsive patterns, touch adaptations, and responsive typography. For choosing the desktop layout that will then adapt, see `ui-layouts`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you with responsive design — breakpoints, adaptation patterns, touch targets, or making a specific component work across screen sizes. What are you adapting, and what screen sizes do you need to support?
-
-Do not provide any other information until the user asks a question or presents a responsive challenge.
-
----
-
 ## 1. Breakpoint Strategy
 
 ### Standard Breakpoints

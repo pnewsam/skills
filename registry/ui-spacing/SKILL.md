@@ -7,16 +7,6 @@ description: Spacing and proximity principles for UI — consistent spacing rhyt
 
 A decision engine for applying consistent, meaningful spacing throughout the UI. Covers spacing scales, the proximity principle, density modes, negative space, and context-specific spacing rules. For page-level layout and zone arrangement, see `ui-layouts`. For typographic spacing (line height, heading-to-body gaps), see `ui-typography`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you with spacing — rhythm, proximity, density, or context-specific spacing decisions. What part of the UI are you working on, and what feels off about the spacing?
-
-Do not provide any other information until the user asks a question or presents spacing to review.
-
----
-
 ## 1. The Spacing Scale
 
 Use a defined spacing scale. Don't use arbitrary pixel values. Every gap, padding, and margin should come from the scale.

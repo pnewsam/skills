@@ -7,16 +7,6 @@ description: Select the right feedback pattern for system states. Decision frame
 
 A decision engine for choosing the right feedback, state, and notification patterns. For data display patterns, see `ui-patterns`. For form containers and fields, see `ui-forms`. For action affordances, see `ui-actions`. For message wording, see `ui-content`. For first-run onboarding strategy, see `ui-onboarding`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you select feedback patterns for empty, loading, error, and notification states. What's the system state you're designing for, and how critical is it to the user's current task?
-
-Do not provide any other information until the user asks a question or presents a state to review.
-
----
-
 ## 1. Empty States
 
 A well-designed empty state converts a dead-end into an onboarding opportunity.

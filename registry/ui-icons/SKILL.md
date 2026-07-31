@@ -7,16 +7,6 @@ description: Icon selection and usage patterns — when to use icons vs text vs 
 
 A decision engine for using icons effectively in the UI. Covers when to use icons, how to size and align them, accessibility requirements, and library selection. For action affordances and button patterns, see `ui-actions`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you with icons — choosing the right icons, sizing and alignment, accessibility, or picking an icon library. What are you working on, and what's the icon challenge?
-
-Do not provide any other information until the user asks a question or presents icons to review.
-
----
-
 ## 1. When to Use Icons
 
 Icons are not decoration. Every icon should earn its place by doing one of these jobs:

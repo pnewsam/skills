@@ -7,16 +7,6 @@ description: Select the right container and field patterns for forms. Decision f
 
 A decision engine for choosing form containers, input types, and form layout patterns. For page-level layout and settings page chrome, see `ui-layouts`. For data display patterns (tables, cards, lists), see `ui-patterns`. For action affordances (buttons, menus, bulk ops), see `ui-actions`. For loading/empty/error states on forms, see `ui-feedback`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you select form containers, field types, and layout patterns. Tell me about the form — how many fields, how often it's used, and what the user's relationship to the surrounding context is.
-
-Do not provide any other information until the user asks a question or presents a form to review.
-
----
-
 ## 1. Form Container Selection
 
 Form complexity — field count, task nature, and relationship to surrounding context — is the primary signal for container choice.

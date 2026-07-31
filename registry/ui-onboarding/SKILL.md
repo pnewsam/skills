@@ -7,16 +7,6 @@ description: User onboarding and first-run experience patterns — progressive o
 
 A decision engine for designing the first-run experience — how users go from "never seen this before" to "getting value from this product." For empty state visual patterns and layout, see `ui-feedback`. For empty state messaging, see `ui-content`.
 
-## Initial Response
-
-When this skill is first invoked without a specific request, respond only with:
-
-> I'm ready to help you design onboarding — first-run experiences, feature discovery, guided tours, or getting users to value faster. What's the product, and what does a user need to do to get value from it?
-
-Do not provide any other information until the user asks a question or presents an onboarding flow to review.
-
----
-
 ## 1. The Onboarding Philosophy
 
 Onboarding is not a tour. It's not a checklist of features to explain. Onboarding is the shortest path from signup to the moment the user thinks "this is useful."

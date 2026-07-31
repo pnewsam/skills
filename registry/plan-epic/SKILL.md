@@ -1,150 +1,126 @@
 ---
 name: plan-epic
-description: create a structured epic plan that translates a product charter into a quarter-level initiative. use when breaking down docs/CHARTER.md into actionable, time-bounded workstreams. produces a markdown epic document in docs/epics/ that features will reference. enforces charter alignment via mandatory checks.
+description: Create or update one charter-aligned epic plan for a cohesive 4–12 week initiative. Use for strategic initiatives or large collections of bug-bash, app-feedback, or quality observations that need deduplication and grouping into independently plannable child features. Reads the charter, directions, and existing plans and writes one docs/epics/ document; never modifies source code, Git, or external systems.
 ---
 
 # Plan Epic
 
-## Overview
+## Outcome
 
-Translate a product charter (or a large strategic initiative) into a concrete epic: a quarter-level body of work with clear goals, scope boundaries, success criteria, and child features.
+Create or update one `docs/epics/NNN-<slug>.md` plan with a bounded problem,
+measurable success criteria, explicit scope, and independently plannable child
+features. Stop before creating feature plans or implementing work.
 
-An epic is the bridge between vision and execution. It answers: "What are we doing this quarter, why does it matter, and how will we know it worked?"
+## Use and boundaries
 
-Every epic must reference `docs/CHARTER.md` and pass an alignment check. If no charter exists, stop and recommend `create-charter` first.
+Use `plan-epic` when one cohesive initiative needs roughly 4–12 weeks of work
+or coordination across several child features. The input may be a selected
+strategic direction, a broad technical initiative, or an unstructured set of
+bug-bash or product-feedback observations.
 
-Projects, refactors, platform work, and internal quality initiatives can all be epics when they are large enough to need coordinated planning. Keep the standard flow as `docs/directions/` -> `docs/epics/` -> `docs/features/`; do not create separate top-level planning directories for project or refactor work.
+- Use `plan-feature` directly for one bounded 1–2 week deliverable.
+- Use `create-charter` when `docs/CHARTER.md` is absent or no longer provides a
+  usable product direction.
+- Use `explore-directions` when several strategic paths remain plausible and
+  none has been selected.
+- For a read-only question about an existing epic's status, inspect the plan
+  and linked evidence directly in chat; do not create a permanent audit
+  artifact unless the user explicitly requests a document.
 
-## Goals
+## Effects and inputs
 
-- Break a strategic initiative into a well-scoped, time-bounded epic.
-- Define what is in scope, what is out of scope, and what success looks like.
-- Identify child features that can be planned independently.
-- Enforce charter alignment — refuse to proceed if the epic cannot demonstrate how it advances the product vision.
+This workflow may read planning and repository context and create or update one
+epic file. It does not modify source code, configuration, branches, commits,
+feature plans, tickets, or external systems.
 
-## Safety rules
+Require:
 
-- Do not modify source code, configuration, or branches.
-- Do not create an epic without reading `docs/CHARTER.md` first.
-- Do not invent charter content — reference it by section.
-- Do not produce vague or unmeasurable success criteria.
-- Epics should represent 4–12 weeks of work. If the scope is smaller, recommend `plan-feature` instead.
+- a usable `docs/CHARTER.md`
+- one identifiable initiative or collection of observations
+- an existing epic path when the user wants an update
+
+Treat dictated notes and rough observations as evidence to normalize, not as
+verified defects. Preserve uncertainty rather than inventing reproduction
+steps, causes, or scope.
 
 ## Workflow
 
-### 1. Read the charter
+### 1. Establish context and normalize the input
 
-```bash
-cat docs/CHARTER.md 2>/dev/null || echo "docs/CHARTER.md not found"
-```
+Read `docs/CHARTER.md` fully. Capture the relevant value proposition, guiding
+principles, north-star or leading indicators, and non-goals. If the initiative
+cannot be connected to the charter in one clear sentence, stop and recommend a
+charter or direction decision.
 
-If no charter exists:
+Inspect `docs/directions/`, `docs/epics/`, and `docs/features/` for a chosen
+direction, overlapping plans, dependencies, and the next available epic ID.
+When updating, read the existing epic and preserve its ID, completed child
+features, decisions, and supported progress.
 
-1. Stop.
-2. Inform the user that epics must align to a charter.
-3. Recommend running `create-charter` first, or confirm whether a charter exists elsewhere.
+Clarify the intended outcome, affected users or systems, time horizon,
+deadlines, dependencies, and non-goals. If the scope is smaller than one epic,
+route to `plan-feature`.
 
-If a charter exists, read it fully. Note:
+For bug-bash, app-feedback, or other observation collections:
 
-- The north star metric and leading indicators.
-- The guiding principles most relevant to this epic.
-- The non-goals that could constrain this epic's scope.
+1. Extract distinct observations and retain useful source wording.
+2. Deduplicate only observations that describe the same underlying behavior.
+3. Record category, severity, effort, and confidence when supported.
+4. Group observations by workflow, area, likely root cause, or shared
+   verification path into a small number of coherent child features.
+5. Keep ambiguity visible and do not create a parallel bug-bash tracker.
 
-### 2. Check for direction documents
+### 2. Draft or update the epic
 
-This skill may be invoked after `explore-directions`, which produces options documents in `docs/directions/`. If direction documents exist, they contain the strategic reasoning that led to this epic — use them.
+Use `references/epic_template.md`. Define:
 
-```bash
-ls docs/directions/ 2>/dev/null
-```
+- charter alignment and the concrete problem or opportunity
+- 2–4 goals and measurable, time-bounded success criteria
+- explicit in-scope and out-of-scope boundaries
+- independently plannable child features with stable checklist state
+- dependencies, risks, sequencing, and target window
 
-If direction documents exist:
+For observation-driven epics, include the conditional issue inventory and
+source-notes sections from the template. Every retained observation must map to
+one child feature or an explicit out-of-scope decision.
 
-1. Read the most recent direction document(s).
-2. Check the "Decision log" table for a direction marked as **chosen**. If none is marked chosen, ask the user which direction they selected.
-3. Note the chosen direction's evidence, trade-offs, confidence, and rough size — these directly inform the epic's problem statement, scope, and risks.
-4. If the chosen direction says the charter needs a refresh, flag this. The epic may need to account for charter drift.
-5. If the chosen direction's next step is `plan-feature` (not `plan-epic`), confirm with the user that an epic-level plan is appropriate — the direction may have been sized smaller.
+When updating an epic, change only conclusions affected by new evidence.
+Preserve completed items unless the evidence shows they are no longer complete;
+state that discrepancy instead of silently reopening work.
 
-If no direction documents exist, proceed to understand the initiative directly.
+### 3. Validate, write, and report
 
-### 3. Understand the initiative
+Before writing, check:
 
-Ask the user to describe the initiative they want to epic-ize. Gather:
+- **Alignment:** goals and criteria directly support the charter.
+- **Scale:** one team could plausibly deliver the scope in 4–12 weeks.
+- **Measurement:** each success criterion has a target and method.
+- **Boundaries:** non-goals exclude plausible scope expansion.
+- **Decomposition:** each child can be planned and deprioritized independently.
+- **Coverage:** observation-driven inputs are deduplicated without losing a
+  distinct issue, and every issue has a disposition.
 
-- What prompted this initiative? (user feedback, metric decline, strategic bet, technical debt)
-- What part of the charter does this advance?
-- What would the user see or experience differently if this epic succeeds?
-- Any hard deadlines or external constraints (conference, regulatory, partnership)?
-- What is the rough time horizon? (default to a quarter if unspecified)
+Revise failures before writing. Create or update exactly one
+`docs/epics/NNN-<slug>.md` file. Do not create `docs/features/` plans in the same
+run.
 
-If the user describes something that feels smaller than 4 weeks, recommend `plan-feature` instead.
+Report the path, epic ID, core argument, number of child features, material
+scope or alignment concerns, and the recommended next `plan-feature` target.
+For observation-driven input, also report distinct observation count,
+highest-severity items, and unresolved ambiguities.
 
-### 4. Explore existing plans
+## Safety and idempotency
 
-Check for prior epics to avoid duplication and understand current priorities:
+- Never invent charter content, observed behavior, severity, or certainty.
+- Never discard a distinct observation merely because it is small.
+- Never reset completed epic progress during an update.
+- Reuse a matching existing epic rather than creating a duplicate; if create
+  versus update is materially ambiguous, ask before writing.
+- Keep planning, implementation, Git delivery, and publication as separately
+  authorized actions.
 
-```bash
-ls docs/epics/ 2>/dev/null
-find . -path "*/epics/*.md" -o -path "*/plans/*.md" | head -20
-```
+## Output contract
 
-Read any existing epics that seem related. Note:
-
-- Whether this initiative overlaps with or supersedes an existing epic.
-- Dependencies on work already in flight.
-
-### 5. Draft the epic
-
-Write the epic document using the template in `references/epic_template.md`. Store it at `docs/epics/NNN-epic-name.md` where `NNN` is a zero-padded number (e.g., `001`, `002`).
-
-### 6. Validate the epic
-
-Before finalizing, run these checks:
-
-- **Charter coherence check:** Can you draw a straight line from this epic's goals to the charter's value proposition? If the connection requires more than one sentence of explanation, the epic is either too broad or misaligned.
-- **Scope check:** Can a single team reasonably deliver the "In Scope" items in 4–12 weeks? If not, split into multiple epics or move items to out-of-scope.
-- **Success criteria check:** Is each criterion measurable without a survey? Prefer behavioral or system metrics over subjective ratings.
-- **Non-goal check:** Does the out-of-scope section actually exclude tempting but distracting work? If it only excludes obviously unrelated things, it is not doing its job.
-- **Child clarity check:** Are the child features independent enough that one could be deprioritized without killing the whole epic? If not, reconsider the decomposition.
-
-If any check fails, flag it to the user and propose a revision.
-
-### 7. Write the file
-
-```bash
-mkdir -p docs/epics
-```
-
-Assign the next available ID by scanning existing files:
-
-```bash
-ls docs/epics/ | grep -E '^[0-9]+' | sort | tail -1
-```
-
-Write the finalized epic to `docs/epics/NNN-<slug>.md`.
-
-### 8. Final response
-
-Report:
-
-- Confirmation that the epic document has been written.
-- The assigned epic ID and file path.
-- A one-paragraph summary of the epic's core argument.
-- Any alignment concerns or scope warnings flagged during validation.
-- Recommended next step: run `plan-feature` to plan the first child feature.
-
-## Idempotency
-
-If `docs/epics/NNN-<slug>.md` already exists:
-
-1. Read the existing epic fully.
-2. Ask the user whether they want to update the existing epic or create a new one.
-3. If updating, preserve the ID and metadata, update changed sections, and refresh the "Last updated" field.
-4. If creating a new epic, assign the next available ID.
-
-## When not to use this skill
-
-- Do not use this skill for work that fits in 1–2 weeks — use `plan-feature` instead.
-- Do not use this skill without a charter — the alignment step will fail.
-- Do not use this skill for tiny isolated tech-debt tasks that do not need epic-level coordination. For strategic maintainability, architecture, platform, or refactor initiatives, create a normal epic and decompose it into feature plans.
+Return the source inputs inspected, epic path and ID, create/update decision,
+child-feature count, observation count when applicable, validation results,
+unresolved questions, and a complete file/Git/external-effect audit.
