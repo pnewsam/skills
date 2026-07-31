@@ -1,6 +1,6 @@
 ---
 name: compliance-accessibility
-description: Accessibility compliance guidance anchored in WCAG 2.2. Use when reviewing keyboard access, semantic structure, accessible names, focus order, contrast, forms, errors, motion, assistive technology support, and WCAG-oriented obligations. Pair with ui-expert, react-accessibility, and color-expert for implementation details.
+description: Accessibility compliance guidance anchored in WCAG 2.2. Use when reviewing keyboard access, semantic structure, accessible names, focus order, contrast, forms, errors, motion, assistive technology support, and WCAG-oriented obligations. Pair with ui-expert, react-accessibility, and ui-color for implementation details.
 ---
 
 # Compliance Accessibility
@@ -62,4 +62,4 @@ Accessibility is operability and semantics, not visual polish. Automated checks 
 
 - Use `ui-expert` for interaction pattern and UX decisions.
 - Use `react-accessibility` for React implementation details.
-- Use `color-expert` or `ui-color` for contrast and color-system decisions.
+- Use `ui-color` for contrast and color-system decisions.

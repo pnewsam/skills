@@ -1,4 +1,4 @@
-# Browser-test epic audit template
+# Browser-test audit report template
 
 ```markdown
 # Browser Test Audit: <epic or application>
@@ -41,7 +41,7 @@
 - **Consequence:** <user-visible or delivery risk>
 - **Proposed child feature:** <name, or none>
 
-## Epic updates
+## Epic updates (include only when explicitly requested)
 
 - <entries changed, added, or deliberately preserved>
 
@@ -51,9 +51,12 @@
 
 ## Next steps
 
-1. <dependency-aware action using plan-feature, add-browser-test,
-   fix-browser-test, or setup-browser-testing>
+1. <dependency-aware action using plan-feature, add-browser-test, or
+   fix-browser-test>
 ```
+
+Return this structure in chat by default. Write it to a file only when the user
+explicitly requests a durable audit artifact.
 
 Do not label a pattern flaky without observed nondeterminism. Use “flake risk”
 when evidence is static.

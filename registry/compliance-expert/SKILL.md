@@ -39,7 +39,7 @@ Compliance skills translate external obligations and unacceptable risks into con
 | New attack surface, assets, actors, trust boundaries, or abuse cases | `threat-model` | `compliance-security`, stack expert |
 | Authn/authz, injection, secrets, session safety, secure defaults | `compliance-security` | stack expert, `quality-correctness` |
 | CVE, dependency advisory, CodeQL/SAST finding, patch risk | `compliance-vulnerability-management` | remediation planning workflows |
-| Keyboard, screen reader, contrast, focus, form errors, WCAG | `compliance-accessibility` | `ui-expert`, `react-accessibility`, `color-expert` |
+| Keyboard, screen reader, contrast, focus, form errors, WCAG | `compliance-accessibility` | `ui-expert`, `react-accessibility`, `ui-color` |
 | PII, data minimization, retention, deletion, analytics, vendors | `compliance-privacy` | `compliance-gdpr` if EU/UK GDPR applies |
 | GDPR, lawful basis, data subject rights, DPIA, breach notification | `compliance-gdpr` | `compliance-privacy`, legal/policy review |
 | HIPAA, ePHI, covered entity, business associate, safeguards | `compliance-hipaa` | `compliance-security`, legal/policy review |

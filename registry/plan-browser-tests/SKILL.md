@@ -1,26 +1,28 @@
 ---
 name: plan-browser-tests
-description: Plan or audit high-value browser and end-to-end test coverage by mapping critical user flows, existing tests, stale or flaky patterns, and coverage gaps into the standard epic and feature-planning flow. Use when asked to plan browser tests, integration tests, or E2E coverage; identify critical UI flows; audit an existing browser suite; or refresh browser-test priorities. Writes only local planning and audit artifacts, not test code.
+description: Plan or audit high-value browser and end-to-end test coverage by mapping critical user flows, existing tests, stale or flaky patterns, and coverage gaps into the standard epic and feature-planning flow. Use when asked to plan browser tests, integration tests, or E2E coverage; identify critical UI flows; audit an existing browser suite; or refresh browser-test priorities. Plan mode may write one coverage epic; Audit mode is read-only unless the user explicitly requests an epic update. Never writes test code.
 ---
 
 # Plan Browser Tests
 
 ## Outcome
 
-Create an evidence-backed browser-test coverage epic, or audit an existing suite
-and update that epic conservatively. Keep durable work in the normal
+Create an evidence-backed browser-test coverage epic, or audit an existing
+suite and report prioritized findings. Keep durable work in the normal
 `docs/epics/` and `docs/features/` planning flow.
 
 ## Modes
 
 - **Plan:** identify critical flows and create or refresh a browser-test
   coverage epic. This is the default for new coverage planning.
-- **Audit:** compare the current application, suite, and coverage epic; write an
-  audit and update the epic with verified coverage and prioritized gaps. Use
-  when asked to audit, review, refresh, find stale tests, or find flakes.
+- **Audit:** compare the current application, suite, and coverage epic and
+  report verified coverage and prioritized gaps. This is read-only by default.
+  Update the epic only when the user explicitly asks to refresh or apply the
+  findings.
 
-Both modes may write local planning artifacts. Neither may edit test or source
-code, install packages, change Git state, or write to external systems.
+Plan mode may write one local epic. Audit mode does not write an audit artifact
+or update plans without explicit user intent. Neither mode may edit test or
+source code, install packages, change Git state, or write to external systems.
 
 ## What deserves browser coverage
 
@@ -46,10 +48,10 @@ Inspect:
 - representative tests, fixtures, selectors, authentication, and data setup
 - CI commands and browser-test conventions
 
-If no framework exists, describe the required capability and use
-`setup-browser-testing` for implementation planning. Recommend a named framework
-only after considering project language, runtime, team conventions, and current
-official support.
+If no framework exists, describe the required foundation as a prerequisite
+child feature or ordinary setup task. Recommend a named framework only after
+considering project language, runtime, team conventions, and current official
+support; do not create a permanent setup workflow merely to scaffold it once.
 
 Do not run the application or test suite in Plan mode. In Audit mode, run the
 existing suite only when the user requested execution or the environment is
@@ -89,15 +91,15 @@ Read `references/audit_template.md`, then:
    dependencies, duplicate coverage, skipped tests, and credible flaky patterns.
 5. If the suite was run, distinguish reproducible failures from static risk
    signals. A hardcoded wait is a flake risk, not proof of a flake by itself.
-6. Write `docs/epics/NNN-<slug>-audit.md`.
-7. Update the epic conservatively:
+6. Report the audit using `references/audit_template.md`.
+7. When the user explicitly requested an epic refresh, update it conservatively:
    - mark a flow covered only when a test verifies its intended outcome
    - preserve child-feature completion and notes
    - add missing or broken flow clusters as child candidates
    - do not create feature plans or test code
 
-If no browser-test epic exists, create one in the same pass when the user asked
-to establish the plan. Otherwise write a clearly provisional audit and
+If no browser-test epic exists, create one in the same pass only when the user
+asked to establish the plan. Otherwise report a clearly provisional audit and
 recommend Plan mode.
 
 ## Prioritization
@@ -118,10 +120,9 @@ coverage is sufficient when that is the better choice.
 Return:
 
 - mode used
-- epic and audit paths written
+- epic path written, if any
 - framework detected
 - suite status when actually run
 - number of critical flows and test files mapped
 - highest-priority missing, broken, or flaky flow clusters
-- next step: `plan-feature`, `add-browser-test`, `fix-browser-test`, or
-  `setup-browser-testing`
+- next step: `plan-feature`, `add-browser-test`, or `fix-browser-test`

@@ -7,7 +7,9 @@ description: "Aesthetic direction and visual language principles for digital pro
 
 Use this skill to decide what the interface should feel like and keep all visual choices aligned with that direction.
 
-For color ramps and semantic tokens, use `ui-color` or `color-expert`. For typography mechanics, use `ui-typography`. This skill owns aesthetic direction, cohesion, and expressive fit.
+For color ramps and semantic tokens, use `ui-color`. For typography mechanics,
+use `ui-typography`. This skill owns aesthetic direction, cohesion, and
+expressive fit.
 
 ## Core Principles
 

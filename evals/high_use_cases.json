@@ -104,14 +104,6 @@
     "forbidden_effects": ["network_write", "external_write"]
   },
   {
-    "id": "save-session",
-    "prompt": "Save a short handoff for what we did today.",
-    "expected_skill": "save-session",
-    "expected_mode": "Write local note",
-    "allowed_effects": ["read_local", "write_files"],
-    "forbidden_effects": ["git_write", "network_write", "external_write"]
-  },
-  {
     "id": "execute-one-item",
     "prompt": "Implement the next unchecked item in feature 014, verify it, and stop.",
     "expected_skill": "execute-feature",
