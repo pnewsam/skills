@@ -79,6 +79,18 @@ The directory and `name` must match. Use a verb phrase for workflows
 (`react-state-management`). Router names may use `-expert` when they genuinely
 route among focused children.
 
+For workflow names, prefer `<verb>-<object>` using the target system's canonical
+noun: `create-issue`, `create-project`, `review-pr`. Keep singular nouns for
+one-record effects and plural nouns for collection or bulk operations. Put
+synonyms such as "ticket" in the description for routing instead of creating
+competing names.
+
+Let the installed profile and the skill description identify an ordinary
+substrate such as Linear. Add a provider prefix only when the provider-specific
+behavior is the user-recognizable operation or when two same-named workflows
+must coexist in one installation, as with `gh-address-comments`. Do not add a
+provider prefix merely because the workflow calls that provider's tools.
+
 For repeatable convergence families, use consistent stage verbs:
 
 - `analyze-<domain>` examines evidence and produces ranked candidates.

@@ -1,0 +1,11 @@
+interface:
+  display_name: "Create Linear Project"
+  short_description: "Create one verified project in Linear."
+  default_prompt: "Use $create-project to create this project in Linear."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "linear"
+      description: "Linear MCP server"
+      transport: "streamable_http"
+      url: "https://mcp.linear.app/mcp"

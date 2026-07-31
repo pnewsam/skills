@@ -17,12 +17,21 @@
       "description": "Minimal daily workflows for diagnosis, local Git, pull requests, sessions, and validation.",
       "skills": [
         "diagnose-failure",
+        "polish-pr",
         "prepare-pr",
         "review-pr",
         "revise-pr",
         "save-session",
         "stash",
         "validate-changes"
+      ]
+    },
+    "linear-ops": {
+      "description": "Focused Linear workflows for creating and polishing issues and projects.",
+      "skills": [
+        "create-issue",
+        "create-project",
+        "polish-issue"
       ]
     },
     "product-delivery": {

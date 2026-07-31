@@ -59,7 +59,8 @@ origin commit and must be updated from upstream rather than edited locally.
 Profiles may include other profiles. `core` intentionally stays small and
 operational; install `advisory` when broad cross-domain routing is useful. The
 advisory profile composes the maintained specialist profiles but deliberately
-does not include externally sourced references.
+does not include externally sourced references. Install `linear-ops` for the
+focused Linear issue and project creation workflows.
 
 Routine convergence workflows use no more than three linear stages. Approval is
 a gate between planning and execution, validation belongs inside execution, and
@@ -154,6 +155,17 @@ flowchart TD
 | [ship-epic](registry/ship-epic/SKILL.md)               | workflow | convergence | execute | Complete an epic end-to-end — plan missing features, advance until all child features are complete, validate, and prepare a PR. |
 | [audit-epic](registry/audit-epic/SKILL.md)             | workflow | convergence | analyze, plan | Audit an epic against its feature plans; optionally turn the findings into a prioritized, progress-preserving gap-closure plan. |
 
+### Linear Operations
+
+Focused workflows for creating or polishing one verified Linear record and
+stopping. Install the `linear-ops` profile when a team uses Linear.
+
+| Skill | Type | Phase | Description |
+| --- | --- | --- | --- |
+| [create-issue](registry/create-issue/SKILL.md) | workflow | plan | Resolve live workspace fields, create one Linear issue, verify it, and stop. |
+| [create-project](registry/create-project/SKILL.md) | workflow | plan | Resolve live workspace fields, create one Linear project, verify it, and stop. |
+| [polish-issue](registry/polish-issue/SKILL.md) | workflow | edit | Improve an issue's language without changing its substance or properties. |
+
 ### Analysis Workflows
 
 | Skill | Type | Phase | Description |
@@ -178,6 +190,7 @@ flowchart LR
 | [stash](registry/stash/SKILL.md)                   | workflow | convergence | preserve | Preserve related in-progress work on a local `wip/` branch in one commit with a context note.                     |
 | [save-session](registry/save-session/SKILL.md)     | workflow |             | analyze | Summarize the current working session and save it to `docs/tmp/`.                                                   |
 | [prepare-pr](registry/prepare-pr/SKILL.md)         | workflow |             | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR.     |
+| [polish-pr](registry/polish-pr/SKILL.md)           | workflow | convergence | edit | Improve a PR's language without changing its substance, template, or checklist state. |
 | [revise-pr](registry/revise-pr/SKILL.md)           | workflow | convergence | execute | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits.        |
 | [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze, review | Review a pull request for actionable defects or assess operational and merge risk; post only when explicitly requested. |
 
