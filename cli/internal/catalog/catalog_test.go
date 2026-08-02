@@ -130,6 +130,7 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 	}
 	wantCore := []string{
 		"diagnose-failure",
+		"harden-pr",
 		"polish-pr",
 		"prepare-pr",
 		"review-pr",

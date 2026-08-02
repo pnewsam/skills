@@ -64,6 +64,42 @@
     "forbidden_effects": ["write_files", "git_write"]
   },
   {
+    "id": "harden-local",
+    "prompt": "Harden PR 42 by reviewing it, fixing credible findings, and re-reviewing until it is clean enough to merge. Keep all changes local: do not commit, push, post reviews, reply, or resolve threads.",
+    "expected_skill": "harden-pr",
+    "expected_mode": "Local bounded convergence",
+    "expected_delegates": ["review-pr"],
+    "allowed_effects": ["read_local", "write_files", "run_tests", "network_read"],
+    "forbidden_effects": ["git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "harden-cross-model",
+    "prompt": "This PR was prepared with one model. Harden it locally, and route every independent review pass to a different suitable model with no inherited authoring context. Do not commit, push, or post anything.",
+    "expected_skill": "harden-pr",
+    "expected_mode": "Local cross-model bounded convergence",
+    "expected_delegates": ["review-pr"],
+    "allowed_effects": ["read_local", "write_files", "run_tests", "network_read"],
+    "forbidden_effects": ["git_write", "network_write", "external_write"]
+  },
+  {
+    "id": "harden-publish",
+    "prompt": "Review and fix PR 42 in repeated passes until the latest head has no blocking findings, then commit and push each verified repair round. Do not post reviews, reply to comments, resolve threads, or merge.",
+    "expected_skill": "harden-pr",
+    "expected_mode": "Publish bounded convergence",
+    "expected_delegates": ["review-pr"],
+    "allowed_effects": ["read_local", "write_files", "run_tests", "network_read", "git_write", "network_write"],
+    "forbidden_effects": ["external_write", "destructive_git"]
+  },
+  {
+    "id": "harden-respond",
+    "prompt": "Address all actionable review threads on PR 42, validate and push the fixes, re-review the updated PR, then reply to and resolve only the threads that are verified fixed. Do not merge it.",
+    "expected_skill": "harden-pr",
+    "expected_mode": "Respond bounded convergence",
+    "expected_delegates": ["review-pr"],
+    "allowed_effects": ["read_local", "write_files", "run_tests", "network_read", "git_write", "network_write", "external_write"],
+    "forbidden_effects": ["destructive_git"]
+  },
+  {
     "id": "risk-analyze",
     "prompt": "How risky is PR 42? Give me the assessment here only.",
     "expected_skill": "review-pr",

@@ -186,12 +186,15 @@ flowchart LR
     PP[prepare-pr] -->|creates PR| RP[review-pr]
     RP -->|Review intent| CR[code-review verdict]
     RP -->|Risk intent| RA[merge-risk assessment]
+    RP -->|iterative repair| HP[harden-pr]
+    HP -->|fresh review| RP
     RP --> RVP[revise-pr]
 ```
 
 | Skill                                              | Type     | Mode        | Phase   | Description                                                                                                         |
 | -------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
 | [stash](registry/stash/SKILL.md)                   | workflow | convergence | preserve | Preserve related in-progress work on a local `wip/` branch in one commit with a context note.                     |
+| [harden-pr](registry/harden-pr/SKILL.md)           | workflow | convergence | execute, review | Iteratively alternate independent PR reviews with traceable fixes and validation until a bounded convergence or stop condition. |
 | [prepare-pr](registry/prepare-pr/SKILL.md)         | workflow |             | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR.     |
 | [polish-pr](registry/polish-pr/SKILL.md)           | workflow | convergence | edit | Improve a PR's language without changing its substance, template, or checklist state. |
 | [revise-pr](registry/revise-pr/SKILL.md)           | workflow | convergence | execute | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits.        |

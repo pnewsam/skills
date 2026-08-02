@@ -17,6 +17,7 @@
       "description": "Minimal daily workflows for diagnosis, local Git, pull requests, and validation.",
       "skills": [
         "diagnose-failure",
+        "harden-pr",
         "polish-pr",
         "prepare-pr",
         "review-pr",
