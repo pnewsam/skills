@@ -1,0 +1,4 @@
+interface:
+  display_name: "Harden PR"
+  short_description: "Cross-model review, repair, and verification cycles."
+  default_prompt: "Use $harden-pr to alternate model-diverse reviews and repairs until this PR reaches the stopping criteria."
