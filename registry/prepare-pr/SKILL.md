@@ -11,9 +11,7 @@ Prepare a local Git branch for review while stopping at the effect boundary the 
 
 ## Modes and stopping point
 
-Infer the narrowest mode that satisfies the request. If the request is ambiguous,
-complete the read-only work and present the proposed next action instead of
-silently advancing.
+Infer the narrowest mode that satisfies the request. If the request is ambiguous, complete the read-only work and present the proposed next action instead of silently advancing.
 
 | Mode | Permitted effects | Stop after |
 | --- | --- | --- |
@@ -22,23 +20,20 @@ silently advancing.
 | Publish | Commit plus ordinary push | Verified remote branch |
 | Open PR | Publish plus create or update a GitHub PR | Verified PR URL |
 
-A request to "review the branch" means Preview. A request to "commit" does not
-authorize pushing. A request to "push" does not authorize opening a PR. Only an
-explicit request to "open" or "create" a PR authorizes the full Open PR
-sequence. Treat "prepare this for a PR" without an explicit effect as
-ambiguous: complete Preview and propose the next action.
+A request to "review the branch" means Preview. A request to "commit" does not authorize pushing. A request to "push" does not authorize opening a PR. Only an explicit request to "open" or "create" a PR authorizes the full Open PR sequence. Treat "prepare this for a PR" without an explicit effect as ambiguous: complete Preview and propose the next action.
+
+## Writing style
+
+Keep the PR title and body concise and straightforward. Write the shortest description that conveys what changed and why — tight bullets over paragraphs, outcomes over file-by-file narration of the diff. Cut hedging, restated instructions, and empty sections.
 
 ## Safety rules
 
 - Never run destructive commands such as `git reset --hard`, `git clean`, `git checkout -- .`, `git restore`, force-push, rebasing, or amending unless the user explicitly asks for that exact operation.
 - Do not commit secrets, credentials, generated build artifacts, dependency folders, editor files, or local environment files. Flag suspicious files before staging or committing.
 - Do not push with `--force` or `--force-with-lease` unless explicitly requested.
-- Before committing, inspect the staged patch and report the intended files and
-  message. Do not add an extra confirmation when the user already explicitly
-  requested the commit and the scope is unambiguous.
+- Before committing, inspect the staged patch and report the intended files and message. Do not add an extra confirmation when the user already explicitly requested the commit and the scope is unambiguous.
 - If there are unrelated changes mixed into the working tree, call them out and ask which changes to include rather than guessing.
-- Preserve the selected mode. Never treat successful completion of one stage as
-  authorization for the next.
+- Preserve the selected mode. Never treat successful completion of one stage as authorization for the next.
 
 ## Workflow
 
@@ -157,25 +152,18 @@ When summarizing, mention both committed branch changes and uncommitted working-
 In Preview mode, inspect existing validation evidence but do not run commands
 that may create caches, reports, or other files unless the user asks.
 
-In Commit, Publish, and Open PR modes, find the repository's actual validation
-commands in its instructions, build metadata, or CI configuration. Run the
-smallest safe checks that cover the candidate change before staging:
+In Commit, Publish, and Open PR modes, find the repository's actual validation commands in its instructions, build metadata, or CI configuration. Run the smallest safe checks that cover the candidate change before staging:
 
 - focused tests for the affected behavior
 - lint or type checks when configured and relevant
 - a broader regression check only when the blast radius warrants it
 
-Do not install dependencies or invent a command. If no applicable check exists
-or the environment cannot run it, continue only with an explicit
+Do not install dependencies or invent a command. If no applicable check exists or the environment cannot run it, continue only with an explicit
 `not run` result and reason.
 
-If a relevant check fails, stop before committing. A local commit may proceed
-only when the user explicitly asks to preserve the failing state. Never publish
-or open a PR with a known failure unless the user explicitly overrides the
-failure after seeing it.
+If a relevant check fails, stop before committing. A local commit may proceed only when the user explicitly asks to preserve the failing state. Never publish or open a PR with a known failure unless the user explicitly overrides the failure after seeing it.
 
-Treat an obvious mismatch between changed behavior, existing tests, and a
-governing feature plan as a failed preflight even if no test command was run.
+Treat an obvious mismatch between changed behavior, existing tests, and a governing feature plan as a failed preflight even if no test command was run.
 
 ### 5. Decide what to stage
 
@@ -210,26 +198,12 @@ Use a conventional commit type when it fits:
 - `perf`: performance improvement
 - `build` or `ci`: build system or continuous integration changes
 
-Choose a scope from the touched component, package, service, or feature area. Omit the scope if it would be vague.
-
-Good examples:
+Choose a scope from the touched component, package, service, or feature area. Omit the scope if it would be vague. Example:
 
 ```text
 feat(auth): support refresh token rotation
 
 Add token rotation during session renewal and cover expired-token handling with regression tests.
-```
-
-```text
-fix(api): handle empty search responses
-
-Return an empty result set instead of raising when the upstream provider responds without matches.
-```
-
-```text
-refactor(connectors): simplify postgres sync setup
-
-Move shared setup into a helper so connector tests can reuse the same initialization path.
 ```
 
 Avoid generic messages such as `update code`, `fix stuff`, `changes`, or `wip` unless the user explicitly requests them.
@@ -278,12 +252,9 @@ Do not push directly to `main`, `master`, or protected release branches unless t
 
 ### 9. Create or update the pull request (Open PR mode only)
 
-Do not infer permission to create a PR merely because the push succeeded. In
-Open PR mode, use one authenticated GitHub access path:
+Do not infer permission to create a PR merely because the push succeeded. In Open PR mode, use one authenticated GitHub access path:
 
-- Prefer an available GitHub connector or app. Resolve the repository, current
-  head branch, and evidence-backed base branch; search for an existing PR from
-  that head before calling the connector's create-pull-request action.
+- Prefer an available GitHub connector or app. Resolve the repository, current head branch, and evidence-backed base branch; search for an existing PR from that head before calling the connector's create-pull-request action.
 - Otherwise use authenticated `gh`:
 
   ```bash
@@ -292,16 +263,11 @@ Open PR mode, use one authenticated GitHub access path:
   gh pr view --json number,title,url,state 2>/dev/null
   ```
 
-Do not require both paths. If neither is authenticated, stop and explain how to
-connect the available GitHub integration or authenticate `gh`.
+Do not require both paths. If neither is authenticated, stop and explain how to connect the available GitHub integration or authenticate `gh`.
 
-Use `references/pr_output_templates.md` for the canonical PR body and final
-status formats. Populate it with facts from the diff and actual validation
-results; remove irrelevant placeholders.
+Use `references/pr_output_templates.md` for the canonical PR body and final status formats. Populate it with facts from the diff and actual validation results; remove irrelevant placeholders.
 
-If no PR exists, create it with the selected access path. For the connector,
-provide the repository, title, populated body, base branch, head branch, and
-draft state explicitly. The `gh` fallback is:
+If no PR exists, create it with the selected access path. For the connector, provide the repository, title, populated body, base branch, head branch, and draft state explicitly. The `gh` fallback is:
 
 ```bash
 gh pr create \
@@ -312,8 +278,7 @@ gh pr create \
   --draft
 ```
 
-Default to a draft unless the user or repository convention clearly requests a
-ready-for-review PR.
+Default to a draft unless the user or repository convention clearly requests a ready-for-review PR.
 
 Optional flags to include when relevant:
 
@@ -321,11 +286,8 @@ Optional flags to include when relevant:
 - `--assignee @me` — self-assign the PR
 - `--label <label>` — apply a label if one clearly matches (e.g. `bug`, `enhancement`)
 
-After creation, fetch the live PR through the same access path and verify its
-number, URL, title, base, head, and draft state before claiming completion.
-If the selected access path rejects the write because direct user authorization
-is missing, do not retry through another path. Report the rejection and preserve
-the prepared PR payload for the original user-authorized context.
+After creation, fetch the live PR through the same access path and verify its number, URL, title, base, head, and draft state before claiming completion.
+If the selected access path rejects the write because direct user authorization is missing, do not retry through another path. Report the rejection and preserve the prepared PR payload for the original user-authorized context.
 
 ### 10. Final response
 
@@ -341,37 +303,8 @@ After preparing the PR, report:
 
 ## Handling common situations
 
-### Already committed branch with no uncommitted changes
-
-Summarize the diff against the base branch, propose a PR title and description, and push if requested.
-
-### Uncommitted changes only
-
-Summarize the working-tree diff, stage intended files, propose a commit message, then commit and push when requested.
-
-### Mixed committed and uncommitted changes
-
-Explain both sets separately. Commit only the uncommitted changes that belong to the PR.
-
-### Multiple unrelated changes
-
-Group files by likely intent and ask which group to commit. Do not create one broad commit unless the user explicitly approves.
-
-### Merge conflicts or failing Git commands
-
-Stop and report the exact problem. Do not attempt risky repair commands. Suggest the safest next command, such as inspecting conflicted files or fetching the base branch.
-
-### Validation evidence
-
-Use the results from Step 4 to populate the **Validation** section of the PR
-body:
-
-- If automated tests were run and passed, list the command used and note that they passed.
-- If automated tests failed, stop before committing or publishing unless the
-  user explicitly authorizes the applicable failing-state action.
-- If no automated tests exist, describe the manual verification steps taken (e.g. "Ran the app locally and confirmed the login flow works end-to-end").
-- If tests were not run at all (e.g. the user skipped this step), state that clearly in both the PR body and the final response.
-
-Always fill in **Validation** with concrete evidence. If a check was not run,
-state that fact and why; do not turn suggested reviewer steps into claimed
-results.
+- **Already committed, nothing uncommitted:** summarize the diff against the base branch, propose a PR title and description, push if requested.
+- **Uncommitted changes only:** summarize the working-tree diff, stage intended files, propose a commit message, then commit and push when requested.
+- **Mixed committed and uncommitted:** explain both sets separately; commit only the uncommitted changes that belong to the PR.
+- **Multiple unrelated changes:** group files by likely intent and ask which group to commit. Do not create one broad commit unless the user explicitly approves.
+- **Merge conflicts or failing Git commands:** stop and report the exact problem. Do not attempt risky repair commands; suggest the safest next command (e.g. inspecting conflicted files or fetching the base branch).

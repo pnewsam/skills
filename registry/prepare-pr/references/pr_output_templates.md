@@ -21,7 +21,8 @@ Not included / follow-ups:
 ## PR body template
 
 Use repository templates when present. Otherwise fill this evidence-oriented
-template from the diff and actual validation. Remove unused optional sections.
+template from the diff and actual validation. Keep it concise: tight bullets, no
+restated instructions, no empty sections. Remove unused optional sections.
 
 ```markdown
 ## Summary
