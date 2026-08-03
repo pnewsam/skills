@@ -100,50 +100,27 @@ Present the review in the shape defined under **Review output** below: verdict f
 
 ## Review output
 
-Use this shape for both the in-chat assessment (Analyze) and the body of a posted GitHub review (Post). Keep it tighter than a PR description: verdict first, reasoning as prose, findings that carry their own fix. Risk mode uses `references/risk_assessment.md` instead.
+Present the review — in chat and in a posted review body — in this shape, tighter than a PR description. Risk mode uses `references/risk_assessment.md` instead.
 
 ```markdown
 ## Code Review
 
 **Verdict: <APPROVE | REQUEST CHANGES | COMMENT>**
 
-<One tight paragraph: what was reviewed and the specific things confirmed — the reasoning behind the verdict — ending with a bottom line such as "No actionable findings." or "One blocking issue below.">
+<A tight paragraph: what was reviewed and why you reached the verdict, ending with a bottom line such as "No actionable findings.">
 
 ### Validation
 
-- <what was actually run or inspected, with real results>
-- Not run: <check> — <reason>
+- <what you actually ran or inspected, with real results>
 ```
 
-- Lead with the verdict; never bury it. The summary explains why you reached it, not a restatement of the diff.
-- **Validation is honest and adaptive.** List only what you actually did — checks you ran with their results, or what you inspected when you could not run the code. Never imply a pass you did not observe; a test file existing is not a passing test. Omit the section only when there is genuinely nothing to report.
-- Optionally close with a one-line note, such as what the new tests cover.
-
-Findings — inline on a changed line, or in the summary when broader — are ordered by severity, most severe first, each in one tight unit:
+Validation lists only what you genuinely did; never imply a pass you did not observe. Findings — inline on a changed line, or in the summary when broader — are ordered most severe first:
 
 ```markdown
-**<Blocking | Major | Minor | Nit>:** <the problem>. <concrete evidence — exact path, observed values, or a short repro>. <the fix, or a precise question>.
+**<Blocking | Major | Minor | Nit>:** <problem>. <evidence>. <fix or precise question>.
 ```
 
-- A short category may follow the severity when it aids scanning: **Major (correctness):**, **Nit (naming):**.
-- Give evidence proportional to the finding: a subtle bug earns a repro; a nit is one line.
-- Offer the smallest useful fix or a precise question, not a vague concern.
-- If nothing is actionable, write "No actionable findings." and omit the findings list.
-
-Example — an approving summary and one blocking finding:
-
-> ## Code Review
->
-> **Verdict: APPROVE**
->
-> Reviewed the shared truncation-retry helper and all eight call-site migrations. Retries stay limited to confirmed truncation, non-truncation failures keep the existing fallback with content-safe logging, and the per-site budget overrides match their workloads. No actionable findings.
->
-> ### Validation
->
-> - 237 targeted regression and surrounding tests passed.
-> - `git diff --check` and Python compilation passed.
-
-> **Blocking:** Do not persist an unscoped runtime into a shared `_no-session` bucket. Cowork's transient `CredentialProbe` builds `ChatSession` without `session_id` and can inherit a process-global `ANTON_SCRATCHPAD_PERSIST_SESSION=true` from an earlier chat, so a later probe reusing the pad name reloads those values — and cowork-server#250 never sweeps this bucket. Disable persistence when `session_id` is absent, or give each probe a unique scoped ID and clean it afterward.
+Give evidence proportional to the finding and the smallest useful fix. If nothing is actionable, say "No actionable findings." and omit the list.
 
 ## Posting
 
