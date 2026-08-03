@@ -131,11 +131,11 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 	wantCore := []string{
 		"diagnose-failure",
 		"harden-pr",
-		"polish-pr",
+		"pr-conventions",
 		"prepare-pr",
 		"review-pr",
-		"revise-pr",
 		"stash",
+		"update-pr",
 		"validate-changes",
 	}
 	if !reflect.DeepEqual(core, wantCore) {
