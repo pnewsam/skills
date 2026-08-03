@@ -55,8 +55,6 @@
    fix-browser-test>
 ```
 
-Return this structure in chat by default. Write it to a file only when the user
-explicitly requests a durable audit artifact.
+Return this structure in chat by default. Write it to a file only when the user explicitly requests a durable audit artifact.
 
-Do not label a pattern flaky without observed nondeterminism. Use “flake risk”
-when evidence is static.
+Do not label a pattern flaky without observed nondeterminism. Use “flake risk” when evidence is static.

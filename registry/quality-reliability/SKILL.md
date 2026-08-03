@@ -39,15 +39,10 @@ Reliable systems make failure explicit: bounded, observable, recoverable, and sa
 
 ## Evidence Signals
 
-- Failure and recovery rate, timeout frequency, retry volume, queue age,
-  dead-letter volume, and backlog growth can reveal recurring failure modes.
-- Retry amplification or duplicate work is stronger evidence than raw retry
-  count.
-- Mean time to detect or diagnose is useful only when incident and observation
-  data are trustworthy.
-- Compare operational metrics only across compatible workloads, environments,
-  and windows; a traffic increase is not automatically a reliability
-  regression.
+- Failure and recovery rate, timeout frequency, retry volume, queue age, dead-letter volume, and backlog growth can reveal recurring failure modes.
+- Retry amplification or duplicate work is stronger evidence than raw retry count.
+- Mean time to detect or diagnose is useful only when incident and observation data are trustworthy.
+- Compare operational metrics only across compatible workloads, environments, and windows; a traffic increase is not automatically a reliability regression.
 
 ## Do / Don't
 

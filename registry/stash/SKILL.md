@@ -90,14 +90,9 @@ git switch -c wip/<name>
 
 ### 4. Write context, stage, and commit once
 
-Before staging, write the context note using
-`references/wip_context_template.md`. Prefer
-`docs/tmp/wip-<name>.md`; if Git ignores that path, use
-`.wip-context-<name>.md` on the WIP branch. Do not change ignore rules merely to
-make the note trackable.
+Before staging, write the context note using `references/wip_context_template.md`. Prefer `docs/tmp/wip-<name>.md`; if Git ignores that path, use `.wip-context-<name>.md` on the WIP branch. Do not change ignore rules merely to make the note trackable.
 
-Stage the exact related paths and the context note. Use `git add -A` only when
-inspection shows every change belongs to this snapshot.
+Stage the exact related paths and the context note. Use `git add -A` only when inspection shows every change belongs to this snapshot.
 
 Verify what is staged:
 
@@ -143,8 +138,7 @@ git status --short
 git show --stat --oneline HEAD
 ```
 
-Do not return to the original branch if related changes remain unstaged or
-uncommitted. Report suspicious or intentionally excluded files explicitly.
+Do not return to the original branch if related changes remain unstaged or uncommitted. Report suspicious or intentionally excluded files explicitly.
 
 ### 6. Return to the original branch
 
@@ -205,8 +199,7 @@ If more than ~30 files are modified, group them by directory or intent in the co
 
 ### The docs/tmp directory is gitignored
 
-Use `.wip-context-<name>.md` on the WIP branch. Do not edit repository or global
-ignore rules as a side effect.
+Use `.wip-context-<name>.md` on the WIP branch. Do not edit repository or global ignore rules as a side effect.
 
 ### Resuming stashed work
 

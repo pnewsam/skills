@@ -119,14 +119,9 @@ Omit the metadata field that does not apply to the selected mode.
 
 ## Tasks
 
-<Use one to three tasks. Each task is a vertical, independently committable
-implementation and verification unit that leaves required checks passing.
-Keep a failing regression test, its implementation, documentation, and final
-proof in the same task when they are coupled. Prefer one task for a small
-atomic feature.>
+<Use one to three tasks. Each task is a vertical, independently committable implementation and verification unit that leaves required checks passing. Keep a failing regression test, its implementation, documentation, and final proof in the same task when they are coupled. Prefer one task for a small atomic feature.>
 
-- [ ] <Implement one bounded behavior or convergence change, add its focused
-  coverage and documentation, run required checks, and record evidence>
+- [ ] <Implement one bounded behavior or convergence change, add its focused coverage and documentation, run required checks, and record evidence>
 
 ## Progress
 

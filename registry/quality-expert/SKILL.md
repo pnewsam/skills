@@ -5,10 +5,7 @@ description: Route language-agnostic code quality requests and measured quality 
 
 # Quality Expert - Skill Router
 
-Use this as the entry point for cross-cutting software quality work. Use the
-router when the request spans two or more focused quality concerns or needs a
-single prioritized recommendation. Go directly to one focused `quality-*`
-skill when exactly one concern is clear.
+Use this as the entry point for cross-cutting software quality work. Use the router when the request spans two or more focused quality concerns or needs a single prioritized recommendation. Go directly to one focused `quality-*` skill when exactly one concern is clear.
 
 Pair this with stack experts for implementation. Quality skills decide what good means; React/Python/etc. skills decide how to implement it idiomatically.
 
@@ -49,9 +46,7 @@ Treat metrics as investigation signals, not verdicts:
 | Untested churn, flakes, old skips, retries, duration variance | `quality-testing` | test purpose and failure classification |
 | Incidents, timeout/retry volume, queue growth, weak recovery evidence | `quality-reliability` | workload and environment context |
 
-Do not create a composite quality score or enforce universal thresholds. Prefer
-repository-relative trends and at least two corroborating signals unless direct
-defect or incident evidence is strong.
+Do not create a composite quality score or enforce universal thresholds. Prefer repository-relative trends and at least two corroborating signals unless direct defect or incident evidence is strong.
 
 ## Common Agent Mistakes
 
@@ -81,7 +76,5 @@ defect or incident evidence is strong.
 
 - Use `react-expert`, `python-expert`, or another stack expert for idiomatic implementation details.
 - Use `compliance-expert` when the risk involves security, privacy, accessibility, regulated data, or audit evidence.
-- Use `analyze-quality` when the user wants a recurring or repository-wide
-  evidence-gathering pass rather than focused guidance.
-- Use `plan-feature` in Convergence mode for one verified improvement; use
-  `plan-epic` only for a deliberately managed larger program.
+- Use `analyze-quality` when the user wants a recurring or repository-wide evidence-gathering pass rather than focused guidance.
+- Use `plan-feature` in Convergence mode for one verified improvement; use `plan-epic` only for a deliberately managed larger program.

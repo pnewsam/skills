@@ -118,16 +118,16 @@
   {
     "id": "revise-audit",
     "prompt": "Check whether PR 42's title and body still match the diff.",
-    "expected_skill": "revise-pr",
-    "expected_mode": "Audit",
+    "expected_skill": "update-pr",
+    "expected_mode": "Sync Preview",
     "allowed_effects": ["network_read"],
     "forbidden_effects": ["git_write", "external_write"]
   },
   {
     "id": "revise-apply",
     "prompt": "Sync PR 42's title and body to its current diff.",
-    "expected_skill": "revise-pr",
-    "expected_mode": "Apply",
+    "expected_skill": "update-pr",
+    "expected_mode": "Sync Apply",
     "allowed_effects": ["network_read", "external_write"],
     "forbidden_effects": ["write_files", "git_write"]
   },
@@ -364,16 +364,16 @@
   {
     "id": "polish-pr-preview",
     "prompt": "Show me a clearer, more human-readable version of PR 42's title and description, but do not update GitHub.",
-    "expected_skill": "polish-pr",
-    "expected_mode": "Preview",
+    "expected_skill": "update-pr",
+    "expected_mode": "Polish Preview",
     "allowed_effects": ["network_read"],
     "forbidden_effects": ["write_files", "git_write", "external_write"]
   },
   {
     "id": "polish-pr-apply",
     "prompt": "Polish PR 42 so it reads naturally for reviewers, preserve all facts and checkboxes, and apply the edit.",
-    "expected_skill": "polish-pr",
-    "expected_mode": "Apply",
+    "expected_skill": "update-pr",
+    "expected_mode": "Polish Apply",
     "allowed_effects": ["network_read", "external_write"],
     "forbidden_effects": ["write_files", "git_write"]
   },

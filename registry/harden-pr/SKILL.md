@@ -9,9 +9,7 @@ description: Iteratively harden an open GitHub pull request by alternating model
 
 Produce a reviewed and validated PR candidate whose latest exact state has no credible merge-blocking findings, or stop with a precise account of what still prevents that claim.
 
-Treat hardening as bounded convergence, not an instruction to eliminate every nit.
-Prefer a reviewer from a different model family than the model that produced the exact candidate.
-Preserve reviewer independence, user work, and a traceable relationship between each finding, fix, and verification result.
+Treat hardening as bounded convergence, not an instruction to eliminate every nit. Prefer a reviewer from a different model family than the model that produced the exact candidate. Preserve reviewer independence, user work, and a traceable relationship between each finding, fix, and verification result.
 
 ## Modes and effects
 
@@ -23,16 +21,13 @@ Choose the narrowest mode authorized by the request:
 | Publish | Local mode plus create ordinary commits and push the PR branch | The remote PR head is hardened; CI status is reported |
 | Respond | Publish mode plus reply to or resolve verified review threads | The remote PR and explicitly selected threads are updated |
 
-Use Local mode for “harden,” “fix the feedback,” or “review and fix” unless the user also asks to commit, push, update the PR, reply, or resolve.
-A request to “review” without a fix cycle belongs to `review-pr` and remains read-only.
+Use Local mode for “harden,” “fix the feedback,” or “review and fix” unless the user also asks to commit, push, update the PR, reply, or resolve. A request to “review” without a fix cycle belongs to `review-pr` and remains read-only.
 
-Never post the internal review passes.
-Posting a review, approving, requesting changes, merging, changing PR metadata, force-pushing, rebasing, or rewriting history requires separate explicit authorization and the appropriate workflow.
+Never post the internal review passes. Posting a review, approving, requesting changes, merging, changing PR metadata, force-pushing, rebasing, or rewriting history requires separate explicit authorization and the appropriate workflow.
 
 ## Convergence contract
 
-Default to at most three repair rounds.
-Permit one additional clean verification review after the last repair, for no more than four review passes unless the user sets another budget.
+Default to at most three repair rounds. Permit one additional clean verification review after the last repair, for no more than four review passes unless the user sets another budget.
 
 Call the candidate sufficiently hardened only when all of these are true:
 
@@ -42,8 +37,7 @@ Call the candidate sufficiently hardened only when all of these are true:
 - the candidate contains no unexplained or unrelated changes
 - in Publish or Respond mode, the verified remote head SHA is the reviewed candidate and required CI is green; pending CI produces a conditional result
 
-Nits do not prevent convergence unless repository policy makes them required.
-Do not create churn merely to reach zero comments.
+Nits do not prevent convergence unless repository policy makes them required. Do not create churn merely to reach zero comments.
 
 ## Phase 1: Establish the candidate
 
@@ -57,8 +51,7 @@ Do not create churn merely to reach zero comments.
 6. Start a round ledger containing the candidate fingerprint or SHA, findings, dispositions, changed files, validation, publication state, and remaining uncertainty.
 7. Record the candidate-producer model when it is available from task metadata, explicit user input, or durable provenance. Do not infer model identity from code style. After a repair, treat the model that made that repair as the producer of the new candidate.
 
-If the remote head changes outside this workflow, invalidate the current review evidence and refresh.
-Never overwrite or silently race another author’s update.
+If the remote head changes outside this workflow, invalidate the current review evidence and refresh. Never overwrite or silently race another author’s update.
 
 ## Phase 2: Review, repair, and verify
 
@@ -66,29 +59,20 @@ Repeat within the budget.
 
 ### Review independently
 
-Use a fresh reviewer subagent when multi-agent execution is available.
-Route it with this priority:
+Use a fresh reviewer subagent when multi-agent execution is available. Route it with this priority:
 
 1. Honor an explicitly requested reviewer model when it is available and capable of the repository and tool work.
 2. Otherwise choose an available model whose base model or family differs from the candidate-producer model. Prefer comparable review capability; do not choose a clearly unsuitable model merely to manufacture diversity.
 3. If producer provenance is unknown, choose a model different from the active hardening or repair model and mark the original producer as unknown.
 4. When multiple suitable alternatives exist, prefer one not used for the immediately preceding review.
 
-Spawn the reviewer with an explicit model override and no inherited conversation history when the agent runtime supports those controls.
-In runtimes exposing `model` and `fork_turns`, set `model` to the selected alternative and `fork_turns` to `none`; do not use a full-history fork for an independent review.
-Give it only the PR intent, governing repository instructions, exact candidate diff, relevant unchanged context, and current validation evidence.
-Do not give it prior round conclusions, attempted fixes, or the desired verdict.
-Instruct it to use `review-pr` in Review Analyze mode, return evidence-backed findings and a proposed verdict, and make no edits or external writes.
+Spawn the reviewer with an explicit model override and no inherited conversation history when the agent runtime supports those controls. In runtimes exposing `model` and `fork_turns`, set `model` to the selected alternative and `fork_turns` to `none`; do not use a full-history fork for an independent review. Give it only the PR intent, governing repository instructions, exact candidate diff, relevant unchanged context, and current validation evidence. Do not give it prior round conclusions, attempted fixes, or the desired verdict. Instruct it to use `review-pr` in Review Analyze mode, return evidence-backed findings and a proposed verdict, and make no edits or external writes.
 
-If no different suitable model is available, use a context-isolated fresh reviewer on the same model.
-If no fresh reviewer is available, perform a new evidence pass from the current candidate.
-Disclose the missing cross-model or agent independence in either case; never imply that a same-model pass was model-diverse.
+If no different suitable model is available, use a context-isolated fresh reviewer on the same model. If no fresh reviewer is available, perform a new evidence pass from the current candidate. Disclose the missing cross-model or agent independence in either case; never imply that a same-model pass was model-diverse.
 
 Model diversity supplements evidence isolation; it does not replace complete diff inspection, repository context, or validation.
 
-Require every finding to include severity, confidence, exact location, consequence, and smallest useful repair.
-Reconcile the results with live human review threads only after the independent pass.
-Deduplicate findings without hiding repeated evidence.
+Require every finding to include severity, confidence, exact location, consequence, and smallest useful repair. Reconcile the results with live human review threads only after the independent pass. Deduplicate findings without hiding repeated evidence.
 
 ### Repair credible findings
 
@@ -100,9 +84,7 @@ Deduplicate findings without hiding repeated evidence.
 
 ### Validate and advance
 
-Run the repository’s actual focused tests and checks for the repair, plus any broader required check justified by its blast radius.
-Do not install dependencies or invent commands.
-Diagnose and repair an in-scope regression before advancing; retain truthful failing or unavailable results in the ledger.
+Run the repository’s actual focused tests and checks for the repair, plus any broader required check justified by its blast radius. Do not install dependencies or invent commands. Diagnose and repair an in-scope regression before advancing; retain truthful failing or unavailable results in the ledger.
 
 In Publish mode, after a repair batch passes its applicable checks:
 
@@ -111,8 +93,7 @@ In Publish mode, after a repair batch passes its applicable checks:
 3. verify the remote head still equals the expected predecessor
 4. push without force and verify the new remote head SHA
 
-Then start a fresh review against the new exact candidate.
-A review from before the latest source change cannot satisfy the convergence gate.
+Then start a fresh review against the new exact candidate. A review from before the latest source change cannot satisfy the convergence gate.
 
 Stop early and report the state when:
 
@@ -124,13 +105,9 @@ Stop early and report the state when:
 
 ## Phase 3: Close the loop
 
-In Respond mode, reply to or resolve only the explicitly authorized review threads whose fixes are present on the verified remote head.
-Reference the fix and validation succinctly.
-Do not resolve ambiguous, disputed, deferred, or merely outdated threads on the reviewer’s behalf.
+In Respond mode, reply to or resolve only the explicitly authorized review threads whose fixes are present on the verified remote head. Reference the fix and validation succinctly. Do not resolve ambiguous, disputed, deferred, or merely outdated threads on the reviewer’s behalf.
 
-Refresh the PR one final time.
-Verify the head SHA, CI, remaining unresolved actionable threads, and that every completion claim corresponds to the round ledger.
-Do not call a local-only candidate the hardened remote PR.
+Refresh the PR one final time. Verify the head SHA, CI, remaining unresolved actionable threads, and that every completion claim corresponds to the round ledger. Do not call a local-only candidate the hardened remote PR.
 
 ## Final report
 

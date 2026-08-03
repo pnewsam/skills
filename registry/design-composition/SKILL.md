@@ -7,10 +7,7 @@ description: "Visual composition principles for digital interfaces: balance, ali
 
 Use this skill to arrange interface elements so the screen feels stable, intentional, and easy to scan. Composition is about how parts relate as a whole.
 
-For page archetypes, app shells, and standard page anatomy, use `ui-layouts`.
-For spacing scale values, use `ui-spacing`. This skill owns balance, proportion,
-focal point, alignment, grouping, visual weight, and the cadence created by
-repeated visual structures.
+For page archetypes, app shells, and standard page anatomy, use `ui-layouts`. For spacing scale values, use `ui-spacing`. This skill owns balance, proportion, focal point, alignment, grouping, visual weight, and the cadence created by repeated visual structures.
 
 ## Core Principles
 
@@ -100,9 +97,7 @@ Users should be able to tell foreground from background.
 
 ### 7. Build Rhythm Through Repetition And Variation
 
-Rhythm is the pattern users feel as modules, gaps, alignments, and visual roles
-repeat. Establish a recognizable cadence, then break it only to signal a real
-change in meaning or priority.
+Rhythm is the pattern users feel as modules, gaps, alignments, and visual roles repeat. Establish a recognizable cadence, then break it only to signal a real change in meaning or priority.
 
 Use:
 
@@ -119,8 +114,7 @@ Avoid:
 - one-off spacing that has no semantic reason
 - overly uniform modules that hide important changes in state
 
-`ui-spacing` owns the actual tokens and density values. Composition owns how
-those values create cadence across the whole surface.
+`ui-spacing` owns the actual tokens and density values. Composition owns how those values create cadence across the whole surface.
 
 ## Measurable Heuristics
 

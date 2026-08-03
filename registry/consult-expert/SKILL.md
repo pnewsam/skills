@@ -26,9 +26,7 @@ Load only the expert skills that match the prompt.
 
 If the prompt spans product, frontend, and backend, consult `ui-expert`, `react-expert`, and `backend-expert` in that order. Add `platform-expert` when the work needs environments, CI/CD, secrets, deployment, rollback, infrastructure, or production-readiness planning. Add `python-expert` when the backend implementation is Python or FastAPI-specific. Add `quality-expert` when maintainability, test confidence, correctness, or reliability materially affects the plan. Add `compliance-expert` when security, accessibility, privacy, GDPR, HIPAA, vulnerability, audit, or regulatory concerns are in scope. Add `design-expert` when visual quality, aesthetic coherence, or interface elegance is meaningful. Add narrower experts only when the prompt explicitly involves their domain.
 
-Use `ui-color` for semantic interface color and accessibility, and
-`design-visual-language` for expressive palette direction. State when a request
-requires deeper color-science expertise than the maintained registry provides.
+Use `ui-color` for semantic interface color and accessibility, and `design-visual-language` for expressive palette direction. State when a request requires deeper color-science expertise than the maintained registry provides.
 
 ---
 

@@ -48,9 +48,7 @@ Prioritize refactoring where change pressure and structural friction overlap:
 - duplicated decisions or competing patterns with active usage
 - an upcoming change that is difficult because of the current structure
 
-Do not refactor solely to improve a dashboard value. Name the next change or
-risk the refactor should make easier, preserve behavior, and stop when that
-objective is met.
+Do not refactor solely to improve a dashboard value. Name the next change or risk the refactor should make easier, preserve behavior, and stop when that objective is met.
 
 ## Do / Don't
 

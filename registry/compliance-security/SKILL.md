@@ -64,7 +64,5 @@ Security controls must be enforced at trusted boundaries, not only hinted in UI 
 - Use stack experts for concrete auth, validation, encoding, and framework APIs.
 - Use `compliance-vulnerability-management` for known CVEs/advisories.
 - Use `compliance-auditability` for evidence, approvals, and exception tracking.
-- Use `analyze-security` for repository-wide posture analysis or recurring
-  hardening candidate discovery.
-- Use `plan-feature` and `execute-feature` for one verified, bounded security
-  improvement.
+- Use `analyze-security` for repository-wide posture analysis or recurring hardening candidate discovery.
+- Use `plan-feature` and `execute-feature` for one verified, bounded security improvement.

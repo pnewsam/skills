@@ -9,9 +9,7 @@ Use this as the entry point for broad UI work. Your job is to identify the actua
 
 If the user says the UI is ugly, clunky, disharmonious, visually awkward, generic, too busy, or not elegant, route aesthetic and compositional judgment to `design-expert` after identifying the functional UI pattern.
 
-Use the router when the request spans two or more focused UI concerns or needs
-a unified screen/flow recommendation. Go directly to one focused `ui-*` skill
-when exactly one concern is clear.
+Use the router when the request spans two or more focused UI concerns or needs a unified screen/flow recommendation. Go directly to one focused `ui-*` skill when exactly one concern is clear.
 
 ## 1. Routing Table
 
@@ -38,9 +36,7 @@ Load the smallest set of focused skills that covers the task.
 | Aesthetic quality, composition, elegance, simplicity, visual harmony | `design-expert` | `ui-layouts`, `visual-hierarchy`, `ui-spacing` |
 | Repository-wide design-system adoption, pattern drift, or consolidation | `analyze-design-system` | `design-expert`, relevant stack expert |
 
-If a request touches more than four rows, start with `ui-layouts`,
-`visual-hierarchy`, and the one domain skill closest to the user's core task.
-Add more skills only when the work demands them.
+If a request touches more than four rows, start with `ui-layouts`, `visual-hierarchy`, and the one domain skill closest to the user's core task. Add more skills only when the work demands them.
 
 ---
 
@@ -54,8 +50,7 @@ Use these boundaries to prevent conflicting advice:
 - `ui-actions` owns how users trigger operations: action placement, overflow menus, bulk bars, shortcuts, drag/drop.
 - `ui-feedback` owns system state: empty, loading, error, success, confirmation, undo.
 - `ui-content` owns words: labels, messages, helper text, terminology, tone.
-- `visual-hierarchy` owns importance: what dominates, what recedes, scanning
-  path, and chunking.
+- `visual-hierarchy` owns importance: what dominates, what recedes, scanning path, and chunking.
 - `ui-spacing`, `ui-typography`, and `ui-color` own the visual system details.
 - `ui-depth` owns surfaces, shadows, elevation, overlays, and image treatment.
 - `ui-responsive` owns adaptation across viewport and input mode.
@@ -71,20 +66,14 @@ When two skills overlap, decide by asking: "Is this about where the thing lives,
 
 ## 3. Design-System Convergence Signals
 
-For a broad system audit or recurring consolidation review, route to
-`analyze-design-system` rather than treating the repository as one large
-screen critique. When that workflow loads this expert, contribute UI
-interpretation for:
+For a broad system audit or recurring consolidation review, route to `analyze-design-system` rather than treating the repository as one large screen critique. When that workflow loads this expert, contribute UI interpretation for:
 
 - whether nominally equivalent patterns serve the same user job
-- differences in loading, empty, error, validation, success, disabled, focus,
-  responsive, and touch behavior
+- differences in loading, empty, error, validation, success, disabled, focus, responsive, and touch behavior
 - canonical pattern adoption and documented exceptions
 - user-visible risk when a primitive or pattern is migrated
 
-Counts of components, CSS values, or missing states are inventory signals.
-Confirm the applicable states and semantic job before recommending
-standardization. Preserve deliberate workflow differences.
+Counts of components, CSS values, or missing states are inventory signals. Confirm the applicable states and semantic job before recommending standardization. Preserve deliberate workflow differences.
 
 ## 4. Build Protocol
 

@@ -1,7 +1,6 @@
 # PR description standard
 
-Follow the project's own PR conventions rather than an ad-hoc structure invented per PR.
-Consistency across PRs is the goal.
+Follow the project's own PR conventions rather than an ad-hoc structure invented per PR. Consistency across PRs is the goal.
 
 ## Defer to the repository's template
 
@@ -52,8 +51,7 @@ Include a Screenshots section for UI/frontend changes; omit it for backend-only 
 
 ## Keep language concise
 
-Write the shortest title and body that convey what changed and why — tight bullets over paragraphs, outcomes and boundaries over a file-by-file narration of the diff.
-Cut hedging, restated instructions, and empty sections.
+Write the shortest title and body that convey what changed and why — tight bullets over paragraphs, outcomes and boundaries over a file-by-file narration of the diff. Cut hedging, restated instructions, and empty sections.
 
 ## Conventional-commit format (titles and commit subjects)
 
@@ -65,9 +63,7 @@ Use a conventional style for PR titles and commit subjects:
 <short body explaining why and what changed>
 ```
 
-Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `build`, or `ci`.
-Choose a scope from the touched component, package, service, or feature area; omit it if it would be vague.
-Avoid generic subjects such as `update code`, `fix stuff`, `changes`, or `wip` unless the user explicitly requests them.
+Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `build`, or `ci`. Choose a scope from the touched component, package, service, or feature area; omit it if it would be vague. Avoid generic subjects such as `update code`, `fix stuff`, `changes`, or `wip` unless the user explicitly requests them.
 
 ## Group changes by intent
 

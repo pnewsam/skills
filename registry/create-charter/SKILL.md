@@ -88,8 +88,7 @@ Ask concise, high-leverage questions to fill the charter sections. Do not ask al
 
 **Guiding Principles**
 
-- What are 3–5 non-negotiable constraints or beliefs that shape every decision?
-  Examples: "privacy-first," "works offline," "sub-100ms interactions," "no AI-generated content," "open source core."
+- What are 3–5 non-negotiable constraints or beliefs that shape every decision? Examples: "privacy-first," "works offline," "sub-100ms interactions," "no AI-generated content," "open source core."
 - Which of these would you sacrifice last if forced to choose?
 
 **Success Metrics**

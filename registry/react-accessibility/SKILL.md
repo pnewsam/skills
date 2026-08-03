@@ -151,8 +151,7 @@ function useModalFocus(isOpen: boolean, triggerRef: RefObject<HTMLElement>) {
 
 For focus trapping, use a library like `focus-trap-react` rather than implementing it from scratch — the edge cases (iframes, shadow DOM, dynamically added content) are numerous.
 
-**Route change focus:**
-When the user navigates to a new page, focus should move to the main content area or the page heading. Without this, focus stays on the navigation link and screen reader users don't know the page changed.
+**Route change focus:** When the user navigates to a new page, focus should move to the main content area or the page heading. Without this, focus stays on the navigation link and screen reader users don't know the page changed.
 
 ```tsx
 // After route change, focus the main heading
@@ -165,15 +164,13 @@ useEffect(() => {
 }, [pathname]);
 ```
 
-**Deletion focus:**
-When the user deletes an item from a list, move focus to a sensible place — the next item, the previous item, or a summary element. Don't leave focus on a now-removed element (it vanishes from the DOM and focus drops to `<body>`).
+**Deletion focus:** When the user deletes an item from a list, move focus to a sensible place — the next item, the previous item, or a summary element. Don't leave focus on a now-removed element (it vanishes from the DOM and focus drops to `<body>`).
 
 ### 5. Accessible forms
 
 Forms are the highest-stakes area for accessibility — they're where users input data, encounter errors, and need the most guidance.
 
-**Labels are mandatory:**
-Every input must have a label. Use `<label htmlFor="id">` or `aria-label` for visually hidden labels. Placeholder text is not a label — it disappears when the user starts typing.
+**Labels are mandatory:** Every input must have a label. Use `<label htmlFor="id">` or `aria-label` for visually hidden labels. Placeholder text is not a label — it disappears when the user starts typing.
 
 ```tsx
 // Good: visible label
@@ -187,8 +184,7 @@ Every input must have a label. Use `<label htmlFor="id">` or `aria-label` for vi
 <input type="email" placeholder="Email" />
 ```
 
-**Error messages:**
-Connect error messages to their inputs with `aria-describedby` and mark invalid inputs with `aria-invalid`:
+**Error messages:** Connect error messages to their inputs with `aria-describedby` and mark invalid inputs with `aria-invalid`:
 
 ```tsx
 <label htmlFor="email">Email</label>
@@ -201,8 +197,7 @@ Connect error messages to their inputs with `aria-describedby` and mark invalid 
 {error && <span id="email-error" role="alert">{error}</span>}
 ```
 
-**Focus on validation failure:**
-When the user submits a form and there are errors, move focus to the first invalid field. This is critical — without it, screen reader users don't know what went wrong.
+**Focus on validation failure:** When the user submits a form and there are errors, move focus to the first invalid field. This is critical — without it, screen reader users don't know what went wrong.
 
 ```tsx
 const onSubmit = async (data) => {
@@ -217,8 +212,7 @@ const onSubmit = async (data) => {
 };
 ```
 
-**Group related fields:**
-Use `<fieldset>` and `<legend>` for groups of related inputs (address fields, radio groups, checkbox groups). Screen readers announce the legend as context for each field in the group.
+**Group related fields:** Use `<fieldset>` and `<legend>` for groups of related inputs (address fields, radio groups, checkbox groups). Screen readers announce the legend as context for each field in the group.
 
 ```tsx
 <fieldset>
