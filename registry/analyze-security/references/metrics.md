@@ -28,8 +28,7 @@ Prioritize verified exposure and impact over raw alert counts.
 - accepted risks without an owner or current review date
 - critical security events without audit or diagnostic evidence
 
-Absence of a test does not prove absence of a control. Inspect implementation
-and runtime enforcement before classifying a gap.
+Absence of a test does not prove absence of a control. Inspect implementation and runtime enforcement before classifying a gap.
 
 ## Measurement rules
 
@@ -40,8 +39,6 @@ Record:
 - exclusions and unavailable evidence
 - reachability, exposure, and confidence
 - target condition and guardrails
-- resolution evidence such as a negative test, scanner recheck, dependency
-  graph, or focused review
+- resolution evidence such as a negative test, scanner recheck, dependency graph, or focused review
 
-Do not combine unrelated metrics into a security score. Report the dimensions
-and uncertainty separately.
+Do not combine unrelated metrics into a security score. Report the dimensions and uncertainty separately.

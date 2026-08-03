@@ -7,9 +7,7 @@ description: Route React application requests to the smallest relevant react-* s
 
 Use this as the entry point for broad React work. Identify the actual engineering problem, load only the focused `react-*` skills needed, and keep the implementation aligned with the app's existing framework, file structure, and component conventions.
 
-Use the router when the request spans two or more focused React concerns and
-needs a coherent recommendation. Go directly to one focused `react-*` skill
-when exactly one concern is clear.
+Use the router when the request spans two or more focused React concerns and needs a coherent recommendation. Go directly to one focused `react-*` skill when exactly one concern is clear.
 
 ## 1. Routing Table
 
@@ -31,9 +29,7 @@ Load the smallest set of focused skills that covers the task.
 | Test strategy, integration tests, component tests, mocks, providers | `react-testing` | `react-data-fetching`, `react-routing`, `react-accessibility` |
 | Design-system component adoption, legacy primitives, variants, or migration | `analyze-design-system` | `react-component-design`, `react-accessibility`, `react-testing` |
 
-If a request touches more than four rows, start with `react-architecture`, then
-add the one focused skill closest to the user's immediate task. Add more only
-when implementation requires it.
+If a request touches more than four rows, start with `react-architecture`, then add the one focused skill closest to the user's immediate task. Add more only when implementation requires it.
 
 ---
 
@@ -41,8 +37,7 @@ when implementation requires it.
 
 Use these boundaries to prevent conflicting advice:
 
-- `react-architecture` owns app-level wiring, feature boundaries, dependency
-  direction, and where application modules live.
+- `react-architecture` owns app-level wiring, feature boundaries, dependency direction, and where application modules live.
 - `react-component-design` owns component shape, composition, variants, and decomposition.
 - `react-hooks-effects` owns effect correctness and hook boundaries.
 - `react-form-patterns` owns form state, validation, field components, and form flow.
@@ -60,18 +55,14 @@ When two skills overlap, decide by asking: "Is this problem about app wiring, fi
 
 ## 3. Design-System Convergence Signals
 
-For a broad component-system audit, route to `analyze-design-system`. When that
-workflow loads this expert, contribute React interpretation for:
+For a broad component-system audit, route to `analyze-design-system`. When that workflow loads this expert, contribute React interpretation for:
 
 - canonical versus legacy imports and consumer migration progress
 - duplicate semantic component families and wrapper layers
 - variant APIs, boolean-mode combinations, invalid states, and unused variants
-- behavioral, accessibility, responsive, and test differences across
-  nominally equivalent components
+- behavioral, accessibility, responsive, and test differences across nominally equivalent components
 
-Component size, prop count, and import frequency are investigation signals.
-Confirm ownership, semantic equivalence, consumer behavior, and external usage
-before recommending consolidation or deletion.
+Component size, prop count, and import frequency are investigation signals. Confirm ownership, semantic equivalence, consumer behavior, and external usage before recommending consolidation or deletion.
 
 ## 4. Build Protocol
 

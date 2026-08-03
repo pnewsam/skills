@@ -1,7 +1,6 @@
 # Update PR output templates
 
-Use these when presenting results.
-The PR body shape itself lives in `pr-conventions/references/pr-standard.md` — defer to the repository's own template when one exists.
+Use these when presenting results. The PR body shape itself lives in `pr-conventions/references/pr-standard.md` — defer to the repository's own template when one exists.
 
 ## Gap analysis (Sync intent)
 

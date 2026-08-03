@@ -7,14 +7,9 @@ description: Analyze a repository's language-agnostic software quality using cha
 
 ## Outcome
 
-Produce a read-only, evidence-backed quality assessment with a small ranked set
-of bounded improvement candidates. Use measurements to locate investigation
-targets, then use `quality-expert` and the smallest relevant focused quality
-skills to interpret them.
+Produce a read-only, evidence-backed quality assessment with a small ranked set of bounded improvement candidates. Use measurements to locate investigation targets, then use `quality-expert` and the smallest relevant focused quality skills to interpret them.
 
-Do not equate a metric threshold with a defect. Prefer repository-relative
-trends and corroborating signals over universal limits or a composite quality
-score.
+Do not equate a metric threshold with a defect. Prefer repository-relative trends and corroborating signals over universal limits or a composite quality score.
 
 ## Source anchors
 
@@ -24,21 +19,13 @@ score.
 
 ## Modes and effects
 
-- **Maintainability:** clarity, modularity, refactoring pressure, duplication,
-  dependency structure, and change isolation.
-- **Correctness:** defect concentration, reverts, invariant risk, concurrency,
-  and error-prone boundaries.
-- **Testing:** coverage of changed behavior, flakiness, skips, runtime variance,
-  and regression confidence.
-- **Reliability:** recurring failures, retry amplification, timeout behavior,
-  recovery, and diagnostic evidence.
-- **Broad:** begin with repository-wide low-cost signals, then inspect only the
-  strongest candidate areas across the modes above.
+- **Maintainability:** clarity, modularity, refactoring pressure, duplication, dependency structure, and change isolation.
+- **Correctness:** defect concentration, reverts, invariant risk, concurrency, and error-prone boundaries.
+- **Testing:** coverage of changed behavior, flakiness, skips, runtime variance, and regression confidence.
+- **Reliability:** recurring failures, retry amplification, timeout behavior, recovery, and diagnostic evidence.
+- **Broad:** begin with repository-wide low-cost signals, then inspect only the strongest candidate areas across the modes above.
 
-This workflow may inspect local files and Git history and run existing,
-read-only project checks when they are necessary to verify a signal. It must
-not edit files, install analyzers, create plans, commit, push, post, or change
-external systems.
+This workflow may inspect local files and Git history and run existing, read-only project checks when they are necessary to verify a signal. It must not edit files, install analyzers, create plans, commit, push, post, or change external systems.
 
 Read `references/metrics.md` before selecting metrics or ranking findings.
 
@@ -46,9 +33,7 @@ Read `references/metrics.md` before selecting metrics or ranking findings.
 
 ### 1. Scope and measure
 
-Identify the requested mode, repository boundaries, available history, and
-generated or vendored paths to exclude. Use existing repository tools first.
-Collect only measurements that can change the prioritization decision.
+Identify the requested mode, repository boundaries, available history, and generated or vendored paths to exclude. Use existing repository tools first. Collect only measurements that can change the prioritization decision.
 
 For a broad run, begin with:
 
@@ -58,8 +43,7 @@ For a broad run, begin with:
 - bug-fix and revert concentration
 - tests, skips, flakes, duration, and recent failures when evidence exists
 
-Record the measurement method, window, exclusions, and important data gaps.
-Do not install a tool merely to make the report look complete.
+Record the measurement method, window, exclusions, and important data gaps. Do not install a tool merely to make the report look complete.
 
 ### 2. Interpret and rank
 
@@ -72,8 +56,7 @@ Route the evidence through `quality-expert`:
 - `quality-testing` for confidence, gaps, and test health
 - `quality-reliability` for failure, recovery, and operability
 
-Require at least two corroborating signals before ranking a metric-driven
-candidate highly, unless direct defect or incident evidence is strong. Rank by:
+Require at least two corroborating signals before ranking a metric-driven candidate highly, unless direct defect or incident evidence is strong. Rank by:
 
 - instability or repeated failure
 - friction and difficulty of safe change
@@ -94,15 +77,11 @@ For each candidate report:
 - a small first change and verification approach
 - confidence and unresolved questions
 
-Recommend `plan-feature` in Convergence mode for the selected candidate. Do
-not create that plan from this skill.
+Recommend `plan-feature` in Convergence mode for the selected candidate. Do not create that plan from this skill.
 
 ## Safety and reruns
 
-- Preserve unrelated work and ignore generated, vendored, snapshot, migration,
-  fixture, and lock files unless the selected mode specifically concerns them.
+- Preserve unrelated work and ignore generated, vendored, snapshot, migration, fixture, and lock files unless the selected mode specifically concerns them.
 - Redact secrets and sensitive data from commands and reported evidence.
-- Treat missing history, tests, coverage, or operational telemetry as a
-  limitation, not a failing score.
-- On rerun, use the same measurement definition when practical and explain any
-  window, tool, or exclusion changes before comparing trends.
+- Treat missing history, tests, coverage, or operational telemetry as a limitation, not a failing score.
+- On rerun, use the same measurement definition when practical and explain any window, tool, or exclusion changes before comparing trends.

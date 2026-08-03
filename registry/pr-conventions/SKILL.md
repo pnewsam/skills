@@ -5,9 +5,7 @@ description: Canonical PR conventions shared across the PR skills — the standa
 
 # PR conventions
 
-Shared kernel for the PR skills.
-`prepare-pr`, `update-pr`, `review-pr`, and `harden-pr` apply these conventions so that every PR — however it is produced — follows one standard.
-Read the reference that fits the task:
+Shared kernel for the PR skills. `prepare-pr`, `update-pr`, `review-pr`, and `harden-pr` apply these conventions so that every PR — however it is produced — follows one standard. Read the reference that fits the task:
 
 - **`references/pr-standard.md`** — how a PR description should read: the canonical body shape, deferring to a repository template, concise language, conventional-commit format, and grouping changes by intent. Apply when writing or updating a PR title, body, or commit message.
 - **`references/github-mechanics.md`** — how to interact with GitHub safely: selecting one authenticated access path, resolving the target PR, handling merged or closed PRs, and the write-once-then-verify discipline. Apply whenever a PR skill reads or writes GitHub state.

@@ -7,8 +7,7 @@ description: Establish or critique visual hierarchy in an interface, page, compo
 
 ## Outcome
 
-Make the intended order of attention match the user's task and the meaning of
-the content. A successful hierarchy answers, at a glance:
+Make the intended order of attention match the user's task and the meaning of the content. A successful hierarchy answers, at a glance:
 
 1. Where am I?
 2. What matters most?
@@ -16,8 +15,7 @@ the content. A successful hierarchy answers, at a glance:
 4. What belongs together?
 5. What can I safely ignore for now?
 
-Hierarchy is relational. Making everything larger, brighter, or bolder removes
-hierarchy rather than strengthening it.
+Hierarchy is relational. Making everything larger, brighter, or bolder removes hierarchy rather than strengthening it.
 
 ## Diagnose first
 
@@ -30,30 +28,23 @@ Identify:
 - destructive, exceptional, or low-frequency actions
 - viewport, input mode, content length, and state variations
 
-When reviewing an existing design, inspect it at normal scale and with blurred
-or squinted vision. If the dominant shapes do not match the intended priorities,
-the hierarchy is structurally wrong.
+When reviewing an existing design, inspect it at normal scale and with blurred or squinted vision. If the dominant shapes do not match the intended priorities, the hierarchy is structurally wrong.
 
-Read `references/scanning_and_chunking.md` for dense pages, lists, dashboards,
-forms, tables, and responsive layouts.
+Read `references/scanning_and_chunking.md` for dense pages, lists, dashboards, forms, tables, and responsive layouts.
 
 ## Levers
 
 Use the fewest levers necessary:
 
-- **Position:** earlier and structurally central elements are usually noticed
-  first.
+- **Position:** earlier and structurally central elements are usually noticed first.
 - **Scale:** reserve meaningful size changes for meaningful rank changes.
 - **Weight:** use typographic or visual mass to reinforce semantic importance.
 - **Contrast:** spend the highest contrast on the current task, not decoration.
 - **Color:** use accent color deliberately and preserve semantic color meanings.
-- **Whitespace:** separation signals different groups; proximity signals
-  relationship.
-- **Containment:** borders, surfaces, and cards create groups but also add
-  visual mass.
+- **Whitespace:** separation signals different groups; proximity signals relationship.
+- **Containment:** borders, surfaces, and cards create groups but also add visual mass.
 - **Repetition:** consistent styling lets users recognize equivalent roles.
-- **Motion:** temporary emphasis can direct attention, but must not create a
-  permanent competing focal point.
+- **Motion:** temporary emphasis can direct attention, but must not create a permanent competing focal point.
 
 Do not stack every lever on the same element unless it is genuinely dominant.
 
@@ -61,8 +52,7 @@ Do not stack every lever on the same element unless it is genuinely dominant.
 
 ### 1. Write the intended attention order
 
-List the first three to five things a user should notice. If the team cannot
-agree on the order, resolve product priority before polishing the visual system.
+List the first three to five things a user should notice. If the team cannot agree on the order, resolve product priority before polishing the visual system.
 
 ### 2. Map the current attention order
 
@@ -77,8 +67,7 @@ Record what actually dominates and why. Distinguish:
 
 ### 3. Fix structure before styling
 
-Change ordering, grouping, and proximity before increasing font size, color, or
-shadow. A structurally clear design usually needs less decoration.
+Change ordering, grouping, and proximity before increasing font size, color, or shadow. A structurally clear design usually needs less decoration.
 
 ### 4. Assign a small set of levels
 
@@ -94,9 +83,7 @@ Not every screen needs every level. Equivalent roles should look equivalent.
 
 ### 5. De-emphasize actively
 
-Reduce contrast, weight, containment, or prominence for elements that interrupt
-the task. De-emphasis must preserve readability, discoverability, and accessible
-contrast.
+Reduce contrast, weight, containment, or prominence for elements that interrupt the task. De-emphasis must preserve readability, discoverability, and accessible contrast.
 
 ### 6. Validate in context
 
@@ -122,8 +109,7 @@ Check:
 
 ## Handoffs
 
-- Use `design-composition` for balance, focal structure, and spatial
-  relationships across the whole composition.
+- Use `design-composition` for balance, focal structure, and spatial relationships across the whole composition.
 - Use `ui-spacing` for spacing tokens, density, and proximity systems.
 - Use `ui-typography` for type scale and text-role decisions.
 - Use `ui-color` for contrast and semantic color.

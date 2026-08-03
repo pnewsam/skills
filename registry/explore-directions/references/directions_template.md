@@ -10,8 +10,7 @@
 
 ## Current-State Gap
 
-Summarize the difference between observable product reality and stated intent.
-Distinguish repository evidence from user-provided context and assumptions.
+Summarize the difference between observable product reality and stated intent. Distinguish repository evidence from user-provided context and assumptions.
 
 ## Constraints
 
@@ -54,5 +53,4 @@ Repeat the same fields for each of 3–5 genuinely distinct directions.
 
 ## Recommended Review
 
-Call out the decision that most needs human judgment, any evidence still missing,
-and the appropriate next planning skill after a direction is selected.
+Call out the decision that most needs human judgment, any evidence still missing, and the appropriate next planning skill after a direction is selected.

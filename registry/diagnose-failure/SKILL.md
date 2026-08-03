@@ -7,12 +7,9 @@ description: Diagnose a reproducible software failure and identify its most like
 
 ## Outcome
 
-Explain the smallest credible cause of the reported failure, backed by a
-reproduction or equivalent evidence. Separate what is known from what is
-inferred, record rejected hypotheses, and stop before implementing a fix.
+Explain the smallest credible cause of the reported failure, backed by a reproduction or equivalent evidence. Separate what is known from what is inferred, record rejected hypotheses, and stop before implementing a fix.
 
-Use the existing project tools and conventions. Do not introduce a debugger,
-test framework, dependency, or logging system merely to investigate one issue.
+Use the existing project tools and conventions. Do not introduce a debugger, test framework, dependency, or logging system merely to investigate one issue.
 
 ## Effect boundary
 
@@ -30,8 +27,7 @@ It must not:
 - install dependencies without separate authorization
 - claim a root cause from correlation alone
 
-If the user asks to diagnose and fix, complete and report the diagnosis first,
-then treat implementation as a separate phase with its own applicable skill.
+If the user asks to diagnose and fix, complete and report the diagnosis first, then treat implementation as a separate phase with its own applicable skill.
 
 ## Workflow
 
@@ -45,8 +41,7 @@ Capture:
 - last-known-good state when available
 - whether the failure is deterministic, intermittent, or not yet reproduced
 
-Do not silently replace the reported symptom with a nearby failure that is
-easier to reproduce.
+Do not silently replace the reported symptom with a nearby failure that is easier to reproduce.
 
 ### 2. Establish repository and runtime context
 
@@ -69,21 +64,18 @@ Prefer, in order:
 3. a read-only request or invocation with the original inputs
 4. log/trace correlation when direct reproduction is unsafe or impossible
 
-Record the command, exit status, and decisive output. Do not run an entire
-expensive suite when a focused reproduction exists.
+Record the command, exit status, and decisive output. Do not run an entire expensive suite when a focused reproduction exists.
 
 ### 4. Localize the failing boundary
 
 Trace from the observed symptom toward its inputs:
 
 - Which layer first produces an incorrect value or state?
-- Is the failure in configuration, environment, data, control flow, timing,
-  integration, persistence, rendering, or the test itself?
+- Is the failure in configuration, environment, data, control flow, timing, integration, persistence, rendering, or the test itself?
 - Which nearby code is merely where the failure surfaces?
 - What changed between the working and failing paths?
 
-Use repository history only as evidence. Do not assume the newest change caused
-the failure merely because it is recent.
+Use repository history only as evidence. Do not assume the newest change caused the failure merely because it is recent.
 
 ### 5. Rank hypotheses
 
@@ -93,17 +85,13 @@ Maintain a short list:
 | --- | --- | --- | --- |
 | <cause> | <facts> | <facts> | <small check> |
 
-Test the highest-information discriminator first. Prefer a check that can rule
-out several hypotheses over repeated speculative reading.
+Test the highest-information discriminator first. Prefer a check that can rule out several hypotheses over repeated speculative reading.
 
 ### 6. Run controlled checks
 
-Change one variable at a time. Use existing flags, focused commands, alternate
-inputs, read-only queries, or temporary copies outside the project.
+Change one variable at a time. Use existing flags, focused commands, alternate inputs, read-only queries, or temporary copies outside the project.
 
-For intermittent failures, repeat the smallest reproduction enough to establish
-a pattern, but do not present absence during a short run as proof that the issue
-is fixed.
+For intermittent failures, repeat the smallest reproduction enough to establish a pattern, but do not present absence during a short run as proof that the issue is fixed.
 
 Stop when:
 
@@ -121,20 +109,14 @@ Return:
 4. **Evidence:** files, lines, logs, values, or experiments that support it.
 5. **Rejected hypotheses:** plausible alternatives ruled out and how.
 6. **Confidence:** high, medium, or low, with the missing evidence if not high.
-7. **Fix boundary:** smallest likely repair and validation needed, without
-   applying it.
+7. **Fix boundary:** smallest likely repair and validation needed, without applying it.
 
 Use “not reproduced” or “cause not proven” when that is the truthful result.
 
 ## Common failure modes
 
-- **A failing test is not automatically a product bug.** Check whether the test,
-  fixture, clock, selector, or environment encodes a stale assumption.
-- **The thrown line is not automatically the cause.** Trace the invalid state to
-  where it was introduced.
-- **A passing retry is not a diagnosis.** Identify the timing, ordering, shared
-  state, or external dependency that explains the flake.
-- **A broad dependency reinstall is not an experiment.** It changes many
-  variables and destroys evidence.
-- **Logs can mislead.** Correlate timestamps, request or trace IDs, environment,
-  and code version before connecting events.
+- **A failing test is not automatically a product bug.** Check whether the test, fixture, clock, selector, or environment encodes a stale assumption.
+- **The thrown line is not automatically the cause.** Trace the invalid state to where it was introduced.
+- **A passing retry is not a diagnosis.** Identify the timing, ordering, shared state, or external dependency that explains the flake.
+- **A broad dependency reinstall is not an experiment.** It changes many variables and destroys evidence.
+- **Logs can mislead.** Correlate timestamps, request or trace IDs, environment, and code version before connecting events.

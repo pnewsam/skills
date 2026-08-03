@@ -38,14 +38,10 @@ Start with invariants. Correct code preserves required truths across normal inpu
 
 ## Evidence Signals
 
-- Reverts, repeated bug-fix changes, and recurring failures can identify an
-  error-prone subsystem, but inspect the changes before classifying them.
-- Concentrated incidents around retries, races, partial writes, or boundary
-  validation are strong evidence of an unprotected invariant.
-- Changed critical rules without corresponding behavioral tests increase
-  uncertainty; absence of a nearby test alone does not prove incorrectness.
-- Use runtime and support evidence to corroborate static suspicion whenever
-  possible.
+- Reverts, repeated bug-fix changes, and recurring failures can identify an error-prone subsystem, but inspect the changes before classifying them.
+- Concentrated incidents around retries, races, partial writes, or boundary validation are strong evidence of an unprotected invariant.
+- Changed critical rules without corresponding behavioral tests increase uncertainty; absence of a nearby test alone does not prove incorrectness.
+- Use runtime and support evidence to corroborate static suspicion whenever possible.
 
 ## Do / Don't
 

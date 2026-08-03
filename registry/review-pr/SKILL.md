@@ -7,8 +7,7 @@ description: Review a GitHub pull request for actionable correctness, security, 
 
 ## Outcome
 
-Provide an evidence-backed code review or merge-risk assessment of the actual pull-request diff.
-Keep findings specific, calibrated, and useful to the merge decision.
+Provide an evidence-backed code review or merge-risk assessment of the actual pull-request diff. Keep findings specific, calibrated, and useful to the merge decision.
 
 This skill never edits source, branches, commits, or PR metadata.
 
@@ -26,9 +25,7 @@ When both are requested, perform both analyses but do not treat a high-risk chan
 - **Analyze:** return the completed assessment in chat. This is the default.
 - **Post:** perform one GitHub write only when the user explicitly asks to post, submit, approve, comment, or request changes.
 
-In Review Post mode, submit a GitHub review.
-In Risk Post mode, add one top-level PR comment.
-If both are requested, prefer one review whose summary contains the risk assessment unless the user explicitly asks for separate artifacts.
+In Review Post mode, submit a GitHub review. In Risk Post mode, add one top-level PR comment. If both are requested, prefer one review whose summary contains the risk assessment unless the user explicitly asks for separate artifacts.
 
 ## Safety
 
@@ -54,15 +51,13 @@ Collect:
 - existing review conversation when it affects whether a finding is current
 - CI status when the merge decision depends on it
 
-Fetch large diffs in bounded groups.
-For very large PRs, prioritize security-sensitive, data, infrastructure, public-interface, and high-churn areas; disclose the sampling boundary and list areas not reviewed in depth.
+Fetch large diffs in bounded groups. For very large PRs, prioritize security-sensitive, data, infrastructure, public-interface, and high-churn areas; disclose the sampling boundary and list areas not reviewed in depth.
 
 ## Review workflow
 
 ### 1. Understand the change
 
-Restate the intended behavior, affected boundaries, and claims made in the PR description.
-Note mismatches between the stated and actual scope.
+Restate the intended behavior, affected boundaries, and claims made in the PR description. Note mismatches between the stated and actual scope.
 
 ### 2. Inspect every relevant hunk
 
@@ -76,8 +71,7 @@ Evaluate:
 - tests for new behavior, failures, and regressions
 - maintainability issues only when they create a concrete future failure mode
 
-Read enough unchanged context to understand the hunk.
-Do not report an issue in unrelated pre-existing code unless the PR makes it reachable or materially worse.
+Read enough unchanged context to understand the hunk. Do not report an issue in unrelated pre-existing code unless the PR makes it reachable or materially worse.
 
 ### 3. Record findings
 
@@ -98,13 +92,11 @@ Praise may appear in the summary but should not dilute actionable findings.
 - **COMMENT:** non-blocking feedback, unresolved uncertainty, or a self-review where approval is inappropriate.
 - **APPROVE:** no credible merge-blocking issues and enough evidence was inspected to support approval.
 
-Use the most severe credible merge-relevant finding.
-Style preference must not drive REQUEST_CHANGES.
+Use the most severe credible merge-relevant finding. Style preference must not drive REQUEST_CHANGES.
 
 ### 5. Present the review
 
-Return the proposed verdict, findings ordered by severity, the evidence or scope reviewed, and the full proposed summary.
-If there are no findings, say so directly.
+Return the proposed verdict, findings ordered by severity, the evidence or scope reviewed, and the full proposed summary. If there are no findings, say so directly.
 
 ## Posting
 

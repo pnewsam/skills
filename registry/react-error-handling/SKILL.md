@@ -7,9 +7,7 @@ description: Design or review failure handling and recovery in React application
 
 ## Outcome
 
-Contain failures at the smallest useful boundary, present an honest and
-actionable user state, preserve unaffected work, and capture enough evidence to
-diagnose unexpected errors.
+Contain failures at the smallest useful boundary, present an honest and actionable user state, preserve unaffected work, and capture enough evidence to diagnose unexpected errors.
 
 Follow the router, framework, and data library already used by the project.
 
@@ -27,9 +25,7 @@ Choose handling based on origin and recoverability:
 | Background async failure | Explicit rejection handling plus user or operational signal |
 | Application bootstrap failure | Minimal root fallback independent of fragile providers |
 
-React Error Boundaries do not catch every asynchronous callback, event handler,
-server-rendering failure, or error thrown inside the boundary itself. Do not use
-them as a universal error channel.
+React Error Boundaries do not catch every asynchronous callback, event handler, server-rendering failure, or error thrown inside the boundary itself. Do not use them as a universal error channel.
 
 ## Place boundaries by recovery scope
 
@@ -40,11 +36,9 @@ Use a boundary where:
 - an untrusted or third-party widget needs isolation
 - recovery can reset the failed state or navigate elsewhere
 
-Avoid a boundary around every small component. Excess boundaries fragment
-recovery, hide systemic failures, and create noisy fallback UI.
+Avoid a boundary around every small component. Excess boundaries fragment recovery, hide systemic failures, and create noisy fallback UI.
 
-Always keep a root boundary as a last resort. Its fallback should not depend on
-the same providers, data, translations, or component tree that may have failed.
+Always keep a root boundary as a last resort. Its fallback should not depend on the same providers, data, translations, or component tree that may have failed.
 
 ## Expected data and action failures
 
@@ -52,18 +46,15 @@ Handle expected failures close to the task:
 
 - preserve entered data after a failed mutation
 - identify what failed in user terms
-- distinguish validation, authorization, conflict, missing data, and transient
-  service failure when the API contract supports it
+- distinguish validation, authorization, conflict, missing data, and transient service failure when the API contract supports it
 - retry only when the operation is safe or idempotent
 - avoid exposing stack traces, internal identifiers, or sensitive details
 
-Use a boundary for unexpected rendering or invariant failures, not for every
-ordinary 404 or rejected form submission.
+Use a boundary for unexpected rendering or invariant failures, not for every ordinary 404 or rejected form submission.
 
 ## Recovery and reset
 
-A Retry button must do more than rerender the same broken state. Define what it
-resets:
+A Retry button must do more than rerender the same broken state. Define what it resets:
 
 - error-boundary state
 - failed query or loader
@@ -71,9 +62,7 @@ resets:
 - relevant local state
 - cached or memoized value that caused the failure
 
-Key boundaries to stable resource or route identity when changing that identity
-should clear the error. Preserve unrelated user work and prevent repeated
-destructive mutations.
+Key boundaries to stable resource or route identity when changing that identity should clear the error. Preserve unrelated user work and prevent repeated destructive mutations.
 
 Offer navigation away when local recovery is not credible.
 
@@ -88,9 +77,7 @@ Unexpected errors should produce:
 - safe user/session context permitted by policy
 - component stack or framework context
 
-Deduplicate repeated reports and redact secrets, tokens, form contents, and
-personal data. Expected validation or authorization outcomes normally need
-metrics or audit events, not exception reports.
+Deduplicate repeated reports and redact secrets, tokens, form contents, and personal data. Expected validation or authorization outcomes normally need metrics or audit events, not exception reports.
 
 ## Workflow
 
@@ -99,8 +86,7 @@ metrics or audit events, not exception reports.
 3. Choose the smallest recovery scope that preserves useful UI.
 4. Specify user message, retry semantics, navigation, and state preservation.
 5. Specify operational evidence and redaction.
-6. Test render failure, expected data failure, failed mutation, retry failure,
-   successful recovery, and root fallback.
+6. Test render failure, expected data failure, failed mutation, retry failure, successful recovery, and root fallback.
 
 ## Checklist
 
@@ -115,8 +101,7 @@ metrics or audit events, not exception reports.
 
 ## Handoffs
 
-- Use `react-data-fetching` for query state, retry policy, and Suspense-enabled
-  data flows.
+- Use `react-data-fetching` for query state, retry policy, and Suspense-enabled data flows.
 - Use `ui-feedback` for loading, empty, success, and non-error status patterns.
 - Use `error-handling` for JavaScript/TypeScript failure contracts below the UI.
 - Use `react-testing` for boundary and recovery test strategy.

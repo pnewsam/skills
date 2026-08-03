@@ -1,7 +1,6 @@
 # React feature structure
 
-Use this reference for folders, feature boundaries, public APIs, shared code,
-imports, and incremental migration.
+Use this reference for folders, feature boundaries, public APIs, shared code, imports, and incremental migration.
 
 ## A practical shape
 
@@ -24,17 +23,13 @@ src/
   ui/              # reusable design-system primitives
 ```
 
-The directory names are less important than clear ownership and enforced import
-direction.
+The directory names are less important than clear ownership and enforced import direction.
 
 ## Feature boundaries
 
-A feature represents a user or business capability, not a technical category.
-Colocate its UI, state, data access, tests, and internal types when they change
-together.
+A feature represents a user or business capability, not a technical category. Colocate its UI, state, data access, tests, and internal types when they change together.
 
-Expose a narrow entrypoint. Consumers should not import deep internal paths
-unless the repository deliberately treats them as public contracts.
+Expose a narrow entrypoint. Consumers should not import deep internal paths unless the repository deliberately treats them as public contracts.
 
 Consider splitting a feature when it has:
 
@@ -65,16 +60,14 @@ Poor shared candidates:
 
 ## Imports
 
-Use lint or build rules when the architecture depends on import boundaries.
-Typical rules:
+Use lint or build rules when the architecture depends on import boundaries. Typical rules:
 
 - features may depend on domain, platform contracts, and UI primitives
 - shared layers must not depend on product features
 - one feature should not reach into another feature's internals
 - application composition may depend on feature public entrypoints
 
-Barrel files should define a deliberate public surface. Avoid repository-wide
-barrels that create cycles, obscure source ownership, or undermine tree shaking.
+Barrel files should define a deliberate public surface. Avoid repository-wide barrels that create cycles, obscure source ownership, or undermine tree shaking.
 
 ## Migration
 
@@ -87,5 +80,4 @@ Move one coherent slice at a time:
 5. validate and remove the old path
 6. make behavioral improvements separately
 
-Use temporary compatibility exports only with an owner and removal condition.
-Keep tests passing at each step so structural migration does not mask defects.
+Use temporary compatibility exports only with an owner and removal condition. Keep tests passing at each step so structural migration does not mask defects.

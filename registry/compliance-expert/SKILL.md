@@ -5,10 +5,7 @@ description: Route compliance and external-risk requests to the smallest relevan
 
 # Compliance Expert - Skill Router
 
-Use this as the entry point for cross-cutting compliance work. Use the router
-when the request spans two or more focused compliance concerns or applicability
-is unclear. Go directly to one focused `compliance-*` skill when exactly one
-concern is clear.
+Use this as the entry point for cross-cutting compliance work. Use the router when the request spans two or more focused compliance concerns or applicability is unclear. Go directly to one focused `compliance-*` skill when exactly one concern is clear.
 
 This is engineering guidance, not legal advice. If a decision depends on jurisdiction, contract terms, organizational policy, or regulatory interpretation, surface the legal/policy question explicitly.
 
@@ -64,11 +61,7 @@ Compliance skills translate external obligations and unacceptable risks into con
 
 ## Handoff Rules
 
-- Use `analyze-security` for recurring posture analysis or to verify, normalize,
-  group, and prioritize dependency or code-scanning findings before planning.
-- Use `threat-model` before implementation or review when assets, actors, trust
-  boundaries, and plausible abuse paths are not yet explicit.
-- Use `plan-feature` in Convergence mode for one verified security or
-  compliance improvement; use `plan-epic` only for a deliberately managed
-  larger program.
+- Use `analyze-security` for recurring posture analysis or to verify, normalize, group, and prioritize dependency or code-scanning findings before planning.
+- Use `threat-model` before implementation or review when assets, actors, trust boundaries, and plausible abuse paths are not yet explicit.
+- Use `plan-feature` in Convergence mode for one verified security or compliance improvement; use `plan-epic` only for a deliberately managed larger program.
 - Use stack experts for concrete implementation and tests.

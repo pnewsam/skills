@@ -7,12 +7,9 @@ description: Select, configure, or migrate Python project tooling for environmen
 
 ## Outcome
 
-Choose the smallest coherent toolchain that fits the project's delivery model,
-team, supported Python versions, packaging needs, and existing conventions.
+Choose the smallest coherent toolchain that fits the project's delivery model, team, supported Python versions, packaging needs, and existing conventions.
 
-Do not churn a functioning project merely to standardize names. A migration
-needs a concrete benefit, an adoption plan, and verification that local and CI
-workflows remain reproducible.
+Do not churn a functioning project merely to standardize names. A migration needs a concrete benefit, an adoption plan, and verification that local and CI workflows remain reproducible.
 
 ## Inspect first
 
@@ -24,19 +21,15 @@ Read:
 - supported Python versions and platforms
 - CI, release, container, and deployment workflows
 - editor and pre-commit integration
-- whether the repository is an application, library, CLI, monorepo, or teaching
-  project
+- whether the repository is an application, library, CLI, monorepo, or teaching project
 
-Identify which file is authoritative for direct dependencies and which artifact
-locks a reproducible environment.
+Identify which file is authoritative for direct dependencies and which artifact locks a reproducible environment.
 
 ## Decision principles
 
 ### Environments and dependencies
 
-For new projects, `uv` is a strong default when its current behavior supports
-the project's index, platform, build, and deployment needs. Existing Poetry,
-PDM, pip-tools, conda, or pip workflows may be entirely reasonable.
+For new projects, `uv` is a strong default when its current behavior supports the project's index, platform, build, and deployment needs. Existing Poetry, PDM, pip-tools, conda, or pip workflows may be entirely reasonable.
 
 Choose based on:
 
@@ -46,33 +39,23 @@ Choose based on:
 - production install path
 - team and CI support
 
-Do not maintain multiple competing lockfiles. During migration, define the
-temporary source of truth and remove the old path only after equivalent builds
-are verified.
+Do not maintain multiple competing lockfiles. During migration, define the temporary source of truth and remove the old path only after equivalent builds are verified.
 
 ### Packaging and builds
 
-Use `[build-system]` only when the project is packaged. Select a backend based on
-actual needs such as extension modules, dynamic versioning, editable installs,
-and publishing—not fashion.
+Use `[build-system]` only when the project is packaged. Select a backend based on actual needs such as extension modules, dynamic versioning, editable installs, and publishing—not fashion.
 
-Applications that are never distributed as Python packages may not need a
-build backend.
+Applications that are never distributed as Python packages may not need a build backend.
 
 ### Linting and formatting
 
-`ruff` is a strong new-project default for fast linting, import organization,
-and formatting. Preserve another formatter or linter when it enforces valuable
-rules Ruff does not cover or when migration noise outweighs the benefit.
+`ruff` is a strong new-project default for fast linting, import organization, and formatting. Preserve another formatter or linter when it enforces valuable rules Ruff does not cover or when migration noise outweighs the benefit.
 
-Adopt rules in stages. Separate mechanical formatting changes from behavioral
-changes.
+Adopt rules in stages. Separate mechanical formatting changes from behavioral changes.
 
 ### Type checking
 
-Choose the checker already supported by the codebase and editor workflow.
-Mypy, Pyright, and other current checkers have different inference,
-configuration, and framework integration.
+Choose the checker already supported by the codebase and editor workflow. Mypy, Pyright, and other current checkers have different inference, configuration, and framework integration.
 
 For new projects:
 
@@ -83,20 +66,15 @@ For new projects:
 
 ### Testing
 
-`pytest` is a common default, but standard-library `unittest` or framework-native
-tools can be appropriate. Preserve a coherent existing suite.
+`pytest` is a common default, but standard-library `unittest` or framework-native tools can be appropriate. Preserve a coherent existing suite.
 
-Configure test discovery, markers, async support, coverage, and warnings
-explicitly enough that local and CI runs agree.
+Configure test discovery, markers, async support, coverage, and warnings explicitly enough that local and CI runs agree.
 
 ### Task execution and hooks
 
-Use the repository's existing task surface when it is clear and portable:
-Make, Just, Tox, Nox, Hatch environments, shell scripts, or package-manager
-commands may each be appropriate.
+Use the repository's existing task surface when it is clear and portable: Make, Just, Tox, Nox, Hatch environments, shell scripts, or package-manager commands may each be appropriate.
 
-Git hooks improve feedback but are not the enforcement boundary. CI must run the
-authoritative checks.
+Git hooks improve feedback but are not the enforcement boundary. CI must run the authoritative checks.
 
 ## New-project baseline
 
@@ -107,8 +85,7 @@ A reasonable starting point, subject to current verification:
 - Ruff for linting and formatting
 - one type checker chosen deliberately
 - pytest when no framework constraint suggests otherwise
-- a short documented task surface for setup, format, lint, type-check, test,
-  build, and release
+- a short documented task surface for setup, format, lint, type-check, test, build, and release
 - CI using the same commands developers run
 
 Add tools only when they own a distinct responsibility.
@@ -117,16 +94,14 @@ Add tools only when they own a distinct responsibility.
 
 1. State the problem and measurable benefit.
 2. Record current setup, lock, checks, build, and release behavior.
-3. Verify candidate tools against current official docs and project
-   constraints.
+3. Verify candidate tools against current official docs and project constraints.
 4. Introduce the new configuration without changing application behavior.
 5. Compare resolved dependencies and build artifacts.
 6. Run the supported test, lint, type, and packaging matrix.
 7. Update local, CI, container, and release instructions together.
 8. Remove obsolete configuration only after the new path is proven.
 
-Avoid combining dependency upgrades, formatting the repository, and changing
-the build backend in one migration.
+Avoid combining dependency upgrades, formatting the repository, and changing the build backend in one migration.
 
 ## Report
 

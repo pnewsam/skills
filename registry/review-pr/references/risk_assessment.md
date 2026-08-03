@@ -1,7 +1,6 @@
 # Pull-request risk assessment
 
-Use this reference in Risk mode.
-Risk describes the chance and consequence of a bad merge; it is related to, but distinct from, proven code-review findings.
+Use this reference in Risk mode. Risk describes the chance and consequence of a bad merge; it is related to, but distinct from, proven code-review findings.
 
 ## Contents
 
@@ -19,9 +18,7 @@ Risk describes the chance and consequence of a bad merge; it is related to, but 
 | High | Broad or difficult-to-reverse impact, sensitive behavior, or weak verification on a critical path |
 | Critical | Credible path to auth bypass, secret exposure, destructive data loss, systemic outage, or another severe outcome |
 
-Start with the highest credible single-dimension level.
-Calibrate with mitigations, reversibility, validation, and confidence.
-Do not compute an average.
+Start with the highest credible single-dimension level. Calibrate with mitigations, reversibility, validation, and confidence. Do not compute an average.
 
 ## Dimensions
 
@@ -36,8 +33,7 @@ Consider dependency reach and runtime scope, not only file count:
 
 ### Change type
 
-Identify behavior changes, public contracts, migrations, refactors, new capabilities, safety-control changes, and removals.
-Large mechanical diffs can be low risk; a one-line permission change can be critical.
+Identify behavior changes, public contracts, migrations, refactors, new capabilities, safety-control changes, and removals. Large mechanical diffs can be low risk; a one-line permission change can be critical.
 
 ### Security and privacy
 
@@ -49,8 +45,7 @@ Inspect schema and storage changes, backfills, transformations, deletion, idempo
 
 ### Verification
 
-Assess whether tests, type checks, builds, staged rollout, monitoring, and manual validation cover the actual failure modes.
-Separate missing PR-local evidence from repository-wide test debt.
+Assess whether tests, type checks, builds, staged rollout, monitoring, and manual validation cover the actual failure modes. Separate missing PR-local evidence from repository-wide test debt.
 
 ### Dependencies and supply chain
 
@@ -62,8 +57,7 @@ Inspect CI/CD, IAM, secrets wiring, environment variables, networking, deploymen
 
 ## Confidence
 
-State High, Medium, or Low confidence and what evidence would materially change the assessment.
-Missing production topology, migration volume, or rollout details may limit confidence without raising the risk level by itself.
+State High, Medium, or Low confidence and what evidence would materially change the assessment. Missing production topology, migration volume, or rollout details may limit confidence without raising the risk level by itself.
 
 ## Output
 
@@ -96,5 +90,4 @@ Missing production topology, migration volume, or rollout details may limit conf
 _Assessment scope: <head> → <base> at <head SHA> · <date>_
 ```
 
-Omit recommendations that do not materially reduce risk.
-If the evidence supports Low risk, say so without manufacturing precautions.
+Omit recommendations that do not materially reduce risk. If the evidence supports Low risk, say so without manufacturing precautions.

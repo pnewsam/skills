@@ -5,11 +5,7 @@ description: Color system principles for UI — building a coherent palette, sem
 
 # UI Color — Systems & Semantic Usage
 
-A decision engine for building and applying a color system. Covers palette
-construction, semantic roles, color for hierarchy, dark mode, and contrast.
-For which feedback pattern a color belongs to (error, success, warning states),
-see `ui-feedback`. State when a request requires deeper color science than this
-maintained UI reference provides.
+A decision engine for building and applying a color system. Covers palette construction, semantic roles, color for hierarchy, dark mode, and contrast. For which feedback pattern a color belongs to (error, success, warning states), see `ui-feedback`. State when a request requires deeper color science than this maintained UI reference provides.
 
 ## 1. The Color Palette Structure
 

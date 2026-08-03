@@ -25,5 +25,4 @@
 
 ## Decisions and notes
 
-<Context that is difficult to reconstruct from the diff, including rejected
-approaches or external references. Omit if none.>
+<Context that is difficult to reconstruct from the diff, including rejected approaches or external references. Omit if none.>

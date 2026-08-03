@@ -9,13 +9,11 @@ description: "Update an existing GitHub pull request's title and body: either sy
 
 Bring one open pull request's title and body into good shape — accurate to the branch and easy to read — without touching source, branches, or commits.
 
-Apply the shared kernel throughout: `pr-conventions/references/github-mechanics.md` for reading and writing GitHub state, and `pr-conventions/references/pr-standard.md` for how the resulting title and body should read.
-Regardless of mode, the updated PR must conform to that standard, deferring to the repository's own PR template when one exists.
+Apply the shared kernel throughout: `pr-conventions/references/github-mechanics.md` for reading and writing GitHub state, and `pr-conventions/references/pr-standard.md` for how the resulting title and body should read. Regardless of mode, the updated PR must conform to that standard, deferring to the repository's own PR template when one exists.
 
 ## Modes
 
-Two independent axes.
-Choose the narrowest that satisfies the request.
+Two independent axes. Choose the narrowest that satisfies the request.
 
 **Intent** — what may change:
 
@@ -44,16 +42,13 @@ Choose the narrowest that satisfies the request.
 
 ### 1. Resolve the target and read the live PR
 
-Select one authenticated access path and resolve the target PR per `pr-conventions/references/github-mechanics.md`.
-Fetch its state, title, full body, URL, base, head, head SHA, commits, and changed-file summary.
-Read the repository's PR template when present.
+Select one authenticated access path and resolve the target PR per `pr-conventions/references/github-mechanics.md`. Fetch its state, title, full body, URL, base, head, head SHA, commits, and changed-file summary. Read the repository's PR template when present.
 
 Stop if the PR is merged or closed unless the user asked for a retrospective change.
 
 ### 2. Build an accurate picture
 
-**Sync intent:** inspect the actual changes on the branch without altering local or remote-tracking refs.
-With a connector, list changed filenames and fetch patches in bounded groups; with `gh`:
+**Sync intent:** inspect the actual changes on the branch without altering local or remote-tracking refs. With a connector, list changed filenames and fetch patches in bounded groups; with `gh`:
 
 ```bash
 gh pr view <number> --json files,commits
@@ -68,22 +63,15 @@ Group the changes by intent (see the kernel's pr-standard), then audit the body 
 - **Risk and rollout** — are breaking behavior, data risk, feature flags, migrations, and rollback needs stated when relevant?
 - **Visual evidence** — for user-visible UI changes, is before/after evidence present or explicitly left for the author?
 
-Produce a plain-English gap analysis: what is **missing from the description**, **stale or inaccurate**, **missing validation evidence**, **missing risk/rollout context**, or a **title mismatch** — or state that the description is already accurate.
-If nothing is wrong, say so and stop; do not edit for its own sake.
+Produce a plain-English gap analysis: what is **missing from the description**, **stale or inaccurate**, **missing validation evidence**, **missing risk/rollout context**, or a **title mismatch** — or state that the description is already accurate. If nothing is wrong, say so and stop; do not edit for its own sake.
 
-**Polish intent:** use the commit and file summary only as a factual guardrail; inspect patches only to check a claim you intend to keep.
-You are not auditing for completeness — you are rewriting existing, accurate content to read better.
+**Polish intent:** use the commit and file summary only as a factual guardrail; inspect patches only to check a claim you intend to keep. You are not auditing for completeness — you are rewriting existing, accurate content to read better.
 
 ### 3. Draft the revised title and body
 
-**Sync:** write the full updated body from the gap analysis, keeping accurate content and changing only what the diff supports.
-Draft a revised title if the current one is inaccurate or vague (conventional-commit style, per the kernel).
+**Sync:** write the full updated body from the gap analysis, keeping accurate content and changing only what the diff supports. Draft a revised title if the current one is inaccurate or vague (conventional-commit style, per the kernel).
 
-**Polish:** rewrite for outcome-first organization, plain language, active voice, and scanability.
-Improve repetitive, vague, inflated, or overly formal phrasing and clarify unexplained jargon without adding a new claim.
-Preserve repository-template headings, required fields, and formatting.
-Do not add generic praise or filler; human-readable does not mean non-technical.
-Update the title only when its language needs improvement.
+**Polish:** rewrite for outcome-first organization, plain language, active voice, and scanability. Improve repetitive, vague, inflated, or overly formal phrasing and clarify unexplained jargon without adding a new claim. Preserve repository-template headings, required fields, and formatting. Do not add generic praise or filler; human-readable does not mean non-technical. Update the title only when its language needs improvement.
 
 Either way, the result must conform to `pr-conventions/references/pr-standard.md`.
 
@@ -95,16 +83,13 @@ Present the proposed changes using `references/update_output_templates.md`:
 - for Sync, the gap-analysis summary
 - the full proposed body
 
-In Preview mode, stop here.
-In Apply mode, write the update once through the selected access path and verify the live result per the kernel's write-once-then-verify rule.
-With `gh`:
+In Preview mode, stop here. In Apply mode, write the update once through the selected access path and verify the live result per the kernel's write-once-then-verify rule. With `gh`:
 
 ```bash
 gh pr edit <number> --title "<revised title>" --body "<revised body>"
 ```
 
-Omit `--title` if unchanged.
-If the write is rejected for missing authorization, do not retry through another path; report it and preserve the proposed text.
+Omit `--title` if unchanged. If the write is rejected for missing authorization, do not retry through another path; report it and preserve the proposed text.
 
 ### 5. Final report
 
