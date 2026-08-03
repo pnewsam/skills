@@ -18,11 +18,11 @@
       "skills": [
         "diagnose-failure",
         "harden-pr",
-        "polish-pr",
+        "pr-conventions",
         "prepare-pr",
         "review-pr",
-        "revise-pr",
         "stash",
+        "update-pr",
         "validate-changes"
       ]
     },
