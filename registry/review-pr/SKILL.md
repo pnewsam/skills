@@ -96,7 +96,31 @@ Use the most severe credible merge-relevant finding. Style preference must not d
 
 ### 5. Present the review
 
-Return the proposed verdict, findings ordered by severity, the evidence or scope reviewed, and the full proposed summary. If there are no findings, say so directly.
+Present the review in the shape defined under **Review output** below: verdict first, a tight summary, honest validation, and findings ordered by severity. If there are no findings, say so directly.
+
+## Review output
+
+Present the review — in chat and in a posted review body — in this shape, tighter than a PR description. Risk mode uses `references/risk_assessment.md` instead.
+
+```markdown
+## Code Review
+
+**Verdict: <APPROVE | REQUEST CHANGES | COMMENT>**
+
+<A tight paragraph: what was reviewed and why you reached the verdict, ending with a bottom line such as "No actionable findings.">
+
+### Validation
+
+- <what you actually ran or inspected, with real results>
+```
+
+Validation lists only what you genuinely did; never imply a pass you did not observe. Findings — inline on a changed line, or in the summary when broader — are ordered most severe first:
+
+```markdown
+**<Blocking | Major | Minor | Nit>:** <problem>. <evidence>. <fix or precise question>.
+```
+
+Give evidence proportional to the finding and the smallest useful fix. If nothing is actionable, say "No actionable findings." and omit the list.
 
 ## Posting
 
