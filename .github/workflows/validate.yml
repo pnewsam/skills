@@ -15,6 +15,9 @@ jobs:
       - name: Validate skill packages
         run: python3 scripts/validate_registry.py
 
+      - name: Check prose wrapping (non-blocking)
+        run: python3 scripts/check_prose_wrap.py
+
       - uses: actions/setup-go@v5
         with:
           go-version-file: cli/go.mod
