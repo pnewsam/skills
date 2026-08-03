@@ -227,7 +227,7 @@ In Open PR mode, capture them as part of preparation. In Preview or Commit mode,
 
 Do not infer permission to create a PR merely because the push succeeded. Select an authenticated access path per `pr-conventions/references/github-mechanics.md`. Resolve the repository, current head branch, and evidence-backed base branch, and search for an existing PR from that head before creating a new one.
 
-Compose the PR body from `pr-conventions/references/pr-standard.md` — defer to the repository's PR template when present — and populate it with facts from the diff and actual validation results, including the visual evidence from Step 9 and, where it helps, a small Mermaid diagram. Use `references/pr_output_templates.md` for the final-status format.
+Compose the PR body from `pr-conventions/references/pr-standard.md` — defer to the repository's PR template when present — and populate it with facts from the diff and actual validation results, including the visual evidence from Step 9 and, where it helps, a small Mermaid diagram. Hold to the standard's concision rules while filling it: outcomes over a diff walkthrough, one line per bullet, validation as `command — result`, and no root-cause essays or hedging paragraphs. Before finalizing, reread the draft and cut anything that restates the diff or says something twice. Use `references/pr_output_templates.md` for the final-status format.
 
 If no PR exists, create it with the selected access path. For the connector, provide the repository, title, populated body, base branch, head branch, and draft state explicitly. The `gh` fallback is:
 

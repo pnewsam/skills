@@ -62,7 +62,25 @@ Add a small Mermaid diagram only when it conveys the shape of the change faster 
 
 ## Keep language concise
 
-Write the shortest title and body that convey what changed and why — tight bullets over paragraphs, outcomes and boundaries over a file-by-file narration of the diff. Cut hedging, restated instructions, and empty sections.
+Write the shortest body that lets a reviewer understand what changed and why. Most PRs fit on one screen: a line-per-item summary, a sentence or two of why, changes grouped by intent, and validation as `command — result`. Length should track the change's complexity, not the effort spent on it — a one-file bug fix does not need five paragraphs.
+
+Two habits carry most of the concision:
+
+- **Describe outcomes and boundaries, not the diff.** The files are in the diff; the body says what the change accomplishes and where its edges are. Do not walk through each function, component, or file you touched.
+- **One idea per bullet, one statement per idea.** A bullet is a single line. If it runs to two or three sentences, it is narrating the mechanism — cut it back to the outcome. State each thing once; do not restate the before/after in both the summary and the screenshots.
+
+A bullet, tightened:
+
+- Verbose: "Extend `deriveProviderStatus` with in-flight inputs (`testPending`, `initialTestDone`) so it also returns `testing` / `display` / `verifying`. The gating rule now lives in the pure helper."
+- Tight: "Move the in-flight gating rule into `deriveProviderStatus` so it also reports `testing`/`verifying`."
+
+Cut on sight:
+
+- Root-cause essays and "why it resolved on its own" narration — one sentence of problem in *Why* is enough.
+- Per-file or per-function walkthroughs dressed up as bullets.
+- Hedging and meta-commentary — stacked-PR preambles, "screenshots to be attached", long environment caveats. Reduce to a single line or drop.
+- Validation prose that describes what the tests cover — list `command — result` and, at most, name the new test file.
+- Padding an optional section to look complete. Delete a section with nothing real to say.
 
 ## Conventional-commit format (titles and commit subjects)
 

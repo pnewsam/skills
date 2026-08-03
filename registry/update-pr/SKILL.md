@@ -74,6 +74,8 @@ Produce a plain-English gap analysis: what is **missing from the description**, 
 
 **Polish:** rewrite for outcome-first organization, plain language, active voice, and scanability. Improve repetitive, vague, inflated, or overly formal phrasing and clarify unexplained jargon without adding a new claim. Preserve repository-template headings, required fields, and formatting. Do not add generic praise or filler; human-readable does not mean non-technical. Update the title only when its language needs improvement.
 
+Cutting length is part of Polish, not a factual change. Removing a root-cause essay, a per-function diff walkthrough, a before/after stated twice, or a hedging paragraph deletes words, not facts — the claim still lives in the diff and the surviving summary. Apply the kernel's "Cut on sight" list aggressively, provided every real claim, number, link, command, result, and checkbox survives somewhere in the body. A shorter, denser body is the goal, not a like-for-like reword of a bloated one.
+
 Either way, the result must conform to `pr-conventions/references/pr-standard.md`.
 
 ### 4. Present (Preview) or apply once (Apply)
