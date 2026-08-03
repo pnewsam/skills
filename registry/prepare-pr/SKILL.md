@@ -213,11 +213,21 @@ git push -u origin <current-branch>
 
 Do not push directly to `main`, `master`, or protected release branches unless the user explicitly confirms that is intended.
 
-### 9. Create or update the pull request (Open PR mode only)
+### 9. Capture visual evidence for UI changes
+
+When the diff changes something a user can see — components, styles, templates, rendered or CLI output — gather before/after screenshots for the body. Skip this step for backend-only changes.
+
+In Open PR mode, capture them as part of preparation. In Preview or Commit mode, don't launch the app on your own; just note that the change is visual and offer to.
+
+- **Shoot the changed states.** Launch the app the way the project already does — invoke the `run` skill or its documented dev command — and capture the states the diff actually changed, not one happy-path shot.
+- **Get a real before/after.** Capture the after-state on the branch, and the "before" from the base state via a worktree or second checkout (not an in-place switch). When a real "before" is impractical, show after-only and say so.
+- **Deliver the images.** Save them to the scratchpad. If the access path can host images, embed them; otherwise hand the user the file paths and a paste-ready Screenshots block.
+
+### 10. Create or update the pull request (Open PR mode only)
 
 Do not infer permission to create a PR merely because the push succeeded. Select an authenticated access path per `pr-conventions/references/github-mechanics.md`. Resolve the repository, current head branch, and evidence-backed base branch, and search for an existing PR from that head before creating a new one.
 
-Compose the PR body from `pr-conventions/references/pr-standard.md` — defer to the repository's PR template when present — and populate it with facts from the diff and actual validation results. Use `references/pr_output_templates.md` for the final-status format.
+Compose the PR body from `pr-conventions/references/pr-standard.md` — defer to the repository's PR template when present — and populate it with facts from the diff and actual validation results, including the visual evidence from Step 9 and, where it helps, a small Mermaid diagram. Use `references/pr_output_templates.md` for the final-status format.
 
 If no PR exists, create it with the selected access path. For the connector, provide the repository, title, populated body, base branch, head branch, and draft state explicitly. The `gh` fallback is:
 
@@ -240,7 +250,7 @@ Optional flags to include when relevant:
 
 After creation, verify the live PR per the kernel's write-once-then-verify rule: fetch it through the same access path and confirm its number, URL, title, base, head, and draft state before claiming completion.
 
-### 10. Final response
+### 11. Final response
 
 After preparing the PR, report:
 
@@ -250,6 +260,7 @@ After preparing the PR, report:
 - PR URL, if a PR was created or updated
 - Short summary of changes
 - Validation commands and results, including anything not run
+- Visual evidence captured, embedded, or left for the author to attach, for UI changes
 - Anything not included, skipped, or needing user attention
 
 ## Handling common situations

@@ -49,6 +49,17 @@ only when genuinely not applicable.>
 
 Include a Screenshots section for UI/frontend changes; omit it for backend-only changes.
 
+- Prefer a before/after pair — a `| Before | After |` table, or `![alt](url)` for after-only when a real "before" is impractical.
+- Cover the states that actually changed, not one happy-path shot.
+
+## Diagrams (optional)
+
+Add a small Mermaid diagram only when it conveys the shape of the change faster than prose — a new flow, a state change, a reworked boundary, a data-model relationship. Most PRs need none.
+
+- Keep it to ~5–12 nodes and diagram only what the diff supports.
+- Pick the format for the intent: `sequenceDiagram` for flow, `flowchart` (the safe default) for boundaries/control flow, `stateDiagram-v2` for lifecycle, `erDiagram` for data models.
+- GitHub renders fenced ```mermaid blocks natively.
+
 ## Keep language concise
 
 Write the shortest title and body that convey what changed and why — tight bullets over paragraphs, outcomes and boundaries over a file-by-file narration of the diff. Cut hedging, restated instructions, and empty sections.

@@ -61,7 +61,8 @@ Group the changes by intent (see the kernel's pr-standard), then audit the body 
 - **Change inventory** — are material API, schema, dependency, migration, configuration, documentation, and compatibility changes represented?
 - **Validation evidence** — are commands and results factual and current? Never infer a test passed because a test file exists.
 - **Risk and rollout** — are breaking behavior, data risk, feature flags, migrations, and rollback needs stated when relevant?
-- **Visual evidence** — for user-visible UI changes, is before/after evidence present or explicitly left for the author?
+- **Visual evidence** — for user-visible UI changes, is before/after evidence present or explicitly left for the author? This skill cannot capture new screenshots, so leave a placeholder for any that are missing.
+- **Diagram** — would a small Mermaid diagram convey the change's shape faster than prose (a new flow, state change, or boundary)? Add one where it clearly helps; most changes need none.
 
 Produce a plain-English gap analysis: what is **missing from the description**, **stale or inaccurate**, **missing validation evidence**, **missing risk/rollout context**, or a **title mismatch** — or state that the description is already accurate. If nothing is wrong, say so and stop; do not edit for its own sake.
 
@@ -69,7 +70,7 @@ Produce a plain-English gap analysis: what is **missing from the description**, 
 
 ### 3. Draft the revised title and body
 
-**Sync:** write the full updated body from the gap analysis, keeping accurate content and changing only what the diff supports. Draft a revised title if the current one is inaccurate or vague (conventional-commit style, per the kernel).
+**Sync:** write the full updated body from the gap analysis, keeping accurate content and changing only what the diff supports. Add a small Mermaid diagram when the audit flagged one as worthwhile, and a Screenshots placeholder when visual evidence is missing. Draft a revised title if the current one is inaccurate or vague (conventional-commit style, per the kernel).
 
 **Polish:** rewrite for outcome-first organization, plain language, active voice, and scanability. Improve repetitive, vague, inflated, or overly formal phrasing and clarify unexplained jargon without adding a new claim. Preserve repository-template headings, required fields, and formatting. Do not add generic praise or filler; human-readable does not mean non-technical. Update the title only when its language needs improvement.
 
