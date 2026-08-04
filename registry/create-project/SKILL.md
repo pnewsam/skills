@@ -34,7 +34,7 @@ Read live Linear data before writing:
 
 If multiple teams, users, or statuses match, stop and ask which one. If a likely duplicate exists, return it and stop unless the user explicitly asks for a separate project.
 
-Draft a concise project brief from known facts. Prefer this compact description when no user or repository template is supplied:
+Draft a concise project brief from known facts, in the shared sentence-level style — one idea per sentence, active voice, plain words (see `writing-conventions/references/prose.md`). Prefer this compact description when no user or repository template is supplied:
 
 ```markdown
 ## Outcome

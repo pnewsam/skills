@@ -23,7 +23,8 @@
         "review-pr",
         "stash",
         "update-pr",
-        "validate-changes"
+        "validate-changes",
+        "writing-conventions"
       ]
     },
     "skill-maintenance": {
@@ -37,7 +38,8 @@
       "skills": [
         "create-issue",
         "create-project",
-        "polish-issue"
+        "polish-issue",
+        "writing-conventions"
       ]
     },
     "product-delivery": {

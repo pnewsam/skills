@@ -68,12 +68,8 @@ These habits carry most of the concision:
 
 - **Describe outcomes and boundaries, not the diff.** The files are in the diff; the body says what the change accomplishes and where its edges are. Do not walk through each function, component, or file you touched.
 - **One idea per bullet, one statement per idea.** A bullet is a single line. If it runs to two or three sentences, it is narrating the mechanism — cut it back to the outcome. State each thing once; do not restate the before/after in both the summary and the screenshots.
-- **One idea per sentence — do not chain clauses.** This governs prose, not just bullets. A sentence that joins two or three points with em-dashes or semicolons is doing too many jobs; split it into short declarative sentences. Prefer active voice and plain words. This is the spirit of simplified technical writing — short sentences, one job each — without adopting a restricted vocabulary that would fight the technical content.
 
-A sentence, tightened:
-
-- Verbose: "The truncation logic is correct and the guard prevents head/tail overlap; the schema change is a prompt edit backed by an n=12/arm A/B, and the tests pin the new behavior."
-- Tight: "The truncation logic is correct — the guard prevents overlap. The schema change is a prompt edit, backed by an n=12/arm A/B. The tests pin the new behavior."
+For sentence-level style — one idea per sentence, active voice, plain words, no clause-chaining — follow the shared `writing-conventions/references/prose.md`. The two habits above are its PR-body-specific application.
 
 A bullet, tightened:
 

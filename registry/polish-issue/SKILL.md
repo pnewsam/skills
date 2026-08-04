@@ -42,6 +42,8 @@ Improve:
 - repetitive, vague, inflated, mechanical, or overly formal phrasing
 - unexplained jargon when it can be clarified without adding a new requirement
 
+Apply the shared sentence-level style in `writing-conventions/references/prose.md` — one idea per sentence, active voice, plain words — while preserving the author's recognizable voice.
+
 Do not infer user impact, priority, acceptance criteria, or implementation details. Do not convert tentative ideas into commitments. Keep useful technical precision and the issue author's recognizable voice.
 
 If a wording change could alter scope or acceptance meaning, preserve the original and flag it instead.

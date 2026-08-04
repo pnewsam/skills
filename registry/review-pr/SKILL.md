@@ -124,7 +124,7 @@ Give evidence proportional to the finding and the smallest useful fix. If nothin
 
 ### Keep sentences short
 
-The shape above controls length; this controls density. One idea per sentence. When a sentence chains clauses with em-dashes or semicolons to do two or three jobs, split it into short declarative sentences — this governs the summary and validation prose, not just findings. Prefer active voice and plain words. A finding reads better as three short sentences (problem, evidence, fix) than one long one, which the `<problem>. <evidence>. <fix>.` shape already implies. This is the same discipline as the "One idea per sentence" habit in `pr-conventions/references/pr-standard.md`.
+The shape above controls length; this controls density. Follow the sentence-level style in the shared `writing-conventions/references/prose.md` — one idea per sentence, active voice, plain words, no clause-chaining — and apply it to the summary and validation prose, not just findings. A finding reads better as three short sentences (problem, evidence, fix) than one long one, which the `<problem>. <evidence>. <fix>.` shape already implies.
 
 ## Posting
 
