@@ -33,7 +33,7 @@ In Review Post mode, submit a GitHub review. In Risk Post mode, add one top-leve
 - Never post in Analyze mode.
 - Verify the repository, PR number, current head SHA, and PR state immediately before posting.
 - Every defect must be traceable to the diff and relevant context.
-- Only attach an inline comment to a valid changed line. Put broader findings in the summary.
+- Post every finding that anchors to a changed line as an inline comment on that line — this is the default, not an option. The summary is only for findings that genuinely do not map to a single diff line (e.g. cross-cutting concerns, a stale PR description, an architectural observation). Never park a line-anchored finding in the summary because it is low severity or because inlining is more effort. Only attach an inline comment to a valid changed line.
 - Do not approve when credible blocking defects remain.
 - A missing signal is uncertainty, not evidence that a defect exists.
 - If the selected GitHub path rejects a write, do not retry through another path to bypass the rejection.
@@ -107,14 +107,14 @@ Present the review — in chat and in a posted review body — in this shape, ti
 
 **Verdict: <APPROVE | REQUEST CHANGES | COMMENT>**
 
-<A tight paragraph: what was reviewed and why you reached the verdict, ending with a bottom line such as "No actionable findings.">
+<Two to four sentences. Only: what you reviewed (scope), the one reason the verdict holds, and the bottom line (e.g. "No actionable findings."). Do NOT narrate or re-explain the change — the author wrote it and knows what it does — or list every path you traced; that belongs in Validation or the findings. If a reader needs the diff summarized back to them, the summary is too long.>
 
 ### Validation
 
-- <what you actually ran or inspected, with real results>
+- <what you actually ran or inspected, with real results — one line each, a few bullets at most>
 ```
 
-Validation lists only what you genuinely did; never imply a pass you did not observe. Findings — inline on a changed line, or in the summary when broader — are ordered most severe first:
+Validation lists only what you genuinely did; never imply a pass you did not observe. Findings are ordered most severe first. Default to an inline comment anchored to the changed line; reserve the summary for findings that do not map to a single diff line. In Analyze mode, where there is no diff to attach to, still tag each finding with its `file:line` so it reads as an inline-bound finding and can be posted as one without rework:
 
 ```markdown
 **<Blocking | Major | Minor | Nit>:** <problem>. <evidence>. <fix or precise question>.
@@ -163,3 +163,4 @@ Include:
 - Do not call missing tests a defect without explaining the unverified behavior.
 - Do not post a review based on a stale head SHA.
 - Do not move a comment to an unrelated diff line merely to satisfy GitHub.
+- Do not summarize the change back to the author. The verdict, one reason, and the findings carry the review; a paragraph re-narrating what the diff does is noise.
