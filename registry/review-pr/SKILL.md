@@ -122,6 +122,10 @@ Validation lists only what you genuinely did; never imply a pass you did not obs
 
 Give evidence proportional to the finding and the smallest useful fix. If nothing is actionable, say "No actionable findings." and omit the list.
 
+### Keep sentences short
+
+The shape above controls length; this controls density. One idea per sentence. When a sentence chains clauses with em-dashes or semicolons to do two or three jobs, split it into short declarative sentences — this governs the summary and validation prose, not just findings. Prefer active voice and plain words. A finding reads better as three short sentences (problem, evidence, fix) than one long one, which the `<problem>. <evidence>. <fix>.` shape already implies. This is the same discipline as the "One idea per sentence" habit in `pr-conventions/references/pr-standard.md`.
+
 ## Posting
 
 ### Review Post
