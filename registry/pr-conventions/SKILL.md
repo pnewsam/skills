@@ -9,7 +9,7 @@ Shared kernel for the PR skills. `prepare-pr`, `update-pr`, `review-pr`, and `ha
 
 - **`references/pr-standard.md`** — how a PR description should read: the canonical body shape, deferring to a repository template, concise language, conventional-commit format, and grouping changes by intent. Apply when writing or updating a PR title, body, or commit message.
 - **`references/github-mechanics.md`** — how to interact with GitHub safely: selecting one authenticated access path, resolving the target PR, handling merged or closed PRs, and the write-once-then-verify discipline. Apply whenever a PR skill reads or writes GitHub state.
-- **`references/visual-evidence.md`** — how to reliably capture UI screenshots and get them into a PR when the happy path fails: the capture fallback ladder (real app → user's app → isolated harness), styling/auth/tooling gotchas, and how to host images without the drag-drop CDN. Apply when a UI diff needs before/after evidence and a plain `run` + screenshot did not just work.
+- **`references/visual-evidence.md`** — how to reliably capture UI screenshots and get them into a PR: the capture fallback ladder (real app → user's app → isolated harness), styling/auth/tooling gotchas, and how to deliver the images — a human-in-the-loop **drag-drop by default** (stage files + placeholders), durable hosting only when fully headless. Apply when a UI diff needs before/after evidence and a plain `run` + screenshot did not just work.
 
 Two rules override any per-skill convenience:
 

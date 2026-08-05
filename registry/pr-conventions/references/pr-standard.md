@@ -24,7 +24,7 @@ When no repository template exists, use this evidence-oriented shape and remove 
 
 ## Why
 
-<Problem, motivation, or linked issue. Use `Closes #<number>` only when known.>
+<Problem, motivation, or linked issue. When an issue is associated, add a clickable link — see "Link the tracked issue" below.>
 
 ## Changes
 
@@ -51,6 +51,16 @@ Include a Screenshots section for UI/frontend changes; omit it for backend-only 
 
 - Prefer a before/after pair — a `| Before | After |` table, or `![alt](url)` for after-only when a real "before" is impractical.
 - Cover the states that actually changed, not one happy-path shot.
+
+## Link the tracked issue
+
+When the change relates to a tracker issue, the body must carry a clickable link, not a bare identifier — `ENG-1234` renders as plain text on GitHub and reaches nothing.
+
+- **GitHub Issues (same repo):** `Closes #123` links and auto-closes on merge.
+- **Linear:** `Closes ENG-1234` drives Linear's integration but is not a link, so also include the URL: `[ENG-1234](https://linear.app/<workspace>/issue/ENG-1234)`.
+- **Other trackers:** include the full issue URL.
+
+Take the identifier from the branch name, commits, existing body, or the user. Resolve its canonical URL — prefer a URL the user gave or one an available tracker integration returns (for Linear, the Linear tools). Never invent a URL; if none resolves, keep the identifier and ask for the workspace or URL.
 
 ## Diagrams (optional)
 

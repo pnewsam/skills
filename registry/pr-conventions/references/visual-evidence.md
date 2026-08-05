@@ -37,11 +37,11 @@ Try in order; stop at the first that works. Note in the PR which one you used.
 
 ## Hosting and embedding in the PR
 
-You **cannot** push to GitHub's drag-drop image CDN (`user-images.githubusercontent.com` / `github.com/user-attachments`) headlessly: that uploader needs a logged-in web session + CSRF token, which a PAT/`gh` token does not carry. Use one of these instead:
+GitHub's drag-drop image CDN can't be written headlessly (it needs a browser session + CSRF token a `gh`/PAT token lacks), but it's the right host — permanent, attached to the PR, nothing to clean up. So:
 
-- **Public repo → side branch (preferred).** Commit the PNGs to a *separate* branch (not the PR head branch, so the PR's "Files changed" stays clean), push, and embed `https://github.com/<owner>/<repo>/blob/<branch>/<path>.png?raw=true`. `curl -sLI` each URL and confirm `content-type: image/*` before embedding. Note in the body that the branch is deletable after merge.
-- **Private repo.** Same-repo raw/blob embeds render unreliably for other viewers; prefer handing the user the file paths plus a paste-ready Screenshots block to drag in, or attach the images as GitHub **release assets** and embed those URLs.
-- **Always** re-fetch the live PR body and confirm the image references are present (write-once-then-verify, per `github-mechanics.md`).
+- **Default — stage for drag-drop.** Save PNGs to a Finder-friendly folder (`~/Desktop/pr-screenshots/<pr>/`, ordered names) and put one labeled placeholder per image in the PR body (e.g. ``_⬇️ drag `1-before-after.png` here_``). Tell the user the folder; they drag them in. Don't embed URLs they're about to replace.
+- **Headless only (cron/CI)** — upload to durable object storage (e.g. S3/R2, public read), embed the URL, and verify it's `image/*` and present in the live body.
+- **Avoid** per-PR throwaway branches as an image host — the embeds die when the ref is deleted, across every PR that used it.
 
 ## Cleanup and safety
 
@@ -55,6 +55,5 @@ You **cannot** push to GitHub's drag-drop image CDN (`user-images.githubusercont
 - [ ] Captured the states the diff changed, not one happy-path shot.
 - [ ] Viewed each image; it is styled and non-blank.
 - [ ] Before/after present, or after-only with a reason.
-- [ ] Images hosted by a method that renders for the audience; every URL verified `image/*`.
-- [ ] Live PR body verified to contain the embeds.
+- [ ] Default: files staged + labeled placeholders in the PR body, user told where to drop; headless: durable host, URLs verified `image/*`.
 - [ ] Temporary scaffolding removed; only my own dev processes stopped.

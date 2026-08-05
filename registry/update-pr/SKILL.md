@@ -57,7 +57,7 @@ gh pr diff <number>
 
 Group the changes by intent (see the kernel's pr-standard), then audit the body against the diff and the repository template:
 
-- **Summary and motivation** — does the body describe the actual outcome, why it exists, and any linked issue without unsupported claims?
+- **Summary and motivation** — does the body describe the actual outcome, why it exists, and any linked issue without unsupported claims? If an issue is referenced, is it a clickable link rather than a bare identifier? If not, resolve and add the URL per the standard's "Link the tracked issue" section.
 - **Change inventory** — are material API, schema, dependency, migration, configuration, documentation, and compatibility changes represented?
 - **Validation evidence** — are commands and results factual and current? Never infer a test passed because a test file exists.
 - **Risk and rollout** — are breaking behavior, data risk, feature flags, migrations, and rollback needs stated when relevant?
