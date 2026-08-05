@@ -1,6 +1,6 @@
 ---
 name: harden-pr
-description: Iteratively harden an open GitHub pull request by alternating model-diverse independent code-review passes with traceable fixes and validation until it converges or reaches a bounded stop. Use when asked to harden a PR, address review feedback and re-review it, repeat review-and-fix cycles, use a different model to review a prepared PR, or make a PR merge-ready. Modifies the local PR branch by default; commits, pushes, review replies, thread resolution, posted reviews, and merges require their own explicit authorization. Use review-pr for one read-only review and update-pr for PR title or body synchronization.
+description: Iteratively harden an open GitHub pull request by alternating model-diverse independent code-review passes with traceable fixes and validation until it converges or reaches a bounded stop. Use when asked to harden a PR, address review feedback and re-review it, repeat review-and-fix cycles, use a different model to review a prepared PR, or make a PR merge-ready. Modifies the local PR branch by default; commits, pushes, review replies, thread resolution, a posted hardening summary comment, posted reviews, and merges require their own explicit authorization. Use review-pr for one read-only review and update-pr for PR title or body synchronization.
 ---
 
 # Harden PR
@@ -23,7 +23,7 @@ Choose the narrowest mode authorized by the request:
 
 Use Local mode for “harden,” “fix the feedback,” or “review and fix” unless the user also asks to commit, push, update the PR, reply, or resolve. A request to “review” without a fix cycle belongs to `review-pr` and remains read-only.
 
-Never post the internal review passes. Posting a review, approving, requesting changes, merging, changing PR metadata, force-pushing, rebasing, or rewriting history requires separate explicit authorization and the appropriate workflow.
+Never post the internal review passes. Posting a review, approving, requesting changes, posting the hardening summary comment, merging, changing PR metadata, force-pushing, rebasing, or rewriting history requires separate explicit authorization and the appropriate workflow.
 
 ## Convergence contract
 
@@ -109,6 +109,40 @@ In Respond mode, reply to or resolve only the explicitly authorized review threa
 
 Refresh the PR one final time. Verify the head SHA, CI, remaining unresolved actionable threads, and that every completion claim corresponds to the round ledger. Do not call a local-only candidate the hardened remote PR.
 
+### Post the hardening summary
+
+When the user explicitly authorizes it, post exactly one top-level PR comment recording the completed hardening as an audit trail. This write requires its own authorization; it is not implied by Local, Publish, or Respond mode. Post it only when a verified remote PR head reflects the hardening — that is, in Publish or Respond mode. Do not post a summary for a local-only candidate, because it would attest to work that is not on the remote head; present that summary in chat instead.
+
+Derive the comment from the round ledger. Do not re-review to produce it. Keep it concise and factual, in the shape below, and follow the sentence-level style in `writing-conventions/references/prose.md`. State outcomes truthfully: never imply convergence, a passed check, or a merge-ready state the ledger does not support.
+
+```markdown
+## PR Hardening Summary
+
+**Result: <converged | conditionally ready | budget exhausted | blocked>**
+
+<Two to four sentences: what was hardened, the one reason the result holds, and the bottom line. Do not re-narrate the PR.>
+
+### Rounds
+
+- Round <n>: reviewer <model, plus whether cross-model and context isolation held> · <Blocking/Major/Minor/Nit counts> · <repairs made> · <validation result>
+
+### Changes made
+
+- <finding cluster → fix, traceable to the commit that resolved it>
+
+### Validation
+
+- <what was actually run, with real results — one line each>
+
+### Deferred or still open
+
+- <deferred finding with its merge-safe reason, remaining actionable thread, or pending or failing CI; omit this section when nothing remains>
+
+_Hardening scope: <head> → <base> at <head SHA> · <date>_
+```
+
+Post it once through the selected access path, then fetch the live comment and verify it appears, per `pr-conventions/references/github-mechanics.md`.
+
 ## Final report
 
 Return:
@@ -119,6 +153,6 @@ Return:
 - a compact round ledger: verdict, finding counts, repairs, validation, commit or push state
 - the known candidate-producer model and reviewer model for each round, plus whether cross-model and context isolation were achieved
 - remaining findings, deferred comments, failing or pending checks, and evidence limitations
-- whether commits, pushes, replies, resolutions, posted reviews, or merges did or did not occur
+- whether commits, pushes, replies, resolutions, the hardening summary comment, posted reviews, or merges did or did not occur
 
 Never claim “clean,” “approved,” “merge-ready,” or “hardened” from an earlier candidate, a review with unresolved Blocking or Major findings, or incomplete required validation.

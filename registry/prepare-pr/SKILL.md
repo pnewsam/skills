@@ -223,6 +223,8 @@ In Open PR mode, capture them as part of preparation. In Preview or Commit mode,
 - **Get a real before/after.** Capture the after-state on the branch, and the "before" from the base state via a worktree or second checkout (not an in-place switch). When a real "before" is impractical, show after-only and say so.
 - **Deliver the images.** Save them to the scratchpad. If the access path can host images, embed them; otherwise hand the user the file paths and a paste-ready Screenshots block.
 
+When the plain `run` + screenshot does not just work — the app is auth-walled, a dev backend won't boot, the harness renders unstyled, or you can't get the images into GitHub headlessly — follow `pr-conventions/references/visual-evidence.md` for the capture fallback ladder, the styling/auth/tooling gotchas, and how to host images without the drag-drop CDN.
+
 ### 10. Create or update the pull request (Open PR mode only)
 
 Do not infer permission to create a PR merely because the push succeeded. Select an authenticated access path per `pr-conventions/references/github-mechanics.md`. Resolve the repository, current head branch, and evidence-backed base branch, and search for an existing PR from that head before creating a new one.
