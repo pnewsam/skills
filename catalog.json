@@ -129,6 +129,7 @@
     "mindsdb": {
       "description": "Organization-specific skills scoped to MindsDB repositories; not part of the generic registry.",
       "skills": [
+        "mindsdb-migrate-surface-to-tailwind",
         "mindsdb-track-design-system-metrics"
       ]
     },
