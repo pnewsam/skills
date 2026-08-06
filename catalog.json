@@ -126,6 +126,12 @@
         "plan-feature"
       ]
     },
+    "mindsdb": {
+      "description": "Organization-specific skills scoped to MindsDB repositories; not part of the generic registry.",
+      "skills": [
+        "mindsdb-track-design-system-metrics"
+      ]
+    },
     "python": {
       "description": "Python and FastAPI architecture, tooling, typing, async, persistence, errors, and testing.",
       "skills": [
