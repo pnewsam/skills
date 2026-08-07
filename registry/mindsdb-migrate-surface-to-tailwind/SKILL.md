@@ -44,10 +44,13 @@ Open a tracking issue under **ENG-1017** (`create-issue`), branch off `staging` 
 
 ### 1. Convert (pixel-preserving)
 
-Convert **static** style objects to `className`; keep **dynamic** ones inline. An element may carry both a `className` and a trimmed `style`. Per `references/mapping.md`: use a token where the value maps exactly, arbitrary `[…]` where it doesn't. **Leave inline** (do not force to classes):
+Convert **static** style objects to `className`; keep **dynamic** ones inline. An element may carry both a `className` and a trimmed `style`. Per `references/mapping.md`: use a token where the value maps exactly, arbitrary `[…]` where it doesn't.
 
-- `mobile ? A : B` (or any prop/state) layout ternaries,
-- `onMouseEnter/Leave` handlers that mutate `e.currentTarget.style`,
+**Convert JS hover to `hover:` variants** — `onMouseOver`/`onMouseOut`/`onMouseEnter`/`onMouseLeave` that only swap styling (or a `useState` hover flag feeding a style ternary) become `hover:` utilities with the base value in `className`; delete the handlers/state. See `references/mapping.md`.
+
+**Leave inline** (do not force to classes):
+
+- `mobile ? A : B` (or any genuine **app-state**) layout/style ternaries — `railOpen`, `revealed`, `active`, `editing`, `busy`,
 - `color-mix(… ${jsVar} …)` templates and any JS-computed value,
 - conditional colors/opacity, and transitions whose value is conditional,
 - `style` passed to a **component** unless you've confirmed it forwards `className`.

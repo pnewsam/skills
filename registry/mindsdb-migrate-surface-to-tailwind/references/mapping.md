@@ -109,10 +109,13 @@ you want. Want `text-muted` → key `muted`. A key like `text-muted` would emit
 `text-text-muted`. Only add tokens for vars used across surfaces; verify they
 emit CSS (see SKILL verification step 3).
 
+## Hover → `hover:` variant (convert these, don't leave inline)
+
+JS hover handlers that only swap styling — `onMouseOver`/`onMouseOut`/`onMouseEnter`/`onMouseLeave` that mutate `e.currentTarget.style.*`, or a `useState` hover flag feeding a `hover ? A : B` style — should become Tailwind `hover:` utilities, and the handlers/state deleted. **Requirement:** the base value must move into `className` too (an inline `style` value always beats a `hover:` class, so a leftover inline base would never let the hover state show). Keep any non-styling work the handler also does (e.g. it sets state). Example: base `text-ink-3 bg-transparent` + `hover:text-ink hover:bg-surface-2`, handlers removed. Visually identical at rest and on hover, and it removes JS.
+
 ## Keep inline (do not convert)
 
-- `mobile ? A : B` and any prop/state-driven ternary style.
-- `onMouseEnter/Leave` that write `e.currentTarget.style.*`.
+- `mobile ? A : B` and any genuine prop/**app-state** ternary style (`railOpen`, `revealed`, `active`, `editing`, `busy`, `isZero`) — not hover; those can't be a CSS `:hover` variant.
 - `color-mix(in srgb, ${jsVar} …)` and any JS-computed value.
 - Conditional colors/opacity, `order`, invalid-state borders, animation whose
   name/value is conditional (`animation: x ? 'pulse …' : 'none'`).
