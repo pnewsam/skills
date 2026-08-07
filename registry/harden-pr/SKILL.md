@@ -9,6 +9,8 @@ description: Iteratively harden an open GitHub pull request by alternating model
 
 Produce a reviewed and validated PR candidate whose latest exact state has no credible merge-blocking findings, or stop with a precise account of what still prevents that claim.
 
+Hardening secures the functional correctness of what the PR already does. It fixes defects in the change's declared scope; it does not add capabilities, handle cases the PR never set out to handle, reinterpret the author's intent, or broaden the diff to satisfy a reviewer's preferences. When in doubt about whether a finding lies inside the PR's intent, treat it as out of scope and surface it rather than fix it. Growing the diff is warranted only when a defect or a merge-blocking issue in the existing scope cannot otherwise be resolved.
+
 Treat hardening as bounded convergence, not an instruction to eliminate every nit. Prefer a reviewer from a different model family than the model that produced the exact candidate. Preserve reviewer independence, user work, and a traceable relationship between each finding, fix, and verification result.
 
 ## Modes and effects
@@ -37,7 +39,7 @@ Call the candidate sufficiently hardened only when all of these are true:
 - the candidate contains no unexplained or unrelated changes
 - in Publish or Respond mode, the verified remote head SHA is the reviewed candidate and required CI is green; pending CI produces a conditional result
 
-Nits do not prevent convergence unless repository policy makes them required. Do not create churn merely to reach zero comments.
+Nits do not prevent convergence unless repository policy makes them required. Do not create churn merely to reach zero comments. A finding that asks the PR to do more than it set out to do does not prevent convergence regardless of its stated severity; record it as deferred-out-of-scope so the author can decide whether it belongs in this PR or a follow-up.
 
 ## Phase 1: Establish the candidate
 
@@ -66,7 +68,7 @@ Use a fresh reviewer subagent when multi-agent execution is available. Route it 
 3. If producer provenance is unknown, choose a model different from the active hardening or repair model and mark the original producer as unknown.
 4. When multiple suitable alternatives exist, prefer one not used for the immediately preceding review.
 
-Spawn the reviewer with an explicit model override and no inherited conversation history when the agent runtime supports those controls. In runtimes exposing `model` and `fork_turns`, set `model` to the selected alternative and `fork_turns` to `none`; do not use a full-history fork for an independent review. Give it only the PR intent, governing repository instructions, exact candidate diff, relevant unchanged context, and current validation evidence. Do not give it prior round conclusions, attempted fixes, or the desired verdict. Instruct it to use `review-pr` in Review Analyze mode, return evidence-backed findings and a proposed verdict, and make no edits or external writes.
+Spawn the reviewer with an explicit model override and no inherited conversation history when the agent runtime supports those controls. In runtimes exposing `model` and `fork_turns`, set `model` to the selected alternative and `fork_turns` to `none`; do not use a full-history fork for an independent review. Give it only the PR intent, governing repository instructions, exact candidate diff, relevant unchanged context, and current validation evidence. Do not give it prior round conclusions, attempted fixes, or the desired verdict. Instruct it to use `review-pr` in Review Analyze mode, judge the change against its stated intent, return evidence-backed findings and a proposed verdict, and make no edits or external writes. Tell it to concentrate on functional correctness, security, and reliability within the declared scope, and to mark any finding that would add capability, handle out-of-scope cases, or reinterpret intent as out of scope rather than raise it as blocking.
 
 If no different suitable model is available, use a context-isolated fresh reviewer on the same model. If no fresh reviewer is available, perform a new evidence pass from the current candidate. Disclose the missing cross-model or agent independence in either case; never imply that a same-model pass was model-diverse.
 
@@ -77,8 +79,8 @@ Require every finding to include severity, confidence, exact location, consequen
 ### Repair credible findings
 
 1. Classify each finding or thread as fix, clarify, defer, duplicate, outdated, superseded, or not applicable. Record a concrete reason for every non-fix.
-2. Fix credible Blocking and Major findings. Fix Minor findings when they are merge-relevant and the repair is proportionate. Do not implement subjective preferences, expand scope, or weaken behavior merely to satisfy a comment.
-3. When comments conflict, requirements are ambiguous, or a proposed fix would cause a regression or material product choice, stop that item and surface the decision instead of guessing.
+2. Fix credible Blocking and Major findings that concern the correctness, security, or reliability of the change as scoped. Fix Minor findings when they are merge-relevant and the repair is proportionate. Do not implement subjective preferences, add capability, handle cases outside the PR's intent, refactor adjacent code, expand scope, or weaken behavior merely to satisfy a comment. A finding that can only be resolved by widening scope or reinterpreting intent is deferred with that reason, not fixed — even when the reviewer rated it Major.
+3. When comments conflict, requirements are ambiguous, a fix would enlarge the PR's scope or change its intent, or a proposed fix would cause a regression or material product choice, stop that item and surface the decision instead of guessing.
 4. Keep edits traceable to findings. Add or update focused regression coverage when a finding exposes behavior that should remain protected.
 5. Preserve unrelated user changes and avoid adjacent cleanup.
 
