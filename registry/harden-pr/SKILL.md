@@ -74,7 +74,7 @@ If no different suitable model is available, use a context-isolated fresh review
 
 Model diversity supplements evidence isolation; it does not replace complete diff inspection, repository context, or validation.
 
-Require every finding to include severity, confidence, exact location, consequence, and smallest useful repair. Reconcile the results with live human review threads only after the independent pass. Deduplicate findings without hiding repeated evidence.
+Require every finding to carry severity, confidence, exact location, consequence, and smallest useful repair, rated per the shared model in `pr-conventions/references/finding-model.md`. Reconcile the results with live human review threads only after the independent pass. Deduplicate by root cause per that model, without hiding repeated evidence.
 
 ### Repair credible findings
 

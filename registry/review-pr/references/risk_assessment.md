@@ -51,6 +51,8 @@ Assess whether tests, type checks, builds, staged rollout, monitoring, and manua
 
 Inspect new packages, major upgrades, lockfile changes, build scripts, maintainer or provenance changes, known advisories, and changes to security-critical libraries.
 
+Verify any advisory against a current source before asserting it. Do not rely on recalled vulnerability status; mark an unverifiable advisory as unconfirmed.
+
 ### Infrastructure and operations
 
 Inspect CI/CD, IAM, secrets wiring, environment variables, networking, deployment manifests, resource limits, observability, feature flags, and rollback procedures.

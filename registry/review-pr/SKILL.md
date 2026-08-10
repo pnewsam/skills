@@ -16,9 +16,11 @@ This skill never edits source, branches, commits, or PR metadata.
 ### Intent
 
 - **Review:** find actionable defects and determine a proposed review verdict. This is the default for requests to review, approve, or request changes.
-- **Risk:** characterize operational and merge risk, even when no code defect is proven. Use when asked about blast radius, risk, safety, or merge readiness. Read `references/risk_assessment.md`.
+- **Risk:** characterize operational and merge risk, even when no code defect is proven. Use when asked about blast radius, risk, or safety. Read `references/risk_assessment.md`.
 
-When both are requested, perform both analyses but do not treat a high-risk change as defective merely because it is risky.
+A merge-readiness question — "is this safe to merge?", "should we merge this?", "is this merge-ready?" — is both modes at once. It asks whether a defect is proven (Review) and what happens if the change's assumptions are wrong (Risk). Run both.
+
+When both modes apply, perform both analyses but do not treat a high-risk change as defective merely because it is risky.
 
 ### Effect
 
@@ -53,6 +55,8 @@ Collect:
 
 Fetch large diffs in bounded groups. For very large PRs, prioritize security-sensitive, data, infrastructure, public-interface, and high-churn areas; disclose the sampling boundary and list areas not reviewed in depth.
 
+When the environment supports it, run the smallest read-only check that would confirm or refute a material candidate — a focused test, a type check, or a targeted build. Claim only what you actually ran. Do not run a broad suite to make the review look thorough, and never edit source to run one.
+
 ## Review workflow
 
 ### 1. Understand the change
@@ -73,20 +77,28 @@ Evaluate:
 
 Read enough unchanged context to understand the hunk. Do not report an issue in unrelated pre-existing code unless the PR makes it reachable or materially worse.
 
-### 3. Record findings
+Track coverage internally across every changed file: reviewed, mechanically inspected, sampled, or not reviewed. Do not stop because a Blocking or Major finding already surfaced — continue through the planned scope and collect all credible findings. Before finalizing, reconcile the ledger against the complete changed-file list. Surface it in the output only when material areas were sampled or left unreviewed.
 
-For each finding capture:
+### 3. Record candidate findings
+
+Capture each candidate finding with:
 
 - exact file and valid new-file line when inline
-- severity: Blocking, Major, Minor, or Nit
+- severity per the shared ladder in `pr-conventions/references/finding-model.md`
 - concise issue statement
 - concrete consequence
 - smallest useful repair or question
-- confidence and missing context when uncertain
+- confidence and missing context when it is not high
 
-Praise may appear in the summary but should not dilute actionable findings.
+These are candidates, not conclusions. Praise may appear in the summary but should not dilute actionable findings.
 
-### 4. Determine the proposed verdict
+### 4. Verify candidate findings
+
+Run every candidate through the verify-before-reporting discipline in `pr-conventions/references/finding-model.md`: try to disprove it, name the concrete trigger, check for an existing guard, and check whether the issue is pre-existing or intentional. Use `git blame` or history when the intent is genuinely ambiguous.
+
+Keep only **Confirmed** candidates as defect findings. Report an **Uncertain** candidate as a precise question or an evidence limitation; it must not drive REQUEST_CHANGES on its own. Drop **Rejected** candidates. Deduplicate by root cause so one defect yields one finding.
+
+### 5. Determine the proposed verdict
 
 - **REQUEST_CHANGES:** at least one credible Blocking issue, or a Major issue that makes the PR unsafe to merge.
 - **COMMENT:** non-blocking feedback, unresolved uncertainty, or a self-review where approval is inappropriate.
@@ -94,7 +106,7 @@ Praise may appear in the summary but should not dilute actionable findings.
 
 Use the most severe credible merge-relevant finding. Style preference must not drive REQUEST_CHANGES.
 
-### 5. Present the review
+### 6. Present the review
 
 Present the review in the shape defined under **Review output** below: verdict first, a tight summary, honest validation, and findings ordered by severity. If there are no findings, say so directly.
 
@@ -162,6 +174,8 @@ Include:
 ## Common traps
 
 - Do not invent findings to justify a review.
+- Do not report a candidate you have not tried to disprove — an unfalsified suspicion is a question at most, not a finding.
+- Do not emit multiple comments for one root cause; report it once at the best causal line.
 - Do not equate file count with risk without considering dependency reach.
 - Do not average away a credible critical risk.
 - Do not call missing tests a defect without explaining the unverified behavior.
