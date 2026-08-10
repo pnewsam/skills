@@ -76,7 +76,12 @@ After each completed child feature:
 
 1. Confirm the epic checkbox or progress entry was updated.
 2. Confirm the feature plan reflects completed acceptance criteria.
-3. Run targeted validation recommended by `advance-epic` or `execute-feature`.
+3. Run the smallest validation tier recommended by `advance-epic` or
+   `execute-feature`. If the feature needs an aggregate backend, full browser,
+   screenshot, or rehearsal boundary, record that boundary and its due point in
+   the feature plan; do not rerun a prior aggregate merely because a focused
+   assertion changed. A repeat needs a written changed-checkpoint and
+   focused-proof-insufficient reason.
 4. Re-read the epic to find remaining incomplete features.
 
 Stop the loop when:

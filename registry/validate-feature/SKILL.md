@@ -104,8 +104,12 @@ Record results for the validation report.
 
 ### 4. Run surface-appropriate regression checks
 
-After targeted checks, run the broadest proportionate suite that can catch
-regressions for the classified surface:
+After targeted checks, select the broadest proportionate *required boundary*
+that can catch regressions for the classified surface. Record the chosen tier
+(focused, aggregate, full browser/visual, or protected rehearsal), the prior
+evidence it reuses, and the delivery point at which any still-due boundary will
+run. Do not repeat an aggregate suite after a focused repair unless the report
+names the changed checkpoint and why focused proof is insufficient:
 
 - **Browser/UI:** configured browser suite, or a strategic browser subset for
   a very large suite
