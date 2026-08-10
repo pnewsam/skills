@@ -9,7 +9,9 @@ description: testing philosophy for React applications — integration tests for
 
 This skill defines a testing philosophy for React applications. The core insight: **tests have real costs** — time to write, time to run, time to maintain when they break — and event-driven UIs are fundamentally harder to test than server APIs. Testing effort should be targeted where it produces the most confidence, not spread evenly across everything.
 
-The testing pyramid for React apps looks different from backend services. Browser tests are proportionally more valuable because they verify what the user actually experiences, while component tests (rendering in jsdom) sit in an uncanny valley — more expensive than unit tests but less reliable than browser tests because they run in a fake environment.
+This skill leans toward browser fidelity: it treats real-browser integration tests as the highest-value tier and is cautious about jsdom component tests, which run in a fake environment (no real layout, event bubbling, or many Web APIs). This is a deliberate position, not the only mainstream one — Kent C. Dodds' widely-followed Testing Trophy instead weights React Testing Library integration tests *in jsdom* as the highest-ROI band. Both are defensible; a team already invested in fast RTL integration tests is also following mainstream practice. What matters is targeting effort by confidence-per-cost, not spreading it evenly.
+
+For new projects the common stack is Vitest (Vite-native, Jest-compatible API) with React Testing Library and jsdom for unit and integration tests, and Playwright for browser tests. Jest remains standard for React Native and large existing suites.
 
 ## The three tiers
 
@@ -164,7 +166,7 @@ expect(screen.getByRole("menu")).toBeVisible();
 
 Heavy mocking creates tests that verify your mocks, not your code. Minimize mocking, and when you do mock:
 
-- **Mock at the network boundary** (MSW for API mocking) rather than mocking hooks, services, or internal modules. This keeps more of your real code in the test path.
+- **Mock at the network boundary** (MSW v2 for API mocking) rather than mocking hooks, services, or internal modules. This keeps more of your real code in the test path.
 - **Don't mock the router, the form library, or the state management library.** Render with real providers. If this is hard, it's a signal that the test should be a browser test instead.
 - **Mock time and randomness** when needed for determinism — these are legitimate mocks.
 

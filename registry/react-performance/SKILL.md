@@ -9,6 +9,8 @@ description: performance principles for React applications — memoization, code
 
 This skill covers the performance patterns and APIs that matter in production React applications. The core philosophy: **profile first, optimize second.** Most React apps are fast enough by default if the component design is clean (see `react-component-design`). Optimization should target measured bottlenecks, not speculative concerns.
 
+If the project uses React Compiler (see Principle 9), prefer it for memoization and treat the manual `React.memo`/`useMemo`/`useCallback` guidance below as escape hatches for what it cannot cover. Without the compiler, that manual guidance is your primary tool.
+
 ## Principles
 
 ### 1. Profile before optimizing
@@ -27,6 +29,8 @@ React DevTools Profiler is your primary tool. Before adding `React.memo`, `useMe
 - A parent re-renders and causes 500 children to re-render → consider memoization at the boundary
 
 Don't optimize render counts. Optimize render *cost*.
+
+Complement the Profiler with the field metric: **INP (Interaction to Next Paint)** is the Core Web Vital for responsiveness — target ≤200ms at the 75th percentile. Keeping interactions responsive (`useTransition`/`useDeferredValue` in Principle 6, code-splitting, and yielding long tasks to the main thread) is what moves it.
 
 ### 2. React.memo — use sparingly and intentionally
 
@@ -302,4 +306,6 @@ const { data: item } = useQuery({ queryKey: ["item", id], queryFn: () => fetchIt
 
 ### 9. React Compiler awareness
 
-If the project uses React Compiler, it can automatically apply many memoization optimizations. In compiler-enabled projects, be even more conservative about manual `React.memo`, `useMemo`, and `useCallback`: keep them when they express a real semantic need (stable dependency, expensive calculation, third-party integration), but don't add them as boilerplate.
+If the project uses React Compiler (stable since v1.0, Oct 2025), it can automatically apply many memoization optimizations. In compiler-enabled projects, be even more conservative about manual `React.memo`, `useMemo`, and `useCallback`: keep them when they express a real semantic need (stable dependency, expensive calculation, third-party integration), but don't add them as boilerplate.
+
+Do not bulk-remove existing manual memoization when enabling the compiler. The React team warns that removing it can change compiler output, and some is still load-bearing for effect-dependency stability. Turn the compiler on, then remove manual memo case by case with testing.

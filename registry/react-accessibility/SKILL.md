@@ -120,7 +120,7 @@ When you build a widget that has no native HTML equivalent (tabs, combobox, tree
 
 **First rule of ARIA:** Don't use ARIA if a native HTML element can do the job. ARIA adds semantics but no behavior — you still have to implement keyboard handling, focus management, and state management yourself.
 
-For complex primitives such as dialogs, popovers, menus, comboboxes, tooltips, and date pickers, prefer the project's existing accessible design-system primitive or a proven library such as React Aria, Radix UI, Ariakit, or Headless UI. Hand-rolled ARIA widgets are easy to get subtly wrong.
+For complex primitives such as dialogs, popovers, menus, comboboxes, tooltips, and date pickers, prefer the project's existing accessible design-system primitive or a proven library such as React Aria, Radix UI, Base UI, Ariakit, or Headless UI. Hand-rolled ARIA widgets are easy to get subtly wrong.
 
 ### 4. Focus management
 
@@ -305,3 +305,13 @@ Common uses:
 - **Keyboard-only navigation:** Unplug your mouse and navigate the feature. Can you reach everything? Is the focus order logical? Can you escape modals?
 - **Screen reader testing:** VoiceOver (macOS), NVDA (Windows), or similar. Test the primary user flows. Is the content announced in a sensible order? Are interactive elements clearly labeled? Are state changes announced?
 - **Zoom to 200%:** Does the layout still work? Is content still readable and usable?
+
+### 10. WCAG 2.2 criteria that commonly affect React UIs
+
+WCAG 2.2 is the current standard (2.1 criteria carry forward). These AA criteria are the ones React apps most often trip on:
+
+- **Focus not obscured (2.4.11):** sticky headers, cookie banners, toasts, and chat widgets must not fully hide the focused element.
+- **Target size (2.5.8):** pointer targets at least 24×24 CSS px, with spacing exceptions — watch icon buttons and dense toolbars.
+- **Dragging movements (2.5.7):** any drag interaction (reorder, kanban, sliders) needs a single-pointer, non-drag alternative.
+- **Accessible authentication (3.3.8):** don't require a cognitive test (puzzle CAPTCHA, transcription) to log in; allow paste and password managers.
+- **Consistent help (3.2.6):** keep help affordances in a consistent location across pages.

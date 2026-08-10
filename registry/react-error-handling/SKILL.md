@@ -40,6 +40,8 @@ Avoid a boundary around every small component. Excess boundaries fragment recove
 
 Always keep a root boundary as a last resort. Its fallback should not depend on the same providers, data, translations, or component tree that may have failed.
 
+Error boundaries are class components. When the project uses `react-error-boundary`, prefer its `ErrorBoundary` component and `useErrorBoundary().showBoundary(error)` to funnel event-handler and async failures into the same boundary. When the data library is TanStack Query, opt error-prone queries into the nearest boundary with `throwOnError` (a predicate can scope it, e.g. to 5xx) and wrap in `QueryErrorResetBoundary` so retry after failure works — wire its `reset` into the boundary's `onReset`.
+
 ## Expected data and action failures
 
 Handle expected failures close to the task:

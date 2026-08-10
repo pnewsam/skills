@@ -42,7 +42,7 @@ Identify:
 - build, environment, and deployment constraints
 - tests and tooling that encode the current structure
 
-Do not prescribe a single-page-app shell to a server-rendered framework or replace framework-native conventions with a generic template.
+Do not prescribe a single-page-app shell to a server-rendered framework or replace framework-native conventions with a generic template. When the rendering model is a framework or RSC app, respect the `'use client'`/`'use server'` boundary and fetch at the server or route-loader boundary. See `react-expert/references/react-version-and-rendering.md` for version- and rendering-specific choices.
 
 ### Keep the app shell explicit
 

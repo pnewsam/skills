@@ -91,7 +91,7 @@ Navigational state — anything the user would expect to survive a refresh or be
 
 ### 4. Use a routing library
 
-Always use a proper routing library. For SPA React apps, default to the project's existing router, usually React Router or TanStack Router. Don't build routing from scratch with `window.location` and conditionals.
+Always use a proper routing library. For SPA React apps, default to the project's existing router. The common choices are React Router (v7 is the current major, which merged the Remix data APIs) and TanStack Router (its differentiator is end-to-end type safety — typed paths, params, and validated search params). Don't build routing from scratch with `window.location` and conditionals. Note: "Remix" now refers to a separate framework, so for a React app the path forward is React Router v7.
 
 The routing library provides:
 - Declarative route definitions

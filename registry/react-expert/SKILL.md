@@ -69,7 +69,7 @@ Component size, prop count, and import frequency are investigation signals. Conf
 When building or refactoring React code, follow this order before editing:
 
 1. **Identify the boundary.** App infrastructure, route/page, feature module, component, hook, form, data layer, or test.
-2. **Follow existing conventions.** Use the project's current router, data library, form library, styling system, and file layout unless they are absent or clearly failing.
+2. **Follow existing conventions.** Use the project's current router, data library, form library, styling system, and file layout unless they are absent or clearly failing. Detect the React major version and rendering model (SPA vs framework/RSC) and prefer modern APIs only when the installed version supports them; keep pre-19 patterns otherwise. See `references/react-version-and-rendering.md`.
 3. **Route to focused skills.** Load only the skills needed for the boundary and failure mode.
 4. **Keep ownership clear.** App wiring stays in app-level modules; domain UI and behavior stay in feature modules; reusable primitives stay in the base UI layer.
 5. **Minimize state.** Derive what can be derived, keep state as low as possible, and avoid duplicating URL, form, and server state.

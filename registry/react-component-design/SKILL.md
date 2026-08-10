@@ -221,6 +221,8 @@ interface InputFieldProps extends React.ComponentPropsWithoutRef<"input"> {
 }
 ```
 
+**Forwarding refs:** On React 19+, `ref` is a regular prop — accept it directly (`React.ComponentProps<"input">` already includes `ref`) and pass it to the underlying element; `forwardRef` is no longer needed. On earlier React, wrap the component in `forwardRef` and extend `ComponentPropsWithoutRef<"input">`.
+
 ## Design-system convergence evidence
 
 When `analyze-design-system` routes a component-family signal here, inspect:

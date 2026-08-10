@@ -90,6 +90,8 @@ useEffect(() => {
 
 For API data in production apps, prefer a server-state library such as TanStack Query or SWR; see `react-data-fetching`. Manual effect fetching is acceptable for one-off browser integration or very small projects, but it should still handle cancellation and race conditions.
 
+On React 19+, `use()` can read a cached promise (suspending until it resolves) or context, and unlike `useContext` it may be called conditionally. The promise must come from a cache, framework, or parent — one created during render re-suspends every render — so `use()` is a primitive that libraries and frameworks build on, not a replacement for a server-state library in app code.
+
 ### 5. Strict Mode should not break effects
 
 In development, React Strict Mode intentionally mounts, unmounts, and remounts components to expose unsafe effects. Effects must be idempotent:
@@ -128,6 +130,7 @@ A closure becomes stale when async work or a callback reads values from an old r
 - Use functional state updates when the next value depends on the previous value
 - Include changing values in dependency arrays
 - Store non-rendering latest values in a ref only when you deliberately need "latest value" semantics
+- On React 19.2+, use `useEffectEvent` to read the latest props/state inside an effect without adding them to the deps, so the effect does not re-run when they change; on earlier React, hold the latest value in a ref. Never list an Effect Event in a dependency array, and use it only for logic that should not re-trigger the effect.
 - Keep async work cancellable
 
 ```tsx

@@ -91,12 +91,19 @@ export function InputField({
 }) {
   const { register, formState: { errors } } = useFormContext();
   const error = errors[name];
+  const errorId = `${name}-error`;
 
   return (
     <div>
       <label htmlFor={name}>{label}</label>
-      <input id={name} type={type} {...register(name)} />
-      {error && <span>{error.message as string}</span>}
+      <input
+        id={name}
+        type={type}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? errorId : undefined}
+        {...register(name)}
+      />
+      {error && <span id={errorId} role="alert">{error.message as string}</span>}
     </div>
   );
 }
@@ -134,6 +141,8 @@ Don't try to make a single generic form context that handles every form via conf
 
 For a tiny form with one or two fields and no reusable field components, local state or the project's existing lightweight pattern is fine. Introduce a form context when validation, field reuse, dirty tracking, async submission, or multi-step behavior would otherwise spread logic across the JSX.
 
+On React 19+, a simple or server-driven form can use `<form action={fn}>` with `useActionState` for built-in pending and error handling, plus `useOptimistic` for optimistic UI — often without a form library. Reach for a form library (React Hook Form, TanStack Form) regardless of React version once you need client-side schema validation, dynamic field arrays, dirty tracking, or fine-grained error UX.
+
 ### Field components are base UI
 
 Field components (`InputField`, `TextareaField`, `SelectField`, etc.) usually belong in the base UI layer (`src/components/ui/` or similar). They are form-library-aware but domain-free — they don't know about invoices, users, or agents. If a project keeps form adapters separate from visual primitives, put the library-aware wrappers in that established form layer and keep the raw input primitives domain-free.
@@ -169,7 +178,7 @@ Define validation in the form schema (Zod, Yup, or the form library's native val
 A field component should handle:
 - Rendering the input element
 - Displaying the label
-- Showing validation errors
+- Showing validation errors, wired for accessibility (`aria-invalid`, `aria-describedby`, and a `role="alert"` error region) — the form library does not do this for you; see `react-accessibility`
 - Connecting to form state via context
 
 It should not handle:
@@ -184,13 +193,14 @@ Conditional logic — showing/hiding fields based on other field values, dynamic
 The form library manages form state. Don't duplicate it into local `useState` calls. If you need a field's current value to drive conditional logic, read it from the form context:
 
 ```tsx
-// Good: read from form context
-const { watch } = useFormContext();
-const paymentType = watch("paymentType");
+// Good: scoped subscription — only this consumer re-renders when the field changes
+const paymentType = useWatch({ name: "paymentType" });
 
 // Bad: duplicate state
 const [paymentType, setPaymentType] = useState("");
 ```
+
+Prefer `useWatch({ name })` over `watch("name")` when only part of the form needs the value. `useWatch` subscribes to that field and isolates re-renders; `watch` re-renders the whole component on every change, which gives back the re-render cost that React Hook Form's uncontrolled inputs are there to avoid.
 
 ### Multi-step and wizard forms
 

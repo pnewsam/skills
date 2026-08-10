@@ -62,6 +62,8 @@ function InvoicesPage() {
 
 Data that comes from an API — entities, lists, search results, user profiles — is **server state**. It should be managed by a purpose-built caching library, not by `useState` + `useEffect` + manual fetching.
 
+In a framework or RSC app, some or all of this data is fetched at the server or route-loader boundary instead; a client cache still owns whatever is fetched on the client. See `react-expert/references/react-version-and-rendering.md`.
+
 **Use TanStack Query (React Query), SWR, or a similar library** as the default for all API data. These libraries handle:
 
 - Caching and deduplication (multiple components can request the same data without duplicate fetches)

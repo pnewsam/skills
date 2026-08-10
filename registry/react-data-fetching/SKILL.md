@@ -15,6 +15,8 @@ This skill defines how React SPAs should load and mutate API data. The core phil
 
 For API data, prefer the project's existing server-state library: TanStack Query, SWR, Apollo/Relay for GraphQL, or a framework/router data layer if the app already uses one. Do not introduce a new library if the project already has a clear pattern.
 
+If the app is a framework or RSC app, fetch at the server or route-loader boundary to avoid client waterfalls; a client cache still applies to data fetched on the client. See `react-expert/references/react-version-and-rendering.md`.
+
 Avoid `useEffect` + `useState` fetching for production feature data:
 
 ```tsx
@@ -110,6 +112,8 @@ Avoid broad invalidation like `invalidateQueries()` with no key unless the mutat
 ### 6. Optimistic updates need rollback
 
 Use optimistic updates for reversible, local-feeling actions such as toggles, reorder operations, or quick edits. Always snapshot previous cache data and rollback on error.
+
+On React 19+, `useOptimistic` provides optimistic UI for action-driven mutations; for cache-driven optimistic updates, use the query library's `onMutate` + rollback shown below.
 
 ```tsx
 const mutation = useMutation({
