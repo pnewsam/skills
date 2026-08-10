@@ -35,12 +35,14 @@ tests/
 
 For existing flat-layout apps, do not migrate to `src/` unless packaging/import confusion is part of the problem.
 
+With a `src/` layout, set pytest's `--import-mode=importlib` on new projects so tests import the installed package instead of mutating `sys.path`.
+
 ## Boundaries
 
 - `main.py` or app entrypoints: process setup, dependency wiring, command parsing, app creation.
 - Domain packages: business concepts, service logic, domain errors, data transformations.
 - Infrastructure packages: database, queues, external clients, filesystem, network integrations.
-- Configuration: one settings boundary that reads environment and exposes typed settings.
+- Configuration: one settings boundary that reads environment and exposes typed, validated settings, typically via `pydantic-settings`.
 - Scripts: thin operational entrypoints that call reusable code.
 - Tests: mirror the behavior boundaries users care about; avoid depending on private module layout unless testing internals intentionally.
 

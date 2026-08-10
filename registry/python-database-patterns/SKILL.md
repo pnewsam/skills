@@ -26,6 +26,9 @@ Use this skill to keep Python persistence code predictable. The goal is explicit
 - Do not commit inside helper functions that callers might compose into larger operations.
 - Avoid long-lived sessions stored in globals.
 - For async apps, use async sessions/clients all the way through the async path.
+- Configure `async_sessionmaker(expire_on_commit=False)` so attribute access after commit does not trigger implicit IO on the async path.
+- Give each concurrent task its own `AsyncSession`; one instance is not safe to share across concurrent tasks.
+- Avoid lazy loading on the async path; eager-load with `selectinload` or use `AsyncAttrs`.
 
 ```python
 # Bad: helper commits, so callers cannot compose it into a larger transaction.

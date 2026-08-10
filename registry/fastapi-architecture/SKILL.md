@@ -40,13 +40,13 @@ Follow the existing project convention first. Do not reorganize the whole app if
 
 ## Boundaries
 
-- `main.py`: create the `FastAPI` app, configure middleware, register routers, and wire app-level exception handlers. Keep it free of business logic.
+- `main.py`: create the `FastAPI` app, configure middleware, register routers, and wire app-level exception handlers. Manage startup and shutdown of pools and clients with a `lifespan` context manager, not the deprecated `@app.on_event`. Keep it free of business logic.
 - Router modules: define paths, request/response models, status codes, dependencies, and HTTP-specific branching. Keep handlers thin.
 - Schemas: use Pydantic models for request bodies, responses, and domain-facing DTOs. Keep persistence models separate from API schemas unless the project already intentionally combines them.
 - Services: own business rules, coordination, and transactions. They should be callable from tests without ASGI or HTTP setup.
 - Repositories or data access modules: own database queries, external API persistence, and storage details.
-- Dependencies: use FastAPI dependency injection for request-scoped concerns such as auth, current user, sessions, clients, and settings.
-- Settings: centralize configuration in one settings module, usually Pydantic settings or the project's established equivalent.
+- Dependencies: use FastAPI dependency injection for request-scoped concerns such as auth, current user, sessions, clients, and settings. Declare them with `Annotated[Type, Depends(...)]` and reuse via a type alias, e.g. `SessionDep = Annotated[AsyncSession, Depends(get_session)]`.
+- Settings: centralize configuration in one `pydantic-settings` `BaseSettings` object, provided through a cached dependency (`@lru_cache`) so it is parsed once and overridable in tests.
 
 ## Refactor Guidance
 
@@ -75,10 +75,10 @@ async def send_invoice(invoice_id: str, session: AsyncSession = Depends(get_sess
     return InvoiceResponse.model_validate(invoice)
 
 # Good: route describes the API boundary; service owns the workflow.
-@router.post("/invoices/{invoice_id}/send", response_model=InvoiceResponse)
+@router.post("/invoices/{invoice_id}/send")
 async def send_invoice(
     invoice_id: str,
-    service: InvoiceService = Depends(get_invoice_service),
+    service: Annotated[InvoiceService, Depends(get_invoice_service)],
 ) -> InvoiceResponse:
     invoice = await service.send_invoice(invoice_id)
     return InvoiceResponse.model_validate(invoice)

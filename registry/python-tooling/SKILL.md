@@ -55,12 +55,12 @@ Adopt rules in stages. Separate mechanical formatting changes from behavioral ch
 
 ### Type checking
 
-Choose the checker already supported by the codebase and editor workflow. Mypy, Pyright, and other current checkers have different inference, configuration, and framework integration.
+Choose the checker already supported by the codebase and editor workflow. Mypy and Pyright are both production-ready and differ in inference, configuration, and framework integration; Pyright drives most editor tooling, while Mypy has the widest plugin ecosystem. Astral's `ty` and Meta's `pyrefly` are much faster and maturing, but are not yet the risk-free default — track them without standardizing on one. Do not run two checkers with divergent configs.
 
-For new projects:
+For new projects and new code:
 
 - type public and architectural boundaries first
-- select strictness the team can sustain
+- run strict mode on new code from the start; ratchet legacy modules toward it rather than flipping a whole repo mid-refactor
 - ratchet coverage without hiding errors behind broad ignores
 - verify plugin and framework support in current official documentation
 
@@ -78,17 +78,21 @@ Git hooks improve feedback but are not the enforcement boundary. CI must run the
 
 ## New-project baseline
 
-A reasonable starting point, subject to current verification:
+A concrete starting point for a greenfield project, subject to current verification:
 
-- PEP 621 metadata in `pyproject.toml` when packaging applies
-- one environment/dependency manager and one lock strategy
-- Ruff for linting and formatting
-- one type checker chosen deliberately
-- pytest when no framework constraint suggests otherwise
+- `uv` for the environment, dependencies, Python version, and a committed `uv.lock`; CI installs with `uv sync --frozen`
+- `ruff` for both linting and formatting
+- a type checker run in strict mode on new code — `mypy` or `pyright` today (see Type checking); type public and boundary interfaces first
+- `pytest`, with branch coverage and a `fail_under` no-regression floor
+- `pre-commit` for fast local feedback on format, lint, and types
+- PEP 621 metadata in `pyproject.toml` as the single source of truth, with a `hatchling` build backend when the project is packaged
+- dependency advisory scanning such as `pip-audit`; see `compliance-vulnerability-management` for triage
 - a short documented task surface for setup, format, lint, type-check, test, build, and release
-- CI using the same commands developers run
+- CI running the same commands developers run
 
-Add tools only when they own a distinct responsibility.
+Add tools only when they own a distinct responsibility. Keep tool config in `pyproject.toml` (`[tool.ruff]`, `[tool.mypy]`, `[tool.pytest.ini_options]`).
+
+Establishing this baseline on a project that lacks it is in scope, not churn. Introduce a missing piece when it closes a real gap, one change at a time, without altering application behavior. See `python-expert` §3 for the quality floor and `python-expert/references/python-libraries.md` for the capability-to-library index. "Do not churn" forbids restyling a working toolchain for fashion; it does not forbid raising a project to the floor.
 
 ## Migration workflow
 

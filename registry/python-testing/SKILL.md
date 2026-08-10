@@ -17,11 +17,14 @@ Use this skill to keep Python tests useful, focused, and maintainable. The goal 
 - Keep fixtures explicit and local until multiple test modules genuinely share setup.
 - Avoid autouse fixtures unless they enforce a global invariant such as environment isolation.
 - Regression tests should name the bug or behavior they protect.
+- Use property-based tests (`hypothesis`) for parsers, serializers, encoders, validators, and numeric code — assert round-trip and invariant properties, not only hand-picked examples.
+- Treat coverage as a diagnostic, not a target: enable branch coverage and set `fail_under` as a no-regression floor. A coverage percentage does not prove the tests assert anything.
+- Snapshot large structured output with `syrupy` or `inline-snapshot`, and review every snapshot diff like an assertion.
 
 ## Test Boundaries
 
 - Unit tests: pure functions, services, validators, mappers, and domain logic.
-- Integration tests: database behavior, framework routing, serialization, dependency wiring, external client adapters with fakes.
+- Integration tests: database behavior, framework routing, serialization, dependency wiring, external client adapters with fakes; real backing services via `testcontainers` when a fake is not faithful enough.
 - End-to-end tests: only for critical flows where lower-level tests cannot provide confidence.
 
 For FastAPI apps, use dependency overrides for request-scoped dependencies and test services directly when HTTP is not the behavior under test.
@@ -58,10 +61,12 @@ def user_factory(db_session):
 
 ## Mocking
 
-- Mock at system edges: network calls, clocks, random IDs, filesystem, queues, email, payment providers.
+- Mock at system edges: network (`respx`/`responses`), clocks (`time-machine`), random IDs, filesystem, queues, email, payment providers.
 - Do not mock the function being tested or its immediate pure helpers.
 - Prefer fakes when a dependency has meaningful behavior across several tests.
 - Assert observable outcomes first; assert calls only when the interaction is the behavior.
+- Spec your mocks (`autospec=True`, `create_autospec`, or `spec=`); a bare mock lets a misspelled assertion such as `assert_called_once` pass silently.
+- Patch where the name is looked up, not where it is defined: if `service.py` does `from client import send`, patch `service.send`.
 
 ```python
 class FakeEmailClient:
@@ -83,7 +88,7 @@ def test_invoice_send_emails_customer() -> None:
 
 ## Async Tests
 
-- Use the project's configured async test runner, such as `pytest-asyncio` or `anyio`.
+- Use the project's configured async test runner — `pytest-asyncio` (pinned ≥ 1.0) or AnyIO's plugin — and only one per suite.
 - Await async work directly. Avoid sleeping to wait for background work unless there is no deterministic signal.
 - Keep event loop and database/session fixtures aligned with the project's async stack.
 

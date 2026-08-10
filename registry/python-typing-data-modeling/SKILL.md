@@ -16,15 +16,20 @@ Use this skill to make data shapes explicit without turning Python into ceremony
 - Keep domain models, API schemas, and persistence models separate when they change for different reasons.
 - Avoid `Any` unless the boundary is genuinely untyped and immediately narrowed.
 - Prefer small, named data shapes over dictionaries passed through several layers.
-- Let existing project tooling decide strictness. Do not introduce strict mypy or pyright settings during a local refactor.
+- Type new code strictly. During a local refactor, match the file's existing strictness rather than flipping the whole repo; ratchet legacy toward strict without hiding errors behind broad ignores.
 
 ## Model Choices
 
-- Pydantic models: external validation, API request/response schemas, settings, serialized data.
+- Pydantic models: external validation, API request/response schemas, and serialized data at boundaries.
+- `pydantic-settings`: typed, validated configuration from environment, `.env`, and secrets files.
 - Dataclasses: internal domain data when validation is already done or not needed.
+- `attrs`: internal value objects that want slots, converters, or opt-in validators without runtime-validation cost.
+- `msgspec`: high-throughput (de)serialization of trusted, typed data on hot paths.
 - `TypedDict`: dictionary-shaped data from APIs, JSON, or partial records where a class would be too heavy.
 - `Protocol`: structural interfaces for injectable dependencies, clients, repositories, or services.
 - `Enum` or `Literal`: closed sets of values that affect branching or validation.
+
+Validate at the boundary; keep the interior cheap. Reaching for Pydantic on every internal object adds allocation and validation cost for no safety gain. Parse untrusted input once at the edge, then carry cheap dataclasses, attrs, or msgspec structs inward.
 
 ```python
 class CreateInvoiceRequest(BaseModel):
@@ -78,6 +83,10 @@ async def create_invoice_route(input: CreateInvoiceRequest) -> InvoiceResponse:
 - Use `Mapping` for read-only dictionary inputs.
 - Prefer `X | None` over sentinel values when absence is real and expected.
 - Keep casts close to the untyped boundary and explain non-obvious casts.
+- On Python 3.12+, write generics with PEP 695 syntax (`class Repo[T]:`, `def first[T](...)`, `type Alias = ...`) instead of explicit `TypeVar`/`Generic`.
+- Use `Self` for fluent methods, alternative constructors, and `__enter__` instead of a hand-bound `TypeVar`.
+- Make closed-set branching exhaustive: end a match on a `Literal` or `Enum` with `assert_never(x)` so the checker flags any case left unhandled when a value is added.
+- Skip `from __future__ import annotations` on projects pinned to Python 3.14+, where deferred evaluation is the default (PEP 649). It stays reasonable while supporting 3.13 and earlier, but it stringizes annotations, which historically broke runtime consumers such as Pydantic and dataclasses.
 
 ```python
 def total_for(items: Sequence[LineItem]) -> Decimal:
@@ -86,6 +95,17 @@ def total_for(items: Sequence[LineItem]) -> Decimal:
 
 def label_for(statuses: Mapping[str, str], status: str) -> str:
     return statuses.get(status, "Unknown")
+```
+
+```python
+def describe(status: Literal["draft", "sent", "paid"]) -> str:
+    if status == "draft":
+        return "Not yet sent"
+    if status == "sent":
+        return "Awaiting payment"
+    if status == "paid":
+        return "Complete"
+    assert_never(status)  # checker errors here if a status is added and unhandled
 ```
 
 ## Verification

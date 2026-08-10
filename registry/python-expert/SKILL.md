@@ -48,12 +48,28 @@ When two skills overlap, decide by asking: "Is this problem about tooling, owner
 
 ---
 
-## 3. Build Protocol
+## 3. Quality Baseline
+
+Follow a working project's conventions by default. But "follow existing conventions" is not a reason to keep a quality gap. When the project is new, or an area is absent or clearly below the baseline, propose establishing the floor — do not silently inherit the gap.
+
+The floor for new code and new projects:
+
+- **Typed config.** Settings loaded and validated once, not read ad hoc from `os.environ`.
+- **Types on new code.** Type public and boundary interfaces and run a type checker in strict mode on new modules, even when the legacy tree is loose. Ratchet legacy per module; do not flip a whole repo mid-refactor.
+- **A check gate.** Format, lint, type-check, and test run the same way locally and in CI.
+- **Structured logging** for services and async apps, and **bounded retries** at external boundaries.
+- **Tests at the boundary** that can catch the regression.
+
+Introducing a dependency to close a real gap is in scope; churning a working project to restyle it is not. Consult `references/python-libraries.md` for the capability-to-library index and each library's "when to introduce" trigger, and `python-tooling` for the toolchain baseline and the safe migration workflow. Propose the change, scope it small, and roll it out without altering existing behavior.
+
+---
+
+## 4. Build Protocol
 
 When building or refactoring Python code, follow this order before editing:
 
 1. **Identify the boundary.** CLI, library module, service, API route, database layer, background job, model/schema, or test.
-2. **Follow existing conventions.** Use the project's package layout, dependency tool, formatter, type checker, async style, and test patterns unless they are absent or clearly failing.
+2. **Follow existing conventions.** Use the project's package layout, dependency tool, formatter, type checker, async style, and test patterns unless they are absent or clearly failing. When they are absent or below the baseline in §3, propose establishing the floor rather than inheriting the gap.
 3. **Route to focused skills.** Load only the skills needed for the boundary and failure mode.
 4. **Keep entrypoints thin.** Entrypoints wire configuration, dependencies, and IO; reusable behavior lives in named modules or services.
 5. **Make data boundaries explicit.** Validate at API/CLI/job boundaries, keep domain and persistence models distinct when the project does, and type public interfaces.
@@ -64,7 +80,7 @@ Do not reorganize a whole Python app when a local extraction, clearer module, or
 
 ---
 
-## 4. Review Protocol
+## 5. Review Protocol
 
 When reviewing Python code, route findings to focused skills and report in this structure:
 

@@ -12,10 +12,11 @@ Use this skill to keep async Python code predictable. The goal is clear ownershi
 ## Principles
 
 - Do not mark code async unless it awaits real async work or must satisfy an async interface.
-- Do not call blocking network, filesystem, CPU-heavy, or synchronous database work directly from async handlers.
-- Keep task lifetime explicit. Fire-and-forget work needs ownership, logging, error handling, and shutdown behavior.
-- Use timeouts around external I/O.
-- Treat cancellation as normal control flow for request-scoped work.
+- Do not call blocking network, filesystem, CPU-heavy, or synchronous database work directly from async handlers. Offload unavoidable blocking work with `asyncio.to_thread(...)`, or a process pool for CPU-bound work.
+- Run related concurrent tasks in an `asyncio.TaskGroup` (3.11+): it cancels the remaining tasks when one fails and raises an `ExceptionGroup`. Prefer it to `asyncio.gather`, which leaves siblings running on error.
+- Keep task lifetime explicit. A bare `asyncio.create_task` whose result is never awaited can be garbage-collected mid-flight and have its exception swallowed; own it in a task group or a named runner with logging, error handling, and shutdown.
+- Wrap external I/O with `async with asyncio.timeout(...)` (3.11+) or an equivalent deadline.
+- Treat cancellation as normal control flow for request-scoped work; re-raise `CancelledError` after cleanup rather than swallowing it.
 - Keep sync and async versions of the same abstraction separate unless the project already has a clear adapter pattern.
 
 ## Boundaries
@@ -43,7 +44,7 @@ async def exchange_rates(client: httpx.AsyncClient = Depends(get_http_client)):
 
 ## Common Refactors
 
-- Move blocking client calls behind a sync adapter and call them from sync code, or use a real async client.
+- Move blocking client calls behind a sync adapter, offload them with `asyncio.to_thread`, or use a real async client.
 - Add explicit timeout handling around external I/O.
 - Replace scattered background task creation with a named task runner or framework-supported background task boundary.
 - Separate pure CPU/data transformation code from async orchestration so it can be tested synchronously.
@@ -53,7 +54,12 @@ async def exchange_rates(client: httpx.AsyncClient = Depends(get_http_client)):
 # Bad: task lifetime and errors are unowned.
 asyncio.create_task(send_receipt(invoice_id))
 
-# Better: use an explicit runner boundary.
+# Own concurrent request-scoped work in a task group.
+async with asyncio.TaskGroup() as tg:
+    tg.create_task(send_receipt(invoice_id))
+    tg.create_task(update_ledger(invoice_id))
+
+# For durable work that must outlive the request, hand off to a real queue.
 await background_jobs.enqueue(SendReceipt(invoice_id=invoice_id))
 ```
 

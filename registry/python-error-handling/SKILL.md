@@ -16,6 +16,8 @@ Use this skill to make Python failure paths explicit and boring. The goal is cle
 - Catch errors at boundaries where you can translate, retry, log, or recover meaningfully.
 - Do not catch broad exceptions inside domain logic unless you re-raise, wrap, or convert them intentionally.
 - Preserve traceback context with `raise` or `raise ... from ...`.
+- Add runtime context with `err.add_note(...)` (3.11+) instead of wrapping an exception just to append a string.
+- Handle aggregated failures from `asyncio.TaskGroup` with `except*` (PEP 654); use plain `except` for ordinary single failures.
 - Keep sensitive values out of exception messages and logs.
 
 ## Error Boundaries
@@ -73,23 +75,24 @@ async def send_invoice(invoice_id: str) -> InvoiceResponse:
 
 ## Logging
 
-- Log where the failure is handled, not at every layer.
+- Log a failure once, at the boundary where it is handled; lower layers propagate without logging so tracebacks are not duplicated.
 - Include stable identifiers and operation names; avoid raw secrets, tokens, passwords, and sensitive payloads.
 - Do not log and then silently continue unless continuing is the intended recovery behavior.
 - Use `logger.exception` inside exception handlers when stack traces are useful.
+- For services and async apps, prefer structured logging such as `structlog`: key-value events, request context bound via `contextvars`, and JSON in production. Libraries stay on stdlib `logging` plus `NullHandler`.
 
 ```python
 try:
     await payment_client.capture(payment_id)
 except PaymentProviderError:
-    logger.exception("payment_capture_failed", extra={"payment_id": payment_id})
+    logger.exception("payment capture failed", extra={"payment_id": payment_id})
     raise
 ```
 
 ## Retries
 
 - Retry only failures that are plausibly transient.
-- Use bounded retries with backoff for external network calls, queues, and dependency outages.
+- Use bounded retries with backoff and jitter for external network calls, queues, and dependency outages; reach for `tenacity` rather than hand-rolling the loop.
 - Do not retry validation errors, permission failures, invariant violations, or non-idempotent writes without a safe idempotency mechanism.
 - Keep retry policy near the client or job boundary, not scattered through business logic.
 
