@@ -36,6 +36,13 @@ const CSS = ['.css'];
 const DEFAULT_CONFIG = {
   scope: 'src/renderer',
   excludeDirs: ['node_modules', 'dist', 'build', 'coverage', '.next', 'public'],
+  // Paths inside the scope that are NOT part of this design system, so they must
+  // not inflate its drift counts. `pages/arcade` is the standalone 8-bit arcade
+  // surface — it has its own aesthetic and token set (`skin-8bit.css`) and is
+  // measured separately, not against cowork primitives (ENG-641 audit 2026-08-10).
+  excludePaths: ['pages/arcade'],
+  // Non-product files: tests/stories are not shipped UI and must not be counted.
+  excludeFileMatch: ['.test.', '.spec.', '.stories.'],
   // CSS where raw color/px values DEFINE the system — not violations.
   tokenSources: [
     'cowork/styles/globals.css',
@@ -74,7 +81,8 @@ const DEFAULT_CONFIG = {
         { key: 'js_hover_handlers', label: 'JS hover handlers (`onMouse*`)', ticket: 'ENG-641',
           include: COMP, patterns: [/on(?:MouseEnter|MouseLeave|MouseOver|MouseOut)\s*=/g] },
         { key: 'native_title', label: 'Native `title=` tooltips → ui/Tooltip', ticket: 'ENG-1152',
-          include: COMP, excludePrimitiveDir: true, patterns: [/\btitle=/g] },
+          include: COMP, excludePrimitiveDir: true, matcher: 'nativeTitle',
+          note: 'DOM elements + title-forwarding controls only; excludes component `title` props (headings)' },
         { key: 'bespoke_dialogs', label: 'Bespoke `role="dialog"` → ui/Modal', ticket: 'ENG-1014',
           include: COMP, excludePrimitiveDir: true, patterns: [/role=["']dialog["']/g] },
       ],
@@ -83,8 +91,11 @@ const DEFAULT_CONFIG = {
       key: 'typography_icons',
       title: 'Typography & icons — lower is better',
       signals: [
-        { key: 'mono_font', label: 'Mono-font usage', ticket: 'ENG-636',
+        { key: 'mono_font', label: 'Mono-font in non-code chrome', ticket: 'ENG-636',
           include: [...COMP, ...CSS], excludeTokenSources: true,
+          // Mono on code/terminal surfaces is correct usage, not drift — measure
+          // only mono in ordinary UI chrome (ENG-641 audit 2026-08-10).
+          excludeFileContains: ['CodeBlock', 'ScratchpadModal', 'MarkdownCode'],
           patterns: [/\bfont-mono\b/g, /JetBrains Mono/g, /Roboto Mono/g] },
         { key: 'offbrand_fonts', label: 'Off-brand fonts (regression guard, target 0)', ticket: 'ENG-635',
           include: [...COMP, ...CSS], patterns: [/Josefin\s*Sans/gi, /Comic Sans/gi] },
@@ -109,7 +120,8 @@ const DEFAULT_CONFIG = {
   // the default `<element` match (e.g. checkbox is an input variant).
   primitiveRatios: [
     { family: 'button', element: 'button', component: 'Button', ticket: 'ENG-936' },
-    { family: 'input', element: 'input', component: 'Input', ticket: 'ENG-1015' },
+    { family: 'input', element: 'input', component: 'Input', ticket: 'ENG-1015',
+      rawMatcher: 'inputTextLike' },
     { family: 'textarea', element: 'textarea', component: 'Textarea', ticket: 'ENG-1015' },
     { family: 'select', element: 'select', component: 'Select', ticket: 'ENG-794' },
     { family: 'checkbox', component: 'Checkbox', ticket: 'ENG-1040',
@@ -139,10 +151,15 @@ const DEFAULT_CONFIG = {
   anchor: {
     date: '2026-07-07',
     commit: '3a92bf1b',
+    // Re-scanned 2026-08-10 under the refined scope (arcade + test/story files
+    // excluded; mono counts non-code chrome only) so the hygiene sub-score stays
+    // comparable to current counts. Prior (pre-refinement) anchor for reference:
+    // inline_styles 1363, raw_colors 501, var_hex_fallbacks 64, raw_px 1388,
+    // mono_font 61, inline_svg 105, glow_effects 20.
     signals: {
-      inline_styles: 1363, raw_colors: 501, var_hex_fallbacks: 64, raw_px: 1388,
-      tw_arbitrary: 92, important: 10, js_hover_handlers: 141, mono_font: 61,
-      offbrand_fonts: 19, inline_svg: 105, local_icon_imports: 54, glow_effects: 20,
+      inline_styles: 1245, raw_colors: 343, var_hex_fallbacks: 62, raw_px: 1356,
+      tw_arbitrary: 92, important: 10, js_hover_handlers: 141, mono_font: 48,
+      offbrand_fonts: 19, inline_svg: 104, local_icon_imports: 54, glow_effects: 16,
     },
   },
 };
@@ -176,6 +193,57 @@ function count(text, patterns) {
   return n;
 }
 
+// Components verified to forward a `title` prop onto a native DOM node (so they
+// render a real browser tooltip). Extend as title-forwarding wrappers are found.
+const TITLE_FORWARDING = ['Button', 'Switch', 'IconButton', 'CardIconButton', 'SmallBtn'];
+
+// Tag-aware matchers for signals where a bare regex over-counts. A signal opts
+// in via `matcher: '<name>'`, which wins over `patterns`; kept here rather than
+// in config so JSON `--config` overrides stay declarative and reference a
+// matcher by name.
+const MATCHERS = {
+  // Native `title=` browser tooltips (ENG-1152). Counts `title=` only when its
+  // owning JSX element is a native lowercase HTML tag, or a component verified
+  // to forward `title` to the DOM (TITLE_FORWARDING). Capitalized components
+  // such as <Section>, <ModalHeader>, <PageHeader>, <EmptyState> render `title`
+  // as VISIBLE TEXT — those are headings, not tooltips, and are excluded. A bare
+  // /\btitle=/ counted them all, inflating the signal ~3x and polluting the
+  // adoption denominator it feeds. Owner = nearest tag-open at or before the
+  // attribute; a JSX element passed as an earlier prop value can misattribute in
+  // rare cases (medium-confidence static scan, consistent with the contract).
+  nativeTitle(text) {
+    const opens = [];
+    const tag = /<([A-Za-z][A-Za-z0-9.]*)/g;
+    let m;
+    while ((m = tag.exec(text))) opens.push([m.index, m[1]]);
+    const title = /\btitle=/g;
+    let n = 0;
+    while ((m = title.exec(text))) {
+      let owner = null;
+      for (let i = opens.length - 1; i >= 0; i--) {
+        if (opens[i][0] <= m.index) { owner = opens[i][1]; break; }
+      }
+      if (owner && (/^[a-z]/.test(owner) || TITLE_FORWARDING.includes(owner))) n++;
+    }
+    return n;
+  },
+
+  // Raw <input> count for the Input adoption ratio, restricted to the text-like
+  // inputs ui/Input actually replaces. type=file/color/range/date/checkbox/radio
+  // are different controls (checkbox has its own ratio), so counting them as
+  // "raw Input" understated adoption. type-less inputs default to text.
+  inputTextLike(text) {
+    const TEXTLIKE = new Set(['text', 'search', 'email', 'password', 'url', 'tel', 'number', '']);
+    const re = /<input\b[^>]*>/g;
+    let n = 0, m;
+    while ((m = re.exec(text))) {
+      const t = /type=["']?([a-zA-Z]+)/.exec(m[0]);
+      if (TEXTLIKE.has(t ? t[1].toLowerCase() : '')) n++;
+    }
+    return n;
+  },
+};
+
 function walk(dir, excludeDirs, out) {
   let entries;
   try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return out; }
@@ -207,8 +275,10 @@ function scan(repo, cfg, asOf) {
   for (const abs of allFiles) {
     const ext = path.extname(abs);
     if (!COMP.includes(ext) && !CSS.includes(ext)) continue;
-    let text; try { text = fs.readFileSync(abs, 'utf8'); } catch { continue; }
     const rel = path.relative(repo, abs);
+    if ((cfg.excludePaths || []).some((p) => rel.includes(p))) continue;
+    if ((cfg.excludeFileMatch || []).some((m) => path.basename(rel).includes(m))) continue;
+    let text; try { text = fs.readFileSync(abs, 'utf8'); } catch { continue; }
     if (COMP.includes(ext)) componentFiles++;
     files.push({ rel, ext, text, token: isToken(rel), prim: inPrim(rel) });
   }
@@ -223,7 +293,8 @@ function scan(repo, cfg, asOf) {
         if (!s.include.includes(f.ext)) continue;
         if (s.excludeTokenSources && f.token) continue;
         if (s.excludePrimitiveDir && f.prim) continue;
-        const n = count(f.text, s.patterns);
+        if (s.excludeFileContains && s.excludeFileContains.some((x) => f.rel.includes(x))) continue;
+        const n = s.matcher ? MATCHERS[s.matcher](f.text) : count(f.text, s.patterns);
         if (n > 0) { occurrences += n; byFile[f.rel] = n; }
       }
       const top = Object.entries(byFile).sort((a, b) => b[1] - a[1]).slice(0, 5)
@@ -242,7 +313,7 @@ function scan(repo, cfg, asOf) {
     const compRe = new RegExp(`<${r.component}[\\s/>]`, 'g');
     for (const f of files) {
       if (!COMP.includes(f.ext) || f.prim) continue;
-      raw += count(f.text, [rawRe]);
+      raw += r.rawMatcher ? MATCHERS[r.rawMatcher](f.text) : count(f.text, [rawRe]);
       canonical += count(f.text, [compRe]);
     }
     const denom = raw + canonical;

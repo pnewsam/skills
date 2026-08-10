@@ -21,8 +21,8 @@ they do not mean, and which sub-ticket owns each signal.
 | Revision and scope | Git short commit + the configured scope (default `cowork` `src/renderer`). |
 | Eligible population | `.tsx`/`.jsx` components for component signals, ratios, and inventory; `.css` added for color, token-fallback, `!important`, mono-font, and glow signals. |
 | Counting units | Occurrences for drift signals; canonical vs raw element **uses** for ratios; component **uses** for inventory; **lines** for legacy footprint. Never mix units in one ratio. |
-| Exclusions | Token-definition CSS (`styles/globals.css`, `skin-8bit.css`, `tailwind.css`) for value/`!important`/glow/mono counts; the primitive library (`components/ui`) for element, tooltip, dialog, ratio, and inventory counts; `node_modules`, build output, `public`, dotfolders. |
-| Method | Static regex scan over eligible files, repeatable with `node scan.mjs`. |
+| Exclusions | Token-definition CSS (`styles/globals.css`, `skin-8bit.css`, `tailwind.css`) for value/`!important`/glow/mono counts; the primitive library (`components/ui`) for element, tooltip, dialog, ratio, and inventory counts; the standalone **arcade** surface (`pages/arcade`, `excludePaths`); **test/story files** (`.test.`/`.spec.`/`.stories.`, `excludeFileMatch`); `node_modules`, build output, `public`, dotfolders. |
+| Method | Static regex scan over eligible files, repeatable with `node scan.mjs`. A few signals (e.g. `native_title`) use a tag-aware matcher instead of a bare regex, attributing each match to its owning JSX element so component props are not miscounted as DOM usage. |
 | Window | Current revision vs the previous posted snapshot — read from the last comment's collapsed `design-metrics-snapshot` block (a fenced JSON payload inside a `<details>`). |
 | Confidence | Medium. Static text scan only; it does not observe runtime styling, theming, or dynamically composed class names. |
 
@@ -67,10 +67,20 @@ Each row in the report is keyed to the ENG-641 sub-ticket that owns the work.
 - **JS hover handlers** — `onMouse*` a CSS `:hover`/`group-hover` state can
   usually express more simply. Handlers driving real logic are not violations.
 - **Native `title=`** — browser tooltips ENG-1152 replaces with ui/Tooltip for
-  consistent, accessible behavior. Includes some non-interactive uses.
+  consistent, accessible behavior. Counted **tag-aware**: only `title=` on a
+  native lowercase DOM element, or on a component verified to forward `title` to
+  the DOM (`TITLE_FORWARDING` in `scan.mjs` — Button, Switch, and the icon-button
+  wrappers), is a tooltip. `title` on a Capitalized component that renders it as
+  visible text (`<Section>`, `<ModalHeader>`, `<PageHeader>`, `<EmptyState>`, …)
+  is a heading prop, **not** a tooltip, and is excluded. Still includes some
+  non-interactive DOM uses (e.g. `title` on a truncated `<span>`); those are
+  legitimate candidates to keep as native/`aria-label` rather than migrate.
 - **Bespoke `role="dialog"`** — dialog markup outside ui/Modal; the remaining
   tail of the modal sweep.
-- **Mono-font usage** — `font-mono` and mono family references ENG-636 reduces.
+- **Mono-font in non-code chrome** — `font-mono` / mono-family references in
+  ordinary UI, ENG-636's target. Code and terminal surfaces (`CodeBlock`,
+  `ScratchpadModal`, `MarkdownCode`, via `excludeFileContains`) are excluded:
+  mono there is correct, not drift.
 - **Off-brand fonts** — Josefin Sans and similar; target 0. A rising count is a
   regression of ENG-635, not new work.
 - **Inline `<svg>` / local icon imports** — the current hand-rolled icon
@@ -83,7 +93,10 @@ Each row in the report is keyed to the ENG-641 sub-ticket that owns the work.
 
 - **Ratios** — canonical component uses / (canonical + raw element uses), per
   family with a clean raw HTML equivalent. Rising adoption is the convergence
-  signal; the raw count is the remaining work.
+  signal; the raw count is the remaining work. The **Input** ratio counts only
+  text-like raw `<input>` (`text`/`search`/`email`/`password`/`url`/`tel`/`number`
+  and type-less) — `file`/`color`/`range`/`date` are different controls and
+  `checkbox` has its own ratio, so counting them understated adoption.
 - **Inventory** — usage counts for primitives without a raw HTML equivalent
   (Alert, Modal, Menu, Switch, …). Rising total = broader adoption. A primitive
   stuck at 0 is defined but unadopted — an inspection candidate, not a defect.
@@ -128,6 +141,29 @@ Convergence Index = mean(Component adoption, Style-hygiene progress)
 Both sub-scores and this formula must stay visible in the report. Do not add
 weights, hidden signals, or a second composite without recording the change
 here. Re-base the anchor only deliberately, and say so when you do.
+
+### Methodology change — `native_title` recount + scope refinement (2026-08-10)
+
+Two measurement corrections landed together, both from the ENG-641 measurement-
+validity audit. Neither is real convergence — the report that introduces them
+flags them, and the pre-change snapshot is non-comparable for the affected rows.
+
+1. **`native_title` tag-aware recount.** Moved from a bare `/\btitle=/` to the
+   tag-aware matcher above, removing ~140 component heading-props that were never
+   tooltips. Signal ~310 → ~172; adoption rises. The ~172 is the metric (all
+   genuine native tooltips); the actionable ENG-1152 sweep is narrower (~114
+   interactive controls) once truncation/non-interactive hints are set aside.
+
+2. **Scope refinement.** The scan now excludes the standalone **arcade** surface
+   (`pages/arcade` — own aesthetic + `skin-8bit.css` tokens) and all
+   **test/story files**, and the **Input** ratio and **mono_font** signal were
+   narrowed to what they actually target (text-like inputs; non-code chrome).
+   Effect on the cowork scope: components scanned 175 → 120; raw_colors 463 →
+   288, inline_styles 815 → 686, mono 71 → 58, native `title=` 310 → 172; button
+   adoption 34% → 39%, input 27% → 41%; Index ~23 → ~28. Because these change
+   signal *definitions*, the day-zero **anchor was re-scanned** at `3a92bf1b`
+   under the same rules (values in `config.anchor.signals`, with the prior anchor
+   recorded in a comment) so the hygiene sub-score stays comparable.
 
 ## Interpretation rules
 
