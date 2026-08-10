@@ -30,7 +30,7 @@ Completion of one stage never authorizes the next. Passes 1–2 are pixel-preser
 ## Inputs and preconditions
 
 - Repo: `cowork/` (Electron+Vite+React+Tailwind). Node 20 on PATH (`PATH="/opt/homebrew/opt/node@20/bin:$PATH"`).
-- **Tailwind preflight is disabled** (`tailwind.config.js`) — utilities are additive, no reset. This is why the existing surfaces are inline-styled and why className work is safe.
+- **Tailwind preflight is disabled** (`tailwind.config.js`) — utilities are additive, no global reset. This is why the surfaces are inline-styled, but it has footguns that have **closed PRs**: a bare border utility renders **no border** (`border-style:none`), unlayered `globals.css` component classes **win specificity ties** against utilities, and `font-[var(--…)]` without a `family-name:` hint drops `font-family`. Read the **Preflight & cascade footguns** section of `references/mapping.md` before converting.
 - The token bridge lives in `tailwind.config.js`; the resolved values live in `src/renderer/cowork/styles/globals.css`. The exact tables and the full style→class mapping are in **`references/mapping.md`** — read it before converting.
 - A surface = one `views/**/XView.jsx` plus its co-located section components. One surface per PR.
 
@@ -55,7 +55,7 @@ Convert **static** style objects to `className`; keep **dynamic** ones inline. A
 - conditional colors/opacity, and transitions whose value is conditional,
 - `style` passed to a **component** unless you've confirmed it forwards `className`.
 
-Guardrails: append to an existing `className`, never emit two; arbitrary values contain **no spaces** (`_` for spaces, strip spaces inside `min()/calc()`); don't delete a `const` that's still referenced. Commit: `refactor(<surface>): migrate inline styles to Tailwind`.
+Guardrails: append to an existing `className`, never emit two; arbitrary values contain **no spaces** (`_` for spaces, strip spaces inside `min()/calc()`); don't delete a `const` that's still referenced. **Footguns (mapping.md):** emit `border-solid` on every converted solid border (bare `border` is invisible under preflight-off); write `font-family` as `font-[family-name:var(--…)]`; before moving a property onto an element that carries a `globals.css` component class, grep that class — if it declares the property, keep it inline (the utility loses the tie). Commit: `refactor(<surface>): migrate inline styles to Tailwind`.
 
 ### 2. Tokens (pixel-preserving)
 
@@ -83,6 +83,7 @@ Before claiming a pass is done, from `cowork/` with the Node 20 PATH:
 2. `npx vitest run <surface test dir>` — the surface's colocated tests pass (Cowork colocates `*.test.jsx`; e.g. `src/renderer/cowork/views/settings/`).
 3. `npm run build:web` — the renderer bundle builds. **If pass 2 added config tokens, grep the emitted CSS** (`dist/renderer-web/assets/*.css`) to confirm each new token class exists (e.g. `.text-muted{color:var(--text-muted)}`) — Tailwind silently omits unknown classes, so this is the only proof they resolve.
 4. Integrity: no element with two `className`; `node scripts/inventory.mjs` shows zero EXACT-token arbitraries remaining after pass 2 (and zero SNAP candidates after pass 3).
+5. **Footgun sweep** (grep the surface): every `border`/`border-[tblrxy]` width utility has a sibling `border-solid`/`border-dashed`; no `font-[var(--font-…)]` missing the `family-name:` hint; nothing moved to a utility on an element whose `globals.css` class already sets that property. Typecheck/build passing does **not** prove pixels — **drive the surface and look** (the `run` skill / `npm run dev`), especially for pass 3. Never label a snap screenshot "no change": snapping changes rendered sizes by definition.
 
 ## Output contract
 

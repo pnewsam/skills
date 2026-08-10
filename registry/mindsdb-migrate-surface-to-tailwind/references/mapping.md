@@ -11,6 +11,7 @@ they still hold if the config/globals change.
 - Type scale
 - Radius
 - Colors
+- Preflight & cascade footguns
 - Keep inline
 - Snap policy
 
@@ -37,8 +38,9 @@ for spaces and strip spaces inside `min()/calc()` (`min(520px,52vh)`).
 | `fontWeight: 500/600/700` · `'inherit'` | `font-medium` / `font-semibold` / `font-bold` · `font-[inherit]` |
 | `letterSpacing:'Xem'` · `lineHeight:X` | `tracking-[Xem]` · `leading-[X]` (`1` → `leading-none`) |
 | `textTransform:'uppercase'` · `textAlign:'left'/'center'` | `uppercase` · `text-left` / `text-center` |
-| `fontFamily`: mono / `var(--font-sans)` / `inherit` | `font-mono` · `font-[var(--font-sans)]` · `font-[inherit]` |
+| `fontFamily`: mono / `var(--font-sans)` / `inherit` | `font-mono` · `font-[family-name:var(--font-sans)]` · `font-[inherit]` (the **`family-name:`** hint is required — see footguns) |
 | `WebkitBackdropFilter`+`backdropFilter:'blur(var(--surface-glass-blur))'` | `[backdrop-filter:blur(var(--surface-glass-blur))] [-webkit-backdrop-filter:blur(var(--surface-glass-blur))]` |
+| `border:'1px solid X'` · `borderTop/Bottom/…:'1px solid X'` | `border border-solid border-<X>` · `border-t/b/… border-solid border-<X>` — **`border-solid` required** (see footguns) |
 | `background:'none'` · `border:'none'/0` · `textDecoration:'underline'` | `[background:none]` · `border-0` · `underline` |
 | anything else static | `[prop:value]` with `_` for spaces; if dynamic, keep inline |
 
@@ -113,9 +115,18 @@ emit CSS (see SKILL verification step 3).
 
 JS hover handlers that only swap styling — `onMouseOver`/`onMouseOut`/`onMouseEnter`/`onMouseLeave` that mutate `e.currentTarget.style.*`, or a `useState` hover flag feeding a `hover ? A : B` style — should become Tailwind `hover:` utilities, and the handlers/state deleted. **Requirement:** the base value must move into `className` too (an inline `style` value always beats a `hover:` class, so a leftover inline base would never let the hover state show). Keep any non-styling work the handler also does (e.g. it sets state). Example: base `text-ink-3 bg-transparent` + `hover:text-ink hover:bg-surface-2`, handlers removed. Visually identical at rest and on hover, and it removes JS.
 
+## Preflight & cascade footguns (these closed real PRs — check every pass)
+
+Preflight is **off** (no global reset, no `border-style` reset) and `globals.css` is imported **after** `tailwind.css` with its component classes **unlayered**. Three failure modes recur:
+
+1. **Bare borders are invisible.** `border`/`border-t`/`border-b`/`border-x` set only *width* → `border-style` stays `none` → nothing paints. Every converted `border: '1px solid …'` must emit **`border-solid`** (`border border-solid border-line`, `border-t border-solid border-line`). `border-dashed`/`border-dotted` self-declare a style and are fine. (Settings PR closed over 17 borders that vanished.)
+2. **Unlayered globals win specificity ties.** If an element carries a `globals.css` component class (`.recent-item`, `.menu`, `.menu-item`, `.send-btn`, `.btn`, `.icon-btn`, `.nav-item`, `.meta-pill`, `.anton-sidebar__*`, …), any property that class **already declares** cannot move to a plain utility — the utility loses the tie and the value silently reverts to the class's. **Grep the class body in globals.css first**; if it sets the property, keep that property **inline** (an inline `style` beats the stylesheet). Regressions seen: `.anton-sidebar__chrome-left {gap:14px}` vs `gap-1` (gap jumped 4→14px); `.recent-item {height:26px; padding:0 10px}` vs `h-auto px-3 py-1` (rows clipped to 26px, vertical padding lost).
+3. **`font-family` arbitraries need a type hint.** `font-[var(--font-body)]` is ambiguous → Tailwind emits **no** `font-family`. Write `font-[family-name:var(--font-body)]`. Because the inline `fontFamily`/`FONT_*` consts are deleted in the same edit, the un-hinted form silently drops the font to inherited across the whole surface.
+
 ## Keep inline (do not convert)
 
 - `mobile ? A : B` and any genuine prop/**app-state** ternary style (`railOpen`, `revealed`, `active`, `editing`, `busy`, `isZero`) — not hover; those can't be a CSS `:hover` variant.
+- Any property the element's **`globals.css` component class already declares** (footgun 2) — moving it to a utility loses the cascade tie.
 - `color-mix(in srgb, ${jsVar} …)` and any JS-computed value.
 - Conditional colors/opacity, `order`, invalid-state borders, animation whose
   name/value is conditional (`animation: x ? 'pulse …' : 'none'`).
