@@ -137,6 +137,7 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 		"stash",
 		"update-pr",
 		"validate-changes",
+		"writing-conventions",
 	}
 	if !reflect.DeepEqual(core, wantCore) {
 		t.Fatalf("core = %#v, want %#v", core, wantCore)
