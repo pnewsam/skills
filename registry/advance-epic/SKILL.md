@@ -7,12 +7,9 @@ description: Advance an epic by coordinating its next incomplete child feature. 
 
 ## Overview
 
-Execute one bounded step of an epic. A single invocation selects one child
-feature and runs at most one `execute-feature` item. Mark the child complete only
-when its entire feature plan is complete and verified.
+Execute one bounded step of an epic. A single invocation selects one child feature and runs at most one `execute-feature` item. Mark the child complete only when its entire feature plan is complete and verified.
 
-If planning is missing, stop and recommend `plan-feature`; do not silently
-expand a planning request into implementation.
+If planning is missing, stop and recommend `plan-feature`; do not silently expand a planning request into implementation.
 
 ## Idempotency requirements
 
@@ -21,9 +18,7 @@ Rerunning this skill for the same epic must not re-implement features that are a
 Before starting work on a child feature:
 
 1. Check the epic for `[ ]` or incomplete child features.
-2. If the next feature already has a corresponding `docs/features/NNN-*.md`
-   file with all items checked, verify the evidence, mark that epic child
-   complete, commit the bookkeeping update, and stop.
+2. If the next feature already has a corresponding `docs/features/NNN-*.md` file with all items checked, verify the evidence, mark that epic child complete, commit the bookkeeping update, and stop.
 3. If all child features are complete, report that the epic is done.
 
 ## Inputs
@@ -107,10 +102,7 @@ If `execute-feature` reports a blocker, propagate that blocker to the user and s
 
 ### 5. Update the epic plan
 
-Only when `execute-feature` reports that the entire feature is complete, mark the
-child feature as done in the epic file. If one item was completed but more
-remain, leave the epic unchanged; the feature plan is the source of truth for
-partial progress.
+Only when `execute-feature` reports that the entire feature is complete, mark the child feature as done in the epic file. If one item was completed but more remain, leave the epic unchanged; the feature plan is the source of truth for partial progress.
 
 - Change `- [ ]` to `- [x]`.
 - Append the feature plan file path and the PR or commit reference if available.
@@ -127,9 +119,7 @@ Update a "Progress" section at the bottom of the epic if one exists:
 
 Do not remove other sections.
 
-Because `execute-feature` has already committed its bounded implementation step,
-do not amend or rewrite that commit. Stage only the epic-plan update and create
-one local bookkeeping commit:
+Because `execute-feature` has already committed its bounded implementation step, do not amend or rewrite that commit. Stage only the epic-plan update and create one local bookkeeping commit:
 
 ```text
 docs(epic): record <feature-name> completion
@@ -149,17 +139,13 @@ Report:
 - Recommended next steps:
   - Run `validate-feature` to comprehensively validate the completed child feature.
   - Run `advance-epic` again for the next feature.
-  - If all features are complete, recommend the relevant validation pass and
-    `prepare-pr`; do not invoke or publish automatically.
+  - If all features are complete, recommend the relevant validation pass and `prepare-pr`; do not invoke or publish automatically.
 
 ## Handling common situations
 
 ### Child feature is already complete
 
-If the feature is already shipped or all acceptance criteria are checked in
-its plan, verify the evidence, mark the epic checkbox as `[x]`, create the
-bookkeeping commit described in Step 5, and stop. Do not advance another child
-in the same invocation.
+If the feature is already shipped or all acceptance criteria are checked in its plan, verify the evidence, mark the epic checkbox as `[x]`, create the bookkeeping commit described in Step 5, and stop. Do not advance another child in the same invocation.
 
 ### Child feature plan is missing
 

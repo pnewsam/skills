@@ -38,15 +38,10 @@ A good boundary makes common changes local and uncommon changes possible. Split 
 
 ## Evidence Signals
 
-- Frequent co-change between supposedly independent modules suggests a missing
-  boundary or misplaced ownership.
-- Dependency cycles, broad fan-out, boundary-crossing imports, and shotgun
-  edits indicate weak change isolation.
-- High fan-in can represent a healthy stable abstraction; corroborate it with
-  churn, responsibility spread, and the likely next change before recommending
-  decomposition.
-- File length alone does not demonstrate poor modularity. Structural outliers
-  are meaningful only among comparable modules with a clear local convention.
+- Frequent co-change between supposedly independent modules suggests a missing boundary or misplaced ownership.
+- Dependency cycles, broad fan-out, boundary-crossing imports, and shotgun edits indicate weak change isolation.
+- High fan-in can represent a healthy stable abstraction; corroborate it with churn, responsibility spread, and the likely next change before recommending decomposition.
+- File length alone does not demonstrate poor modularity. Structural outliers are meaningful only among comparable modules with a clear local convention.
 
 ## Do / Don't
 

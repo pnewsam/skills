@@ -147,7 +147,5 @@ If a module does not help answer one of those questions, remove it or move it lo
 
 - Use `ui-expert` after this skill when an email needs broader structure, hierarchy, content, or visual-system routing.
 - Use `design-expert` when an email feels generic, cluttered, visually incoherent, or insufficiently refined.
-- Use focused skills for follow-up decisions: `ui-content` for copy,
-  `visual-hierarchy` for emphasis, `ui-spacing` for density, `ui-typography`
-  for readability, and `ui-color` for semantic color and contrast.
+- Use focused skills for follow-up decisions: `ui-content` for copy, `visual-hierarchy` for emphasis, `ui-spacing` for density, `ui-typography` for readability, and `ui-color` for semantic color and contrast.
 - Use `ui-expert` and `design-expert` for top-section or module-level rework.

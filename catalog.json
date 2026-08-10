@@ -18,12 +18,13 @@
       "skills": [
         "diagnose-failure",
         "harden-pr",
-        "polish-pr",
+        "pr-conventions",
         "prepare-pr",
         "review-pr",
-        "revise-pr",
         "stash",
-        "validate-changes"
+        "update-pr",
+        "validate-changes",
+        "writing-conventions"
       ]
     },
     "skill-maintenance": {
@@ -37,7 +38,8 @@
       "skills": [
         "create-issue",
         "create-project",
-        "polish-issue"
+        "polish-issue",
+        "writing-conventions"
       ]
     },
     "product-delivery": {
@@ -122,6 +124,13 @@
         "analyze-design-system",
         "execute-feature",
         "plan-feature"
+      ]
+    },
+    "mindsdb": {
+      "description": "Organization-specific skills scoped to MindsDB repositories; not part of the generic registry.",
+      "skills": [
+        "mindsdb-migrate-surface-to-tailwind",
+        "mindsdb-track-design-system-metrics"
       ]
     },
     "python": {

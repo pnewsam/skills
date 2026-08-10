@@ -9,9 +9,7 @@ Use this as the entry point for broad backend work. Identify the server-side res
 
 Backend engineering is not governed by one standards body. Use protocol standards where they apply, and otherwise prefer canonical pattern literature, mature vendor architecture guidance, and production-proven provider documentation.
 
-Use the router when the request spans two or more focused backend concerns and
-needs a coherent recommendation. Go directly to one focused `backend-*` skill
-when exactly one concern is clear.
+Use the router when the request spans two or more focused backend concerns and needs a coherent recommendation. Go directly to one focused `backend-*` skill when exactly one concern is clear.
 
 ---
 

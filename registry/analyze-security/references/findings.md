@@ -9,8 +9,7 @@
 
 ## Dependency findings
 
-Possible sources include Dependabot, CVE/GHSA details, package-manager audit
-tools, base-image scanners, and user-provided advisories.
+Possible sources include Dependabot, CVE/GHSA details, package-manager audit tools, base-image scanners, and user-provided advisories.
 
 Collect when available:
 
@@ -23,9 +22,7 @@ Collect when available:
 - compatibility or migration implications
 - an existing bot PR, branch, feature plan, or owner
 
-Safe groups commonly share a package, parent dependency, manifest, lockfile,
-base image, or GitHub Action. Keep unrelated ecosystems and risky major
-upgrades separate.
+Safe groups commonly share a package, parent dependency, manifest, lockfile, base image, or GitHub Action. Keep unrelated ecosystems and risky major upgrades separate.
 
 Suggested inventory:
 
@@ -34,8 +31,7 @@ Suggested inventory:
 
 ## Code-scanning findings
 
-Possible sources include CodeQL, SAST tools, workflow scanners, or
-user-provided alert IDs, rules, locations, and messages.
+Possible sources include CodeQL, SAST tools, workflow scanners, or user-provided alert IDs, rules, locations, and messages.
 
 Collect when available:
 
@@ -46,9 +42,7 @@ Collect when available:
 - runtime reachability or configuration assumptions
 - an existing branch, pull request, feature plan, or owner
 
-Safe groups commonly share one rule or cause in a subsystem, one source/sink
-pattern, or one workflow-permission correction. Keep unrelated languages,
-rules, owners, and behavior changes separate.
+Safe groups commonly share one rule or cause in a subsystem, one source/sink pattern, or one workflow-permission correction. Keep unrelated languages, rules, owners, and behavior changes separate.
 
 Suggested inventory:
 
@@ -66,13 +60,11 @@ Use `compliance-security` and the relevant stack or platform expert to inspect:
 - CI/CD permissions, trusted artifacts, registries, and provenance
 - control verification, negative tests, audit evidence, and accepted risk
 
-Describe a gap as an evidence-backed missing or ineffective control, not a
-generic best-practice recommendation.
+Describe a gap as an evidence-backed missing or ineffective control, not a generic best-practice recommendation.
 
 ## Grouping and status
 
-A candidate should normally become one feature and one focused change. Group
-only when findings share:
+A candidate should normally become one feature and one focused change. Group only when findings share:
 
 - one underlying cause or dependency update
 - compatible ownership and rollout

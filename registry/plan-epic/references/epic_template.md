@@ -26,8 +26,7 @@
 
 ## Problem Statement
 
-<What specific problem or opportunity does this epic address? 2–4 sentences.
-Be more specific than the charter. This is the charter's problem statement narrowed to this quarter's focus.>
+<What specific problem or opportunity does this epic address? 2–4 sentences. Be more specific than the charter. This is the charter's problem statement narrowed to this quarter's focus.>
 
 ## Goals
 

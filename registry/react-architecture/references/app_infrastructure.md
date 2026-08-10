@@ -1,7 +1,6 @@
 # React application infrastructure
 
-Use this reference for startup, shell, providers, routing, configuration,
-authentication bootstrap, platform adapters, and deployment.
+Use this reference for startup, shell, providers, routing, configuration, authentication bootstrap, platform adapters, and deployment.
 
 ## Startup and shell
 
@@ -13,13 +12,11 @@ Keep startup deterministic:
 4. mount the router and application shell
 5. enable development-only instrumentation
 
-Do not perform unrelated network work in module scope. Startup failures should
-be visible and actionable rather than leaving a blank screen.
+Do not perform unrelated network work in module scope. Startup failures should be visible and actionable rather than leaving a blank screen.
 
 ## Providers
 
-Providers are appropriate for stable application-wide capabilities such as the
-router, theme, data client, authentication context, localization, and telemetry.
+Providers are appropriate for stable application-wide capabilities such as the router, theme, data client, authentication context, localization, and telemetry.
 
 For each provider, state:
 
@@ -29,14 +26,11 @@ For each provider, state:
 - what users see while it initializes or fails
 - how tests replace or configure it
 
-Prefer a named `AppProviders` composition over deeply nested anonymous setup in
-the entrypoint.
+Prefer a named `AppProviders` composition over deeply nested anonymous setup in the entrypoint.
 
 ## Configuration
 
-Read runtime or build-time variables in one module. Parse and validate required
-values once, expose a typed configuration object, and avoid leaking secrets into
-client bundles.
+Read runtime or build-time variables in one module. Parse and validate required values once, expose a typed configuration object, and avoid leaking secrets into client bundles.
 
 Distinguish:
 
@@ -47,27 +41,19 @@ Distinguish:
 
 ## Authentication bootstrap
 
-Authentication initialization should make the states explicit: unknown,
-authenticated, anonymous, expired, and failed. Avoid rendering protected
-content while authorization is unresolved.
+Authentication initialization should make the states explicit: unknown, authenticated, anonymous, expired, and failed. Avoid rendering protected content while authorization is unresolved.
 
-Authentication answers identity. Resource access still requires authorization
-at the API or server boundary.
+Authentication answers identity. Resource access still requires authorization at the API or server boundary.
 
 ## API and platform adapters
 
-Centralize transport mechanics such as base URLs, credentials, headers,
-serialization, cancellation, and consistent error translation. Keep product
-decisions out of a generic client.
+Centralize transport mechanics such as base URLs, credentials, headers, serialization, cancellation, and consistent error translation. Keep product decisions out of a generic client.
 
-Wrap browser globals and vendor SDKs when doing so creates a meaningful test or
-migration boundary. Avoid wrappers that merely rename an existing API.
+Wrap browser globals and vendor SDKs when doing so creates a meaningful test or migration boundary. Avoid wrappers that merely rename an existing API.
 
 ## Routing and code splitting
 
-Define route ownership, layouts, permission gates, error handling, and lazy
-boundaries deliberately. Split code at boundaries users naturally cross, often
-routes or large optional workflows.
+Define route ownership, layouts, permission gates, error handling, and lazy boundaries deliberately. Split code at boundaries users naturally cross, often routes or large optional workflows.
 
 Avoid:
 
@@ -86,5 +72,4 @@ Verify:
 - configuration is appropriate for the target environment
 - health and error signals distinguish startup failure from route failure
 
-Document hosting assumptions next to the deployment configuration, not only in
-tribal knowledge.
+Document hosting assumptions next to the deployment configuration, not only in tribal knowledge.

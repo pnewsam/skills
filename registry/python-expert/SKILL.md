@@ -9,9 +9,7 @@ Use this as the entry point for broad Python work. Identify the actual engineeri
 
 For language-agnostic backend architecture such as API contract shape, service boundary strategy, persistence lifecycle, background jobs, external integrations, or auth boundary placement, use `backend-expert` first, then return to `python-expert` for Python/FastAPI implementation details.
 
-Use the router when the request spans two or more focused Python concerns and
-needs a coherent recommendation. Go directly to one focused Python skill when
-exactly one concern is clear.
+Use the router when the request spans two or more focused Python concerns and needs a coherent recommendation. Go directly to one focused Python skill when exactly one concern is clear.
 
 ## 1. Routing Table
 

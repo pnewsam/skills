@@ -7,29 +7,20 @@ description: Create exactly one issue in Linear, resolving the target team and o
 
 ## Outcome
 
-Create one correctly scoped Linear issue, verify its live fields, return its
-identifier and URL, and stop.
+Create one correctly scoped Linear issue, verify its live fields, return its identifier and URL, and stop.
 
 ## Preconditions and effect
 
-Require an authenticated Linear MCP connection. If it is unavailable, follow
-the Linear connection and OAuth setup, then stop because Codex must restart
-before continuing.
+Require an authenticated Linear MCP connection. If it is unavailable, follow the Linear connection and OAuth setup, then stop because Codex must restart before continuing.
 
-This workflow performs one external create operation. The user's explicit
-request to create or file an issue authorizes that operation; it does not
-authorize creating a project, label, cycle, or another issue.
+This workflow performs one external create operation. The user's explicit request to create or file an issue authorizes that operation; it does not authorize creating a project, label, cycle, or another issue.
 
 Require:
 
 - target team
 - concise title
 
-Use supplied context to draft the description. Resolve optional project,
-status, priority, assignee, labels, cycle, due date, estimate, and parent only
-when requested or clearly established by repository instructions or the
-conversation. Ask only when a missing value would materially change the issue
-or its destination.
+Use supplied context to draft the description. Resolve optional project, status, priority, assignee, labels, cycle, due date, estimate, and parent only when requested or clearly established by repository instructions or the conversation. Ask only when a missing value would materially change the issue or its destination.
 
 ## Workflow
 
@@ -39,15 +30,11 @@ Read live Linear data before writing:
 
 - resolve the team and confirm its identifier
 - resolve every requested project, status, label, cycle, user, or parent
-- inspect plausible active issues in the target team or project for an exact or
-  clearly equivalent title and outcome
+- inspect plausible active issues in the target team or project for an exact or clearly equivalent title and outcome
 
-If multiple teams, projects, users, or statuses match, stop and ask which one.
-If a likely duplicate exists, return it and stop unless the user explicitly
-asks for a separate issue.
+If multiple teams, projects, users, or statuses match, stop and ask which one. If a likely duplicate exists, return it and stop unless the user explicitly asks for a separate issue.
 
-Draft an actionable description from known facts. Prefer this compact shape
-when no user or repository template is supplied:
+Draft an actionable description from known facts, in the shared sentence-level style — one idea per sentence, active voice, plain words (see `writing-conventions/references/prose.md`). Prefer this compact shape when no user or repository template is supplied:
 
 ```markdown
 ## Outcome
@@ -67,22 +54,13 @@ when no user or repository template is supplied:
 <Constraints, evidence, links, or open questions>
 ```
 
-Remove empty optional sections. Preserve uncertainty instead of inventing
-requirements. If the user supplies a template or repository instructions name
-one, follow it. Do not claim to have applied a native Linear template unless
-the connected tool actually supports and confirms that operation.
+Remove empty optional sections. Preserve uncertainty instead of inventing requirements. If the user supplies a template or repository instructions name one, follow it. Do not claim to have applied a native Linear template unless the connected tool actually supports and confirms that operation.
 
 ### 2. Create once
 
-Call the Linear issue-creation tool once with the resolved identifiers and
-supported fields. Do not create missing labels or other supporting records as
-a side effect. If the tool rejects an optional field, report the unsupported
-field rather than silently creating a less specific issue or retrying through
-another integration.
+Call the Linear issue-creation tool once with the resolved identifiers and supported fields. Do not create missing labels or other supporting records as a side effect. If the tool rejects an optional field, report the unsupported field rather than silently creating a less specific issue or retrying through another integration.
 
-If the create response is ambiguous or times out, search for the intended
-issue before retrying. Never create a second issue merely because verification
-was inconclusive.
+If the create response is ambiguous or times out, search for the intended issue before retrying. Never create a second issue merely because verification was inconclusive.
 
 ### 3. Verify and report
 
@@ -93,11 +71,9 @@ Fetch the created issue by its returned identifier and verify:
 - requested project and properties that the tool accepted
 - issue identifier, URL, and current status
 
-If creation succeeded but verification fails, report the returned identifier
-and the verification gap; do not retry creation.
+If creation succeeded but verification fails, report the returned identifier and the verification gap; do not retry creation.
 
-Return the issue identifier and URL, its team and project, the properties
-applied, and any requested property the tool could not set.
+Return the issue identifier and URL, its team and project, the properties applied, and any requested property the tool could not set.
 
 ## Safety and idempotency
 
@@ -105,5 +81,4 @@ applied, and any requested property the tool could not set.
 - Read before writing and verify after writing.
 - Do not modify an existing issue; use an update workflow for that.
 - Do not create duplicates, supporting records, comments, or child issues.
-- Do not expose private workspace data beyond what is necessary to identify the
-  created issue.
+- Do not expose private workspace data beyond what is necessary to identify the created issue.

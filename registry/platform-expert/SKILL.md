@@ -9,9 +9,7 @@ Use this as the entry point for broad platform engineering work. Identify the op
 
 Platform work is where product code becomes a running service. Prefer repeatable, reviewed, observable, reversible changes over hand-tuned environments and one-off deployment rituals.
 
-Use the router when the request spans two or more focused platform concerns and
-needs a coherent recommendation. Go directly to one focused `platform-*` skill
-when exactly one concern is clear.
+Use the router when the request spans two or more focused platform concerns and needs a coherent recommendation. Go directly to one focused `platform-*` skill when exactly one concern is clear.
 
 ---
 

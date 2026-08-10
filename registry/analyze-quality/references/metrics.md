@@ -22,8 +22,7 @@ Record for every metric used:
 | Confidence | High, medium, or low based on evidence quality |
 | Limitation | Missing history, telemetry, tests, ownership, or runtime context |
 
-Use repository-relative percentiles and trends when no project standard exists.
-Do not invent universal file-length, complexity, or coverage gates.
+Use repository-relative percentiles and trends when no project standard exists. Do not invent universal file-length, complexity, or coverage gates.
 
 ## Maintainability signals
 
@@ -45,11 +44,9 @@ Do not invent universal file-length, complexity, or coverage gates.
 - duplicated implementations or competing patterns
 - structural outliers among comparable sibling modules
 
-The strongest maintainability candidates usually combine change pressure with
-structural friction. Length or complexity alone is weak evidence.
+The strongest maintainability candidates usually combine change pressure with structural friction. Length or complexity alone is weak evidence.
 
-Use `quality-code-clarity` for local reading cost, `quality-modularity` for
-boundary evidence, and `quality-refactoring` to choose a safe transformation.
+Use `quality-code-clarity` for local reading cost, `quality-modularity` for boundary evidence, and `quality-refactoring` to choose a safe transformation.
 
 ## Correctness signals
 
@@ -59,11 +56,9 @@ boundary evidence, and `quality-refactoring` to choose a safe transformation.
 - changes to critical rules without nearby behavioral tests
 - repeated production or support reports for one workflow
 
-Do not infer that every commit containing `fix` is a defect. Inspect a sample
-and report the classification method.
+Do not infer that every commit containing `fix` is a defect. Inspect a sample and report the classification method.
 
-Use `quality-correctness` to identify the invariant or boundary behind a
-candidate and `quality-testing` to identify proof.
+Use `quality-correctness` to identify the invariant or boundary behind a candidate and `quality-testing` to identify proof.
 
 ## Testing signals
 
@@ -76,8 +71,7 @@ candidate and `quality-testing` to identify proof.
 - expensive end-to-end coverage where a lower level could prove the behavior
 - critical flows with no recent automated or exploratory evidence
 
-Coverage percentage is a weak proxy. Prefer whether a test would fail for a
-meaningful regression at the cheapest reliable level.
+Coverage percentage is a weak proxy. Prefer whether a test would fail for a meaningful regression at the cheapest reliable level.
 
 ## Reliability signals
 
@@ -89,8 +83,7 @@ meaningful regression at the cheapest reliable level.
 - mean time to detect or diagnose when trustworthy data exists
 - missing logs, metrics, or traces at critical boundaries
 
-Compare production signals only when workload, environment, and observation
-windows are compatible.
+Compare production signals only when workload, environment, and observation windows are compatible.
 
 ## Ranking and false positives
 
@@ -102,8 +95,7 @@ Rank candidates using separate evidence-backed dimensions:
 4. Confidence and corroboration.
 5. Feasibility of one bounded improvement.
 
-Do not collapse the dimensions into a single quality score. A high score hides
-trade-offs and invites metric gaming.
+Do not collapse the dimensions into a single quality score. A high score hides trade-offs and invites metric gaming.
 
 Common false positives:
 

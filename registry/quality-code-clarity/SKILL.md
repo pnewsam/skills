@@ -38,14 +38,10 @@ Clear code makes intent obvious at the point of use. A maintainer should underst
 
 ## Evidence Signals
 
-- Function length, nesting, branching complexity, and parameter count can point
-  to high local reading cost.
+- Function length, nesting, branching complexity, and parameter count can point to high local reading cost.
 - High churn or repeated defects make a clarity problem more urgent.
-- A large file, function, or metric value alone does not prove unclear code;
-  inspect whether a maintainer can identify the main path, inputs, outputs, and
-  constraints without reconstructing distant context.
-- Compare like-for-like units inside the repository instead of imposing a
-  universal size or complexity threshold.
+- A large file, function, or metric value alone does not prove unclear code; inspect whether a maintainer can identify the main path, inputs, outputs, and constraints without reconstructing distant context.
+- Compare like-for-like units inside the repository instead of imposing a universal size or complexity threshold.
 
 ## Do / Don't
 

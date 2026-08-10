@@ -1,4 +1,0 @@
-interface:
-  display_name: "Polish PR"
-  short_description: "Make a PR clearer without changing its meaning."
-  default_prompt: "Use $polish-pr to make this pull request clearer and more human-readable."

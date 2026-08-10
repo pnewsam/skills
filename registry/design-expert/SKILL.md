@@ -9,9 +9,7 @@ Use this as the entry point for visual design judgment. The goal is to make a fu
 
 This skill does not replace `ui-expert`. Use `ui-expert` for interface mechanics: page archetypes, forms, actions, feedback states, data display, responsive behavior, copy, icons, and concrete visual-system implementation. Use `design-expert` when the problem is that the UI feels busy, clunky, disharmonious, unfocused, generic, heavy, or visually unresolved.
 
-Use the router when the request needs synthesis across two or more focused
-design concerns or the dominant concern is unclear. Go directly to one focused
-`design-*` skill when exactly one concern is clear.
+Use the router when the request needs synthesis across two or more focused design concerns or the dominant concern is unclear. Go directly to one focused `design-*` skill when exactly one concern is clear.
 
 ## 1. Routing Table
 
@@ -36,12 +34,8 @@ If the task also requires choosing a UI pattern, route through `ui-expert` first
 Use these boundaries:
 
 - `ui-layouts` owns page archetypes, app shell, page zones, and chrome. `design-composition` owns balance, proportion, focal point, and spatial harmony within that structure.
-- `visual-hierarchy` owns task priority, scanning order, visual dominance,
-  contrast, and de-emphasis across both interface and general visual-design
-  contexts.
-- `ui-spacing` owns spacing scales, padding, gaps, and density values.
-  `design-composition` owns the cadence, repetition, pauses, and felt tempo
-  those values create across a composition.
+- `visual-hierarchy` owns task priority, scanning order, visual dominance, contrast, and de-emphasis across both interface and general visual-design contexts.
+- `ui-spacing` owns spacing scales, padding, gaps, and density values. `design-composition` owns the cadence, repetition, pauses, and felt tempo those values create across a composition.
 - `ui-color`, `ui-typography`, and `ui-depth` own implementation systems and semantic roles. `design-visual-language` owns aesthetic direction, mood, coherence, and expressive fit.
 - `ui-content` owns words and microcopy. `design-simplicity` owns whether the total surface has too many words, options, decorations, or competing ideas.
 
@@ -51,20 +45,14 @@ When two skills overlap, ask: "Is this a conventional interface-pattern decision
 
 ## 3. Design-System Convergence Signals
 
-For repository-wide analysis, use `analyze-design-system`. When that workflow
-loads this expert, interpret whether measured variation is coherent expression
-or accidental drift. Examine:
+For repository-wide analysis, use `analyze-design-system`. When that workflow loads this expert, interpret whether measured variation is coherent expression or accidental drift. Examine:
 
 - whether semantic tokens and repeated treatments support one named direction
-- whether exceptions correspond to product, brand, editorial, data, or theme
-  needs
+- whether exceptions correspond to product, brand, editorial, data, or theme needs
 - whether duplicate values express the same visual role
-- whether consolidation would improve coherence without flattening useful
-  hierarchy or product character
+- whether consolidation would improve coherence without flattening useful hierarchy or product character
 
-Raw-value counts and value equality do not establish design duplication.
-Semantic role, context, theming, and intended visual direction decide whether a
-shared token or treatment is appropriate.
+Raw-value counts and value equality do not establish design duplication. Semantic role, context, theming, and intended visual direction decide whether a shared token or treatment is appropriate.
 
 ## 4. Design Review Protocol
 

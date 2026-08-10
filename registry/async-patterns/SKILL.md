@@ -7,9 +7,7 @@ description: Design or review asynchronous JavaScript and TypeScript control flo
 
 ## Outcome
 
-Make asynchronous ownership, ordering, cancellation, failure, and resource use
-explicit. Optimize concurrency only after identifying which operations are
-independent and what failure semantics the caller needs.
+Make asynchronous ownership, ordering, cancellation, failure, and resource use explicit. Optimize concurrency only after identifying which operations are independent and what failure semantics the caller needs.
 
 ## Model the operation
 
@@ -27,12 +25,9 @@ Before choosing a pattern, answer:
 
 ### Use the clearest control flow
 
-`async`/`await` is usually clearest for multi-step logic. Promise composition
-can be clearer for direct transforms or library APIs. Consistency within one
-operation matters more than banning `.then()`.
+`async`/`await` is usually clearest for multi-step logic. Promise composition can be clearer for direct transforms or library APIs. Consistency within one operation matters more than banning `.then()`.
 
-Do not add `async` merely to wrap a synchronous result unless an interface
-requires a promise.
+Do not add `async` merely to wrap a synchronous result unless an interface requires a promise.
 
 ### Express dependency and concurrency honestly
 
@@ -46,17 +41,13 @@ const [orders, preferences] = await Promise.all([
 ]);
 ```
 
-`Promise.all` fails fast from the caller's perspective, but it does not cancel
-the remaining operations. Ensure abandoned work is harmless or pass a shared
-cancellation signal.
+`Promise.all` fails fast from the caller's perspective, but it does not cancel the remaining operations. Ensure abandoned work is harmless or pass a shared cancellation signal.
 
-Use `Promise.allSettled` only when the product can meaningfully process partial
-success and every rejection will be inspected.
+Use `Promise.allSettled` only when the product can meaningfully process partial success and every rejection will be inspected.
 
 ### Propagate cancellation
 
-Make cancellation part of the operation contract when work can become
-irrelevant:
+Make cancellation part of the operation contract when work can become irrelevant:
 
 ```ts
 async function search(query: string, signal: AbortSignal) {
@@ -84,24 +75,17 @@ async function handleInput(query: string) {
 }
 ```
 
-Abort only work owned by the caller. Propagate the signal through internal
-layers rather than creating unrelated controllers at each function.
+Abort only work owned by the caller. Propagate the signal through internal layers rather than creating unrelated controllers at each function.
 
 ### Guard stale results
 
-Cancellation may be unavailable or arrive too late. Use a generation, request
-identity, or framework-native mechanism to prevent an older result from
-overwriting current state.
+Cancellation may be unavailable or arrive too late. Use a generation, request identity, or framework-native mechanism to prevent an older result from overwriting current state.
 
-The guard protects state; cancellation additionally saves resources. They may
-both be needed.
+The guard protects state; cancellation additionally saves resources. They may both be needed.
 
 ### Bound parallelism
 
-Do not apply `Promise.all(items.map(...))` to an unbounded collection. Choose a
-limit based on the downstream service, connection pool, memory, file handles,
-and rate limits. Prefer an existing project utility or library over a naive
-batch loop when fairness, ordering, or continuous scheduling matters.
+Do not apply `Promise.all(items.map(...))` to an unbounded collection. Choose a limit based on the downstream service, connection pool, memory, file handles, and rate limits. Prefer an existing project utility or library over a naive batch loop when fairness, ordering, or continuous scheduling matters.
 
 ### Own every promise
 
@@ -112,20 +96,15 @@ Every promise should be:
 - collected into an explicit group
 - or intentionally detached with rejection reporting
 
-For detached work, record failure and shutdown behavior. `void task()` documents
-that the result is ignored; it does not handle rejection by itself.
+For detached work, record failure and shutdown behavior. `void task()` documents that the result is ignored; it does not handle rejection by itself.
 
 ### Timeouts and cleanup
 
-A timeout should cancel or otherwise retire the underlying work, not merely
-stop waiting for it. Release timers, listeners, locks, streams, and other
-resources in `finally` or the runtime's structured cleanup mechanism.
+A timeout should cancel or otherwise retire the underlying work, not merely stop waiting for it. Release timers, listeners, locks, streams, and other resources in `finally` or the runtime's structured cleanup mechanism.
 
 ### Loops
 
-Use `for...of` with `await` for intentional sequencing. Use a mapped promise
-group or concurrency limiter for intentional parallelism. Avoid async
-`forEach`, whose returned promises are not collected.
+Use `for...of` with `await` for intentional sequencing. Use a mapped promise group or concurrency limiter for intentional parallelism. Avoid async `forEach`, whose returned promises are not collected.
 
 ## Review checklist
 
@@ -138,5 +117,4 @@ group or concurrency limiter for intentional parallelism. Avoid async
 - Do timeouts retire work and cleanup resources?
 - Are retry and idempotency handled by the correct boundary?
 
-Use `error-handling` for the failure contract and `react-hooks-effects` for
-React effect lifecycles.
+Use `error-handling` for the failure contract and `react-hooks-effects` for React effect lifecycles.

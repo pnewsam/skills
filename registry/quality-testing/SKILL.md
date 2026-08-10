@@ -40,14 +40,10 @@ Test risk, not files. Coverage percentage is a weak proxy. A good test would fai
 ## Evidence Signals
 
 - Same-code pass/fail frequency is the primary flakiness signal.
-- Old skips or quarantines, retry dependence, repeated failure clusters, and
-  high duration variance indicate an unreliable suite.
-- Changed production behavior without corresponding tests identifies a review
-  candidate, not an automatic coverage failure.
-- Coverage percentage is a weak proxy. Prefer whether the test would fail for
-  a meaningful regression at the cheapest reliable level.
-- Compare runtime and failure trends only across compatible environments and
-  workloads.
+- Old skips or quarantines, retry dependence, repeated failure clusters, and high duration variance indicate an unreliable suite.
+- Changed production behavior without corresponding tests identifies a review candidate, not an automatic coverage failure.
+- Coverage percentage is a weak proxy. Prefer whether the test would fail for a meaningful regression at the cheapest reliable level.
+- Compare runtime and failure trends only across compatible environments and workloads.
 
 ## Do / Don't
 
