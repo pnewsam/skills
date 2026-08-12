@@ -89,22 +89,30 @@ and `rounded-[12px]` are **exact** token matches. `6px` and others have none.
 `theme.extend.colors` keys → `text-/bg-/border-<key>`. Present:
 `surface`, `surface-2`, `surface-3`, `ink`, `ink-2…5`, `line`, `line-2`,
 `accent`, `accent-2/3`, `accent-bg`, `danger(+-bg/-border/-text)`,
-`warning(+…)`, `info-bg/-border/-text`, `success(+…)`, and the semantic
-aliases added for this migration: `muted`, `strong`, `surface-glass`,
-`sage-500`. (Also `text-primary/secondary/faint`, `surface-01/02`,
-`border-01/02` — these keys yield **doubled** utilities like `text-text-primary`;
-avoid them for new work.)
+`warning(+…)`, `info-bg/-border/-text`, `success(+…)`. (Also
+`text-primary/secondary/faint`, `surface-01/02`, `border-01/02` — these keys
+yield **doubled** utilities like `text-text-primary`; avoid them for new work.)
+
+⚠️ **NOT yet in the config** (verified on `staging` 2026-08-12): `muted`,
+`strong`, `surface-glass`, `sage-500`. These aliases were in the **closed** PR
+#588 and never merged; their addition is deferred to **ENG-1381**. The CSS
+*vars* exist in globals.css, but the *utilities* (`text-muted`, `text-strong`,
+`bg-surface-glass`, `text-sage-500`) do **not** — emitting them now produces an
+undefined class that Tailwind silently drops (preflight off) → invisible
+styling. **Keep `[var(--text-muted)]` etc. arbitrary until ENG-1381 lands the
+config token.** Re-verify this list against `tailwind.config.js` before relying
+on it.
 
 Exact semantic equivalences (a var defined as another var):
 
 | Inline var | Use |
 | --- | --- |
-| `var(--text-muted)` (= `var(--ink-3)`) | `text-muted` |
-| `var(--text-strong)` (= `var(--ink)`) | `text-strong` |
-| `var(--border-subtle)` (= `var(--line)`) | `border-line` |
-| `var(--surface-glass)` | `bg-surface-glass` |
-| `var(--sage-500)` | `text-sage-500` |
-| `var(--ink)`, `var(--ink-3)`, `var(--line)`, `var(--surface-2)` … | `text-ink`, `text-ink-3`, `border-line`, `bg-surface-2` … |
+| `var(--border-subtle)` (= `var(--line)`) | `border-line` ✅ live |
+| `var(--ink)`, `var(--ink-3)`, `var(--line)`, `var(--surface-2)` … | `text-ink`, `text-ink-3`, `border-line`, `bg-surface-2` … ✅ live |
+| `var(--text-muted)` (= `var(--ink-3)`) | `text-muted` — ⚠️ pending ENG-1381; keep arbitrary (or use `text-ink-3` directly) |
+| `var(--text-strong)` (= `var(--ink)`) | `text-strong` — ⚠️ pending ENG-1381; keep arbitrary (or use `text-ink` directly) |
+| `var(--surface-glass)` | `bg-surface-glass` — ⚠️ pending ENG-1381; keep arbitrary |
+| `var(--sage-500)` | `text-sage-500` — ⚠️ pending ENG-1381; keep arbitrary |
 
 **Adding a token to the config**: pick a color *key* that produces the utility
 you want. Want `text-muted` → key `muted`. A key like `text-muted` would emit

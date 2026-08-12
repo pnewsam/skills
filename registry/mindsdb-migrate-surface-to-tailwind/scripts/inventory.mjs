@@ -25,8 +25,18 @@ const SPACE_SNAP = { 6: '2', 10: '3', 14: '4', 18: '5' }; // half-steps, round-h
 const FONT = { 10: '2xs', 11: 'xs', 12.5: 'sm', 14: 'base', 15: 'md', 17: 'lg', 22: 'xl', 28: '2xl', 36: '3xl' };
 const FONT_PTS = Object.keys(FONT).map(Number);
 const RADIUS = { 8: 'card-row', 12: 'card' };
+// Only vars whose Tailwind utility is actually defined in tailwind.config.js today.
+// `border-subtle` → `border-line` is the only live color equivalence on staging.
 const COLOR_VAR = {
-  'text-muted': 'text-muted', 'text-strong': 'text-strong', 'border-subtle': 'border-line',
+  'border-subtle': 'border-line',
+};
+// These vars exist in globals.css but have NO matching config utility yet — the
+// tokens were in the closed PR #588 and their addition is deferred to ENG-1381.
+// Converting to the bare utility now emits an UNDEFINED class that Tailwind
+// silently drops (preflight off) → invisible styling. Keep arbitrary until the
+// config token lands. Re-verify against tailwind.config.js if ENG-1381 merges.
+const COLOR_VAR_PENDING = {
+  'text-muted': 'text-muted', 'text-strong': 'text-strong',
   'surface-glass': 'bg-surface-glass', 'sage-500': 'text-sage-500',
 };
 
@@ -69,6 +79,7 @@ for (const m of src.matchAll(/\brounded-\[(\d+(?:\.\d+)?)px\]/g)) {
 for (const m of src.matchAll(/\b(text|bg|border)-\[var\(--([a-z0-9-]+)\)\]/g)) {
   const cls = `${m[1]}-[var(--${m[2]})]`;
   if (COLOR_VAR[m[2]]) add('EXACT', cls, COLOR_VAR[m[2]]);
+  else if (COLOR_VAR_PENDING[m[2]]) add('KEEP', cls, `${COLOR_VAR_PENDING[m[2]]} — token NOT in config yet; add via ENG-1381 before converting`);
   else add('KEEP', cls, 'semantic var — keep, or add a config token');
 }
 

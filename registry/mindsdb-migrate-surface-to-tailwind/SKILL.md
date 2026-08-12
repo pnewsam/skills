@@ -40,6 +40,8 @@ Completion of one stage never authorizes the next. Passes 1–2 are pixel-preser
 
 Run `node scripts/inventory.mjs <file...>` to get: the `style={{` count, and a histogram of arbitrary utilities bucketed into **EXACT token available**, **SNAP candidate**, and **no token (keep arbitrary)**. This is the worklist. Also skim the files so you can tell dynamic objects from static ones.
 
+**Repo-wide baseline / picking a surface.** The renderer is **`.jsx`, not `.tsx`** — a `git grep -- 'src/renderer/**/*.tsx'` pathspec silently matches almost nothing (git doesn't expand `**` without `:(glob)`, and it's the wrong extension); scan with a plain dir pathspec: `git grep -c 'style={{' origin/staging -- 'src/renderer/cowork'`. As of 2026-08-12 the original ENG-1017 queue (the top-8 surfaces) is **merged**, but it was never the whole job: **~610 raw inline `style={{}}` across ~69 un-queued `.jsx` files remain** (plus ~150 arbitrary utilities to tokenize/snap). Bucket un-queued work by feature area (views, then `components/<area>/`), one surface per PR. Raw counts mix static (migratable) and dynamic (keep) — the static/dynamic split still needs a per-file skim; inventory.mjs counts objects and classifies only the already-arbitrary utilities.
+
 Open a tracking issue under **ENG-1017** (`create-issue`), branch off `staging` (or off the prior stacked PR's branch if this surface builds on unmerged work), and name it `paul/eng-<n>-<surface>-tailwind`.
 
 ### 1. Convert (pixel-preserving)
