@@ -134,33 +134,12 @@
         "mindsdb-track-design-system-metrics"
       ]
     },
-    "python": {
-      "description": "Python and FastAPI architecture, tooling, typing, async, persistence, errors, and testing.",
-      "skills": [
-        "fastapi-architecture",
-        "python-async-boundaries",
-        "python-database-patterns",
-        "python-error-handling",
-        "python-expert",
-        "python-project-structure",
-        "python-testing",
-        "python-tooling",
-        "python-typing-data-modeling"
-      ]
-    },
     "quality": {
       "description": "Language-agnostic correctness, clarity, modularity, reliability, testing, refactoring, async, errors, and TypeScript guidance.",
       "skills": [
         "analyze-quality",
         "async-patterns",
         "error-handling",
-        "quality-code-clarity",
-        "quality-correctness",
-        "quality-expert",
-        "quality-modularity",
-        "quality-refactoring",
-        "quality-reliability",
-        "quality-testing",
         "typescript-types"
       ]
     },
@@ -202,7 +181,6 @@
         "backend",
         "platform",
         "compliance",
-        "python",
         "quality",
         "ui",
         "design"
