@@ -58,7 +58,7 @@ const judged = await parallel(directions.map(d => () =>
 phase('Synthesize')
 const digest = judged.map(d => `#${d.i} (${d.angle}) total=${d.total}\n${d.text}`).join('\n\n---\n\n')
 const recommendation = await agent(
-  `You are the design lead. From these judged directions, recommend ONE final direction: take the highest-scoring as the base and graft the specific stronger moves from the runners-up. State the base, exactly what you borrowed and from which, and why. Then list the ground-truth checks to run before build (contrast via ui-color's check, spacing via ui-spacing's lint).\n\n${digest}`,
+  `You are the design lead. From these judged directions, recommend ONE final direction: take the highest-scoring as the base and graft the specific stronger moves from the runners-up. State the base, exactly what you borrowed and from which, and why. Then list the ground-truth checks to run before build (contrast via ui-color's check, spacing via ui-spacing's lint).\n\nOutput ONLY the final recommendation — no preamble, no "let me…", no meta-commentary, no restating the task.\n\n${digest}`,
   { label: 'synthesize', phase: 'Synthesize' },
 )
 
