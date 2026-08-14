@@ -148,23 +148,6 @@
         "python-typing-data-modeling"
       ]
     },
-    "react": {
-      "description": "React architecture and focused component, hooks, state, data, routing, quality, and testing guidance.",
-      "skills": [
-        "react-accessibility",
-        "react-architecture",
-        "react-component-design",
-        "react-data-fetching",
-        "react-error-handling",
-        "react-expert",
-        "react-form-patterns",
-        "react-hooks-effects",
-        "react-performance",
-        "react-routing",
-        "react-state-management",
-        "react-testing"
-      ]
-    },
     "quality": {
       "description": "Language-agnostic correctness, clarity, modularity, reliability, testing, refactoring, async, errors, and TypeScript guidance.",
       "skills": [
@@ -220,7 +203,6 @@
         "platform",
         "compliance",
         "python",
-        "react",
         "quality",
         "ui",
         "design"
