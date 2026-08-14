@@ -67,18 +67,6 @@
         "validate-feature"
       ]
     },
-    "backend": {
-      "description": "Language-agnostic backend architecture and focused server-side decision guidance.",
-      "skills": [
-        "backend-api-design",
-        "backend-auth-boundaries",
-        "backend-expert",
-        "backend-integrations",
-        "backend-jobs-queues",
-        "backend-persistence",
-        "backend-service-boundaries"
-      ]
-    },
     "platform": {
       "description": "Platform engineering, CI/CD, deployments, environments, infrastructure, and secrets.",
       "skills": [
@@ -178,7 +166,6 @@
     "advisory": {
       "description": "Broad cross-domain consultation with every locally maintained specialist router and reference profile.",
       "includes": [
-        "backend",
         "platform",
         "compliance",
         "quality",

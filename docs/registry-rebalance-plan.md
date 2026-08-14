@@ -4,6 +4,35 @@ A plan to re-weight the skill registry away from hand-encoded method knowledge
 and toward objective-specification and ground-truth verification — the parts
 that keep their value (or gain value) as the base model improves.
 
+## Progress (2026-08-14) — branch `pilot/react-eviction`
+
+Executed on a reversible branch (`git checkout main` reverts everything):
+
+- **Evicted (evidence-backed):** `react-*` (12), `python-*` (9), `quality-*`
+  knowledge skills (7), `backend-*` (7) → `archive/*-evicted/`. Active skills
+  **108 → 73**, validator green throughout.
+- **Evidence:** 4 A/B rounds (31 advice cases + 4 real-code tasks) under a
+  strict evidence-grounded judge. The bare model tied or beat every skill; zero
+  convert candidates. Scorecards: `evals/results/2026-08-14-*`.
+- **Deliberately preserved:** `analyze-quality` (measurement) and cross-cutting
+  `async-patterns` / `error-handling` / `typescript-types`.
+
+### Remaining families — NOT blanket-evict (deliberate stop)
+
+These need conversion, not eviction, so they are left active pending that work:
+
+- **`compliance-*`, `threat-model`, `platform-*`:** these encode *external
+  objectives* (regulatory standards, operational guardrails), not derivable
+  technique. Convert each to "what must be true + a pinned citation + an
+  automated check" (e.g. axe for a11y); keep the objective, drop how-to-code
+  prose. A blind evict-A/B is the wrong instrument here.
+- **`ui-*`, `design-*`:** replace prose with checks/search — `ui-color`→contrast
+  validator, `ui-spacing`→scale lint, keep `ui-data-viz` (validator template);
+  `design-*` → a generate-N-and-judge Workflow. Evict prose only once the
+  replacement exists, so capability isn't lost.
+- `writing-conventions` (house voice) and the PR/Linear/planning/verification
+  skills remain (objective/plumbing/ground-truth).
+
 ## The rule this plan applies
 
 **Keep skills that specify _what you want_ or _check what you got_. Drop or
