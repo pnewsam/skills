@@ -22,6 +22,7 @@
         "prepare-pr",
         "review-pr",
         "stash",
+        "trim-comments",
         "update-pr",
         "validate-changes",
         "writing-conventions"

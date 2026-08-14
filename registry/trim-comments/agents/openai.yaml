@@ -1,0 +1,4 @@
+interface:
+  display_name: "Trim Comments"
+  short_description: "Trim low-value comments a branch's changes introduced."
+  default_prompt: "Use $trim-comments to trim the low-value code comments this branch's changes introduced."
