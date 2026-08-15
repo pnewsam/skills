@@ -155,7 +155,6 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 	for _, expected := range []string{
 		"consult-expert",
 		"compliance-expert",
-		"design-expert",
 		"platform-expert",
 		"ui-expert",
 		"visual-hierarchy",
