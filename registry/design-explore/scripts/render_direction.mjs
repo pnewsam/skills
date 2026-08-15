@@ -33,9 +33,10 @@
  *   node render_direction.mjs --directions dirs.json --out out/             # HTML only
  *   node render_direction.mjs --directions dirs.json --out out/ --shot      # + screenshots
  *   node render_direction.mjs --directions dirs.json --out out/ --shot --scale 4,8,12,16
+ *   node render_direction.mjs --directions dirs.json --out out/ --strict-spacing  # promote off-scale to a gate
  *
- * Exit status is nonzero when any candidate fails its AA contrast gate or a
- * required step fails, so a workflow can stop a failing direction.
+ * Exit status is nonzero when any candidate fails its AA contrast gate, or the
+ * spacing conformance gate under --strict-spacing, or a required step fails.
  */
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -87,6 +88,20 @@ function spacingScale(tokens, explicit) {
     sp0: near(2 * unit), sp1: near(4 * unit), sp2: near(8 * unit),
     sp3: near(16 * unit), sp4: near(32 * unit),
   };
+}
+
+// spacing conformance (mirrors ui-spacing's lint): flag any rhythm value that
+// is off the scale. Advisory by default; --strict-spacing promotes it to a gate.
+function spacingGate(t, explicit, base = 4) {
+  const rawUnit = Math.max(2, Math.round((t.spacing ?? 8) * (t.density ?? 1)));
+  const onScale = (v) => (explicit || []).includes(v) || (!explicit && v % base === 0);
+  const nearest = (v) => (explicit && explicit.length
+    ? explicit.reduce((a, b) => Math.abs(b - v) < Math.abs(a - v) ? b : a, explicit[0])
+    : Math.round(v / base) * base);
+  const slots = [['unit', rawUnit], ['2u', 2 * rawUnit], ['4u', 4 * rawUnit], ['8u', 8 * rawUnit], ['16u', 16 * rawUnit], ['32u', 32 * rawUnit]];
+  const issues = [];
+  for (const [label, v] of slots) if (!onScale(v)) issues.push({ label, requested: v, nearest: nearest(v) });
+  return { unit: rawUnit, issues };
 }
 
 function cssVarsFor(tokens, sp, sizes, isDark) {
@@ -213,6 +228,7 @@ function main() {
   const shot = has('--shot');
   const scaleSpec = arg('--scale');
   const explicit = scaleSpec ? scaleSpec.split(',').map((s) => parseInt(s, 10)).filter((n) => Number.isFinite(n)) : null;
+  const strictSpacing = has('--strict-spacing');
 
   if (!directionsPath) {
     console.error('usage: node render_direction.mjs --directions dirs.json --out out/ [--shot] [--scale 4,8,12,16]');
@@ -237,7 +253,8 @@ function main() {
 
     const report = checkPairs(id, t);
     const fails = report.fail;
-        let line = `[${fails.length ? 'FAIL' : 'ok  '}] ${id}: `;
+    const spacing = spacingGate(t, explicit);
+    let line = `[${fails.length ? 'FAIL' : 'ok  '}] ${id}: `;
     const shots = [];
     const themePasses = [['light', t, false]];
     if (t.dark) themePasses.push(['dark', { ...t, ...t.dark }, true]);
@@ -256,12 +273,16 @@ function main() {
       }
     }
 
-    line += `${report.pairs.length} contrast pairs; ${fails.length} below AA`;
+    line += `${report.pairs.length} contrast pairs; ${fails.length} below AA; spacing off-scale ${spacing.issues.length}`;
     console.log(line);
     for (const f of fails) {
       console.log(`    FAIL  ${f.dark ? '[dark] ' : ''}${(f.r || 0).toFixed(2)}:1  ${f.label}${f.note ? ' (' + f.note + ')' : ''}`);
     }
+    for (const w of spacing.issues) {
+      console.log(`    WARN spacing  ${w.label}=${w.requested}px off-scale (nearest ${w.nearest}px)`);
+    }
     if (fails.length) failures += 1;
+    if (strictSpacing && spacing.issues.length) failures += 1;
 
     if (chrome) {
       for (const [src, dst] of shots) {
@@ -273,7 +294,7 @@ function main() {
   }
 
   if (!chrome && shot) console.error(`WARNING: --shot requested but no Chrome found (CHROME_BIN, macOS path, google-chrome, chromium). HTML only.`);
-  console.log(`\n${spec.candidates?.length || 0} direction(s), ${failures} below the AA gate`);
+  console.log(`\n${spec.candidates?.length || 0} direction(s), ${failures} gate failure(s) (contrast AA${strictSpacing ? ' + spacing on-scale' : ''})`);
   process.exit(failures ? 1 : 0);
 }
 

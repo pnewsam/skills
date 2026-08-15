@@ -50,9 +50,10 @@ focused `ui-*` skills.
 5. **Synthesize.** Take the highest-scoring direction as the base and graft the
    specific stronger moves from the others. State what you took and why.
 6. **Verify against ground truth.** The renderer's contrast gate is the first
-   check; cross-check it with `ui-color`'s contrast validator and `ui-spacing`
-   scale lint on the spacing when a real implementation exists. A direction
-   that fails accessibility is out regardless of taste.
+   check; it also flags any spacing that is off the scale (`--strict-spacing`
+   promotes this to a gate, otherwise advisory). Cross-check with `ui-color`'s
+   contrast validator and `ui-spacing`'s scale lint when a real implementation
+   exists. A direction that fails accessibility is out regardless of taste.
 
 ## Automated form
 

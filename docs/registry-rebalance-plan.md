@@ -141,7 +141,9 @@ The maintenance and routing attention you free goes into the part that scales:
   generators emit a structured `tokens` block; `scripts/render_direction.mjs`
   turns each into a standalone page + Chrome screenshot and runs the WCAG AA
   gate on the pairs it actually renders (math identical to `ui-color`'s
-  checker, verified 1:1). A direction below AA is out regardless of taste.
+  checker, verified 1:1) and a spacing-conformance advisory mirroring
+  `ui-spacing`'s lint (`--strict-spacing` gates it). A direction below AA is
+  out regardless of taste.
 - **`shot_diff.mjs` added to `validate-changes`** (2026-08-15): a
   dependency-free pure-Node PNG decoder + diff (strict by default: any pixel
   above tolerance is a change; `--threshold` for non-deterministic renders).
