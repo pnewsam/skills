@@ -26,8 +26,13 @@ A `*_pilot_cases.json` file is the contract for one family-level A/B run:
 - Score 0-1: (fraction of `must_include` anchors satisfied) minus 0.34 per
   `must_exclude` anchor present, floored at 0. Exclude degenerate reps
   (returned preamble only) and note them in the report.
-- Record the journal id, raw answers, and scores in a dated `results/` file,
-  then interpret per the file's `gate`.
+- Verify the numbers, do not hand-eye them: `scripts/score_ab.py` recomputes
+  per-arm means, the per-case table, the recovery rule, and the gate from the
+  raw rows `scripts/score_ab.py <case-file> scores.tsv
+  [--exclude case,arm,rep,...]` (TSV: case arm rep score [avoid_violations]).
+- Record the journal id, raw answers, and scores in a dated `results/` file —
+  copy `results/TEMPLATE-ui-family.md` (or the react trials report) for the
+  shape — then interpret per the case file's `gate`.
 
 Add a quality case whenever a family is proposed for eviction or conversion,
 and add a routing regression case whenever a real invocation routes
