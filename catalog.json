@@ -67,18 +67,6 @@
         "validate-feature"
       ]
     },
-    "backend": {
-      "description": "Language-agnostic backend architecture and focused server-side decision guidance.",
-      "skills": [
-        "backend-api-design",
-        "backend-auth-boundaries",
-        "backend-expert",
-        "backend-integrations",
-        "backend-jobs-queues",
-        "backend-persistence",
-        "backend-service-boundaries"
-      ]
-    },
     "platform": {
       "description": "Platform engineering, CI/CD, deployments, environments, infrastructure, and secrets.",
       "skills": [
@@ -134,50 +122,12 @@
         "mindsdb-track-design-system-metrics"
       ]
     },
-    "python": {
-      "description": "Python and FastAPI architecture, tooling, typing, async, persistence, errors, and testing.",
-      "skills": [
-        "fastapi-architecture",
-        "python-async-boundaries",
-        "python-database-patterns",
-        "python-error-handling",
-        "python-expert",
-        "python-project-structure",
-        "python-testing",
-        "python-tooling",
-        "python-typing-data-modeling"
-      ]
-    },
-    "react": {
-      "description": "React architecture and focused component, hooks, state, data, routing, quality, and testing guidance.",
-      "skills": [
-        "react-accessibility",
-        "react-architecture",
-        "react-component-design",
-        "react-data-fetching",
-        "react-error-handling",
-        "react-expert",
-        "react-form-patterns",
-        "react-hooks-effects",
-        "react-performance",
-        "react-routing",
-        "react-state-management",
-        "react-testing"
-      ]
-    },
     "quality": {
       "description": "Language-agnostic correctness, clarity, modularity, reliability, testing, refactoring, async, errors, and TypeScript guidance.",
       "skills": [
         "analyze-quality",
         "async-patterns",
         "error-handling",
-        "quality-code-clarity",
-        "quality-correctness",
-        "quality-expert",
-        "quality-modularity",
-        "quality-refactoring",
-        "quality-reliability",
-        "quality-testing",
         "typescript-types"
       ]
     },
@@ -216,11 +166,8 @@
     "advisory": {
       "description": "Broad cross-domain consultation with every locally maintained specialist router and reference profile.",
       "includes": [
-        "backend",
         "platform",
         "compliance",
-        "python",
-        "react",
         "quality",
         "ui",
         "design"

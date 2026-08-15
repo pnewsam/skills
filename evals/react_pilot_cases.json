@@ -1,0 +1,84 @@
+{
+  "pilot": "react-knowledge-eviction",
+  "created": "2026-08-14",
+  "purpose": "Test whether the react-* knowledge prose (12 skills, ~2,497 lines) changes answer quality beyond what the base model produces. These are quality/routing cases, not effect-boundary cases, so they are kept separate from high_use_cases.json and are not parsed by validate_registry.py.",
+  "arms": {
+    "A_control": "Active registry WITH the react-* family installed (routes via react-expert or a focused react-* skill).",
+    "B_bare": "Active registry WITH react-* removed. Base model only, no react guidance.",
+    "C_substitute": "react-* removed, plus the proposed replacement context: eslint-plugin-react-hooks rules + React Testing Library conventions (see docs/react-substitute-note.md)."
+  },
+  "protocol": "Run each case 3x per arm in fresh context. Score each answer 0-1: (fraction of must_include anchors satisfied) minus 0.34 for each must_avoid anchor present, floored at 0. Record raw answers before scores in a dated results/ file. A rubric-judge model may score, but must see the anchors, not the arm label.",
+  "gate": "The family is safe to EVICT when mean(B) >= mean(A) - 0.10 AND arm B commits no must_avoid violation on any case where arm A commits none. A case where A beats B by >0.25 and C does NOT recover it flags that specific sub-skill as a CONVERT candidate (keep a check, not the prose), not a blanket keep.",
+  "cases": [
+    {
+      "id": "derived-state-effect",
+      "prompt": "This component keeps `fullName` in state and updates it with a useEffect that runs whenever firstName or lastName change. Is this the right approach?",
+      "routes_today": "react-hooks-effects",
+      "must_include": ["derive fullName during render instead of storing it", "remove the redundant state and the effect", "effects are for synchronizing with external systems, not computing values"],
+      "must_avoid": ["endorsing the effect as correct", "only suggesting to fix the dependency array"]
+    },
+    {
+      "id": "stale-closure-interval",
+      "prompt": "I have a useEffect with an empty dependency array that starts a setInterval calling setCount(count + 1), but count is stuck at 1. Why, and how do I fix it?",
+      "routes_today": "react-hooks-effects",
+      "must_include": ["the interval closes over the initial count (stale closure)", "use the functional updater setCount(c => c + 1)", "explain why empty deps captures count once"],
+      "must_avoid": ["adding count to the dependency array without noting it tears down and recreates the interval every tick", "recommending a third-party library as the primary fix"]
+    },
+    {
+      "id": "effect-cleanup-subscription",
+      "prompt": "I subscribe to a WebSocket inside a useEffect and call setMessages when data arrives. There is no return value from the effect. Anything wrong?",
+      "routes_today": "react-hooks-effects",
+      "must_include": ["return a cleanup function that unsubscribes/closes the socket", "otherwise subscriptions leak and stack across renders/unmounts", "StrictMode double-invokes effects in dev so cleanup must be correct"],
+      "must_avoid": ["saying no cleanup is needed"]
+    },
+    {
+      "id": "list-key-index",
+      "prompt": "My list renders items with key={index}. When I delete or reorder rows, the wrong row's input state moves around. What's going on?",
+      "routes_today": "react-component-design",
+      "must_include": ["index keys tie React state to position, not identity", "use a stable unique id from the data as the key", "explain reconciliation reusing the wrong element state"],
+      "must_avoid": ["claiming keys are cosmetic", "suggesting a fresh random key each render"]
+    },
+    {
+      "id": "premature-memo",
+      "prompt": "To make our app fast, I wrapped every component in React.memo and every prop value in useMemo/useCallback. Good practice?",
+      "routes_today": "react-performance",
+      "must_include": ["push back: blanket memoization adds cost and complexity for usually-negligible benefit", "measure first (profiler) and memoize proven hot paths", "the legitimate cases are referential stability for deps and genuinely expensive renders"],
+      "must_avoid": ["endorsing memoizing everything", "implying memo is always free"]
+    },
+    {
+      "id": "fetch-waterfall-cancel",
+      "prompt": "I fetch in a useEffect keyed on a prop id and setState with the result. When the id changes quickly I sometimes see the wrong data flash. How should I structure this?",
+      "routes_today": "react-data-fetching",
+      "must_include": ["it's a race: a slow earlier response resolves after a newer one", "cancel or ignore stale responses (AbortController or an ignore flag in cleanup)", "consider a query library or router loader that handles this"],
+      "must_avoid": ["leaving the race unaddressed", "setState-after-unmount without any guard"]
+    },
+    {
+      "id": "context-rerender",
+      "prompt": "One React context holds a big object with many fields. Any field change re-renders the whole tree. What are my options?",
+      "routes_today": "react-state-management",
+      "must_include": ["split into multiple narrower contexts by change frequency", "memoize the provided value", "or use a selector-based store (e.g. useSyncExternalStore / a state library)"],
+      "must_avoid": ["claiming context re-render is unavoidable", "saying context is always the wrong tool"]
+    },
+    {
+      "id": "controlled-form-perf",
+      "prompt": "My form re-renders on every keystroke and I want per-field validation and dirty tracking without janky typing. How should I build it?",
+      "routes_today": "react-form-patterns",
+      "must_include": ["weigh controlled vs uncontrolled inputs (uncontrolled/refs avoid per-keystroke re-render)", "isolate field state so one field's change doesn't re-render the whole form", "define validation timing (on blur/submit vs on change)"],
+      "must_avoid": ["only saying add an onChange handler", "ignoring the re-render cause"]
+    },
+    {
+      "id": "modal-focus-trap",
+      "prompt": "I built a custom modal with a div overlay. Keyboard users can tab to the page behind it, focus doesn't return to the trigger on close, and Escape does nothing. How do I fix it?",
+      "routes_today": "react-accessibility",
+      "must_include": ["trap focus within the dialog while open", "restore focus to the trigger on close", "role=dialog + aria-modal and an Escape handler", "prefer the native <dialog> element or a maintained accessible primitive"],
+      "must_avoid": ["treating this as purely visual", "ignoring focus management"]
+    },
+    {
+      "id": "test-implementation-details",
+      "prompt": "Our React tests assert on component state and instance methods, and they break every time we refactor even though the UI still works. How should we test instead?",
+      "routes_today": "react-testing",
+      "must_include": ["test observable behavior, not internals", "query by role/text and interact as a user (Testing Library)", "this decouples tests from refactors"],
+      "must_avoid": ["endorsing assertions on state/instances", "recommending shallow rendering of internals"]
+    }
+  ]
+}
