@@ -28,8 +28,16 @@ A `*_pilot_cases.json` file is the contract for one family-level A/B run:
   (returned preamble only) and note them in the report.
 - Verify the numbers, do not hand-eye them: `scripts/score_ab.py` recomputes
   per-arm means, the per-case table, the recovery rule, and the gate from the
-  raw rows `scripts/score_ab.py <case-file> scores.tsv
-  [--exclude case,arm,rep,...]` (TSV: case arm rep score [avoid_violations]).
+  raw rows. Scaffold the skeleton first, then fill, then verify:
+
+      node scripts/scaffold_scores.mjs --cases evals/<family>_cases.json > scores.tsv
+      # ... fill the blank score cells (and the 5th avoid column if the judge counted must_exclude) ...
+      python3 scripts/score_ab.py evals/<family>_cases.json scores.tsv [--exclude case,arm,rep]
+
+  `scaffold_scores.mjs` is generic over any `*_pilot_cases.json`, emits every
+  case x arm x rep row, and comments the arm-C rows (uncomment only where arm C
+  ran). The scorer skips unfilled cells with a note and exits 2 on
+  insufficient data for either required arm.
 - Record the journal id, raw answers, and scores in a dated `results/` file —
   copy `results/TEMPLATE-ui-family.md` (or the react trials report) for the
   shape — then interpret per the case file's `gate`.

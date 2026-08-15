@@ -39,26 +39,40 @@ from collections import defaultdict
 from pathlib import Path
 
 
+UNSET = {"", "_", "na", "n/a", "null", "none"}
+
+
+def _num(tok: str):
+    t = tok.strip().lower()
+    return None if t in UNSET else float(t)
+
+
 def load_scores(path: str):
-    """Return list of (case, arm, rep, score, avoid_or_None)."""
-    rows = []
+    """Return (rows, skipped) where rows is (case, arm, rep, score, avoid_or_None).
+
+    A row with a blank/unset score is kept as an expected row but flagged as
+    skipped (scaffold_scores.mjs emits those cells for the harness to fill).
+    Skipped rows never count toward the means.
+    """
+    rows, skipped = [], 0
     for lineno, raw in enumerate(Path(path).read_text().splitlines(), 1):
         line = raw.split("#", 1)[0].strip()
         if not line:
             continue
         parts = line.split()
-        if len(parts) < 4:
+        if len(parts) < 3:
             sys.exit(f"{path}:{lineno}: expected 'case arm rep score [avoid]', got: {line!r}")
         case, arm, rep = parts[0], parts[1], parts[2]
-        try:
-            score = float(parts[3])
-        except ValueError:
-            sys.exit(f"{path}:{lineno}: bad score {parts[3]!r}")
-        avoid = float(parts[4]) if len(parts) > 4 else None
-        if not 0.0 <= score <= 1.0 or (avoid is not None and not 0.0 <= avoid <= 100):
+        s = _num(parts[3]) if len(parts) > 3 else None
+        avoid = _num(parts[4]) if len(parts) > 4 else None
+        if s is None:
+            skipped += 1
+            rows.append((case, arm, rep, None, None))
+            continue
+        if not 0.0 <= s <= 1.0 or (avoid is not None and not 0.0 <= avoid <= 100):
             sys.exit(f"{path}:{lineno}: score must be 0-1; row out of range")
-        rows.append((case, arm, rep, score, avoid))
-    return rows
+        rows.append((case, arm, rep, s, avoid))
+    return rows, skipped
 
 
 def parse_excludes(spec: str):
@@ -88,9 +102,14 @@ def main() -> int:
 
     spec = json.loads(Path(cases_path).read_text())
     cases = {c["id"]: c for c in spec["cases"]}
-    rows = [r for r in load_scores(scores_path) if (r[0], r[1], r[2]) not in excludes]
+    all_rows, skipped = load_scores(scores_path)
+    rows = [r for r in all_rows if (r[0], r[1], r[2]) not in excludes]
+    expected_empty = [r for r in rows if r[3] is None]
+    rows = [r for r in rows if r[3] is not None]
     if not rows:
-        sys.exit("no rows after exclusions — nothing to score")
+        sys.exit("no scored rows — fill the scores (scaffold_scores.mjs emits the skeleton) or the file is empty")
+    if expected_empty:
+        print(f"# note: {len(expected_empty)} row(s) still unfilled (skipped; not counted). Remove the blank score cells or fill them.")
 
     # group per (case, arm)
     grouped: dict[tuple[str, str], list[float]] = defaultdict(list)
@@ -137,6 +156,10 @@ def main() -> int:
 
     mA, mB = mean("A"), mean("B")
     print(f"\n{'overall':<24}{'':<13}{mA:>6.3f}{mB:>6.3f}{'':>6}{mB - mA:>8.3f}")
+
+    if mA != mA or mB != mB or not rows:
+        print("\nVERDICT: INSUFFICIENT DATA — arm A or arm B has no filled scores")
+        return 2
 
     # gate
     margin = 0.10
