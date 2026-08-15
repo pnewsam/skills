@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Explore"
+  short_description: "Generate and judge distinct visual-design directions."
+  default_prompt: "Use $design-explore to generate several distinct design directions, judge them against criteria, and synthesize a recommendation."
