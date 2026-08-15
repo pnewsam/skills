@@ -142,8 +142,11 @@ The maintenance and routing attention you free goes into the part that scales:
   turns each into a standalone page + Chrome screenshot and runs the WCAG AA
   gate on the pairs it actually renders (math identical to `ui-color`'s
   checker, verified 1:1). A direction below AA is out regardless of taste.
-- Strengthen `validate-changes` / `verify` to render UI and screenshot-diff,
-  not just run tests (renderer above is the primitive to reuse).
+- **`shot_diff.mjs` added to `validate-changes`** (2026-08-15): a
+  dependency-free pure-Node PNG decoder + diff (strict by default: any pixel
+  above tolerance is a change; `--threshold` for non-deterministic renders).
+  Documented as optional step 4b for visual-only changes; the design-explore
+  renderer is the capture primitive for static HTML / token specs.
 - Wire `analyze-*` to run as part of `execute-feature`, not on request
   (verification step already says to repeat the baseline method; make it
   explicit when the plan names an analyzer).

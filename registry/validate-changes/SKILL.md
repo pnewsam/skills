@@ -156,6 +156,34 @@ npx playwright test tests/smoke.spec.ts --reporter=line
 npx cypress run --spec cypress/e2e/smoke.cy.ts
 ```
 
+### 4b. Render + screenshot diff (optional, visual-only changes)
+
+When the change is visual (components, styling, layout, responsive) *and* the
+render is deterministic, add pixel evidence on top of tests. This never
+replaces tests — it is the render/measurement layer the rebalance asks for.
+
+Capture the same screen before and after, then diff the PNGs with the bundled
+dependency-free helper:
+
+```bash
+node scripts/shot_diff.mjs BEFORE.png AFTER.png \
+    [--tolerance 32] [--out diff.png] [--report report.json]
+```
+
+- **Identical screenshots exit 0 (UNCHANGED); any real difference exits 1
+  (CHANGED).** The default `--threshold 0` counts any pixel above `--tolerance`
+  as a change. Pass `--threshold 0.01` only for non-deterministic renders
+  (animation, remote fonts) — a focused-element color or spacing change is
+  usually small (< 1% of pixels) but is still a regression.
+- **How to capture:** if the app is static HTML or the change is to a token
+  spec (design-explore directions), render via
+  `registry/design-explore/scripts/render_direction.mjs` or headless Chrome
+  `--screenshot`. If the project has Playwright, capture both with
+  `page.screenshot()` on the same viewport with animations disabled. Keep the
+  capture consistent so the diff is meaningful.
+- Log the `--report` JSON (before/after, changed pixels, ratio, verdict) in the
+  validation report.
+
 ### 5. Run unit tests for changed logic
 
 If the changes include business logic files (`lib/`, `utils/`, hooks), also run the corresponding unit tests:
@@ -210,6 +238,7 @@ Output a structured summary:
 - **Unit tests:** <passing>/<total> passing
 - **Lint:** pass/fail
 - **Typecheck:** pass/fail
+- **Visual diff (if run):** <shot_diff verdict> — <changed pixels>/<total> (<ratio>%)
 
 ### Coverage gaps
 
