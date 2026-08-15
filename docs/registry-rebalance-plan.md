@@ -141,7 +141,9 @@ The maintenance and routing attention you free goes into the part that scales:
   generators emit a structured `tokens` block; `scripts/render_direction.mjs`
   turns each into a standalone page + Chrome screenshot and runs the WCAG AA
   gate on the pairs it actually renders (math identical to `ui-color`'s
-  checker, verified 1:1). A direction below AA is out regardless of taste.
+  checker, verified 1:1) and a spacing-conformance advisory mirroring
+  `ui-spacing`'s lint (`--strict-spacing` gates it). A direction below AA is
+  out regardless of taste.
 - Strengthen `validate-changes` / `verify` to render UI and screenshot-diff,
   not just run tests (renderer above is the primitive to reuse).
 - Wire `analyze-*` to run as part of `execute-feature`, not on request
