@@ -34,20 +34,33 @@ focused `ui-*` skills.
    bold-expressive), not a color tweak of the same layout. Generate them
    independently so they don't converge — the bundled workflow does this in
    parallel; done by hand, deliberately reset your assumptions between each.
-3. **Judge independently, preserve disagreement.** Score every direction against
-   every criterion. Keep the split verdicts ("A wins hierarchy, B wins mood")
-   rather than flattening to an average.
-4. **Synthesize.** Take the highest-scoring direction as the base and graft the
+   Each direction carries a structured `tokens` block (palette hexes, radius,
+   spacing, density, optional dark) so a judge can look at it as an artifact.
+3. **Render before judging (when a browser is available).**
+   `node scripts/render_direction.mjs --directions dirs.json --out out/ --shot`
+   builds each direction as a standalone page, screenshots it with headless
+   Chrome, and runs the WCAG AA gate on the pairs it actually renders — the
+   same math as `ui-color`'s checker. A direction below AA is out regardless
+   of taste; the screenshot is what the judge rates, not the prose. HTML-only
+   (`no --shot`) still gates contrast.
+4. **Judge independently, preserve disagreement.** Score every direction against
+   every criterion, looking at the rendered artifact when present. Keep the
+   split verdicts ("A wins hierarchy, B wins mood") rather than flattening to
+   an average.
+5. **Synthesize.** Take the highest-scoring direction as the base and graft the
    specific stronger moves from the others. State what you took and why.
-5. **Verify against ground truth.** Run the checks before recommending:
-   `ui-color` contrast validator on the palette, `ui-spacing` scale lint on the
-   spacing. A direction that fails accessibility is out regardless of taste.
+6. **Verify against ground truth.** The renderer's contrast gate is the first
+   check; cross-check it with `ui-color`'s contrast validator and `ui-spacing`
+   scale lint on the spacing when a real implementation exists. A direction
+   that fails accessibility is out regardless of taste.
 
 ## Automated form
 
-`scripts/design_explore.workflow.js` runs steps 2–4 with the Workflow tool:
-parallel direction-generators → a judge panel per criterion → a synthesis pass.
-Run it with `Workflow({scriptPath})` and a brief in `args`.
+`scripts/design_explore.workflow.js` runs steps 2–6 with the Workflow tool:
+parallel direction-generators (each emitting a `tokens` block) → a judge
+panel per criterion (viewing screenshots when rendered) → a synthesis pass.
+The workflow returns a `render_command` for turning its directions into
+artifacts. Run it with `Workflow({scriptPath})` and a brief in `args`.
 
 ## Handoff
 

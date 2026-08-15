@@ -30,22 +30,27 @@ const SCORE_SCHEMA = {
 }
 
 // 1. Generate N deliberately distinct directions, in parallel so they don't converge.
+// Each direction also emits a compact tokens block so scripts/render_direction.mjs
+// can turn it into a rendered artifact (bitter-lesson: judge the thing, not the prose).
 phase('Generate')
 const angles = ['dense/utilitarian', 'airy/editorial', 'bold/expressive', 'calm/minimal', 'playful/tactile', 'classic/trustworthy']
 const directions = (await parallel(
   Array.from({ length: N }, (_, i) => () =>
     agent(
-      `Design brief:\n${brief}\n\nPropose ONE visual-design direction committed to a "${angles[i % angles.length]}" organizing idea — distinct from the obvious default. Specify: overall concept in one line, palette (with hex), type treatment, spacing/density, layout structure, and the signature move that makes it feel intentional. Be concrete. Output only the direction.`,
+      `Design brief:\n${brief}\n\nPropose ONE visual-design direction committed to a "${angles[i % angles.length]}" organizing idea — distinct from the obvious default. Specify: overall concept in one line, palette (with hex), type treatment, spacing/density, layout structure, and the signature move that makes it feel intentional. Be concrete. Output only the direction.\n\nThen, on its own lines, emit a valid JSON block named TOKENS with exactly these keys and values consistent with your palette: bg, surface, text, muted, primary, accent (hex), radius (css length), spacing (base px), density (0.8-1.2), and optionally sizes (h1/h2/body/caption px) and a dark object with the same color keys. TOKENS: {"bg":"#...","surface":"#...","text":"#...","muted":"#...","primary":"#...","accent":"#...","radius":"...","spacing":8,"density":1.0}`,  
       { label: `dir:${i}:${angles[i % angles.length]}`, phase: 'Generate', agentType: 'general-purpose' },
     ).then(text => ({ i, angle: angles[i % angles.length], text })),
   )
 )).filter(Boolean).filter(d => d.text && d.text.trim())
 
 // 2. Judge each direction against all criteria (independent scoring; keep the splits).
+// When the operator rendered screenshots (node scripts/render_direction.mjs), the
+// judge rates the artifact, and the renderer's contrast report is authoritative
+// for accessibility: a direction below the AA gate loses regardless of taste.
 phase('Judge')
 const judged = await parallel(directions.map(d => () =>
   agent(
-    `Score this design direction against each criterion 0..1 for the brief.\n\nBrief:\n${brief}\n\nDirection (${d.angle}):\n"""\n${d.text}\n"""\n\nCriteria: ${criteria.join(', ')}. Judge strictly; note the standout strength or weakness per criterion.`,
+    `Score this design direction against each criterion 0..1 for the brief.\n\nBrief:\n${brief}\n\nDirection (${d.angle}):\n"""\n${d.text}\n"""\n\nCriteria: ${criteria.join(', ')}. Judge strictly; note the standout strength or weakness per criterion. If a rendered screenshot for this direction is available to you, judge the artifact as well as the prose; if its contrast report shows an AA failure, that criterion scores 0 with a note.`,
     { label: `judge:${d.i}`, phase: 'Judge', schema: SCORE_SCHEMA },
   ).then(r => {
     const s = (r?.scores || [])
@@ -67,4 +72,5 @@ return {
   ranked: judged.map(d => ({ i: d.i, angle: d.angle, total: d.total })),
   recommendation,
   directions: judged,
+  render_command: `node scripts/render_direction.mjs --directions dirs.json --out out/ --shot`,
 }
