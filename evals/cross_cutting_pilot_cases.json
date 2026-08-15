@@ -1,0 +1,194 @@
+{
+  "pilot": "cross-cutting method-knowledge family (typescript-types, error-handling, async-patterns)",
+  "created": "2026-08-15",
+  "purpose": "Decide whether the three cross-cutting method-prose skills survive the bitter-lesson gate. These are the outstanding CONVERT/EVICT candidates from the 2026-08-15 retention first-pass. Concerns are code-writing judgment, not objective/taste facts, so eviction hinges on whether a capable base model recovers the skill's distinctive guidance from a clean prompt. Gate = family-level A/B (same protocol as ui-*): EVICT when mean(B) >= mean(A) - 0.10 with no B-only must_exclude violation; a case arm A beats by > 0.25 and arm C does not recover -> that sub-skill is a CONVERT candidate.",
+  "arms": {
+    "A_control": "Active registry WITH the three cross-cutting method packages installed (typescript-types, error-handling, async-patterns) as of 2026-08-15 (their distinctive guidance and anti-pattern prose).",
+    "B_bare": "Same registry WITH the three cross-cutting method packages removed to archive/ (their method prose evicted as knowledge a capable base model already covers).",
+    "C_substitute": "Arm B plus a substitution context naming the deterministic checks that exist: for typescript-types, tsc + a no-any / no-unsafe-cast lint (and type-level narrowing checks) as the ground-truth; for error-handling and async-patterns, no deterministic checker exists (pure judgment, so taste is the only signal). Runs only where mean(A) - mean(B) > 0.15 (recovery test). Per-case kind: canonical = high-confidence discriminating behavior; openjudgment = more taste-dependent."
+  },
+  "protocol": "Same protocol as the ui-* family (see evals/README.md): blind scored judgment per rep; scaffold with scripts/scaffold_scores.mjs; score with scripts/score_ab.py; gate in evals/README.md. If the gate passes, evict the packet(s) to archive/cross-cutting-evicted/; a case arm A beats by > 0.25 with no C recovery marks that skill as a CONVERT candidate instead.",
+  "gate": {
+    "evict_if": "mean(B) >= mean(A) - 0.10 AND no B-only must_exclude violation on a case where A has none",
+    "convert_if": "a case where mean(A) - mean(B) > 0.25 and mean(C) < mean(A) - 0.10 (C fails to recover)"
+  },
+  "cases": [
+    {
+      "id": "tt-state-discriminated-union",
+      "kind": "canonical",
+      "routes_today": "typescript-types",
+      "prompt": "A modal can be: closed; open with form fields being edited; submitting (a request in flight); or showing a server error. Model this as a TypeScript type so each variant carries only the data it needs and callers can switch exhaustively. Today the code has one interface with four mutually-exclusive optional fields plus a string 'phase'. Give me the type and the consumer switch.",
+      "must_include": [
+        "a discriminated union lifting each state to its own variant, keyed on a discriminant (e.g. kind/status), with each variant carrying only its relevant data (fields, or an in-flight payload, or an error message)",
+        "an exhaustive switch or narrowing over the discriminant so TypeScript flags an unhandled variant"
+      ],
+      "must_exclude": [
+        "one interface with four optional fields plus a string phase (stringly-typed state)",
+        "an `any` or unsafe casts in the model or consumer"
+      ]
+    },
+    {
+      "id": "tt-derive-from-value",
+      "kind": "canonical",
+      "routes_today": "typescript-types",
+      "prompt": "I have a config object with themes = ['light', 'dark', 'system'] and defaultPref = 'system'. I want a readonly literal-union of valid theme names so autocomplete works and defaults are type-checked, without retyping the list or using a cast. How do I type this so TypeScript derives the exact literal values from the value itself?",
+      "must_include": [
+        "deriving the literal union from the value (e.g. `typeof obj[keyof typeof obj]`) so the source of truth and the type stay in sync",
+        "a const assertion (`as const`) or `satisfies` so literals are not widened to plain string"
+      ],
+      "must_exclude": [
+        "a manually duplicated union of string literals that can drift from the value",
+        "a widened `string[]` that loses the literality",
+        "`any` or a cast to force the type"
+      ]
+    },
+    {
+      "id": "tt-branded-id",
+      "kind": "openjudgment",
+      "routes_today": "typescript-types",
+      "prompt": "We pass user ids and session ids around and keep mixing them up; both are plain strings. Give me a technique that makes passing a user id where a session id is expected a compile error, with no runtime overhead.",
+      "must_include": [
+        "a branded/nominal id type per domain (e.g. a unique symbol brand) so distinct id domains are not implicitly interchangeable",
+        "ids constructed through a brand/guard that enforces the domain, all at compile time with no runtime cost"
+      ],
+      "must_exclude": [
+        "both ids remaining plain `string`",
+        "a runtime wrapper or validator that adds runtime overhead",
+        "`any` in the id plumbing"
+      ]
+    },
+    {
+      "id": "tt-discriminated-fetch-response",
+      "kind": "openjudgment",
+      "routes_today": "typescript-types",
+      "prompt": "An endpoint returns either { ok: true, data: T } or { ok: false, error: { code, message } }. Handlers currently do `(await res.json()) as any`. Type the response shape and show how a caller narrows on ok to get the data or the typed error, without unsafe casts.",
+      "must_include": [
+        "a discriminated union keyed on ok (or a code discriminant) so narrowing on ok yields data versus the typed error",
+        "an exhaustive pattern so both branches are handled and the error payload (code + message) is reachable after narrowing"
+      ],
+      "must_exclude": [
+        "`as any` / unsafe casts in the caller",
+        "a single permissive type with optional data and error",
+        "accessing data without narrowing on the discriminant"
+      ]
+    },
+    {
+      "id": "eh-exception-vs-null",
+      "kind": "canonical",
+      "routes_today": "error-handling",
+      "prompt": "I have a getSetting(name) backed by a map. Callers treat a missing setting inconsistently: some expect null, some crash. Pick one contract, justify it, and show the signature.",
+      "must_include": [
+        "a clear one-directional contract chosen by whether absence is an expected recoverable case (nullable result) or a programming error (throw), and justified as such",
+        "the type signature reflects the choice (e.g. `T | null` or a documented throw)"
+      ],
+      "must_exclude": [
+        "leaving the decision to every caller (inconsistent mixed usage)",
+        "returning null while callers dereference without handling it",
+        "swallowing a real error and returning null"
+      ]
+    },
+    {
+      "id": "eh-preserve-cause",
+      "kind": "canonical",
+      "routes_today": "error-handling",
+      "prompt": "A fetch inside loadProfile fails with a low-level ECONNRESET. Wrap it so the new error tells an operator which profile/task failed and still keeps the original error reachable for debugging.",
+      "must_include": [
+        "a new typed error that adds task context (which user/profile operation) and names the failing operation",
+        "the original cause preserved and reachable (cause field or chaining) so the low-level detail is not lost"
+      ],
+      "must_exclude": [
+        "throwing a new Error entirely detached from the original cause (context lost)",
+        "logging and returning a generic failure with no information",
+        "conflating retryable and permanent failure signals here"
+      ]
+    },
+    {
+      "id": "eh-retry-vs-permanent",
+      "kind": "openjudgment",
+      "routes_today": "error-handling",
+      "prompt": "A background job sends an email and retries on failure. It must not retry a 4xx bad-request, but should retry transient network/5xx with backoff. Sketch the failure taxonomy and the retry decision.",
+      "must_include": [
+        "a distinction between transient/retryable (5xx/network) and permanent (4xx, do-not-retry) failures",
+        "a bounded retry policy with backoff attached to the transient class"
+      ],
+      "must_exclude": [
+        "retrying failures unconditionally, including permanent 4xx",
+        "infinite or immediate retries with no bound or backoff",
+        "ignoring errors so a permanent failure is retried forever"
+      ]
+    },
+    {
+      "id": "eh-typed-result-pipeline",
+      "kind": "openjudgment",
+      "routes_today": "error-handling",
+      "prompt": "Several steps in sequence (validate, auth, save) each can fail with distinct causes. I don't want try/catch pyramids and the caller needs to know which step failed. Pick a shape.",
+      "must_include": [
+        "a single typed error taxonomy or result union that distinguishes validation / auth / save failures",
+        "a mechanism that avoids nested try/catch (flat error handling, a typed result type, or an explicit error channel)"
+      ],
+      "must_exclude": [
+        "a bare top-level generic catch that erases which step failed",
+        "nested try/catch per step",
+        "errors typed as a plain string or `any`"
+      ]
+    },
+    {
+      "id": "ap-search-stale-result",
+      "kind": "canonical",
+      "routes_today": "async-patterns",
+      "prompt": "Typeahead search fires a request per keystroke, and responses can arrive out of order. Write the handler so only the latest query's result is applied, and wire cancellation.",
+      "must_include": [
+        "a guard against stale/out-of-order responses so only the latest query's result is applied (e.g. token/sequence check or AbortController)",
+        "the superseded request is aborted or ignored, including its eventual rejection not surfacing as unhandled"
+      ],
+      "must_exclude": [
+        "applying whichever response returns first (an older query clobbering a newer result)",
+        "an unhandled rejection from the aborted request"
+      ]
+    },
+    {
+      "id": "ap-bounded-parallelism",
+      "kind": "canonical",
+      "routes_today": "async-patterns",
+      "prompt": "We must POST 1000 rows to an API that tolerates about 10 concurrent requests. Promise.all-ing all 1000 overwhelms it. Give a pattern that runs them with a small concurrency limit.",
+      "must_include": [
+        "a bounded-concurrency pool with a small fixed limit that drains the full queue",
+        "per-item failure does not stop unrelated items, and the limit is a tunable number"
+      ],
+      "must_exclude": [
+        "Promise.all over all 1000 at once (unbounded concurrency)",
+        "awaiting each item fully sequentially (no concurrency) when bounded parallelism is available",
+        "a pool that halts the entire batch on a single failure"
+      ]
+    },
+    {
+      "id": "ap-fire-and-forget-unhandled",
+      "kind": "openjudgment",
+      "routes_today": "async-patterns",
+      "prompt": "A click handler kicks off a background save and returns immediately; it calls saveThing() without awaiting and sometimes throws 'Unhandled rejection'. Fix the ownership.",
+      "must_include": [
+        "an explicitly-owned background task: a catch/report path attaches an error handler to the floating promise (or a scoped runner owns it), so the UI is not blocked but errors are still surfaced/handled"
+      ],
+      "must_exclude": [
+        "leaving a floating promise with no catch (unhandled rejection)",
+        "a fire-and-forget that swallows the error silently",
+        "requiring the caller to handle an error it cannot recover from"
+      ]
+    },
+    {
+      "id": "ap-timeout-race",
+      "kind": "openjudgment",
+      "routes_today": "async-patterns",
+      "prompt": "A slow partner API can hang. Wrap the call with a timeout so we fail fast, and make sure the timed-out branch cleans up (doesn't leak the in-flight request or swallow its later rejection).",
+      "must_include": [
+        "a per-call timeout (e.g. Promise.race or AbortSignal.timeout) that fails fast",
+        "cleanup of the timed-out loser branch so its eventual rejection is handled / the request is aborted and nothing leaks"
+      ],
+      "must_exclude": [
+        "Promise.race with no handling of the slow branch's eventual rejection (unhandled rejection)", 
+        "a timeout that abandons but leaves the request running",
+        "ignoring the race's loser path"
+      ]
+    }
+  ]
+}

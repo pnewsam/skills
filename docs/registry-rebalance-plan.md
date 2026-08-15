@@ -100,7 +100,7 @@ Default: method families → Tier A; already-superseded one-offs → Tier B.
 | **Backend knowledge** | `backend-*` (6) + `backend-expert` | **EVICTED** | A/B tied; keep only genuine org guardrails as objectives. `archive/backend-evicted/`. |
 | **Platform knowledge** | `platform-*` (5) + `platform-expert` | **EVICT / thin (partially converted)** | Keep org-specific deploy/secrets guardrails as objective + check; check layer landed on `platform-secrets-config`, the rest follow the light pattern. |
 | **Compliance / risk** | `compliance-*` (7), `threat-model`, `consult-expert` | **CONVERT: objective + pinned citation + automated checks** | Flagships (`accessibility`, `secrets`) done; the rest follow. Never a blind evict-A/B for external objectives. |
-| **Cross-cutting knowledge** | `async-patterns`, `error-handling`, `typescript-types` | **CONVERT → lint/types config, else EVICT** | Kept for now; revisit on the quarterly gate. |
+| **Cross-cutting knowledge** | `async-patterns`, `error-handling`, `typescript-types` | **CONVERT → lint/types config, else EVICT** | Kept for now. Instrumented 2026-08-15 → `evals/cross_cutting_pilot_cases.json` (12 cases, 4/skill); run the same A/B as ui-* once the harness is warm, then CONVERT/EVICT on gate. |
 | **Routers** | `*-expert` (ui, design, react, python, backend, quality, platform, compliance), `consult-expert` | **Collapse** | A router over evicted children is dead weight. react/python/quality/backend/design experts already gone; `ui-expert` slims after the ui A/B; keep `consult-expert`/`compliance-expert` only as an index over the legislative families. |
 
 Net effect: roughly 70–80 of the ~132 skills are in the method/router bucket
