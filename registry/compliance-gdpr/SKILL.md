@@ -20,6 +20,15 @@ This is engineering guidance, not legal advice. Escalate lawful basis, controlle
 
 GDPR work starts with a data map and purpose. Engineering should minimize personal data, enforce purpose boundaries, support rights workflows, and preserve evidence for accountability.
 
+## Checks — data-flow audits, not code lints
+
+GDPR obligations are about how data flows and what the system can prove; the durable artifacts are a current data map and evidence records, so make them scriptable:
+
+- **Data map** — a scripted sweep finds personal-data fields, payload logging, and third-party SDKs; keep the map generated, not a stale wiki page.
+- **Deletion/export tests** — exercise forget-me and export through the whole stack (DB, logs, backups, vendors), not just the API handler.
+- **Consent evidence** — a withdraw test proves downstream collection stops and the record is preserved.
+- **Retention defaults** — a config review flags unbounded retention (`keep forever`, open-ended TTLs) before launch.
+- **Manual gate** — lawful-basis, transfer-mechanism, and DPIA decisions stay with legal/privacy owners; the check records their decision for accountability.
 ## Common Agent Mistakes
 
 - Asking for consent when another lawful basis may be intended, or assuming consent by default.

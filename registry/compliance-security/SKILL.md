@@ -22,6 +22,15 @@ This is engineering guidance, not legal advice. Escalate organization-specific s
 
 Security controls must be enforced at trusted boundaries, not only hinted in UI or convention. Prefer secure-by-construction APIs over "remember to sanitize" guidance.
 
+## Checks — scan and gate, then verify
+
+Tooling catches the obvious injection, secret, and dependency classes; it cannot prove authorization or supply-chain intent, which stay a manual review. Run these in CI:
+
+- **SAST** — CodeQL, Semgrep, or the language's analyzer with the injection/authz/secret rule sets on every PR.
+- **Dependency scanning** — OSV, Dependabot, or platform advisory feed fails the build on reachable vulnerable versions.
+- **Secret scanning** — gitleaks/trufflehog in pre-commit plus push protection, so credentials never land in history or logs.
+- **CI hardening** — `permissions: read-only` defaults, pinned third-party actions, and no long-lived cloud credentials in workflows.
+- **Manual gate** — trace one request through authn → authz → data access per sensitive object; no tool proves authorization.
 ## Common Agent Mistakes
 
 - Confusing authentication with authorization.

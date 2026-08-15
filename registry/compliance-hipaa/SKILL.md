@@ -21,6 +21,15 @@ This is engineering guidance, not legal advice. Escalate covered entity/business
 
 HIPAA-oriented engineering starts by identifying ePHI and enforcing safeguards around access, audit, integrity, transmission, and risk management. Do not label a system HIPAA-ready without applicability and policy review.
 
+## Checks — enforce the safeguard categories, then verify
+
+Like security, HIPAA-relevant tooling gates known classes; audit and access controls must then be exercised end-to-end:
+
+- **Transmission/at-rest config scans** — TLS policy and storage/backup encryption settings as fleet checks.
+- **ePHI-in-logs scan** — attribute names and heuristics for PHI-like values in log and analytics paths; treat any hit as a defect.
+- **Audit trail test** — access to ePHI records actor, resource, action, time, and result; automated test asserts the fields.
+- **Unique-user access** — no shared credentials in prod paths; least-privilege role assertions as a test.
+- **Manual gate** — covered-entity/BA status, BA agreements, and breach determination remain legal/policy-owned.
 ## Common Agent Mistakes
 
 - Treating all health-adjacent data as HIPAA-covered without checking actors and context.

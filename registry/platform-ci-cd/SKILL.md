@@ -21,6 +21,16 @@ Use for CI workflows, deployment pipelines, build scripts, test gates, artifact 
 
 CI/CD should make the safest path the easiest path. Build once, test the artifact, record evidence, restrict permissions, and deploy only what has passed the agreed gates.
 
+## Checks — automation gates the pipeline shape
+
+Is the CI graph itself verifiable? Enforce the structural invariants with tooling, then let the deployment gates be the human review of evidence.
+
+- **actionlint / workflow lint** — validate YAML syntax, pinned actions, and bare `permissions` in CI.
+- **Permissions snapshot** — workflows default to read-only and escalate only when a job needs it; a policy check rejects broad grants.
+- **Provenance** — artifacts carry attestations (SLSA-style) and are built once, tested, then deployed from the tested artifact.
+- **Pipeline evidence** — a deploy only proceeds through explicit gates that recorded tests, scans, and approvals.
+- **Manual gate** — release approval and environment promotion decisions remain human where required by policy.
+
 ## Common Agent Mistakes
 
 - Deploying from a job that did not build or verify the exact artifact being released.

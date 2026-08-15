@@ -20,6 +20,15 @@ This is engineering evidence guidance, not legal advice. Escalate records retent
 
 If it was not captured, linked, and preserved, it is weak evidence. Create evidence as part of the workflow, not after the fact.
 
+## Checks — evidence must be machine-verifiable, too
+
+Auditability is a claim about verifiable links; encode the invariant checks so omissions fail automatically.
+
+- **Audit-log schema test** — every audit event carries actor, resource, action, timestamp, result, and context; enforce in test.
+- **Verification claims** — any workflow stop that says verified must name the command/artifact/reviewer; review rejects bare claims.
+- **Traceability links** — PRs reference the alert/ticket/decision and land as a stable link (not a tmp path) that survives retention.
+- **Risk-acceptance fields** — owner, rationale, expiry, and compensating controls are mandatory before acceptance.
+- **Manual gate** — records retention scope and regulatory evidence requirements stay with the audit owner.
 ## Common Agent Mistakes
 
 - Saying "verified" without naming command, scan, artifact, or reviewer.

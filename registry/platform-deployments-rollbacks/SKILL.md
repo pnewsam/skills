@@ -20,6 +20,15 @@ Use for release sequencing, production deployment, canary/blue-green/progressive
 
 A deployment is not done when code is copied. It is done when the intended version is running, verified, observable, and recoverable, with a clear path if the release is bad.
 
+## Checks — deploy is verified, observable, recoverable
+
+The runnable checks are the health and smoke gates after rollout, plus rehearsed recovery.
+
+- **Health/smoke gates** — a post-deploy probe hits the new instance's health endpoint plus one user-real request; failure pauses the rollout.
+- **Progressive rollout metrics** — canary/blue-green gates on error rate and latency before full traffic (feature-flag or weighted).
+- **Migration sequencing** — schema migrations are safe when the new code is leading; add a downgrade path test for the irreversible case.
+- **Rollback rehearsal** — the runbook's rollback/roll-forward is executed in a scratch environment, not invented at incident time.
+- **Manual gate** — migration data-loss risk, and cross-service/queue/cron compatibility judgment stay human.
 ## Common Agent Mistakes
 
 - Saying "rollback is redeploy previous version" while introducing irreversible database changes.

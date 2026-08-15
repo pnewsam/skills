@@ -40,10 +40,12 @@ These need conversion, not eviction, so they are left active pending that work:
     objective+citation+rubric shaped (e.g. `compliance-accessibility` 65 lines
     with WCAG anchors; `platform-secrets-config` 79 lines with 12-factor/OWASP
     anchors) — confirming "keep, don't evict." The only missing layer was the
-    concrete automated check, now added to two flagships (a11y → axe /
-    jsx-a11y / the `ui-color` contrast validator; secrets → gitleaks/trufflehog
-    + startup validation). The remaining compliance/platform skills follow the
-    same light pattern: name the runnable check, keep the objective.
+    concrete automated check, now added to every compliance/platform skill
+    (2026-08-15): a11y → axe/`ui-color` validator; secrets → gitleaks; security
+    → SAST + dependency + secret scans; GDPR/HIPAA/privacy → data-map,
+    deletion/export, and audit-trail checks; vulnerability management → closure
+    evidence; auditability → evidence invariants; platform → actionlint,
+    plan-validate/policy-as-code, health/smoke gates, parity scans.
 - **`ui-*`:** prose family A/B defined in `evals/ui_family_cases.json` (14
   cases, 13 prose skills + `visual-hierarchy`); keep the converted checkers,
   evict (or convert per-case) whatever ties the bare model. `design-*` prose is

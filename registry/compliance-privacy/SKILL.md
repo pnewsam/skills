@@ -20,6 +20,15 @@ This is engineering guidance, not legal advice. Use `compliance-gdpr` for GDPR-s
 
 Privacy-safe systems collect less, expose less, retain less, and make data flows explicit. If a lower-data design satisfies the product need, choose it.
 
+## Checks — make the data map and lifecycle runnable
+
+Privacy is auditable in the repo: collection, flow, logging, and deletion can be checked as tests/sweeps, and the results are the reviewable record.
+
+- **PII inventory sweep** — scripted search for PII fields and full-payload logging; keep the inventory generated.
+- **Third-party flow map** — each analytics/SDK/vendor integration lists the data it receives and the purpose.
+- **Delete/export test** — run through storage, logs, caches, backups, and vendors, and assert the result.
+- **Retention asserts** — default retention config must be explicit; flag unbounded retention in review.
+- **Manual gate** — new-purpose reuse, notice/consent updates, and jurisdiction decisions belong with privacy/legal owners.
 ## Common Agent Mistakes
 
 - Treating email/name as the only personal data.

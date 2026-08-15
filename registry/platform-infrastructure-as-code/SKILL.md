@@ -21,6 +21,15 @@ Use for Terraform/OpenTofu/Pulumi/CDK/Kubernetes manifests, cloud resources, mod
 
 Infrastructure should be declared, reviewed, planned, applied predictably, and recoverable. Avoid invisible dashboard drift and avoid broad shared modules that make small changes dangerous.
 
+## Checks — plan, validate, and verify state
+
+IaC is the highest-value automation of the platform set: a plan diff and validate run are ground truth, not review.
+
+- **validate + plan in CI** — `terraform validate` (or the provider equivalent) on every PR; the plan diff is part of review (openTofu/OPA/Checkov for policy).
+- **Policy-as-code** — deny broad IAM grants, public buckets, and secrets-in-state with Checkov or OPA; failures block the plan.
+- **Drift detection** — scheduled runs show state vs live drift and enforce that manual changes are re-imported, not left invisible.
+- **State locking** — backend locking on so concurrent plans cannot race; destructive output is reviewed explicitly before apply.
+- **Manual gate** — module ownership and broad cross-cutting change require a human approval.
 ## Common Agent Mistakes
 
 - Editing cloud resources manually without reflecting the change in IaC.

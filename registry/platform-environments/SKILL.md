@@ -19,6 +19,15 @@ Use for local/preview/staging/production setup, environment parity, backing-serv
 
 Every environment should exist for a reason. Keep environments similar enough that they catch real failures, different only where the difference is intentional, and explicit enough that an agent can tell where code is safe to run.
 
+## Checks — parity and permission drift are lint-able
+
+The environment surface can be checked with config and CI scripts, so drift fails fast instead of at incident time.
+
+- **Config schema check** — a single validated variables schema; startup validation fails fast with redacted errors in every environment.
+- **Parity scan** — diff the backing-services and versions between preview/staging/prod; flag intentional-looking gaps, require justification.
+- **Secret hygiene** — preview/prod never share production credentials: a scan asserts unique credential sets per environment.
+- **Promotion check** — environment promotion (including seeded data) runs through the same scripted path, not hand-followed steps.
+- **Manual gate** — what is intentionally different, and who owns each variable, is a product/ops decision.
 ## Common Agent Mistakes
 
 - Creating a new `.env` variable without documenting ownership, required environments, or safe defaults.
