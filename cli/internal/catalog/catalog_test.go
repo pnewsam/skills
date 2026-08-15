@@ -135,6 +135,7 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 		"prepare-pr",
 		"review-pr",
 		"stash",
+		"trim-comments",
 		"update-pr",
 		"validate-changes",
 		"writing-conventions",
@@ -153,9 +154,10 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 	}
 	for _, expected := range []string{
 		"consult-expert",
-		"backend-expert",
-		"react-expert",
-		"quality-expert",
+		"compliance-expert",
+		"design-expert",
+		"platform-expert",
+		"ui-expert",
 		"visual-hierarchy",
 	} {
 		if !inAdvisory[expected] {
