@@ -160,8 +160,12 @@ The maintenance and routing attention you free goes into the part that scales:
   gate for families.
 - Add a recurring (e.g. quarterly) retention review that re-runs the evict gate:
   as models improve, more CONVERT skills graduate to EVICT, and the evals README
-  now documents how to run a family quality A/B end-to-end. Treat the next
-  cleanup as the first recurring pass.
+  now documents how to run a family quality A/B end-to-end. **First pass run
+  2026-08-15 → `evals/results/2026-08-15-retention-first-pass.md`**: sweeps all
+  70 active packages; remaining work is exactly two trails — the instrumented
+  ui-* run (harness-gated) and the cross-cutting method trio (`async-patterns`,
+  `error-handling`, `typescript-types`) scheduled for the next A/B. Re-run this
+  pass after the ui-* verdict lands.
 
 ## Per-skill decision gate (the checklist)
 
