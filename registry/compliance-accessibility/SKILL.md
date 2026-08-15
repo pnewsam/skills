@@ -26,7 +26,7 @@ Automated scans catch roughly a third of WCAG issues; they gate the obvious, the
 
 - **axe-core** (`@axe-core/cli`, `jest-axe`, or `@axe-core/playwright`) — automated WCAG rule scan in tests/CI.
 - **eslint-plugin-jsx-a11y** — static lint for missing names, roles, and keyboard handlers at the source.
-- **Contrast** — `ui-color`'s `scripts/check_contrast.py` on text and meaningful-indicator pairs (WCAG AA), or the browser's contrast tooling.
+- **Contrast** — the `ui-color` skill's bundled WCAG contrast validator on text and meaningful-indicator pairs (AA), or the browser's contrast tooling.
 - **Keyboard + screen reader** — no tool replaces tabbing the primary flow and listening to it; this is required, not optional.
 
 ## Common Agent Mistakes
