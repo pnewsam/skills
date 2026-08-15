@@ -336,24 +336,6 @@
   ]
  },
  {
-  "id": "router-ui-aesthetic",
-  "prompt": "The settings page works, but it feels visually noisy and generic.",
-  "expected_skill": "design-expert",
-  "expected_mode": "Route",
-  "expected_delegates": [
-   "design-simplicity",
-   "design-visual-language"
-  ],
-  "allowed_effects": [
-   "read_local"
-  ],
-  "forbidden_effects": [
-   "write_files",
-   "git_write",
-   "external_write"
-  ]
- },
- {
   "id": "router-ui-mechanics",
   "prompt": "Choose the right layout, form, feedback, and responsive patterns for this onboarding flow.",
   "expected_skill": "ui-expert",
