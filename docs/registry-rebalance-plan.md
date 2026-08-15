@@ -135,14 +135,18 @@ For every skill that *fails* the evict gate, do not restore the prose. Express
 it as a check: a `scripts/` validator or a pointer to an existing tool, plus a
 one-paragraph objective. Shape it like `ui-data-viz`.
 
-### Phase 4 — Reinvest the freed budget in the loop
+### Phase 4 — Reinvest the freed budget in the loop ✅ (design-explore render) + next
 The maintenance and routing attention you free goes into the part that scales:
-- Strengthen `validate-changes` / `verify` to render UI and screenshot-diff, not
-  just run tests.
-- Wire `analyze-*` to run as part of `execute-feature`, not on request.
-- Add a "generate N directions → judge panel → synthesize" design Workflow that
-  replaces the `design-*` prose with search + selection (the harness already
-  supports this).
+- **`design-explore` now renders before judging** (2026-08-15): the workflow's
+  generators emit a structured `tokens` block; `scripts/render_direction.mjs`
+  turns each into a standalone page + Chrome screenshot and runs the WCAG AA
+  gate on the pairs it actually renders (math identical to `ui-color`'s
+  checker, verified 1:1). A direction below AA is out regardless of taste.
+- Strengthen `validate-changes` / `verify` to render UI and screenshot-diff,
+  not just run tests (renderer above is the primitive to reuse).
+- Wire `analyze-*` to run as part of `execute-feature`, not on request
+  (verification step already says to repeat the baseline method; make it
+  explicit when the plan names an analyzer).
 
 ### Phase 5 — Governance ✅ (AUTHORING.md) + recurring cadence
 - Rewrite the `AUTHORING.md` retention test around the method/objective/
