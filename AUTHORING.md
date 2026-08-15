@@ -20,23 +20,44 @@ effects such as writing files, committing, pushing, or posting externally.
 
 ## Admission and retention test
 
-Every active skill consumes routing attention and maintenance capacity. Keep a
-skill only when it has a plausible recurring audience and earns its permanent
-place in at least one of these ways:
+Sort every proposed or existing skill on the **method / objective / verification
+axis** first (docs/registry-rebalance-plan.md applies it to the whole
+registry):
+
+- **Does it specify an objective, taste, or org fact the model cannot derive?**
+  (a house style, a company workflow, a regulatory requirement, a platform
+  constraint) → it can KEEP as an objective/citation/check skeleton. Say what
+  must be true, pin the citation or convention, and attach a runnable check.
+- **Does it connect to ground truth?** (run, render, test, measure, review:
+  `validate-changes`, `analyze-*`, `review-pr`, a `scripts/` validator) → keep
+  and consider growing; verification is where value rises as models improve.
+- **Is it method knowledge with a deterministic check?** → CONVERT: keep the
+  check (a script or an existing linter), delete the how-to prose. See
+  `ui-color` and `ui-spacing` for the reference shape.
+- **Is it method knowledge with no durable check?** → do not add it. If it
+  exists, EVICT to `archive/` unless a quality A/B (`evals/*_pilot_cases.json`)
+  shows it clearly beats the base model on its own trigger prompts — the model
+  as a whole already absorbed most canonical knowledge prose.
+
+A skill also needs a plausible recurring audience and must be complete,
+maintainable, distinct from neighboring skills, and proportionate to its
+routing cost. The older retention categories still apply underneath:
 
 - **Recurring workflow:** it adds non-obvious decisions, fragile mechanics,
   safety boundaries, state recovery, or verification to a task people perform
-  repeatedly.
-- **Evergreen reference:** it materially improves repeated engineering or
-  product decisions with durable domain judgment the base model should not be
-  expected to reconstruct each time.
-- **Necessary router:** it resolves real overlap among a maintained specialist
-  family and adds synthesis that the child descriptions cannot provide alone.
+  repeatedly — the durable part is the verification and the boundary, not the
+  derived method.
+- **Evergreen reference:** it carries *external objective* context (standards,
+  org conventions, taste commitments), not technique the model is already good
+  at.
+- **Necessary router:** it resolves real overlap among a maintained family and
+  adds synthesis the child descriptions cannot alone — and it gets collapsed
+  the moment its children leave.
 
-The package must also be complete, maintainable, distinct from neighboring
-skills, and proportionate to its routing cost. Archive or decline it when it is
-primarily:
+Archive or decline a skill when it is primarily:
 
+- method/taste of prose that restates what the base model applies from its own
+  knowledge — encode the check, not the lesson;
 - one-time project setup or generic scaffolding recoverable from current
   framework documentation;
 - a prompt template, conversational ritual, or ordinary capable-agent behavior;
@@ -48,9 +69,7 @@ primarily:
 
 Do not use frequency alone. A lower-frequency skill may still earn its place
 when the operation is high-risk, externally effectful, or unusually dependent
-on consistent evidence. Re-run this retention test periodically; a skill that
-was once useful can become redundant as the base agent, tools, or shared
-workflows improve.
+on consistent evidence. Re-run this retention test when the base model or tooling improves; a skill that was once useful becomes redundant exactly as the base agent absorbs what its prose taught (run a quality A/B prior to evicting a family — `evals/README.md`).
 
 ## Skill kinds
 

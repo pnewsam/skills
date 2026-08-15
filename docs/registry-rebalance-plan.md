@@ -4,18 +4,28 @@ A plan to re-weight the skill registry away from hand-encoded method knowledge
 and toward objective-specification and ground-truth verification — the parts
 that keep their value (or gain value) as the base model improves.
 
-## Progress (2026-08-14) — branch `pilot/react-eviction`
-
-Executed on a reversible branch (`git checkout main` reverts everything):
+## Progress (2026-08-15) — main
 
 - **Evicted (evidence-backed):** `react-*` (12), `python-*` (9), `quality-*`
-  knowledge skills (7), `backend-*` (7) → `archive/*-evicted/`. Active skills
-  **108 → 73**, validator green throughout.
-- **Evidence:** 4 A/B rounds (31 advice cases + 4 real-code tasks) under a
-  strict evidence-grounded judge. The bare model tied or beat every skill; zero
-  convert candidates. Scorecards: `evals/results/2026-08-14-*`.
-- **Deliberately preserved:** `analyze-quality` (measurement) and cross-cutting
+  (7), `backend-*` (7), `design-*` prose (4) → `archive/*-evicted/`. Active
+  skills **108 → 70**, validator + CLI tests green throughout.
+- **Evidence:** 5 A/B rounds (advice + real-code tasks) under a strict
+  evidence-grounded judge; bare model tied or beat every family; zero convert
+  candidates. Scorecards: `evals/results/2026-08-1?`.
+- **Converted (prose → objective + runnable check):** `ui-color` (contrast
+  validator), `ui-spacing` (scale lint); `design-explore` added as the
+  search-based replacement for prescriptive design taste.
+- **Check layer landed** on compliance/platform flagships
+  (`compliance-accessibility` → axe / jsx-a11y / contrast; `platform-secrets-config` → gitleaks/trufflehog), confirming those families convert, not evict.
+- **Pending run:** consolidated `ui-*` family A/B defined in
+  `evals/ui_family_cases.json` (14 cases, 13 prose skills + visual-hierarchy)
+  with substitute note `docs/ui-substitute-note.md`; `ui-expert` slims after the verdict.
+- **Deliberately preserved:** measurement/verification (`analyze-*`,
+  `validate-*`, `review-pr`, `diagnose-failure`) and cross-cutting
   `async-patterns` / `error-handling` / `typescript-types`.
+
+Earlier prototype state (branch `pilot/react-eviction`): executed
+reversibly; the eviction evidence and archive moves now live on `main`.
 
 ### Remaining families — NOT blanket-evict (deliberate stop)
 
@@ -34,10 +44,11 @@ These need conversion, not eviction, so they are left active pending that work:
     jsx-a11y / the `ui-color` contrast validator; secrets → gitleaks/trufflehog
     + startup validation). The remaining compliance/platform skills follow the
     same light pattern: name the runnable check, keep the objective.
-- **`ui-*`, `design-*`:** replace prose with checks/search — `ui-color`→contrast
-  validator, `ui-spacing`→scale lint, keep `ui-data-viz` (validator template);
-  `design-*` → a generate-N-and-judge Workflow. Evict prose only once the
-  replacement exists, so capability isn't lost.
+- **`ui-*`:** prose family A/B defined in `evals/ui_family_cases.json` (14
+  cases, 13 prose skills + `visual-hierarchy`); keep the converted checkers,
+  evict (or convert per-case) whatever ties the bare model. `design-*` prose is
+  already retired in favor of `design-explore` (search over prescription);
+  `ui-expert` slims to a survivor index after the verdict.
 - `writing-conventions` (house voice) and the PR/Linear/planning/verification
   skills remain (objective/plumbing/ground-truth).
 
@@ -79,16 +90,16 @@ Default: method families → Tier A; already-superseded one-offs → Tier B.
 | **PR / Linear / repo plumbing** | `prepare-pr`, `update-pr`, `pr-conventions`, `create-issue`, `create-project`, `polish-issue`, `stash`, `ingest-skill`, `trim-comments` | **KEEP** | Mechanical environment glue, not knowledge. |
 | **Browser-test workflow** | `add-browser-test`, `fix-browser-test`, `plan-browser-tests` | **KEEP** | They write/verify real tests = ground truth. |
 | **Org-specific & taste-as-objective** | `mindsdb-migrate-surface-to-tailwind`, `emil-design-eng` (already `external/preserve`), `writing-conventions` (house voice) | **KEEP** | Irreducible context; a specific taste is an objective, not a technique. |
-| **React knowledge** | `react-*` (11) + `react-expert` | **CONVERT → eslint-plugin-react-hooks / RTL conventions, else EVICT** | **Pilot family** — strongest deterministic substitutes. |
-| **Python knowledge** | `python-*` (7) + `python-expert` + `fastapi-architecture` | **CONVERT → ruff / mypy config, else EVICT** | Tooling already enforces most of it. |
-| **Quality knowledge** | `quality-*` (6) + `quality-expert` | **CONVERT → metrics via `analyze-quality`, else EVICT** | Measurement skill already exists. |
-| **UI knowledge** | `ui-*` (15) + `visual-hierarchy` + `ui-expert` | **CONVERT the measurable (`ui-color`→contrast, `ui-spacing`→scale-lint; keep `ui-data-viz` as the template), else EVICT** | Design/UI already partly archived. |
-| **Design knowledge** | `design-composition`, `design-simplicity`, `design-visual-language`, `design-expert` | **EVICT → replace with a generate-N-and-judge Workflow** | Pure taste-prescription; better served by search + selection. |
-| **Backend knowledge** | `backend-*` (6) + `backend-expert` | **EVICT (thin objective survivors only)** | Weak deterministic substitutes; keep only genuine org guardrails as objectives. |
-| **Platform knowledge** | `platform-*` (5) + `platform-expert` | **EVICT / thin** | Keep any org-specific deploy/secrets guardrail as an objective + a check. |
-| **Compliance / risk** | `compliance-*` (7), `threat-model`, `consult-expert` | **CONVERT to checklist-objective + automated checks** | Regulatory rules are *external objectives*: keep "what must be true" + a pinned citation + an automated check (e.g. axe for a11y); drop the how-to-code prose. |
-| **Cross-cutting knowledge** | `async-patterns`, `error-handling`, `typescript-types` | **CONVERT → lint/types config, else EVICT** | |
-| **Routers** | `*-expert` (ui, design, react, python, backend, quality, platform, compliance), `consult-expert` | **Collapse** | A router over evicted children is dead weight. Keep one only if it now routes among *survivors + validators*. |
+| **React knowledge** | `react-*` (11) + `react-expert` | **EVICTED (pilot)** | A/B + code-gap eval: bare model tied/beat every case. `archive/react-pilot/`. |
+| **Python knowledge** | `python-*` (7) + `python-expert` + `fastapi-architecture` | **EVICTED** | A/B + extrapolation confirmation. `archive/python-evicted/`. |
+| **Quality knowledge** | `quality-*` (6) + `quality-expert` | **EVICTED** | A/B + extrapolation confirmation. `archive/quality-evicted/`. |
+| **UI knowledge** | `ui-*` (15) + `visual-hierarchy` + `ui-expert` | **A/B pending** | `evals/ui_family_cases.json`: keep `ui-color`/`ui-spacing` checkers; evict or convert what ties; `visual-hierarchy` decided separately; slim `ui-expert`. |
+| **Design knowledge** | `design-composition`, `design-simplicity`, `design-visual-language`, `design-expert` | **EVICTED** | A/B tied; replaced by `design-explore` (generate-N-and-judge). `archive/design-evicted/`. |
+| **Backend knowledge** | `backend-*` (6) + `backend-expert` | **EVICTED** | A/B tied; keep only genuine org guardrails as objectives. `archive/backend-evicted/`. |
+| **Platform knowledge** | `platform-*` (5) + `platform-expert` | **EVICT / thin (partially converted)** | Keep org-specific deploy/secrets guardrails as objective + check; check layer landed on `platform-secrets-config`, the rest follow the light pattern. |
+| **Compliance / risk** | `compliance-*` (7), `threat-model`, `consult-expert` | **CONVERT: objective + pinned citation + automated checks** | Flagships (`accessibility`, `secrets`) done; the rest follow. Never a blind evict-A/B for external objectives. |
+| **Cross-cutting knowledge** | `async-patterns`, `error-handling`, `typescript-types` | **CONVERT → lint/types config, else EVICT** | Kept for now; revisit on the quarterly gate. |
+| **Routers** | `*-expert` (ui, design, react, python, backend, quality, platform, compliance), `consult-expert` | **Collapse** | A router over evicted children is dead weight. react/python/quality/backend/design experts already gone; `ui-expert` slims after the ui A/B; keep `consult-expert`/`compliance-expert` only as an index over the legislative families. |
 
 Net effect: roughly 70–80 of the ~132 skills are in the method/router bucket
 being evicted, converted, or collapsed. Nearly everything in KEEP is already
@@ -105,23 +116,17 @@ what you'd call task- or objective-oriented.
   prompts, the model either (a) does the task well natively, or (b) routes to a
   validator/verification skill — demonstrated on the evals, not asserted.
 
-### Phase 1 — Pilot one family end-to-end: `react-*`
+### Phase 1 — Pilot one family end-to-end: `react-*` ✅
 Chosen because the deterministic substitutes are strongest (eslint-plugin-
-react-hooks, react-testing-library), so it's the cleanest test of "does removing
-the prose hurt, given model + linters?"
-1. Stand up the `skills-knowledge` repo; `git mv` the `react-*` family in with
-   history preserved.
-2. In the active registry, replace them with nothing but a short `react` profile
-   note pointing at the lint/test substitutes.
-3. Re-run evals + a small A/B on real React tasks (registry-with vs -without).
-4. **Decide per outcome:** no regression → evicted for good. Localized
-   regression on one sub-skill (e.g. `react-performance`) → that one becomes a
-   CONVERT (perf checklist + a profiler-in-the-loop step), not a restore.
+react-hooks, react-testing-library). **Status:** complete — A/B + code-gap
+eval passed, family archived (`archive/react-pilot/`), evidence in
+`evals/results/2026-08-14-*`.
 
-### Phase 2 — Roll eviction across the method families
-Same gate, one family per change, ordered by strength of existing tooling
-(cheapest wins first): **python → quality → react (done) → ui → backend /
-platform → compliance.** Collapse each `*-expert` router as its children leave.
+### Phase 2 — Roll eviction across the method families ✅ (ui pending A/B)
+Executed in order: **python → quality → react → backend → design**, each
+behind its own A/B. Remaining: **ui-* prose** (case file ready — run, then
+evict/convert per verdict) and collapse of `ui-expert`. compliance/platform
+are CONVERT families, not evictions.
 
 ### Phase 3 — Convert the survivors to validators
 For every skill that *fails* the evict gate, do not restore the prose. Express
@@ -137,11 +142,15 @@ The maintenance and routing attention you free goes into the part that scales:
   replaces the `design-*` prose with search + selection (the harness already
   supports this).
 
-### Phase 5 — Governance
+### Phase 5 — Governance ✅ (AUTHORING.md) + recurring cadence
 - Rewrite the `AUTHORING.md` retention test around the method/objective/
-  verification axis explicitly.
+  verification axis explicitly — done 2026-08-15: the admission test sorts by
+  "can the model derive this?" first, then KEEP/CONVERT/EVICT, with the A/B
+  gate for families.
 - Add a recurring (e.g. quarterly) retention review that re-runs the evict gate:
-  as models improve, more CONVERT skills graduate to EVICT.
+  as models improve, more CONVERT skills graduate to EVICT, and the evals README
+  now documents how to run a family quality A/B end-to-end. Treat the next
+  cleanup as the first recurring pass.
 
 ## Per-skill decision gate (the checklist)
 
@@ -155,13 +164,22 @@ For each candidate, in order:
 4. Is it **method knowledge with no durable check**, and does the model handle
    its trigger prompts well on the evals? → EVICT to `skills-knowledge`.
 
-## Open decisions (need your call)
+## Decisions (2026-08-15)
 
-1. **Retention tier for the method families** — editable separate repo
-   (`skills-knowledge`, my recommendation, since you may re-vendor) vs in-repo
-   `archive/` (history only)?
-2. **Compliance & platform aggressiveness** — keep thin "objective + citation +
-   automated check" survivors (recommended, given legal/operational risk) or
-   evict fully?
-3. **Pilot family** — `react-*` (recommended: strongest tooling substitute) or
-   `ui-*` (more consolidation momentum, already partly archived)?
+1. **Pilot family — RESOLVED (react-*):** strongest tooling substitute, clean
+   A/B; evicted and archived.
+2. **Compliance & platform aggressiveness — RESOLVED:** convert, not evict.
+   Objective + pinned citation + automated check for each; blind evict-A/B is
+   the wrong instrument for external objectives. Flagships done;
+   remaining skills follow the same light pattern.
+3. **Retention tier for the method families — choosing in-repo `archive/`
+   over a separate `skills-knowledge` repo, pending evidence of actual
+   re-vendor demand.** Every family A/B so far says the base model covers the
+   archived material, so there is no demonstrated consumer for editable cold
+   storage; `archive/` preserves history and reversibility cheaply. If a
+   project actually asks to re-vendor a family (via `ingest-skill` with
+   `provenance: external`), split it to a `skills-knowledge` repo at that
+   point — the eviction remains reversible either way.
+4. **Remaining open:** the `ui-*` prose A/B verdict (case file ready in
+   `evals/ui_family_cases.json`), and whether `visual-hierarchy` stays as a
+   lone survivor once it is decided.

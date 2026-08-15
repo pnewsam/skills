@@ -1,0 +1,224 @@
+{
+  "pilot": "ui-knowledge-eviction",
+  "created": "2026-08-15",
+  "purpose": "Consolidated A/B for the prose ui-* family (13 skills + visual-hierarchy, roughly 2,800 lines) with visual-hierarchy evaluated in the same run but flagged as a separate decision. ui-color and ui-spacing are already converted to objective + runnable check and stay installed in all arms; this run isolates whether the remaining ui prose changes answer quality beyond the base model. Routing/effect-boundary cases stay in high_use_cases.json; this file is quality cases only and is deliberately not parsed by validate_registry.py.",
+  "arms": {
+    "A_control": "Active registry WITH the prose ui-* family installed (ui-actions, ui-content, ui-data-viz, ui-depth, ui-email, ui-feedback, ui-forms, ui-icons, ui-layouts, ui-onboarding, ui-patterns, ui-responsive, ui-typography, visual-hierarchy, plus the ui-expert routing table) — the registry as of 2026-08-15 including the two converted checkers.",
+    "B_bare": "Same registry WITH the prose ui-* family removed to archive/ui-evicted/. Only the converted checkers (ui-color, ui-spacing) and their checks remain; no ui-expert router.",
+    "C_substitute": "Arm B plus the substitution context in docs/ui-substitute-note.md: axe-core + Playwright screenshot diffs as the ground-truth checks and the kept convert checks. Runs only where mean(A) - mean(B) > 0.15 (recovery test)."
+  },
+  "protocol": "Run each case 3x per arm in fresh context. Score each answer 0-1: (fraction of must_include anchors satisfied) minus 0.34 for each must_avoid anchor present, floored at 0. Record raw answers before scores in a dated results/ file. A rubric-judge model may score, but must see only prompt + answer + anchors, never the arm label. Exclude degenerate reps (returned preamble only) and note them in the report.",
+  "gate": "The family is safe to EVICT when mean(B) >= mean(A) - 0.10 AND arm B commits no must_exclude violation on any case where arm A commits none. A case where A beats B by >0.25 and C does NOT recover it flags that specific sub-skill as a CONVERT candidate (keep a check, not the prose), not a blanket keep. Because these are UX judgments, tag each case `canonical` (well-known trap the model has internalized) or `openjudgment` (genuine trade-off where taste/context matters); a tied openjudgment case is stronger evidence than a tied canonical one — say which in the report.",
+  "cases": [
+    {
+      "id": "empty-state-copy",
+      "kind": "canonical",
+      "prompt": "Our new invoices screen has no rows yet. What should we show instead of a blank table? Also, what should the empty-state button label be?",
+      "routes_today": "ui-content",
+      "must_include": [
+        "an empty state that explains the current state and offers the primary next action",
+        "copy that names the object/action without duplicating the page heading",
+        "a concrete primary action the user can take to get value"
+      ],
+      "must_exclude": [
+        "showing only a bare 'No invoices' message with no action",
+        "vague marketing copy that does not name the action"
+      ]
+    },
+    {
+      "id": "row-action-overflow",
+      "kind": "openjudgment",
+      "prompt": "Every row in our projects table has 6 actions (edit, duplicate, share, archive, export, delete). All 6 as icon buttons feels noisy and wide. How should I present row-level actions?",
+      "routes_today": "ui-actions",
+      "must_include": [
+        "only the 1-2 primary actions stay visible inline; the rest go in an overflow (kebab/ellipsis) menu",
+        "destructive actions sit last in the overflow, not inline first",
+        "actions the user takes often stay visible; rare ones move to the menu"
+      ],
+      "must_exclude": [
+        "recommending every action as a visible icon button",
+        "putting delete as the first inline action"
+      ]
+    },
+    {
+      "id": "chart-choice",
+      "kind": "canonical",
+      "prompt": "Our dashboard shows total users over 12 months in a card, plus a second card with this month's total. I am choosing between a full line chart and a big number with a small trend indicator for the second card. Which and why?",
+      "routes_today": "ui-data-viz",
+      "must_include": [
+        "the single current-month total is a big number with a tiny trend indicator, not a full chart",
+        "the 12-month series earns a line chart because the shape over time matters",
+        "match chart to data density; one number does not need an axis"
+      ],
+      "must_exclude": [
+        "recommending a pie or donut for the current-month total",
+        "same chart treatment for both cards regardless of data"
+      ]
+    },
+    {
+      "id": "elevation-scale",
+      "kind": "openjudgment",
+      "prompt": "Cards, a modal, and a dropdown on one page all use the same large shadow and read as one blob. How do I differentiate elevation so depth reads without clutter?",
+      "routes_today": "ui-depth",
+      "must_include": [
+        "a limited elevation scale (resting / raised / overlay) mapped to component types",
+        "differentiate with surface tone, borders, and layering, not shadow size alone",
+        "modal + backdrop sit above the page layer; cards stay at rest"
+      ],
+      "must_exclude": [
+        "advising one shared shadow value for consistency",
+        "implying all floating UI needs the same drop shadow"
+      ]
+    },
+    {
+      "id": "email-client-hell",
+      "kind": "canonical",
+      "prompt": "My order-confirmation email renders fine in Gmail but breaks in Outlook: grid columns collapse and image spacing multiplies. What is the general approach to authoring cross-client email?",
+      "routes_today": "ui-email",
+      "must_include": [
+        "target the worst client (Outlook): table-based layout and inline styles, not grid/flexbox",
+        "degrade gracefully: keep content readable when a style is dropped",
+        "test in real clients (Litmus or mail clients), not just a browser"
+      ],
+      "must_exclude": [
+        "recommending flexbox/grid layout as safe across clients",
+        "claiming it works because GMail renders it"
+      ]
+    },
+    {
+      "id": "toast-banner-inline",
+      "kind": "openjudgment",
+      "prompt": "A user submits a form and the server times out. Should I show a toast? The app is also half-down, so a persistent system banner exists. How do I choose between inline error, toast, and banner here?",
+      "routes_today": "ui-feedback",
+      "must_include": [
+        "field validation/errors live inline next to the field",
+        "the transient post-submit failure is a toast (short-lived, dismissible, retry offered)",
+        "a durable outage is a banner/modal with an explicit action, not a toast"
+      ],
+      "must_exclude": [
+        "using a toast for a repeated inline field error",
+        "using a modal for a transient failure that a toast handles"
+      ]
+    },
+    {
+      "id": "settings-layout-choice",
+      "kind": "openjudgment",
+      "prompt": "A settings nav has 3 sections. One section holds 30 toggles and sliders; the other two have 5 fields each. Same page or tabs? And is toggles-everywhere even right?",
+      "routes_today": "ui-forms",
+      "must_include": [
+        "30 controls on one page is too much; group by purpose or split into tabs/sections",
+        "toggles suit binary, frequently-changed choices; mutual-exclusive options should be radio/select",
+        "a destructive or rarely-changed setting deserves a distinct control (button/confirm), not a silent toggle"
+      ],
+      "must_exclude": [
+        "using a toggle for mutually exclusive options",
+        "a modal for any form with more than a handful of fields"
+      ]
+    },
+    {
+      "id": "icon-only-accessibility",
+      "kind": "canonical",
+      "prompt": "We want a delete row with only a trash icon and a profile icon button, no text. Is icon-only acceptable? What exactly is required for it?",
+      "routes_today": "ui-icons",
+      "must_include": [
+        "an icon-only button needs an accessible name (aria-label/title), not a tooltip-only label",
+        "icons must be recognizable in context; ambiguous actions should be text-labeled or paired",
+        "hover-dependent meaning is a failure for keyboard and touch users"
+      ],
+      "must_exclude": [
+        "a tooltip as the only accessible name",
+        "using the identical icon for two distinct actions"
+      ]
+    },
+    {
+      "id": "settings-page-zoning",
+      "kind": "openjudgment",
+      "prompt": "We have a settings page with 3 sections: account profile (5 fields), notifications (2 toggles), and permissions (2 selects). It looks thin and empty. Should I reorganize as cards, tabs, or a dashboard layout?",
+      "routes_today": "ui-layouts",
+      "must_include": [
+        "small-scope settings belong as simple grouped sections or tabs on one page, not a dashboard",
+        "do not invent cards, stat tiles, or side metrics to fill whitespace",
+        "a dashboard grid is for operational data, not for a small settings surface"
+      ],
+      "must_exclude": [
+        "adding unrelated analytics cards 'so it does not look empty'",
+        "a full-screen landing-page hero for a settings page"
+      ]
+    },
+    {
+      "id": "first-run-value",
+      "kind": "openjudgment",
+      "prompt": "New users land on an empty project board. We spent a while reasoning about whether to show a checklist tour, a product-tour tooltip, or a blank-slate card. What is the better onboarding approach and when?",
+      "routes_today": "ui-onboarding",
+      "must_include": [
+        "orchestrate for value quickly: the empty state itself is the onboarding moment",
+        "a scripted multi-step tour is for complex flows; a one-line action is enough for a simple board",
+        "avoid coercing power users through a fixed tour; keep the path skippable and reversible"
+      ],
+      "must_exclude": [
+        "a full-screen checklist modal before any value is visible",
+        "forcing a 6-step tooltip tour on first visit"
+      ]
+    },
+    {
+      "id": "table-vs-card-list",
+      "kind": "canonical",
+      "prompt": "We display 40 deployments per environment. Customers need to scan by column (name, status, age, commit). Is a table, a card list, or a tile grid the right pattern here?",
+      "routes_today": "ui-patterns",
+      "must_include": [
+        "data with repeatable columns and a scan-by-column need is a table",
+        "cards/lists serve heterogeneous or media-heavy content and lower density",
+        "with 40 rows, offer filtering/search even if an expert table is fine"
+      ],
+      "must_exclude": [
+        "converting a scan-by-column list into a big-card list that breaks alignment",
+        "removing pagination/filter evidence because table is 'the pattern'"
+      ]
+    },
+    {
+      "id": "responsive-breakpoint",
+      "kind": "canonical",
+      "prompt": "Our desktop table is 9 columns wide. Which responsive pattern is the right one for narrow phones: horizontal scroll, collapse to cards, hide columns, or a separate view?",
+      "routes_today": "ui-responsive",
+      "must_include": [
+        "choose a pattern by task: collapse to stacked cards for scannable cards, hide the least-needed columns for comparison scanning, dedicated view for edit-heavy tables",
+        "rule: a reorganized stacked layout still keeps the primary columns visible",
+        "never silently cut business-critical columns on small screens without a check"
+      ],
+      "must_exclude": [
+        "hiding entire columns that are the primary action on desktop",
+        "advising one universal responsive pattern for all tables"
+      ]
+    },
+    {
+      "id": "type-scale",
+      "kind": "canonical",
+      "prompt": "We need a type scale for a marketing + app dashboard. We have 9 font sizes in use across screens. How do we build a sane scale from this?",
+      "routes_today": "ui-typography",
+      "must_include": [
+        "a modular base scale (e.g. 1.25 ratio) yields a small set; bind 3-4 hierarchical roles (title, heading, body, caption) rather than every size",
+        "body text weight and size first, then headings sized relative to body",
+        "map existing 9 sizes into roles; drop unused sizes, keep < so the scale stays tight"
+      ],
+      "must_exclude": [
+        "prescribing 9 unrelated sizes as solids",
+        "using a chart/display font for body copy"
+      ]
+    },
+    {
+      "id": "hierarchy-critique",
+      "kind": "openjudgment",
+      "prompt": "A settings page has a big hero title, a prominent install banner, small form labels, and every button equally styled. Users cannot see what to do first. How do I fix the hierarchy without adding color or larger whitespace?",
+      "routes_today": "visual-hierarchy",
+      "must_include": [
+        "rank: decide the controlling task, restructure title + action + content to serve it",
+        "reduce prominence of the co-equal banner (less visual weight) so one thing dominates",
+        "emphasis via grouping, spacing, type weight, not brightness and color alone"
+      ],
+      "must_exclude": [
+        "making everything bigger and stronger",
+        "adding a strong color to every primary button"
+      ]
+    }
+  ]
+}
