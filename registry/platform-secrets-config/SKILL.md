@@ -20,6 +20,14 @@ Use for secrets, credentials, API keys, tokens, certificates, runtime config, en
 
 Secrets and config are different things. Config can be reviewed and documented; secrets must be protected, rotated, scoped, audited, and injected only where needed.
 
+## Checks — automate leak prevention
+
+The "no secret in the repo, image, or bundle" guardrail is enforceable — scan for it, do not rely on review:
+
+- **Secret scanning** — `gitleaks` or `trufflehog` in pre-commit and CI to block committed credentials; enable the platform's native push protection (e.g. GitHub secret scanning) where available.
+- **Config validation** — validate required variables at startup and fail fast with redacted errors; a checked-in config schema is the reviewable source of truth.
+- **CI hygiene** — restrict secrets to trusted workflows/environments, block fork-PR access, and verify logs redact by key name and value pattern.
+
 ## Common Agent Mistakes
 
 - Putting secrets in `.env.example`, fixtures, screenshots, logs, images, or generated docs.

@@ -26,6 +26,14 @@ These need conversion, not eviction, so they are left active pending that work:
   technique. Convert each to "what must be true + a pinned citation + an
   automated check" (e.g. axe for a11y); keep the objective, drop how-to-code
   prose. A blind evict-A/B is the wrong instrument here.
+  - **Status (2026-08-15):** on inspection these skills were already
+    objective+citation+rubric shaped (e.g. `compliance-accessibility` 65 lines
+    with WCAG anchors; `platform-secrets-config` 79 lines with 12-factor/OWASP
+    anchors) — confirming "keep, don't evict." The only missing layer was the
+    concrete automated check, now added to two flagships (a11y → axe /
+    jsx-a11y / the `ui-color` contrast validator; secrets → gitleaks/trufflehog
+    + startup validation). The remaining compliance/platform skills follow the
+    same light pattern: name the runnable check, keep the objective.
 - **`ui-*`, `design-*`:** replace prose with checks/search — `ui-color`→contrast
   validator, `ui-spacing`→scale lint, keep `ui-data-viz` (validator template);
   `design-*` → a generate-N-and-judge Workflow. Evict prose only once the

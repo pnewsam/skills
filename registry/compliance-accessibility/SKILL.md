@@ -20,6 +20,15 @@ This is engineering guidance, not legal advice. Escalate formal conformance clai
 
 Accessibility is operability and semantics, not visual polish. Automated checks help, but a meaningful review always includes keyboard flow, accessible names, focus behavior, and user-task completion.
 
+## Checks — run these, then verify by hand
+
+Automated scans catch roughly a third of WCAG issues; they gate the obvious, they do not certify accessibility. Run them in CI, then complete the Review Checklist by keyboard and screen reader.
+
+- **axe-core** (`@axe-core/cli`, `jest-axe`, or `@axe-core/playwright`) — automated WCAG rule scan in tests/CI.
+- **eslint-plugin-jsx-a11y** — static lint for missing names, roles, and keyboard handlers at the source.
+- **Contrast** — `ui-color`'s `scripts/check_contrast.py` on text and meaningful-indicator pairs (WCAG AA), or the browser's contrast tooling.
+- **Keyboard + screen reader** — no tool replaces tabbing the primary flow and listening to it; this is required, not optional.
+
 ## Common Agent Mistakes
 
 - Adding ARIA instead of using native HTML.
