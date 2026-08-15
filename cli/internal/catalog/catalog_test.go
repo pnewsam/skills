@@ -135,6 +135,7 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 		"prepare-pr",
 		"review-pr",
 		"stash",
+		"trim-comments",
 		"update-pr",
 		"validate-changes",
 		"writing-conventions",
