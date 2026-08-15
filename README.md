@@ -116,12 +116,8 @@ Workflow skills for product direction, planning, cross-domain consultation, epic
 ```mermaid
 flowchart TD
     CE[consult-expert] -->|routes to domain experts| UE[ui-expert]
-    CE --> DX[design-expert]
-    CE --> RE[react-expert]
-    CE --> BE[backend-expert]
+    CE --> DE[design-explore]
     CE --> PL[platform-expert]
-    CE --> PY[python-expert]
-    CE --> QE[quality-expert]
     CE --> CX[compliance-expert]
     CE -->|produces epic briefs| PE
     CC[create-charter] -->|produces docs/CHARTER.md| ED[explore-directions]
@@ -257,32 +253,25 @@ implementation, validation, and delivery.
 
 ### Design Principles
 
-Reference skills for turning a functional interface into something clearer, calmer, more elegant, and more visually coherent. Use `design-expert` for broad visual quality work or when the right focused design skill is unclear.
+Visual direction is **searched, not prescribed**. `design-explore` generates
+several distinct directions, judges them against criteria derived from the
+brief, and synthesizes a recommendation (generate-N-and-judge Workflow),
+verified against ground truth (`ui-color` contrast, `ui-spacing` scale).
+`visual-hierarchy` closes the scanning-order and emphasis decisions once a
+direction is set, and `analyze-design-system` owns repository-wide convergence
+and pattern drift.
 
-Legacy design-system and critique workflows are retained under `archive/` for
-migration history. They are not discoverable or installable. The active design
-taxonomy uses `analyze-design-system` for repository-wide convergence,
-`design-expert` for broad visual judgment, and focused `design-*` references
-for individual decisions.
+The prescriptive `design-*` references (composition, simplicity,
+visual-language) were retired to `archive/design-evicted/` after A/B evidence
+showed the base model matches them on their own trigger prompts
+(`evals/results/2026-08-15-design-retire.md`). They, and other legacy critique
+workflows, are retained under `archive/` for history only — not discoverable or
+installable.
 
-```mermaid
-flowchart LR
-    ADS[analyze-design-system] -->|one bounded candidate| PF[plan-feature]
-    PF --> EF[execute-feature]
-    ADS -.->|interprets visual drift with| DX
-    DX[design-expert] --> DC[design-composition]
-    DX --> VH[visual-hierarchy]
-    DX --> DS[design-simplicity]
-    DX --> DVL[design-visual-language]
-```
-
-| Skill                                                | Type      | Description                                                                                                                                           |
-| ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [design-expert](registry/design-expert/SKILL.md)     | router | Router for visual design judgment - coordinates composition, hierarchy, simplicity, and visual-language guidance.                                     |
-| [design-composition](registry/design-composition/SKILL.md) | reference | Composition principles - balance, alignment, proportion, focal point, grouping, visual weight, repetition, and rhythm.                                |
-| [visual-hierarchy](registry/visual-hierarchy/SKILL.md) | reference | Unified hierarchy guidance for task priority, scanning, visual dominance, contrast, grouping, and de-emphasis.                                        |
-| [design-simplicity](registry/design-simplicity/SKILL.md) | reference | Simplicity principles - restraint, reduction, decluttering, focus, and reducing visual/cognitive load without removing needed capability.             |
-| [design-visual-language](registry/design-visual-language/SKILL.md) | reference | Visual language principles - aesthetic direction, mood, personality, cohesion, materiality, brand fit, and avoiding generic or mismatched styling.    |
+| Skill                                                         | Type     | Description                                                                                                          |
+| ------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| [design-explore](registry/design-explore/SKILL.md)            | workflow | Generate several distinct visual directions, judge against explicit criteria, synthesize. Search over prescription.  |
+| [visual-hierarchy](registry/visual-hierarchy/SKILL.md)        | reference | Scanning order, emphasis, grouping, and de-emphasis within a chosen direction.                                       |
 
 ### External Design References
 
@@ -343,25 +332,17 @@ flowchart LR
 
 ### Quality
 
-```mermaid
-flowchart LR
-    QX[quality-expert] --> QCC[quality-code-clarity]
-    QX --> QM[quality-modularity]
-    QX --> QR[quality-refactoring]
-    QX --> QC[quality-correctness]
-    QX --> QT[quality-testing]
-    QX --> QREL[quality-reliability]
-```
+The `quality-*` interpretive family (clarity, modularity, refactoring,
+correctness, testing, reliability) was retired to `archive/quality-evicted/`
+after strict A/B evidence (`evals/results/2026-08-14-*`). What remains is the
+part that scales: `analyze-quality` measures and ranks candidates, and
+cross-cutting method judgment (`error-handling`, `async-patterns`,
+`typescript-types` — see Core Language) replaces the prose when a signal needs
+interpretation.
 
-| Skill                                                              | Type      | Description                                                                                                                  |
-| ------------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| [quality-expert](registry/quality-expert/SKILL.md)                 | router | Router for broad code quality work - coordinates clarity, modularity, refactoring, correctness, testing, and reliability.    |
-| [quality-code-clarity](registry/quality-code-clarity/SKILL.md)     | reference | Naming, readability, local reasoning, intention-revealing code, control flow, comments, and removal of cleverness.          |
-| [quality-modularity](registry/quality-modularity/SKILL.md)         | reference | Cohesion, coupling, responsibility boundaries, dependency direction, abstractions, module seams, and change isolation.       |
-| [quality-refactoring](registry/quality-refactoring/SKILL.md)       | reference | Code smells, safe incremental transformations, behavior preservation, cleanup sequencing, and validation of refactors.       |
-| [quality-correctness](registry/quality-correctness/SKILL.md)       | reference | Invariants, edge cases, boundary validation, data integrity, idempotency, concurrency hazards, and behavioral truth.         |
-| [quality-testing](registry/quality-testing/SKILL.md)               | reference | Language-agnostic testing strategy, test ROI, test levels, regression confidence, test smells, and flakiness.               |
-| [quality-reliability](registry/quality-reliability/SKILL.md)       | reference | Failure modes, timeouts, retries, graceful degradation, observability, backpressure, recovery, and operational confidence.  |
+| Skill                                              | Type      | Purpose                                                            |
+| -------------------------------------------------- | --------- | ----------------------------------------------------------------- |
+| [analyze-quality](registry/analyze-quality/SKILL.md) | workflow | Read-only measurement and ranking of bounded quality candidates. |
 
 ### Compliance
 
@@ -421,83 +402,31 @@ flowchart LR
 
 ### Backend
 
-```mermaid
-flowchart LR
-    BX[backend-expert] --> BAD[backend-api-design]
-    BX --> BSB[backend-service-boundaries]
-    BX --> BP[backend-persistence]
-    BX --> BJQ[backend-jobs-queues]
-    BX --> BI[backend-integrations]
-    BX --> BAB[backend-auth-boundaries]
-```
-
-| Skill                                                                    | Type      | Description                                                                                                                              |
-| ------------------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| [backend-expert](registry/backend-expert/SKILL.md)                       | router | Router for broad backend work - coordinates focused server-side skills across APIs, service boundaries, persistence, jobs, integrations, and auth boundaries. |
-| [backend-api-design](registry/backend-api-design/SKILL.md)               | reference | API contracts, resource modeling, request/response shapes, validation, errors, pagination, filtering, versioning, and idempotency.       |
-| [backend-service-boundaries](registry/backend-service-boundaries/SKILL.md) | reference | Server-side ownership for handlers, services, use cases, domain behavior, transaction placement, dependency direction, and side effects. |
-| [backend-persistence](registry/backend-persistence/SKILL.md)             | reference | Data modeling, migrations, transactions, consistency, repositories, query boundaries, indexing, retention, and safe schema evolution.    |
-| [backend-jobs-queues](registry/backend-jobs-queues/SKILL.md)             | reference | Background jobs, queues, schedules, retries, idempotency, dead-letter handling, concurrency, backpressure, and observability.            |
-| [backend-integrations](registry/backend-integrations/SKILL.md)           | reference | Third-party APIs, webhooks, external clients, sync flows, provider rate limits, outbox/inbox patterns, and partial failure handling.     |
-| [backend-auth-boundaries](registry/backend-auth-boundaries/SKILL.md)     | reference | Authentication and authorization placement, identity propagation, tenant isolation, sessions, tokens, permission checks, and access tests. |
+The `backend-*` family (API design, service boundaries, persistence, jobs,
+integrations, auth) retired to `archive/backend-evicted/` after A/B evidence —
+advice and code tasks — showed the base model matches it
+(`evals/results/2026-08-14-rollout-backend.md`). Keep only genuine
+org-specific guardrails as objectives; `docs/registry-rebalance-plan.md`
+records the disposition.
 
 ### React
 
-```mermaid
-flowchart LR
-    RX[react-expert] --> RAR[react-architecture]
-    RX --> RCD[react-component-design]
-    RX --> RHE[react-hooks-effects]
-    RX --> RFP[react-form-patterns]
-    RX --> RSM[react-state-management]
-    RX --> RDF[react-data-fetching]
-    RX --> RR[react-routing]
-    RX --> RP[react-performance]
-    RX --> REH[react-error-handling]
-    RX --> RA[react-accessibility]
-    RX --> RT[react-testing]
-```
-
-| Skill                                                                | Type      | Description                                                                                                                                |
-| -------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| [react-expert](registry/react-expert/SKILL.md)                       | router | Router for broad React work - coordinates focused React skills across architecture, components, hooks, forms, state, data, routing, performance, errors, accessibility, and tests. |
-| [react-architecture](registry/react-architecture/SKILL.md)           | reference | App shell, providers, routes, environment and platform adapters, feature ownership, public APIs, dependency direction, and incremental structural migration. |
-| [react-component-design](registry/react-component-design/SKILL.md)   | reference | Component size, single responsibility, compositional patterns, and "branch early" — prefer distinct components over prop-toggled behavior. |
-| [react-hooks-effects](registry/react-hooks-effects/SKILL.md)         | reference | Effects as escape hatches, dependency arrays, cleanup, stale closures, refs vs state, Strict Mode, and custom hook boundaries.             |
-| [react-form-patterns](registry/react-form-patterns/SKILL.md)         | reference | Form-library contexts for non-trivial forms, reusable field components, schema-level validation, dirty tracking, and wizards.              |
-| [react-state-management](registry/react-state-management/SKILL.md)   | reference | Keep state low, minimize global state, treat URL/form/server/local state differently, derive don't sync.                                   |
-| [react-data-fetching](registry/react-data-fetching/SKILL.md)         | reference | Server-state fetching, query keys, colocated API clients, mutations, invalidation, optimistic updates, pagination, and prefetching.        |
-| [react-routing](registry/react-routing/SKILL.md)                     | reference | RESTful URL design, new views = new URLs, URL as source of truth for navigational state.                                                   |
-| [react-performance](registry/react-performance/SKILL.md)             | reference | Profile first, then optimize — React.memo, useMemo/useCallback, code splitting, virtualization, concurrent features.                       |
-| [react-error-handling](registry/react-error-handling/SKILL.md)       | reference | Render and route error boundaries, expected data and mutation failures, reset behavior, recovery, and user-safe reporting.                 |
-| [react-accessibility](registry/react-accessibility/SKILL.md)         | reference | Semantic HTML first, keyboard navigation, ARIA patterns, focus management, accessible forms, live regions, color/contrast.                 |
-| [react-testing](registry/react-testing/SKILL.md)                     | reference | Integration tests for critical flows, unit tests for business logic, minimal component tests — test ROI over coverage percentage.          |
+The `react-*` knowledge family (12 skills, ~2,497 lines) was retired to
+`archive/react-pilot/` after the eviction pilot: an advice A/B and a code-gap
+eval showed the bare model writes code with the same skill-taught properties
+(`evals/results/2026-08-14-*`). The deterministic substitutes now do that
+work: `eslint-plugin-react-hooks` (rules-of-hooks, exhaustive-deps),
+`eslint-plugin-jsx-a11y`, React Testing Library conventions, and profiler
+evidence — enforced by lint and tests, not prose.
 
 ### Python And FastAPI
 
-```mermaid
-flowchart LR
-    PX[python-expert] --> PT[python-tooling]
-    PX --> PPS[python-project-structure]
-    PX --> PTEST[python-testing]
-    PX --> PTDM[python-typing-data-modeling]
-    PX --> PAB[python-async-boundaries]
-    PX --> PEH[python-error-handling]
-    PX --> PDP[python-database-patterns]
-    PX --> FA[fastapi-architecture]
-```
-
-| Skill                                                                                  | Type      | Description                                                                                                                           |
-| -------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| [python-expert](registry/python-expert/SKILL.md)                                       | router | Router for broad Python work - coordinates focused Python and FastAPI skills across tooling, structure, typing, async, errors, database, testing, and API architecture. |
-| [python-tooling](registry/python-tooling/SKILL.md)                                     | reference | Context-sensitive Python environment, dependency, packaging, lint, format, typing, test, task, CI, and migration decisions.                |
-| [python-project-structure](registry/python-project-structure/SKILL.md)                 | reference | Organize Python packages, modules, entrypoints, configuration, imports, scripts, services, utilities, and tests.                       |
-| [python-testing](registry/python-testing/SKILL.md)                                     | reference | Pytest suites, fixtures, dependency overrides, async tests, mocks, factories, integration tests, and regression coverage.              |
-| [python-typing-data-modeling](registry/python-typing-data-modeling/SKILL.md)           | reference | Type hints, Pydantic models, dataclasses, DTOs, `TypedDict`, `Protocol`, validation boundaries, and serialization.                     |
-| [python-async-boundaries](registry/python-async-boundaries/SKILL.md)                   | reference | Async boundaries, FastAPI handlers, async database access, background tasks, cancellations, timeouts, and blocking-call risks.         |
-| [python-error-handling](registry/python-error-handling/SKILL.md)                       | reference | Python exceptions, domain errors, API/CLI/job boundary translation, logging, retries, validation failures, and rollback behavior.      |
-| [python-database-patterns](registry/python-database-patterns/SKILL.md)                 | reference | SQLAlchemy models, sessions, transactions, repositories, migrations, query boundaries, async database access, fixtures, and tests.     |
-| [fastapi-architecture](registry/fastapi-architecture/SKILL.md)                         | reference | FastAPI project structure, thin routers, Pydantic schemas, dependency injection, service boundaries, settings, errors, and tests.      |
+The `python-*` + `fastapi-architecture` family was retired to
+`archive/python-evicted/` under the same gate (rollout + extrapolation
+confirmation, `evals/results/2026-08-14-*`). Tooling already enforces most of
+its claims — `ruff` for lint/format, `mypy`/pyright for typing, `pytest` for
+behavior, SqlAlchemy/async guardrails in code — so project config and CI
+replace the prose.
 
 ## Other Skill Collections
 

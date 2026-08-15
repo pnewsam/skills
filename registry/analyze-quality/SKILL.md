@@ -1,13 +1,13 @@
 ---
 name: analyze-quality
-description: Analyze a repository's language-agnostic software quality using change history, structure, defects, tests, and operational evidence; interpret the signals through the focused quality-* skills; and rank bounded improvement candidates. Use for recurring quality audits, refactoring hotspot analysis, test-health or reliability assessment, or when deciding what maintainability work deserves a feature plan. Defaults to read-only analysis and never edits code, creates plans, commits, or publishes.
+description: Analyze a repository's language-agnostic software quality using change history, structure, defects, tests, and operational evidence; interpret the signals through the smallest evidence-backed references and rank bounded improvement candidates. Use for recurring quality audits, refactoring hotspot analysis, test-health or reliability assessment, or when deciding what maintainability work deserves a feature plan. Defaults to read-only analysis and never edits code, creates plans, commits, or publishes.
 ---
 
 # Analyze Quality
 
 ## Outcome
 
-Produce a read-only, evidence-backed quality assessment with a small ranked set of bounded improvement candidates. Use measurements to locate investigation targets, then use `quality-expert` and the smallest relevant focused quality skills to interpret them.
+Produce a read-only, evidence-backed quality assessment with a small ranked set of bounded improvement candidates. Use measurements to locate investigation targets, then interpret them with `error-handling`, `async-patterns`, or `typescript-types` where the signal lands; quality-* prose was retired to archive/
 
 Do not equate a metric threshold with a defect. Prefer repository-relative trends and corroborating signals over universal limits or a composite quality score.
 
@@ -47,14 +47,13 @@ Record the measurement method, window, exclusions, and important data gaps. Do n
 
 ### 2. Interpret and rank
 
-Route the evidence through `quality-expert`:
+Interpret the evidence against the smallest relevant cross-cutting reference:
 
-- `quality-code-clarity` for local reading and reasoning cost
-- `quality-modularity` for coupling, ownership, and change isolation
-- `quality-refactoring` for behavior-preserving improvement candidates
-- `quality-correctness` for defects, invariants, and boundary risk
-- `quality-testing` for confidence, gaps, and test health
-- `quality-reliability` for failure, recovery, and operability
+- `error-handling` for failure contracts, retries, and cleanup
+- `async-patterns` for concurrency, cancellation, and stale-result risk
+- `typescript-types` for type-level risk in typed codebases
+- otherwise interpret candidates directly — the quality-* interpretive prose is
+  archived and the base model plus these references covers it
 
 Require at least two corroborating signals before ranking a metric-driven candidate highly, unless direct defect or incident evidence is strong. Rank by:
 

@@ -14,19 +14,28 @@ Load only the expert skills that match the prompt.
 | Prompt Signal | Expert Skill | Use For |
 | :--- | :--- | :--- |
 | Page/app UX, information architecture, workflows, visual quality, UI reliability | `ui-expert` | Product UI direction, screen architecture, interaction and visual system concerns |
-| Visual design quality, elegance, composition, hierarchy, rhythm, simplicity, aesthetic direction | `design-expert` | Turning functional UI direction into coherent, calm, polished visual design |
-| React SPA, frontend architecture, components, hooks, data fetching, routing | `react-expert` | Frontend implementation architecture and maintainability |
-| Backend architecture, API contracts, service boundaries, persistence, jobs, integrations, auth boundaries | `backend-expert` | Language-agnostic server-side architecture and behavior |
+| Open visual direction, mood, look-and-feel, aesthetic exploration | `design-explore` | Generate-and-judge search over directions instead of prescribing a house style |
 | Platform engineering, environments, CI/CD, secrets, config, deploys, rollbacks, infrastructure as code | `platform-expert` | Operational platform, release safety, and production-readiness |
-| Python, FastAPI, Python data modeling, async, persistence implementation | `python-expert` | Python and FastAPI implementation architecture |
-| Code quality, maintainability, correctness, refactoring, testing strategy, reliability | `quality-expert` | Language-agnostic code health and system quality judgment |
 | Security, accessibility, privacy, GDPR, HIPAA, vulnerability management, auditability, external obligations | `compliance-expert` | Required constraints, unacceptable risk, and evidence expectations |
-| Palette, color naming, contrast, and palette generation | `ui-color` and `design-visual-language` | Semantic interface color, accessibility, and expressive palette direction |
+| Palette, color naming, contrast, and palette generation | `ui-color` | Semantic interface color and WCAG contrast (runnable validator) |
 | Transactional/lifecycle email UX and HTML email constraints | `ui-email` | Email product surfaces and email-client-safe implementation |
 
-If the prompt spans product, frontend, and backend, consult `ui-expert`, `react-expert`, and `backend-expert` in that order. Add `platform-expert` when the work needs environments, CI/CD, secrets, deployment, rollback, infrastructure, or production-readiness planning. Add `python-expert` when the backend implementation is Python or FastAPI-specific. Add `quality-expert` when maintainability, test confidence, correctness, or reliability materially affects the plan. Add `compliance-expert` when security, accessibility, privacy, GDPR, HIPAA, vulnerability, audit, or regulatory concerns are in scope. Add `design-expert` when visual quality, aesthetic coherence, or interface elegance is meaningful. Add narrower experts only when the prompt explicitly involves their domain.
+Method knowledge for React, Python, backend, quality, and prescriptive design
+prose was retired to `archive/` — the base model plus lint/test tooling covers
+it (see `docs/registry-rebalance-plan.md`). Route such prompts to a focused
+workflow skill or the intersection of the survivors above, not to an evicted
+router.
 
-Use `ui-color` for semantic interface color and accessibility, and `design-visual-language` for expressive palette direction. State when a request requires deeper color-science expertise than the maintained registry provides.
+If the prompt spans product, UI, and platform, consult `ui-expert` and
+`platform-expert` in that order. Add `compliance-expert` when security,
+accessibility, privacy, GDPR, HIPAA, vulnerability, audit, or regulatory
+concerns are in scope. Add `design-explore` when visual quality, aesthetic
+coherence, or interface elegance is meaningful and the direction is open. Add
+narrower experts only when the prompt explicitly involves their domain.
+
+Use `ui-color` for semantic interface color and accessibility; `design-explore`
+for open visual direction. State when a request requires deeper color-science
+expertise than the maintained registry provides.
 
 ---
 

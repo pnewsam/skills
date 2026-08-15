@@ -49,7 +49,7 @@ If a request touches more than three rows, start with `platform-deployments-roll
 - `platform-deployments-rollbacks` owns rollout strategy, release sequencing, migration safety, rollback/roll-forward, and post-deploy verification.
 - `platform-infrastructure-as-code` owns declarative infrastructure definitions, modules, state, drift, review, and GitOps-style reconciliation.
 
-Pair with `backend-expert` when platform changes affect API behavior, migrations, jobs, queues, data stores, or auth boundaries. Pair with `react-expert` or `python-expert` for framework-specific build/runtime details. Pair with `quality-expert` for test confidence and reliability. Pair with `compliance-expert` for security, privacy, audit, regulatory, or evidence requirements.
+For backend, framework, or quality method guidance rely on the base model plus lint/test tooling (the knowledge prose is archived; see `docs/registry-rebalance-plan.md`). Pair with `compliance-expert` for security, privacy, audit, regulatory, or evidence requirements.
 
 ---
 

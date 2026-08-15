@@ -39,10 +39,10 @@ Inspect repository instructions, branch, status, diff, and relevant existing imp
 
 Route the item to the smallest relevant domain references:
 
-- quality or refactoring: `quality-expert` and focused `quality-*` skills
+- quality or refactoring: `analyze-quality`, `error-handling`, `async-patterns`, or `typescript-types`
 - security: `compliance-expert`, `compliance-security`, or `compliance-vulnerability-management`
-- UI/design system: `ui-expert`, `design-expert`, and relevant stack skills
-- stack, backend, or platform work: the applicable focused expert
+- UI/design system: `ui-expert`, `design-explore`, `visual-hierarchy`, or a focused `ui-*` skill
+- platform work: `platform-expert` and the focused `platform-*` skill
 
 Mark the selected plan item in progress only when the plan supports that state.
 

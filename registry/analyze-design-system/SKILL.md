@@ -26,8 +26,8 @@ The workflow may inspect source, history, existing tests, Storybook or other com
 Use the smallest relevant expert set:
 
 - `ui-expert` for functional patterns, state coverage, responsive behavior, interaction consistency, and accessibility expectations
-- `design-expert` for visual-language coherence, hierarchy, restraint, and whether token exceptions express a deliberate direction
-- `react-expert` for React component ownership, primitive APIs, variants, migration boundaries, and test strategy
+- `design-explore` for open visual-language direction and `visual-hierarchy` for scanning order and emphasis
+- evicted knowledge prose (react-*, quality-*, backend-*, design-* composition) is archived; rely on the base model plus focused mechanics skills
 
 Load focused children only for signals that need interpretation. Do not load React guidance for a non-React system. Once this workflow is active, use expert and focused-skill guidance as references; do not recursively reroute the same request or load every child in a router.
 

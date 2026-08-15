@@ -1,13 +1,13 @@
 ---
 name: ui-expert
-description: Route UI and UX requests to the smallest relevant ui-* skill set and synthesize the guidance. Use for a full screen, page, or flow that spans two or more interface concerns, or when the needed pattern is unclear. Prefer one focused ui-* skill for one clearly bounded concern. Owns functional interface decisions; hand purely aesthetic or compositional concerns to design-expert.
+description: Route UI and UX requests to the smallest relevant ui-* skill set and synthesize the guidance. Use for a full screen, page, or flow that spans two or more interface concerns, or when the needed pattern is unclear. Prefer one focused ui-* skill for one clearly bounded concern. Owns functional interface decisions; hand open visual direction to design-explore and composition/hierarchy to visual-hierarchy.
 ---
 
 # UI Expert - Skill Router
 
 Use this as the entry point for broad UI work. Your job is to identify the actual interface problem, load only the focused `ui-*` skills needed, and produce or review UI that is intuitive, conventional, simple, and polished.
 
-If the user says the UI is ugly, clunky, disharmonious, visually awkward, generic, too busy, or not elegant, route aesthetic and compositional judgment to `design-expert` after identifying the functional UI pattern.
+If the user says the UI is ugly, clunky, disharmonious, visually awkward, generic, too busy, or not elegant, route open visual direction to `design-explore` and hierarchy/composition to `visual-hierarchy` after identifying the functional UI pattern.
 
 Use the router when the request spans two or more focused UI concerns or needs a unified screen/flow recommendation. Go directly to one focused `ui-*` skill when exactly one concern is clear.
 
@@ -33,8 +33,8 @@ Load the smallest set of focused skills that covers the task.
 | Charts, metrics, dashboards, choosing chart type vs number | `ui-data-viz` | `ui-layouts`, `ui-color` |
 | First-run experience, activation, tours, checklists, sample data | `ui-onboarding` | `ui-feedback`, `ui-content`, `ui-layouts` |
 | Transactional emails, digests, reports, product updates, lifecycle emails | `ui-email` | `ui-content`, `visual-hierarchy`, `ui-typography`, `ui-color` |
-| Aesthetic quality, composition, elegance, simplicity, visual harmony | `design-expert` | `ui-layouts`, `visual-hierarchy`, `ui-spacing` |
-| Repository-wide design-system adoption, pattern drift, or consolidation | `analyze-design-system` | `design-expert`, relevant stack expert |
+| Open visual direction, mood, look-and-feel, elegance | `design-explore` | `visual-hierarchy`, `ui-color`, `ui-spacing` |
+| Repository-wide design-system adoption, pattern drift, or consolidation | `analyze-design-system` | relevant stack expert |
 
 If a request touches more than four rows, start with `ui-layouts`, `visual-hierarchy`, and the one domain skill closest to the user's core task. Add more skills only when the work demands them.
 
@@ -58,7 +58,7 @@ Use these boundaries to prevent conflicting advice:
 - `ui-data-viz` owns quantitative presentation and chart selection.
 - `ui-onboarding` owns the path from first visit to user value.
 - `ui-email` owns email-specific UI patterns, layout constraints, client-safe implementation, inbox-safe hierarchy, and transactional/digest email structures.
-- `design-expert` owns visual design judgment: composition, harmony, restraint, rhythm, aesthetic direction, and whether the interface feels elegant or resolved.
+- `design-explore` owns open visual direction and composition: generate multiple directions, judge against the brief, and synthesize; `visual-hierarchy` covers scanning order and emphasis.
 
 When two skills overlap, decide by asking: "Is this about where the thing lives, what pattern the thing is, how the thing behaves, what state the thing is in, or how the thing is visually expressed?"
 
@@ -85,7 +85,7 @@ When generating UI, follow this order before writing code:
 4. **Inventory content and actions.** Separate primary content, secondary content, primary actions, secondary actions, and system states.
 5. **Pick inner patterns.** Use `ui-patterns`, `ui-forms`, `ui-actions`, `ui-feedback`, or `ui-data-viz` for the dominant interaction.
 6. **Establish hierarchy before styling.** The screen should work in grayscale before relying on brand color, icons, shadows, or imagery.
-7. **Apply design judgment when needed.** If the page feels busy, clunky, unbalanced, generic, or visually unresolved, route to `design-expert` before final styling.
+7. **Apply design judgment when needed.** If the page feels busy, clunky, unbalanced, generic, or visually unresolved, route to `design-explore` (open direction) or `visual-hierarchy` (emphasis/order) before final styling.
 8. **Apply visual system rules.** Use spacing, typography, color, depth, icons, and responsive guidance. Prefer the project's existing design system when present.
 9. **Check state coverage.** Include empty, loading, error, success, disabled, focus, hover, and mobile/touch states when relevant.
 10. **Limit choices.** Use constrained scales for spacing, type, color, radius, shadow, and icon style instead of one-off values.

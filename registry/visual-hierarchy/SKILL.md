@@ -109,7 +109,7 @@ Check:
 
 ## Handoffs
 
-- Use `design-composition` for balance, focal structure, and spatial relationships across the whole composition.
+- Use `design-explore` for balance, focal structure, and spatial relationships across a whole open composition.
 - Use `ui-spacing` for spacing tokens, density, and proximity systems.
 - Use `ui-typography` for type scale and text-role decisions.
 - Use `ui-color` for contrast and semantic color.
