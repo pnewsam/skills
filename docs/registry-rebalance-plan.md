@@ -149,9 +149,11 @@ The maintenance and routing attention you free goes into the part that scales:
   above tolerance is a change; `--threshold` for non-deterministic renders).
   Documented as optional step 4b for visual-only changes; the design-explore
   renderer is the capture primitive for static HTML / token specs.
-- Wire `analyze-*` to run as part of `execute-feature`, not on request
-  (verification step already says to repeat the baseline method; make it
-  explicit when the plan names an analyzer).
+- **`analyze-*` wired into the `execute-feature` loop** (2026-08-15): when a
+  plan names an analyzer (`analyze-quality`, `analyze-design-system`,
+  `analyze-security`, or a metrics script), `execute-feature` re-runs it as the
+  verification method and records the before/after evidence in the plan —
+  analyzers are part of execution, not on-request chores.
 
 ### Phase 5 — Governance ✅ (AUTHORING.md) + recurring cadence
 - Rewrite the `AUTHORING.md` retention test around the method/objective/

@@ -63,11 +63,14 @@ If the item is already implemented, verify the evidence, update the plan when ap
 Run the plan's verification and the smallest relevant regression checks. Record
 the selected validation tier and any prior aggregate evidence reused. For
 Convergence mode, repeat the baseline method when practical and report the
-before/after result, guardrails, and limitations. A new aggregate backend,
-full-browser, screenshot, or rehearsal run requires a recorded changed
-checkpoint and why focused proof is insufficient; this never waives a required
-delivery boundary. Use manual, visual, scanner, or runtime checks when
-automated tests cannot prove the outcome.
+before/after result, guardrails, and limitations. When the plan names an
+analyzer (`analyze-quality`, `analyze-design-system`, `analyze-security`, or a
+named metrics script), **re-run that analyzer as the verification method** and
+record its evidence — do not defer it to a separate on-request run. A new
+aggregate backend, full-browser, screenshot, or rehearsal run requires a
+recorded changed checkpoint and why focused proof is insufficient; this never
+waives a required delivery boundary. Use manual, visual, scanner, or runtime
+checks when automated tests cannot prove the outcome.
 
 Do not mark the item complete or create a commit when required verification fails. An expected failure that only demonstrates pre-change behavior is baseline evidence, not final passing verification. Record the blocker and leave the item unchecked or explicitly blocked.
 
