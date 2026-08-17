@@ -1,0 +1,65 @@
+{
+  "note": "Prompts-only view of evals/cross_cutting_pilot_cases.json for the family A/B. Deliberately carries NO must_include/must_exclude anchors so answer-generation arms never see the scoring rubric. Blind scorers read the full case file; answer agents read only this. Keep the prompts here byte-identical to the case file.",
+  "cases": [
+    {
+      "id": "tt-state-discriminated-union",
+      "skill": "typescript-types",
+      "prompt": "A modal can be: closed; open with form fields being edited; submitting (a request in flight); or showing a server error. Model this as a TypeScript type so each variant carries only the data it needs and callers can switch exhaustively. Today the code has one interface with four mutually-exclusive optional fields plus a string 'phase'. Give me the type and the consumer switch."
+    },
+    {
+      "id": "tt-derive-from-value",
+      "skill": "typescript-types",
+      "prompt": "I have a config object with themes = ['light', 'dark', 'system'] and defaultPref = 'system'. I want a readonly literal-union of valid theme names so autocomplete works and defaults are type-checked, without retyping the list or using a cast. How do I type this so TypeScript derives the exact literal values from the value itself?"
+    },
+    {
+      "id": "tt-branded-id",
+      "skill": "typescript-types",
+      "prompt": "We pass user ids and session ids around and keep mixing them up; both are plain strings. Give me a technique that makes passing a user id where a session id is expected a compile error, with no runtime overhead."
+    },
+    {
+      "id": "tt-discriminated-fetch-response",
+      "skill": "typescript-types",
+      "prompt": "An endpoint returns either { ok: true, data: T } or { ok: false, error: { code, message } }. Handlers currently do `(await res.json()) as any`. Type the response shape and show how a caller narrows on ok to get the data or the typed error, without unsafe casts."
+    },
+    {
+      "id": "eh-exception-vs-null",
+      "skill": "error-handling",
+      "prompt": "I have a getSetting(name) backed by a map. Callers treat a missing setting inconsistently: some expect null, some crash. Pick one contract, justify it, and show the signature."
+    },
+    {
+      "id": "eh-preserve-cause",
+      "skill": "error-handling",
+      "prompt": "A fetch inside loadProfile fails with a low-level ECONNRESET. Wrap it so the new error tells an operator which profile/task failed and still keeps the original error reachable for debugging."
+    },
+    {
+      "id": "eh-retry-vs-permanent",
+      "skill": "error-handling",
+      "prompt": "A background job sends an email and retries on failure. It must not retry a 4xx bad-request, but should retry transient network/5xx with backoff. Sketch the failure taxonomy and the retry decision."
+    },
+    {
+      "id": "eh-typed-result-pipeline",
+      "skill": "error-handling",
+      "prompt": "Several steps in sequence (validate, auth, save) each can fail with distinct causes. I don't want try/catch pyramids and the caller needs to know which step failed. Pick a shape."
+    },
+    {
+      "id": "ap-search-stale-result",
+      "skill": "async-patterns",
+      "prompt": "Typeahead search fires a request per keystroke, and responses can arrive out of order. Write the handler so only the latest query's result is applied, and wire cancellation."
+    },
+    {
+      "id": "ap-bounded-parallelism",
+      "skill": "async-patterns",
+      "prompt": "We must POST 1000 rows to an API that tolerates about 10 concurrent requests. Promise.all-ing all 1000 overwhelms it. Give a pattern that runs them with a small concurrency limit."
+    },
+    {
+      "id": "ap-fire-and-forget-unhandled",
+      "skill": "async-patterns",
+      "prompt": "A click handler kicks off a background save and returns immediately; it calls saveThing() without awaiting and sometimes throws 'Unhandled rejection'. Fix the ownership."
+    },
+    {
+      "id": "ap-timeout-race",
+      "skill": "async-patterns",
+      "prompt": "A slow partner API can hang. Wrap the call with a timeout so we fail fast, and make sure the timed-out branch cleans up (doesn't leak the in-flight request or swallow its later rejection)."
+    }
+  ]
+}

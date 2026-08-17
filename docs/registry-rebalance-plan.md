@@ -100,7 +100,7 @@ Default: method families → Tier A; already-superseded one-offs → Tier B.
 | **Backend knowledge** | `backend-*` (6) + `backend-expert` | **EVICTED** | A/B tied; keep only genuine org guardrails as objectives. `archive/backend-evicted/`. |
 | **Platform knowledge** | `platform-*` (5) + `platform-expert` | **EVICT / thin (partially converted)** | Keep org-specific deploy/secrets guardrails as objective + check; check layer landed on `platform-secrets-config`, the rest follow the light pattern. |
 | **Compliance / risk** | `compliance-*` (7), `threat-model`, `consult-expert` | **CONVERT: objective + pinned citation + automated checks** | Flagships (`accessibility`, `secrets`) done; the rest follow. Never a blind evict-A/B for external objectives. |
-| **Cross-cutting knowledge** | `async-patterns`, `error-handling`, `typescript-types` | **CONVERT → lint/types config, else EVICT** | Kept for now. Instrumented 2026-08-15 → `evals/cross_cutting_pilot_cases.json` (12 cases, 4/skill); run the same A/B as ui-* once the harness is warm, then CONVERT/EVICT on gate. |
+| **Cross-cutting knowledge** | `async-patterns`, `error-handling`, `typescript-types` | **RESOLVED 2026-08-17: evict eh + ap, CONVERT tt** | A/B run (`evals/results/2026-08-17-cross-cutting-family.md`, 204 pooled blind reps): bare model ties the skill on every case (A=0.992, B=0.997). `error-handling` (1.000/1.000, 0 violations) and `async-patterns` (0.975/1.000, 0 B-only violations) → **EVICT**. `typescript-types` ties on means but the bare model emits an unsafe cast/`any` the skill prevents, and that failure mode is deterministically caught by `tsc --strict` + `@typescript-eslint/no-unsafe-*` → **CONVERT** (objective + check, drop prose). |
 | **Routers** | `*-expert` (ui, design, react, python, backend, quality, platform, compliance), `consult-expert` | **Collapse** | A router over evicted children is dead weight. react/python/quality/backend/design experts already gone; `ui-expert` slims after the ui A/B; keep `consult-expert`/`compliance-expert` only as an index over the legislative families. |
 
 Net effect: roughly 70–80 of the ~132 skills are in the method/router bucket
@@ -164,8 +164,10 @@ The maintenance and routing attention you free goes into the part that scales:
   2026-08-15 → `evals/results/2026-08-15-retention-first-pass.md`**: sweeps all
   70 active packages; remaining work is exactly two trails — the instrumented
   ui-* run (harness-gated) and the cross-cutting method trio (`async-patterns`,
-  `error-handling`, `typescript-types`) scheduled for the next A/B. Re-run this
-  pass after the ui-* verdict lands.
+  `error-handling`, `typescript-types`). **The cross-cutting trail is now run
+  (2026-08-17): evict `error-handling` + `async-patterns`, convert
+  `typescript-types` to a check** (`evals/results/2026-08-17-cross-cutting-family.md`).
+  Only the ui-* run remains. Re-run this pass after the ui-* verdict lands.
 
 ## Per-skill decision gate (the checklist)
 

@@ -84,7 +84,9 @@ def parse_excludes(spec: str):
         case, arm, rep = parts[i], parts[i + 1], parts[i + 2]
         if not re.fullmatch(r"[a-z0-9-]+", case, re.I) or not re.fullmatch(r"[A-Za-z]", arm) or not re.fullmatch(r"[0-9]+", rep):
             sys.exit(f"bad --exclude triple {case},{arm},{rep}; want case,arm,rep")
-        out.add((case, arm.upper(), int(rep)))
+        # rep kept as a string to match the parsed score rows (which keep rep textual);
+        # normalizing both sides here is what makes --exclude actually drop the row.
+        out.add((case, arm.upper(), str(int(rep))))
     return out
 
 
@@ -103,7 +105,7 @@ def main() -> int:
     spec = json.loads(Path(cases_path).read_text())
     cases = {c["id"]: c for c in spec["cases"]}
     all_rows, skipped = load_scores(scores_path)
-    rows = [r for r in all_rows if (r[0], r[1], r[2]) not in excludes]
+    rows = [r for r in all_rows if (r[0], r[1].upper(), str(r[2])) not in excludes]
     expected_empty = [r for r in rows if r[3] is None]
     rows = [r for r in rows if r[3] is not None]
     if not rows:
