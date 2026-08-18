@@ -16,10 +16,12 @@
     "core": {
       "description": "Minimal daily workflows for diagnosis, local Git, pull requests, and validation.",
       "skills": [
+        "address-review",
         "diagnose-failure",
         "harden-pr",
         "pr-conventions",
         "prepare-pr",
+        "rebase-pr",
         "review-pr",
         "stash",
         "trim-comments",
