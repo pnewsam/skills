@@ -1,0 +1,4 @@
+interface:
+  display_name: "Address Review"
+  short_description: "Triage inbound PR review comments and address each."
+  default_prompt: "Use $address-review to triage the review comments on this PR and address them."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rebase PR"
+  short_description: "Rebase a PR onto its base and reconcile with upstream."
+  default_prompt: "Use $rebase-pr to rebase this PR on staging and reconcile it against upstream."
