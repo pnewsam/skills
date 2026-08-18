@@ -126,8 +126,6 @@
       "description": "Language-agnostic correctness, clarity, modularity, reliability, testing, refactoring, async, errors, and TypeScript guidance.",
       "skills": [
         "analyze-quality",
-        "async-patterns",
-        "error-handling",
         "typescript-types"
       ]
     },

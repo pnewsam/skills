@@ -335,10 +335,12 @@ flowchart LR
 The `quality-*` interpretive family (clarity, modularity, refactoring,
 correctness, testing, reliability) was retired to `archive/quality-evicted/`
 after strict A/B evidence (`evals/results/2026-08-14-*`). What remains is the
-part that scales: `analyze-quality` measures and ranks candidates, and
-cross-cutting method judgment (`error-handling`, `async-patterns`,
-`typescript-types` — see Core Language) replaces the prose when a signal needs
-interpretation.
+part that scales: `analyze-quality` measures and ranks candidates, and the base
+model interprets the signal. The cross-cutting method trio was resolved by A/B on
+2026-08-17 (`evals/results/2026-08-17-cross-cutting-family.md`): `error-handling`
+and `async-patterns` were evicted to `archive/cross-cutting-evicted/` (the base
+model ties them with no residual failure mode), and `typescript-types` was
+converted to an objective + check (see Core Language).
 
 | Skill                                              | Type      | Purpose                                                            |
 | -------------------------------------------------- | --------- | ----------------------------------------------------------------- |
@@ -372,13 +374,13 @@ flowchart LR
 
 ### Core Language
 
-TypeScript and JavaScript best practices — reference skills that inform how code is written across the stack.
+TypeScript type-safety as an objective plus the deterministic check that enforces
+it. `error-handling` and `async-patterns` were evicted here on 2026-08-17 (the base
+model covers failure contracts and async control flow natively); see Quality.
 
 | Skill                                                        | Type      | Description                                                                                                                  |
 | ------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| [typescript-types](registry/typescript-types/SKILL.md)       | reference | No `any`, discriminated unions, type narrowing, `satisfies`, branded types, deriving types from values.                      |
-| [error-handling](registry/error-handling/SKILL.md)           | reference | Failure classification, explicit results or typed exceptions, boundary translation, causal context, cleanup, retries, and safe reporting. |
-| [async-patterns](registry/async-patterns/SKILL.md)           | reference | Dependency-aware concurrency, cancellation, stale-result guards, bounded parallelism, promise ownership, timeouts, and cleanup. |
+| [typescript-types](registry/typescript-types/SKILL.md)       | reference | Type-safety objectives (unrepresentable invalid states, no `any`/unsafe casts, derive-from-value, branded ids, exhaustiveness) enforced by `tsc --strict` + `@typescript-eslint/no-unsafe-*`. |
 
 ### Platform
 

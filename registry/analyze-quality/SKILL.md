@@ -7,7 +7,7 @@ description: Analyze a repository's language-agnostic software quality using cha
 
 ## Outcome
 
-Produce a read-only, evidence-backed quality assessment with a small ranked set of bounded improvement candidates. Use measurements to locate investigation targets, then interpret them with `error-handling`, `async-patterns`, or `typescript-types` where the signal lands; quality-* prose was retired to archive/
+Produce a read-only, evidence-backed quality assessment with a small ranked set of bounded improvement candidates. Use measurements to locate investigation targets, then interpret them directly — the base model covers failure-contract, concurrency, and general quality judgment natively; use `typescript-types` where type-level risk lands. The quality-*, error-handling, and async-patterns prose was retired to archive/
 
 Do not equate a metric threshold with a defect. Prefer repository-relative trends and corroborating signals over universal limits or a composite quality score.
 
@@ -49,11 +49,12 @@ Record the measurement method, window, exclusions, and important data gaps. Do n
 
 Interpret the evidence against the smallest relevant cross-cutting reference:
 
-- `error-handling` for failure contracts, retries, and cleanup
-- `async-patterns` for concurrency, cancellation, and stale-result risk
-- `typescript-types` for type-level risk in typed codebases
-- otherwise interpret candidates directly — the quality-* interpretive prose is
-  archived and the base model plus these references covers it
+- `typescript-types` for type-level risk in typed codebases (its check: tsc
+  --strict + the no-unsafe lint)
+- otherwise interpret candidates directly — the quality-*, error-handling, and
+  async-patterns interpretive prose is archived and the base model covers
+  failure contracts, retries, cleanup, concurrency, cancellation, and
+  stale-result risk natively
 
 Require at least two corroborating signals before ranking a metric-driven candidate highly, unless direct defect or incident evidence is strong. Rank by:
 

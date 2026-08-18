@@ -1,238 +1,62 @@
 ---
 name: typescript-types
-description: principles for using the TypeScript type system effectively. covers avoiding `any`, discriminated unions, type narrowing, `satisfies`, branded types, const assertions, `as` vs type declarations, and deriving types from values. reference this skill when writing type definitions, reviewing type usage, or deciding how to model data variants.
+description: TypeScript type-safety objectives plus the deterministic checks that enforce them — tsc --strict and the @typescript-eslint no-unsafe/no-any rules. Use when writing or reviewing type definitions, modeling data variants, or deciding how to type values. Enforce with the compiler and lint; let the model model the data. For general failure contracts the base model handles it natively.
 ---
 
-# TypeScript Types
+# TypeScript Types — Objectives + Ground-Truth Check
 
-## Overview
+Converted reference (bitter-lesson A/B, 2026-08-17,
+`evals/results/2026-08-17-cross-cutting-family.md`): a capable base model already
+produces idiomatic discriminated unions, `as const` derivations, `satisfies`,
+branded ids, and narrowing without prompting — it tied the old prose skill on
+every case. The one residual, durable value was **catching the unsafe escape
+hatch the model occasionally reaches for** (`any`, an unsafe `as` cast). That is
+mechanically checkable, so it becomes the check; the modeling stays with the model.
 
-This skill defines the principles for using TypeScript's type system to catch errors at compile time and make code self-documenting. The core philosophy: model data precisely so invalid states are unrepresentable, and let the compiler verify correctness rather than relying on runtime checks.
+## The check (deterministic)
 
-## Principles
+Make the compiler and lint the ground truth instead of eyeballing types:
 
-### 1. No `any` — use `unknown` instead
-
-`any` disables type checking. `unknown` forces you to narrow the type before using the value.
-
-```ts
-// Bad: any bypasses all type checking
-function parseJSON(json: string): any {
-  return JSON.parse(json);
-}
-const data = parseJSON(input);
-data.user.name.toUpperCase(); // crashes at runtime, no compile error
-
-// Good: unknown forces validation
-function parseJSON(json: string): unknown {
-  return JSON.parse(json);
-}
-const data = parseJSON(input);
-// TypeScript error: Object is of type 'unknown'
-// data.user.name.toUpperCase();
-
-// Must validate first
-if (isUserData(data)) {
-  data.user.name.toUpperCase(); // safe
-}
+```
+tsc --noEmit            # with "strict": true (noImplicitAny, strictNullChecks,
+                        # exactOptionalPropertyTypes) — an unhandled discriminant,
+                        # an access before narrowing, or a missing property fails here
 ```
 
-If you must use `as any` as an escape hatch (e.g., working around a third-party type bug), add a comment explaining why, and scope it as narrowly as possible.
+ESLint (`@typescript-eslint`, type-checked config) is the non-negotiable gate on
+the escape hatches:
 
-### 2. Use discriminated unions for variant data
+- `no-explicit-any`
+- `no-unsafe-assignment`, `no-unsafe-argument`, `no-unsafe-call`, `no-unsafe-member-access`, `no-unsafe-return`
+- `consistent-type-assertions` (flag `as` casts; prefer annotation/narrowing)
+- `switch-exhaustiveness-check` (every discriminated union is handled)
 
-When data can be one of several shapes, use a literal `type` or `kind` field so TypeScript can narrow automatically.
+Treat every hit as a defect. `any` → `unknown` + narrow; `as X` → a type guard or
+an annotation on the assignee; a non-exhaustive switch → handle the variant or add
+a `never` check. "It compiled" is not the bar; "it passes strict + no-unsafe" is.
 
-```ts
-// Bad: optional fields — valid states include impossible combinations
-interface ApiResponse {
-  data?: User[];
-  error?: string;
-}
+## The objectives (what well-typed code satisfies)
 
-// Good: discriminated union — only valid states exist
-type ApiResponse =
-  | { status: "ok"; data: User[] }
-  | { status: "error"; error: string }
-  | { status: "loading" };
+State these as requirements; the model applies them and the check verifies the
+mechanical ones:
 
-function handleResponse(response: ApiResponse) {
-  switch (response.status) {
-    case "ok":
-      // response.data is known to exist, response.error is known absent
-      return response.data;
-    case "error":
-      // response.error is known to exist
-      throw new Error(response.error);
-    case "loading":
-      return null;
-  }
-}
-```
+- **Invalid states are unrepresentable.** Model variant data as a discriminated
+  union keyed on a literal discriminant, each variant carrying only its own data —
+  not one interface with mutually-exclusive optional fields.
+- **No lying to the compiler.** No `any`; narrow from `unknown` with type guards
+  rather than asserting with `as` — verified by the check.
+- **One source of truth.** Derive types from values (`as const` + `typeof`/`keyof`,
+  `satisfies`) so the value and its literal type cannot drift.
+- **Distinct domains are distinct types.** Where mixing them is a real bug (ids,
+  units), use a branded/nominal type so a wrong-domain value is a compile error at
+  no runtime cost.
+- **Exhaustiveness is enforced**, not assumed — a new variant should fail to
+  compile until it is handled.
 
-This pattern eliminates entire categories of bugs: you can never access `.data` when the response is an error, because the type system prevents it.
+## Defer to the model (specify intent, then verify)
 
-### 3. Narrow types explicitly, don't cast
-
-Use type guards to narrow from a broader type to a specific one. Avoid `as` casts that lie to the compiler.
-
-```ts
-// Bad: casting bypasses verification
-function getArea(shape: Shape): number {
-  return (shape as Circle).radius ** 2 * Math.PI;
-}
-
-// Good: narrowing verifies the type at runtime
-function getArea(shape: Shape): number {
-  if (shape.kind === "circle") {
-    return shape.radius ** 2 * Math.PI;
-  }
-  if (shape.kind === "rectangle") {
-    return shape.width * shape.height;
-  }
-  // TypeScript enforces exhaustiveness
-  const _exhaustive: never = shape;
-  throw new Error(`Unknown shape: ${_exhaustive}`);
-}
-```
-
-Write custom type guards for complex narrowing:
-
-```ts
-function isUser(obj: unknown): obj is User {
-  return (
-    typeof obj === "object" &&
-    obj !== null &&
-    "id" in obj &&
-    "email" in obj
-  );
-}
-```
-
-### 4. Derive types from values, don't duplicate
-
-When a type mirrors a runtime value, derive the type from the value so they stay in sync.
-
-```ts
-// Bad: duplicated — the array and type can drift apart
-const ROLES = ["admin", "editor", "viewer"];
-type Role = "admin" | "editor" | "viewer";
-
-// Good: derived — removing from the array removes from the type
-const ROLES = ["admin", "editor", "viewer"] as const;
-type Role = (typeof ROLES)[number];
-```
-
-This applies to config objects, lookup tables, and any constant where the type mirrors a value:
-
-```ts
-const STATUS_MAP = {
-  draft: { label: "Draft", color: "gray" },
-  published: { label: "Published", color: "green" },
-  archived: { label: "Archived", color: "red" },
-} as const;
-
-type Status = keyof typeof STATUS_MAP;
-type StatusConfig = (typeof STATUS_MAP)[Status];
-```
-
-### 5. Use `satisfies` for validation without widening
-
-`satisfies` checks that a value matches a type without changing its inferred type. Use it when you want validation but still need the narrower inferred type.
-
-```ts
-// Without satisfies: type is widened to Record<string, RouteConfig>
-const routes = {
-  home: { path: "/", component: HomePage },
-  user: { path: "/user/:id", component: UserPage },
-} satisfies Record<string, { path: string; component: ComponentType }>;
-
-// routes.home.path is still "/" (literal), not string
-// routes.user.path is still "/user/:id" (literal), not string
-```
-
-Use `satisfies` over a type annotation when the inferred type is more precise and you don't want to lose that precision.
-
-### 6. Prefer type annotation on the thing being assigned, not `as` on the value
-
-```ts
-// Bad: as cast — can hide missing properties
-const user = {
-  name: "Alice",
-  email: "alice@example.com",
-} as User;
-
-// Good: type annotation — compiler checks completeness
-const user: User = {
-  name: "Alice",
-  email: "alice@example.com",
-};
-```
-
-`as` is appropriate for:
-- Narrowing within a type guard you've already verified: `(event.target as HTMLInputElement).value`
-- Working around known third-party type inaccuracies (with a comment)
-- Asserting non-null after a check: `container!` (sparingly)
-
-### 7. Use template literal types for string patterns
-
-```ts
-// Model precise string formats instead of using `string`
-type EventName = `user.${"created" | "updated" | "deleted"}`;
-// "user.created" | "user.updated" | "user.deleted"
-
-type RouteParam = `:${string}`;
-type ApiPath = `/api/${string}`;
-```
-
-### 8. Model empty and error states explicitly
-
-Don't use `null` or `undefined` to mean "error" or "empty" when those are distinct states.
-
-```ts
-// Bad: null means both "no data yet" and "error"
-const [data, setData] = useState<User | null>(null);
-
-// Good: discriminated state
-type AsyncState<T> =
-  | { status: "idle" }
-  | { status: "loading" }
-  | { status: "error"; error: Error }
-  | { status: "ok"; data: T };
-```
-
-### 9. Use `readonly` aggressively in interfaces
-
-Mark properties `readonly` by default. Only make them mutable when mutation is required.
-
-```ts
-interface User {
-  readonly id: string;
-  readonly email: string;
-  name: string; // only this may change
-}
-```
-
-Use `Readonly<T>`, `ReadonlyArray<T>`, and `readonly` tuples to signal immutability intentions through the type system.
-
-### 10. Prefer `interface` for public APIs, `type` for unions and composition
-
-```ts
-// Interface: best for object shapes that may be extended
-interface User {
-  id: string;
-  email: string;
-}
-
-// Type: best for unions, intersections, and mapped types
-type ApiResponse<T> =
-  | { status: "ok"; data: T }
-  | { status: "error"; error: string };
-
-// Type for composing from other types
-type UserWithSession = User & { session: Session };
-```
-
-The practical difference is small in modern TypeScript. The convention matters for consistency:
-- `interface` signals "this is an object shape, possibly extendable"
-- `type` signals "this is a type expression — union, intersection, alias"
+Do not hand-maintain worked examples of every pattern here; the model produces
+them. Give it the data shape and the invariant you want, let it model the types,
+then run `tsc --strict` + the no-unsafe lint to confirm it did not reach for an
+escape hatch. For failure contracts (throw vs result, cause chaining) and async
+control flow, the base model handles those natively — there is no separate skill.
