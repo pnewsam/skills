@@ -55,6 +55,7 @@ tables here.
 
 ## Handoff
 
-For which feedback pattern a color belongs to (error/success/warning states),
-see `ui-feedback`. For contrast as one input to visual hierarchy, see
-`visual-hierarchy`.
+Which feedback pattern a color belongs to (error/success/warning states) and how
+contrast feeds visual hierarchy are base-model capability now (the `ui-feedback` /
+`visual-hierarchy` prose was evicted 2026-08-17); this skill owns the palette and
+the runnable contrast check.

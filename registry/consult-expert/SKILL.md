@@ -18,7 +18,7 @@ Load only the expert skills that match the prompt.
 | Platform engineering, environments, CI/CD, secrets, config, deploys, rollbacks, infrastructure as code | `platform-expert` | Operational platform, release safety, and production-readiness |
 | Security, accessibility, privacy, GDPR, HIPAA, vulnerability management, auditability, external obligations | `compliance-expert` | Required constraints, unacceptable risk, and evidence expectations |
 | Palette, color naming, contrast, and palette generation | `ui-color` | Semantic interface color and WCAG contrast (runnable validator) |
-| Transactional/lifecycle email UX and HTML email constraints | `ui-email` | Email product surfaces and email-client-safe implementation |
+| Data-collection display and scale-completeness (tables/cards/lists, filter, pagination) | `ui-patterns` | Collection objectives the base model tends to omit at scale |
 
 Method knowledge for React, Python, backend, quality, and prescriptive design
 prose was retired to `archive/` — the base model plus lint/test tooling covers

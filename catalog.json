@@ -132,30 +132,16 @@
     "ui": {
       "description": "Functional UI and UX routing, layout, patterns, content, feedback, responsive behavior, and visual-system implementation.",
       "skills": [
-        "ui-actions",
         "ui-color",
-        "ui-content",
-        "ui-data-viz",
-        "ui-depth",
-        "ui-email",
         "ui-expert",
-        "ui-feedback",
-        "ui-forms",
-        "ui-icons",
-        "ui-layouts",
-        "ui-onboarding",
         "ui-patterns",
-        "ui-responsive",
-        "ui-spacing",
-        "ui-typography",
-        "visual-hierarchy"
+        "ui-spacing"
       ]
     },
     "design": {
       "description": "Visual composition, hierarchy, simplicity, and visual language.",
       "skills": [
-        "design-explore",
-        "visual-hierarchy"
+        "design-explore"
       ]
     },
     "advisory": {
