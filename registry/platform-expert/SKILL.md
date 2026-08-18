@@ -32,9 +32,9 @@ Load the smallest set of focused skills that covers the task.
 | User Need | Primary Skill | Secondary Skills |
 | :--- | :--- | :--- |
 | Local/staging/preview/prod parity, environment variables, backing services, feature flags | `platform-environments` | `platform-secrets-config`, stack expert |
-| Build workflows, CI gates, artifacts, tests, release provenance, supply chain hardening | `platform-ci-cd` | `quality-testing`, `compliance-security` |
+| Build workflows, CI gates, artifacts, tests, release provenance, supply chain hardening | `platform-ci-cd` | `compliance-security` |
 | Secret storage, config separation, rotation, env vars, CI secrets, runtime injection | `platform-secrets-config` | `compliance-security`, `platform-environments` |
-| Release strategy, canaries, blue/green, migrations during deploy, rollback, release evidence | `platform-deployments-rollbacks` | `quality-reliability`, `backend-persistence` |
+| Release strategy, canaries, blue/green, migrations during deploy, rollback, release evidence | `platform-deployments-rollbacks` | `compliance-auditability` |
 | Terraform/OpenTofu/Pulumi/CDK/Kubernetes manifests, drift, modules, state, GitOps | `platform-infrastructure-as-code` | `compliance-auditability`, `compliance-security` |
 
 If a request touches more than three rows, start with `platform-deployments-rollbacks`, then add the skill closest to the immediate production risk.

@@ -82,7 +82,6 @@ The runnable checks are the health and smoke gates after rollout, plus rehearsed
 
 ## Handoff Rules
 
-- Use `backend-persistence` for database migration compatibility and data rollback/repair.
-- Use `backend-jobs-queues` for worker, queue, and replay concerns.
 - Use `platform-ci-cd` when deployment behavior lives in pipelines.
-- Use `quality-reliability` for failure-mode and observability expectations.
+- Database migration compatibility, data rollback/repair, worker/queue/replay
+  concerns, and failure-mode/observability expectations are base-model capability.

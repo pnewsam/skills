@@ -46,7 +46,7 @@ Use repository-relative percentiles and trends when no project standard exists. 
 
 The strongest maintainability candidates usually combine change pressure with structural friction. Length or complexity alone is weak evidence.
 
-Use `quality-code-clarity` for local reading cost, `quality-modularity` for boundary evidence, and `quality-refactoring` to choose a safe transformation.
+Interpret local reading cost, boundary evidence, and safe-transformation choice directly — the quality-* interpretive prose was evicted; the base model covers it.
 
 ## Correctness signals
 
@@ -58,7 +58,7 @@ Use `quality-code-clarity` for local reading cost, `quality-modularity` for boun
 
 Do not infer that every commit containing `fix` is a defect. Inspect a sample and report the classification method.
 
-Use `quality-correctness` to identify the invariant or boundary behind a candidate and `quality-testing` to identify proof.
+Identify the invariant or boundary behind a candidate and the proof that would cover it directly — the base model covers this; use the browser-test skills when the proof is a real end-to-end test.
 
 ## Testing signals
 
