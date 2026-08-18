@@ -1,0 +1,147 @@
+{
+  "pilot": "generic-methodology workflow family (diagnose-failure, document-architecture, explore-directions, threat-model, polish-issue)",
+  "created": "2026-08-18",
+  "purpose": "Decide whether these workflow skills earn their keep. Each produces an artifact (a diagnosis, an architecture doc, strategic directions, a threat model, a polished issue) from a self-contained scenario. The A/B measures whether the skill's methodology prose makes the artifact better than a capable bare model produces from the same scenario. Caveat for interpretation: document-architecture and explore-directions also encode a file/format CONVENTION (docs/architecture/ARCHITECTURE.md, docs/directions/) which is a KEEP-worthy objective even if content quality ties — the anchors judge substantive methodology; a tie means 'the only residual value is the convention', decided separately.",
+  "arms": {
+    "A_control": "Reads the skill's registry/<skill>/SKILL.md methodology and applies it to the scenario.",
+    "B_bare": "Capable bare model, same scenario, no skill.",
+    "C_substitute": "n/a."
+  },
+  "protocol": "Blind answer + blind deterministic-anchor scoring (evals/family_ab.workflow.js). gate in evals/README.md.",
+  "gate": {
+    "evict_if": "mean(B) >= mean(A) - 0.10 AND no B-only must_exclude violation where A has none",
+    "note": "A skill whose content-quality ties but which enforces a durable file/format convention is a KEEP-as-convention, not a blanket evict."
+  },
+  "cases": [
+    {
+      "id": "diag-flaky-test",
+      "skill": "diagnose-failure",
+      "kind": "canonical",
+      "must_include": [
+        "forms more than one candidate hypothesis for the flakiness (e.g. timing/async race, shared state/order dependence, external dependency, resource/timeout) rather than guessing one cause",
+        "proposes a discriminating experiment or evidence to gather that would confirm/refute a hypothesis (e.g. run in isolation, seed/order variation, add timing/logging), i.e. an evidence loop, not a blind fix"
+      ],
+      "must_exclude": [
+        "jumps straight to a code fix without establishing the root cause",
+        "attributes it to one cause with no evidence or alternative considered"
+      ]
+    },
+    {
+      "id": "diag-intermittent-500",
+      "skill": "diagnose-failure",
+      "kind": "openjudgment",
+      "must_include": [
+        "distinguishes root cause from symptom and reasons from the available evidence (logs/timing/correlation) toward the most likely cause",
+        "names the next concrete diagnostic step (a focused experiment, log, or metric) that would narrow it, staying read-only rather than shipping a speculative fix"
+      ],
+      "must_exclude": [
+        "immediately proposes a patch as the answer without diagnosis",
+        "conflates the surface error with its underlying cause"
+      ]
+    },
+    {
+      "id": "arch-document-service",
+      "skill": "document-architecture",
+      "kind": "canonical",
+      "must_include": [
+        "produces the core architecture views for the described system: at least a system-context view, a runtime/request-flow view, and module/service boundaries",
+        "grounds the description in the system's actual named components and their responsibilities rather than generic boilerplate, and is honest about what is derived vs assumed"
+      ],
+      "must_exclude": [
+        "invents components or flows not implied by the described system",
+        "produces a single vague prose blob with no structural decomposition or diagram"
+      ]
+    },
+    {
+      "id": "arch-data-flow",
+      "skill": "document-architecture",
+      "kind": "openjudgment",
+      "must_include": [
+        "traces the data/request path through the named components end to end (entry -> processing -> storage/egress), identifying the trust and module boundaries it crosses",
+        "captures the data model / key entities and where state lives, distinguishing derived-from-description facts from assumptions"
+      ],
+      "must_exclude": [
+        "describes an idealized generic architecture instead of the one described",
+        "omits where data is stored or how it flows"
+      ]
+    },
+    {
+      "id": "dir-product-gap",
+      "skill": "explore-directions",
+      "kind": "canonical",
+      "must_include": [
+        "generates at least 3 genuinely distinct strategic directions (different bets/audiences/mechanisms), not incremental variations of one idea",
+        "gives each direction evidence/rationale grounded in the described state AND its trade-offs or risks, so they can be compared"
+      ],
+      "must_exclude": [
+        "offers a single recommendation or a to-do list rather than distinct strategic options",
+        "lists directions with no trade-offs, evidence, or basis for choosing"
+      ]
+    },
+    {
+      "id": "dir-stalled-growth",
+      "skill": "explore-directions",
+      "kind": "openjudgment",
+      "must_include": [
+        "diagnoses the gap between where the product is and where it could go before proposing directions",
+        "presents 3-5 distinct directions each with a rationale and an explicit trade-off, framed as options for the user to choose, not a single plan"
+      ],
+      "must_exclude": [
+        "jumps to one growth tactic without exploring the option space",
+        "proposes directions that are minor variants of the same approach"
+      ]
+    },
+    {
+      "id": "tm-file-upload",
+      "skill": "threat-model",
+      "kind": "canonical",
+      "must_include": [
+        "systematically enumerates assets, actors/entry points, and trust boundaries the feature crosses (not just a list of generic vulns)",
+        "derives concrete abuse cases and maps a mitigating control to each, and states residual risk"
+      ],
+      "must_exclude": [
+        "lists a few generic vulnerabilities with no assets/boundaries/abuse-case structure",
+        "proposes controls without tying them to a specific threat or boundary"
+      ]
+    },
+    {
+      "id": "tm-webhook-integration",
+      "skill": "threat-model",
+      "kind": "openjudgment",
+      "must_include": [
+        "maps the data flow and trust boundary between the external sender and the system, identifying spoofing/replay/tampering/authorization abuse cases specific to an inbound webhook",
+        "assigns a control to each abuse case (e.g. signature verification, replay window, idempotency, least-privilege handler) and notes what residual risk remains"
+      ],
+      "must_exclude": [
+        "gives generic API-security advice not specific to the webhook trust boundary",
+        "omits abuse-case-to-control mapping or residual risk"
+      ]
+    },
+    {
+      "id": "polish-vague-bug",
+      "skill": "polish-issue",
+      "kind": "canonical",
+      "must_include": [
+        "rewrites the title and body to be clearer and more concise while preserving every original requirement, reproduction detail, and acceptance meaning",
+        "keeps scope identical: no new requirements, causes, or solutions invented that were not in the original"
+      ],
+      "must_exclude": [
+        "adds scope, requirements, root-cause claims, or a solution the original did not state",
+        "drops or alters an original detail so the meaning changes"
+      ]
+    },
+    {
+      "id": "polish-feature-request",
+      "skill": "polish-issue",
+      "kind": "openjudgment",
+      "must_include": [
+        "improves clarity, structure, and tone of the request without changing what is being asked for or its acceptance criteria",
+        "preserves all stated constraints and links and reads as natural human writing, not padded or robotic"
+      ],
+      "must_exclude": [
+        "expands or narrows the requested feature, or invents acceptance criteria",
+        "changes stated constraints or removes information"
+      ]
+    }
+  ]
+}
