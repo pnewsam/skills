@@ -1,0 +1,156 @@
+{
+  "pilot": "router family (consult-expert, compliance-expert, platform-expert, ui-expert)",
+  "created": "2026-08-18",
+  "purpose": "Decide whether the router skills earn their keep under the bitter lesson. A router's job is to pick the smallest correct subset of focused skills for a broad/ambiguous request and synthesize their combined guidance. The test holds the visible delegate list constant across arms, so the only difference is the router's own prose. If the bare model routes+synthesizes as well from the same list, the router is dead weight (plan: 'a router over a set the model can see is dead weight').",
+  "arms": {
+    "A_control": "Reads the router's registry/<router>/SKILL.md (its routing table + synthesis protocol) AND is given the delegate list in the prompt.",
+    "B_bare": "Given the identical delegate list in the prompt, but NOT the router skill. This is the honest bitter-lesson condition: the model sees the available focused skills (as it does in the real harness) and must route + synthesize itself.",
+    "C_substitute": "n/a — a router has no deterministic check; arm C is not run."
+  },
+  "protocol": "Same blind answer + blind deterministic-anchor scoring as evals/family_ab.workflow.js. Both arms receive the same embedded delegate list; score against whether the answer selects the correct delegate subset and synthesizes coherently. gate in evals/README.md.",
+  "gate": {
+    "evict_if": "mean(B) >= mean(A) - 0.10 AND no B-only must_exclude violation on a case where A has none",
+    "note": "Evicting a router means removing the router skill; its delegates stay. A case where mean(A) - mean(B) > 0.25 means the router prose genuinely improves routing -> keep/slim rather than remove."
+  },
+  "cases": [
+    {
+      "id": "cmp-healthcare-eu",
+      "router": "compliance-expert",
+      "kind": "canonical",
+      "must_include": [
+        "routes to compliance-gdpr because EU users + patient health data is special-category personal data (Art. 9), and to compliance-privacy for minimization/retention and the email-vendor data flow",
+        "correctly scopes the regime: HIPAA is a US covered-entity/business-associate regime not triggered merely by EU health data, so it is escalated/scoped-out rather than reflexively applied",
+        "synthesizes rather than dumping: names the specific relevant skills and why, not all eight"
+      ],
+      "must_exclude": [
+        "reflexively treats HIPAA as applicable (routes to compliance-hipaa) with no US covered-entity trigger",
+        "recommends consulting all listed skills indiscriminately with no selection",
+        "names a skill that is not in the provided list"
+      ]
+    },
+    {
+      "id": "cmp-cve-auth",
+      "router": "compliance-expert",
+      "kind": "canonical",
+      "must_include": [
+        "routes primarily to compliance-vulnerability-management for the CVE/advisory triage and remediation-with-evidence",
+        "reasons about the auth-service's elevated exposure/blast-radius (whether via compliance-security or an explicit reachability/exposure analysis), not as a routine dependency bump"
+      ],
+      "must_exclude": [
+        "routes to unrelated skills (accessibility, gdpr, hipaa) as if equally relevant",
+        "treats the alert as a plan without reachability/exposure/evidence reasoning",
+        "names a skill that is not in the provided list"
+      ]
+    },
+    {
+      "id": "cmp-payments-webhook",
+      "router": "compliance-expert",
+      "kind": "openjudgment",
+      "must_include": [
+        "routes to threat-model because a new external webhook + card data is new attack surface",
+        "brings in compliance-security (secure defaults, injection, secrets) and privacy/PCI-style handling of card data"
+      ],
+      "must_exclude": [
+        "misses the new-attack-surface framing (no threat-model)",
+        "recommends all listed skills with no prioritization",
+        "names a skill that is not in the provided list"
+      ]
+    },
+    {
+      "id": "plt-preview-prod-creds",
+      "router": "platform-expert",
+      "kind": "canonical",
+      "must_include": [
+        "routes to platform-environments (preview/parity, per-PR disposable envs) AND platform-secrets-config (unique per-environment credentials, no prod creds in preview)",
+        "frames the fix as credential separation + environment isolation, not just 'rotate the key'"
+      ],
+      "must_exclude": [
+        "routes only to one when both concerns clearly apply",
+        "recommends infrastructure-as-code or deployments as the primary fix",
+        "names a skill that is not in the provided list"
+      ]
+    },
+    {
+      "id": "plt-canary-migration",
+      "router": "platform-expert",
+      "kind": "canonical",
+      "must_include": [
+        "routes to platform-deployments-rollbacks as primary (canary + breaking-migration sequencing, rollback safety)",
+        "sequences the migration to be backward-compatible / expand-contract rather than shipping breaking schema with the canary"
+      ],
+      "must_exclude": [
+        "misses deployments-rollbacks entirely",
+        "treats the migration as unrelated to the deploy strategy",
+        "names a skill that is not in the provided list"
+      ]
+    },
+    {
+      "id": "plt-terraform-token",
+      "router": "platform-expert",
+      "kind": "openjudgment",
+      "must_include": [
+        "routes to platform-ci-cd as core: the broad workflow token is a CI permission/identity problem (least-privilege job token, OIDC/short-lived credentials, provenance)",
+        "addresses the credential/apply blast-radius via at least one of platform-secrets-config (scoped/short-lived credentials, no long-lived over-scoped secret) or platform-infrastructure-as-code (least-privilege apply role and state) — either decomposition is valid"
+      ],
+      "must_exclude": [
+        "misses the CI token-permission problem entirely (routes to none of ci-cd / secrets-config / iac)",
+        "names a skill that is not in the provided list"
+      ]
+    },
+    {
+      "id": "ui-analytics-dashboard",
+      "router": "ui-expert",
+      "kind": "canonical",
+      "must_include": [
+        "routes to ui-patterns for the data-dense tables/collection and its scale-completeness (filter/search/pagination)",
+        "brings in ui-color for contrast/accessibility of the on-brand palette (and its runnable contrast check)"
+      ],
+      "must_exclude": [
+        "invents an evicted skill not in the list (e.g. ui-layouts, ui-data-viz, visual-hierarchy)",
+        "recommends all listed skills with no selection",
+        "ignores the accessibility/contrast requirement"
+      ]
+    },
+    {
+      "id": "ui-drift-audit",
+      "router": "ui-expert",
+      "kind": "openjudgment",
+      "must_include": [
+        "starts with a repo-wide measured drift audit/inventory before ad-hoc fixes (routes to analyze-design-system OR clearly prescribes measuring the drift first)",
+        "relies on runnable spacing and color/contrast checks (ui-spacing + ui-color, or explicitly running a scale-conformance lint and a contrast check) to enforce the canonical system"
+      ],
+      "must_exclude": [
+        "jumps to per-screen fixes without the audit",
+        "invents an evicted skill not in the list",
+        "names a skill that is not in the provided list"
+      ]
+    },
+    {
+      "id": "csl-telehealth-launch",
+      "router": "consult-expert",
+      "kind": "canonical",
+      "must_include": [
+        "recognizes the request spans multiple domains and routes across at least compliance (HIPAA/privacy), platform (secure deploy/secrets), and UI/accessibility",
+        "produces a coherent who-to-consult plan grouped by concern rather than a single-domain answer"
+      ],
+      "must_exclude": [
+        "collapses the multi-domain request into one domain",
+        "lists every available skill with no grouping or prioritization",
+        "names a skill that is not in the provided list"
+      ]
+    },
+    {
+      "id": "csl-slow-and-clunky",
+      "router": "consult-expert",
+      "kind": "openjudgment",
+      "must_include": [
+        "treats the ambiguity honestly: names the candidate domains (design/UI polish, performance/quality, architecture, or a concrete failure to diagnose) instead of guessing one",
+        "proposes a way to disambiguate (e.g. diagnose-failure or analyze-quality to locate the real problem) before committing"
+      ],
+      "must_exclude": [
+        "commits to a single cause with no evidence or disambiguation step",
+        "names a skill that is not in the provided list"
+      ]
+    }
+  ]
+}

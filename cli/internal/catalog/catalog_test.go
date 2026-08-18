@@ -153,11 +153,10 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 		inAdvisory[name] = true
 	}
 	for _, expected := range []string{
-		"consult-expert",
-		"compliance-expert",
-		"platform-expert",
-		"ui-expert",
+		"compliance-security",
+		"platform-ci-cd",
 		"ui-patterns",
+		"design-explore",
 	} {
 		if !inAdvisory[expected] {
 			t.Errorf("advisory does not include %q", expected)

@@ -338,10 +338,9 @@
   {
     "id": "router-ui-mechanics",
     "prompt": "Design a data-dense settings screen: choose the collection display, the color tokens, and the spacing scale.",
-    "expected_skill": "ui-expert",
-    "expected_mode": "Route",
+    "expected_skill": "ui-patterns",
+    "expected_mode": "Focused guidance",
     "expected_delegates": [
-      "ui-patterns",
       "ui-color",
       "ui-spacing"
     ],

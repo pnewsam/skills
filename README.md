@@ -115,11 +115,6 @@ Workflow skills for product direction, planning, cross-domain consultation, epic
 
 ```mermaid
 flowchart TD
-    CE[consult-expert] -->|routes to domain experts| UE[ui-expert]
-    CE --> DE[design-explore]
-    CE --> PL[platform-expert]
-    CE --> CX[compliance-expert]
-    CE -->|produces epic briefs| PE
     CC[create-charter] -->|produces docs/CHARTER.md| ED[explore-directions]
     ED -->|produces docs/directions/| PE[plan-epic]
     PE -->|produces docs/epics/| PF[plan-feature]
@@ -136,7 +131,6 @@ flowchart TD
 
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
 | ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [consult-expert](registry/consult-expert/SKILL.md)     | router | divergence | analyze, plan | Route broad product, engineering, backend, platform, quality, or compliance prompts to domain experts, synthesize recommendations, and produce epic briefs. |
 | [explore-directions](registry/explore-directions/SKILL.md) | workflow | divergence | analyze | Analyze the product's current state and generate 3–5 distinct strategic directions with evidence and trade-offs for review. |
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
 | [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create or update one charter-aligned epic, including deduplicating bug-bash or app-feedback observations into coherent child features. |
@@ -290,25 +284,16 @@ icons, depth, responsive, onboarding, email) plus `visual-hierarchy` was evicted
 `archive/ui-evicted/` on 2026-08-17 after a family A/B showed the base model
 produces equal-quality UI on those concerns unaided
 (`evals/results/2026-08-17-ui-family.md`; 14 cases, gate PASS at A=0.913/B=0.905).
-What remains is what the model can't derive or should verify: `ui-expert` (a thin
-survivor index), `ui-patterns` (collection scale-completeness — the one skill with
-a reproducible edge, converted to a slim objective), and the two runnable checkers
-`ui-color` (WCAG contrast) and `ui-spacing` (scale conformance). Open visual
-direction goes to `design-explore`; repository-wide drift to
-`analyze-design-system`.
-
-```mermaid
-flowchart LR
-    UX[ui-expert] --> P[ui-patterns]
-    UX --> CL[ui-color]
-    UX --> S[ui-spacing]
-    UX --> DE[design-explore]
-    UX --> ADS[analyze-design-system]
-```
+What remains is what the model can't derive or should verify: `ui-patterns`
+(collection scale-completeness — the one skill with a reproducible edge, converted to
+a slim objective) and the two runnable checkers `ui-color` (WCAG contrast) and
+`ui-spacing` (scale conformance). Open visual direction goes to `design-explore`;
+repository-wide drift to `analyze-design-system`. The `ui-expert` router was itself
+evicted 2026-08-18 (`evals/results/2026-08-18-router-family.md`) — the base model
+routes among these few skills as well without it.
 
 | Skill                                                | Type      | Description                                                                                                                                           |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ui-expert](registry/ui-expert/SKILL.md)             | router | Thin survivor index — routes to the few UI skills that still earn their keep and otherwise defers to base-model capability. |
 | [ui-patterns](registry/ui-patterns/SKILL.md)         | reference | Collection objectives — match the container to the data, and the scale-completeness checklist (filter/search, pagination, density, empty/overflow) the model tends to omit. |
 | [ui-color](registry/ui-color/SKILL.md)               | reference | Color-system objectives plus a runnable WCAG contrast check (`scripts/check_contrast.py`).                                                             |
 | [ui-spacing](registry/ui-spacing/SKILL.md)           | reference | Spacing objectives plus a runnable scale-conformance lint (`scripts/check_spacing.py`).                                                                |
@@ -333,21 +318,11 @@ converted to an objective + check (see Core Language).
 
 ### Compliance
 
-```mermaid
-flowchart LR
-    CX[compliance-expert] --> CS[compliance-security]
-    CX --> CVM[compliance-vulnerability-management]
-    CX --> CA[compliance-accessibility]
-    CX --> CP[compliance-privacy]
-    CX --> CG[compliance-gdpr]
-    CX --> CH[compliance-hipaa]
-    CX --> CAT[compliance-auditability]
-    CX --> TM[threat-model]
-```
+The `compliance-expert` router was evicted 2026-08-18 (the base model routes among
+the focused skills as well without it); consult the focused skills directly.
 
 | Skill                                                                                      | Type      | Description                                                                                                                         |
 | ------------------------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [compliance-expert](registry/compliance-expert/SKILL.md)                                   | router | Router for security, vulnerability management, accessibility, privacy, GDPR, HIPAA, auditability, and external-risk work.           |
 | [compliance-security](registry/compliance-security/SKILL.md)                               | reference | OWASP/NIST-anchored secure coding, auth/authz, injection, secrets, sessions, logging, supply chain, CI/CD, and secure defaults.     |
 | [compliance-vulnerability-management](registry/compliance-vulnerability-management/SKILL.md) | reference | CVE and advisory triage, exploitability, remediation sequencing, patch risk, risk acceptance, and evidence.                         |
 | [compliance-accessibility](registry/compliance-accessibility/SKILL.md)                     | reference | WCAG 2.2-oriented keyboard access, semantic structure, accessible names, focus order, contrast, forms, errors, and motion.          |
@@ -369,18 +344,11 @@ model covers failure contracts and async control flow natively); see Quality.
 
 ### Platform
 
-```mermaid
-flowchart LR
-    PLX[platform-expert] --> PE[platform-environments]
-    PLX --> PCD[platform-ci-cd]
-    PLX --> PSC[platform-secrets-config]
-    PLX --> PDR[platform-deployments-rollbacks]
-    PLX --> PIAC[platform-infrastructure-as-code]
-```
+The `platform-expert` router was evicted 2026-08-18 (the base model routes among
+the focused skills as well without it); consult the focused skills directly.
 
 | Skill                                                                            | Type      | Description                                                                                                                       |
 | -------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| [platform-expert](registry/platform-expert/SKILL.md)                             | router | Router for broad platform work - coordinates environment, CI/CD, secrets/config, deployment/rollback, and infrastructure-as-code guidance. |
 | [platform-environments](registry/platform-environments/SKILL.md)                 | reference | Local, preview, staging, and production parity; backing services, runtime config, feature flags, promotion, and readiness.        |
 | [platform-ci-cd](registry/platform-ci-cd/SKILL.md)                               | reference | Build/test/deploy pipelines, artifacts, workflow permissions, gates, provenance, supply-chain hardening, and release automation.  |
 | [platform-secrets-config](registry/platform-secrets-config/SKILL.md)             | reference | Secrets, credentials, env vars, config schemas, secret stores, runtime injection, rotation, redaction, and leakage prevention.    |

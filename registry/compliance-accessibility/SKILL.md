@@ -1,6 +1,6 @@
 ---
 name: compliance-accessibility
-description: Accessibility compliance guidance anchored in WCAG 2.2. Use when reviewing keyboard access, semantic structure, accessible names, focus order, contrast, forms, errors, motion, assistive technology support, and WCAG-oriented obligations. Pair with ui-expert and ui-color for implementation details.
+description: Accessibility compliance guidance anchored in WCAG 2.2. Use when reviewing keyboard access, semantic structure, accessible names, focus order, contrast, forms, errors, motion, assistive technology support, and WCAG-oriented obligations. Pair with ui-color for contrast; UI/UX implementation is base-model capability.
 ---
 
 # Compliance Accessibility
@@ -69,6 +69,6 @@ Automated scans catch roughly a third of WCAG issues; they gate the obvious, the
 
 ## Handoff Rules
 
-- Use `ui-expert` for interaction pattern and UX decisions.
+- Interaction-pattern and UX decisions are base-model capability.
 - Use `ui-color` for contrast and color-system decisions.
 - Framework-specific implementation (React and others) is base-model capability.
