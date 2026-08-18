@@ -4,6 +4,22 @@ A plan to re-weight the skill registry away from hand-encoded method knowledge
 and toward objective-specification and ground-truth verification — the parts
 that keep their value (or gain value) as the base model improves.
 
+## Progress (2026-08-18b) — routers evicted
+
+- **Router family evicted (`consult-expert`, `compliance-expert`, `platform-expert`,
+  `ui-expert`) → `archive/router-evicted/`.** Family A/B holding the visible delegate
+  list constant across arms (`evals/results/2026-08-18-router-family.md`): the bare
+  model routed to the correct focused-skill subset and synthesized as well or better
+  without the router prose (final A=0.989, B=1.000; consult-expert: bare beat it).
+  A router over a delegate set the model already sees is redundant — the plan's own
+  "collapse routers" rule, now measured. Focused delegates all stay. **Active skills
+  55 → 51.** Rewrote the catalog_test.go advisory assertion and repointed all router
+  references (compliance-accessibility, analyze-design-system, analyze-security,
+  execute-feature, ship-epic, README, one routing eval case).
+- **Still untested (next):** the generic-methodology workflows — `diagnose-failure`,
+  `document-architecture`, `explore-directions`, `threat-model`, and `polish-issue` —
+  scheduled for an artifact-quality A/B.
+
 ## Progress (2026-08-18) — main
 
 - **Cross-cutting + ui-* families resolved and merged (PR #29):** active skills

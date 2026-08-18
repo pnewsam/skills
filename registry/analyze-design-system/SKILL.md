@@ -25,7 +25,7 @@ The workflow may inspect source, history, existing tests, Storybook or other com
 
 Use the smallest relevant expert set:
 
-- `ui-expert` for functional patterns, state coverage, responsive behavior, interaction consistency, and accessibility expectations
+- `ui-patterns` for data-collection patterns and scale-completeness; functional patterns, state coverage, responsive behavior, and interaction consistency are base-model capability, with `compliance-accessibility` for WCAG expectations
 - `design-explore` for open visual-language direction; scanning order and emphasis are base-model capability (the `visual-hierarchy` prose was evicted 2026-08-17)
 - evicted knowledge prose (react-*, quality-*, backend-*, design-* composition) is archived; rely on the base model plus focused mechanics skills
 

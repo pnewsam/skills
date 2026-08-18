@@ -75,7 +75,6 @@
         "platform-ci-cd",
         "platform-deployments-rollbacks",
         "platform-environments",
-        "platform-expert",
         "platform-infrastructure-as-code",
         "platform-secrets-config"
       ]
@@ -86,7 +85,6 @@
         "analyze-security",
         "compliance-accessibility",
         "compliance-auditability",
-        "compliance-expert",
         "compliance-gdpr",
         "compliance-hipaa",
         "compliance-privacy",
@@ -135,7 +133,6 @@
       "description": "Functional UI and UX routing, layout, patterns, content, feedback, responsive behavior, and visual-system implementation.",
       "skills": [
         "ui-color",
-        "ui-expert",
         "ui-patterns",
         "ui-spacing"
       ]
@@ -155,9 +152,7 @@
         "ui",
         "design"
       ],
-      "skills": [
-        "consult-expert"
-      ]
+      "skills": []
     },
     "external-creative": {
       "description": "Externally sourced design-engineering and SVG-animation references preserved without local edits.",

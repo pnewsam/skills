@@ -9,7 +9,7 @@ description: Analyze a repository's application-security posture or current depe
 
 Produce a read-only, evidence-backed security assessment with a small ranked set of feature-sized remediation candidates. Convert alerts and suspected control gaps into reachability, exposure, impact, fix path, regression risk, and required evidence before planning.
 
-Use `compliance-expert` to route security judgment. Use `threat-model` instead when the requested outcome is a formal asset, actor, data-flow, trust-boundary, and abuse-case model for one feature or system.
+Route security judgment across the focused `compliance-security` and `compliance-vulnerability-management` skills directly. Use `threat-model` instead when the requested outcome is a formal asset, actor, data-flow, trust-boundary, and abuse-case model for one feature or system.
 
 ## Source anchors
 

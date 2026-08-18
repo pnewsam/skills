@@ -40,9 +40,9 @@ Inspect repository instructions, branch, status, diff, and relevant existing imp
 Route the item to the smallest relevant domain references:
 
 - quality or refactoring: `analyze-quality`, or `typescript-types` (type-level risk; base model covers failure contracts and async natively)
-- security: `compliance-expert`, `compliance-security`, or `compliance-vulnerability-management`
-- UI/design system: `ui-expert`, `design-explore`, `ui-patterns`, `ui-color`, or `ui-spacing`
-- platform work: `platform-expert` and the focused `platform-*` skill
+- security: `compliance-security`, `compliance-vulnerability-management`, or the focused `compliance-*` skill
+- UI/design system: `design-explore`, `ui-patterns`, `ui-color`, or `ui-spacing`
+- platform work: the focused `platform-*` skill
 
 Mark the selected plan item in progress only when the plan supports that state.
 

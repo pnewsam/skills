@@ -149,4 +149,4 @@ If this skill is re-run after interruption:
 - Use `plan-feature` when only one feature needs planning.
 - Use `advance-epic` when the user wants exactly one child feature advanced.
 - Use `prepare-pr` when the work is already complete and only PR preparation remains.
-- Use `consult-expert` when the initiative is still ambiguous and needs cross-domain shaping before epics/features exist.
+- Use `explore-directions` when the initiative is still ambiguous and needs cross-domain shaping before epics/features exist.
