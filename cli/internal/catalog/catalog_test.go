@@ -157,7 +157,7 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 		"compliance-expert",
 		"platform-expert",
 		"ui-expert",
-		"visual-hierarchy",
+		"ui-patterns",
 	} {
 		if !inAdvisory[expected] {
 			t.Errorf("advisory does not include %q", expected)

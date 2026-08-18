@@ -65,7 +65,8 @@ artifacts. Run it with `Workflow({scriptPath})` and a brief in `args`.
 
 ## Handoff
 
-Once a direction is chosen, the focused skills own the mechanics: `ui-color`
-(palette + contrast check), `ui-spacing` (scale + lint), `ui-typography`,
-`ui-layouts`, `visual-hierarchy`. For a specific person's aesthetic, pair with
+Once a direction is chosen, the surviving check skills own the measurable
+mechanics: `ui-color` (palette + contrast check) and `ui-spacing` (scale + lint);
+the rest of the layout/typography/hierarchy execution is base-model capability
+(that prose was evicted 2026-08-17). For a specific person's aesthetic, pair with
 `emil-design-eng`.

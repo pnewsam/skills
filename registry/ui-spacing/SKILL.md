@@ -1,6 +1,6 @@
 ---
 name: ui-spacing
-description: Spacing objectives (scale conformance, proximity, density) plus a runnable scale-conformance lint. Use when applying or auditing UI spacing. Enforce on-scale spacing with scripts/check_spacing.py; let the model apply proximity and density judgment. For page zones see ui-layouts; for type rhythm see ui-typography.
+description: Spacing objectives (scale conformance, proximity, density) plus a runnable scale-conformance lint. Use when applying or auditing UI spacing. Enforce on-scale spacing with scripts/check_spacing.py; let the model apply proximity and density judgment.
 ---
 
 # UI Spacing — Objectives + Ground-Truth Check
@@ -51,5 +51,6 @@ here.
 
 ## Handoff
 
-Page-level zone arrangement → `ui-layouts`. Typographic vertical rhythm
-(line-height, heading-to-body) → `ui-typography`.
+Page-level zone arrangement and typographic vertical rhythm are base-model
+capability now (the `ui-layouts`/`ui-typography` prose was evicted 2026-08-17); run
+this lint to keep whatever spacing it produces on the grid.

@@ -256,22 +256,21 @@ implementation, validation, and delivery.
 Visual direction is **searched, not prescribed**. `design-explore` generates
 several distinct directions, judges them against criteria derived from the
 brief, and synthesizes a recommendation (generate-N-and-judge Workflow),
-verified against ground truth (`ui-color` contrast, `ui-spacing` scale).
-`visual-hierarchy` closes the scanning-order and emphasis decisions once a
-direction is set, and `analyze-design-system` owns repository-wide convergence
-and pattern drift.
+verified against ground truth (`ui-color` contrast, `ui-spacing` scale), and
+`analyze-design-system` owns repository-wide convergence and pattern drift.
 
 The prescriptive `design-*` references (composition, simplicity,
-visual-language) were retired to `archive/design-evicted/` after A/B evidence
-showed the base model matches them on their own trigger prompts
-(`evals/results/2026-08-15-design-retire.md`). They, and other legacy critique
+visual-language) were retired to `archive/design-evicted/`, and `visual-hierarchy`
+followed to `archive/ui-evicted/` on 2026-08-17, after A/B evidence showed the base
+model matches them on their own trigger prompts
+(`evals/results/2026-08-15-design-retire.md`,
+`evals/results/2026-08-17-ui-family.md`). They, and other legacy critique
 workflows, are retained under `archive/` for history only — not discoverable or
 installable.
 
 | Skill                                                         | Type     | Description                                                                                                          |
 | ------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
 | [design-explore](registry/design-explore/SKILL.md)            | workflow | Generate several distinct visual directions, judge against explicit criteria, synthesize. Search over prescription.  |
-| [visual-hierarchy](registry/visual-hierarchy/SKILL.md)        | reference | Scanning order, emphasis, grouping, and de-emphasis within a chosen direction.                                       |
 
 ### External Design References
 
@@ -286,47 +285,33 @@ profiles.
 
 ### UI Patterns
 
-Reference skills for selecting the right UI patterns based on data density, task complexity, and user goals. Use `ui-expert` for broad page/app work or when the right focused skill is unclear; invoke individual skills for specific decisions.
+The `ui-*` prose family (layouts, forms, actions, feedback, content, typography,
+icons, depth, responsive, onboarding, email) plus `visual-hierarchy` was evicted to
+`archive/ui-evicted/` on 2026-08-17 after a family A/B showed the base model
+produces equal-quality UI on those concerns unaided
+(`evals/results/2026-08-17-ui-family.md`; 14 cases, gate PASS at A=0.913/B=0.905).
+What remains is what the model can't derive or should verify: `ui-expert` (a thin
+survivor index), `ui-patterns` (collection scale-completeness — the one skill with
+a reproducible edge, converted to a slim objective), and the two runnable checkers
+`ui-color` (WCAG contrast) and `ui-spacing` (scale conformance). Open visual
+direction goes to `design-explore`; repository-wide drift to
+`analyze-design-system`.
 
 ```mermaid
 flowchart LR
-    UX[ui-expert] --> L[ui-layouts]
-    UX --> P[ui-patterns]
-    UX --> F[ui-forms]
-    UX --> A[ui-actions]
-    UX --> FB[ui-feedback]
-    UX --> C[ui-content]
-    UX --> VH[visual-hierarchy]
-    UX --> S[ui-spacing]
-    UX --> T[ui-typography]
+    UX[ui-expert] --> P[ui-patterns]
     UX --> CL[ui-color]
-    UX --> D[ui-depth]
-    UX --> R[ui-responsive]
-    UX --> I[ui-icons]
-    UX --> DV[ui-data-viz]
-    UX --> O[ui-onboarding]
-    UX --> E[ui-email]
+    UX --> S[ui-spacing]
+    UX --> DE[design-explore]
+    UX --> ADS[analyze-design-system]
 ```
 
 | Skill                                                | Type      | Description                                                                                                                                           |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ui-expert](registry/ui-expert/SKILL.md)             | router | Router for broad UI work — coordinates the focused `ui-*` skills and prevents overlap across layout, patterns, forms, actions, states, surfaces, and visual system decisions. |
-| [ui-layouts](registry/ui-layouts/SKILL.md)           | reference | Page-level layout patterns — app shell, page chrome, content zoning, standard page archetypes, scroll behavior, and responsive layout adaptation.      |
-| [ui-patterns](registry/ui-patterns/SKILL.md)         | reference | Data display patterns — tables vs cards vs lists, pagination, search/filter placement, detail views, navigation, tabs vs accordions, content organization. |
-| [ui-forms](registry/ui-forms/SKILL.md)               | reference | Form patterns — container selection (modal vs drawer vs page), field type heuristics, wizard design, settings page organization.                      |
-| [ui-feedback](registry/ui-feedback/SKILL.md)         | reference | Feedback patterns — empty states, loading states (skeleton vs spinner vs optimistic), error handling, toast vs banner vs modal alerts, confirmation vs undo. |
-| [ui-actions](registry/ui-actions/SKILL.md)           | reference | Action affordances — row actions (inline vs overflow), bulk operations, hover vs static visibility, keyboard shortcuts, drag-and-drop, mobile touch adaptations. |
-| [ui-content](registry/ui-content/SKILL.md)           | reference | UX writing and microcopy — button labels, empty states, errors, field help, terminology, confirmations, success messages, and tone.                    |
-| [visual-hierarchy](registry/visual-hierarchy/SKILL.md) | reference | Visual hierarchy — task priority, size, weight, color, position, chunking, scanning, action hierarchy, and responsive reflow.                    |
-| [ui-spacing](registry/ui-spacing/SKILL.md)           | reference | Spacing and proximity — spacing scale, density, negative space, rhythm, and context-specific spacing for forms, tables, cards, lists, and pages.      |
-| [ui-typography](registry/ui-typography/SKILL.md)     | reference | Typography — type scales, font choices, line length, heading hierarchy, contrast, numeric figures, and context-specific text treatment.               |
-| [ui-color](registry/ui-color/SKILL.md)               | reference | Color systems — palettes, semantic tokens, neutral scales, dark mode, contrast, status colors, and brand color selection.                              |
-| [ui-depth](registry/ui-depth/SKILL.md)               | reference | Depth and media treatment — elevation, shadows, layered surfaces, overlays, inset controls, image crops, text over images, and user-uploaded media.    |
-| [ui-responsive](registry/ui-responsive/SKILL.md)     | reference | Responsive design — breakpoints, stack/reduce/reorganize/off-canvas patterns, touch targets, navigation adaptation, images, and testing widths.       |
-| [ui-icons](registry/ui-icons/SKILL.md)               | reference | Icon usage — when to use icons, label pairing, sizing, accessible icon buttons, library selection, consistency, color, and animation.                 |
-| [ui-data-viz](registry/ui-data-viz/SKILL.md)         | reference | Data visualization — chart type selection, number-vs-chart decisions, dashboard cards, data-ink ratio, chart color, and time-series guidance.         |
-| [ui-onboarding](registry/ui-onboarding/SKILL.md)     | reference | Onboarding — first-run experiences, sample data, checklists, progressive discovery, tours, activation moments, and re-onboarding.                     |
-| [ui-email](registry/ui-email/SKILL.md)               | reference | Email UI patterns — transactional, digest, report, product update, and lifecycle email layouts with real email-client constraints.                    |
+| [ui-expert](registry/ui-expert/SKILL.md)             | router | Thin survivor index — routes to the few UI skills that still earn their keep and otherwise defers to base-model capability. |
+| [ui-patterns](registry/ui-patterns/SKILL.md)         | reference | Collection objectives — match the container to the data, and the scale-completeness checklist (filter/search, pagination, density, empty/overflow) the model tends to omit. |
+| [ui-color](registry/ui-color/SKILL.md)               | reference | Color-system objectives plus a runnable WCAG contrast check (`scripts/check_contrast.py`).                                                             |
+| [ui-spacing](registry/ui-spacing/SKILL.md)           | reference | Spacing objectives plus a runnable scale-conformance lint (`scripts/check_spacing.py`).                                                                |
 
 **References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
 
@@ -335,10 +320,12 @@ flowchart LR
 The `quality-*` interpretive family (clarity, modularity, refactoring,
 correctness, testing, reliability) was retired to `archive/quality-evicted/`
 after strict A/B evidence (`evals/results/2026-08-14-*`). What remains is the
-part that scales: `analyze-quality` measures and ranks candidates, and
-cross-cutting method judgment (`error-handling`, `async-patterns`,
-`typescript-types` — see Core Language) replaces the prose when a signal needs
-interpretation.
+part that scales: `analyze-quality` measures and ranks candidates, and the base
+model interprets the signal. The cross-cutting method trio was resolved by A/B on
+2026-08-17 (`evals/results/2026-08-17-cross-cutting-family.md`): `error-handling`
+and `async-patterns` were evicted to `archive/cross-cutting-evicted/` (the base
+model ties them with no residual failure mode), and `typescript-types` was
+converted to an objective + check (see Core Language).
 
 | Skill                                              | Type      | Purpose                                                            |
 | -------------------------------------------------- | --------- | ----------------------------------------------------------------- |
@@ -372,13 +359,13 @@ flowchart LR
 
 ### Core Language
 
-TypeScript and JavaScript best practices — reference skills that inform how code is written across the stack.
+TypeScript type-safety as an objective plus the deterministic check that enforces
+it. `error-handling` and `async-patterns` were evicted here on 2026-08-17 (the base
+model covers failure contracts and async control flow natively); see Quality.
 
 | Skill                                                        | Type      | Description                                                                                                                  |
 | ------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| [typescript-types](registry/typescript-types/SKILL.md)       | reference | No `any`, discriminated unions, type narrowing, `satisfies`, branded types, deriving types from values.                      |
-| [error-handling](registry/error-handling/SKILL.md)           | reference | Failure classification, explicit results or typed exceptions, boundary translation, causal context, cleanup, retries, and safe reporting. |
-| [async-patterns](registry/async-patterns/SKILL.md)           | reference | Dependency-aware concurrency, cancellation, stale-result guards, bounded parallelism, promise ownership, timeouts, and cleanup. |
+| [typescript-types](registry/typescript-types/SKILL.md)       | reference | Type-safety objectives (unrepresentable invalid states, no `any`/unsafe casts, derive-from-value, branded ids, exhaustiveness) enforced by `tsc --strict` + `@typescript-eslint/no-unsafe-*`. |
 
 ### Platform
 

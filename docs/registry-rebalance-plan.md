@@ -95,12 +95,12 @@ Default: method families → Tier A; already-superseded one-offs → Tier B.
 | **React knowledge** | `react-*` (11) + `react-expert` | **EVICTED (pilot)** | A/B + code-gap eval: bare model tied/beat every case. `archive/react-pilot/`. |
 | **Python knowledge** | `python-*` (7) + `python-expert` + `fastapi-architecture` | **EVICTED** | A/B + extrapolation confirmation. `archive/python-evicted/`. |
 | **Quality knowledge** | `quality-*` (6) + `quality-expert` | **EVICTED** | A/B + extrapolation confirmation. `archive/quality-evicted/`. |
-| **UI knowledge** | `ui-*` (15) + `visual-hierarchy` + `ui-expert` | **A/B pending** | `evals/ui_family_cases.json`: keep `ui-color`/`ui-spacing` checkers; evict or convert what ties; `visual-hierarchy` decided separately; slim `ui-expert`. |
+| **UI knowledge** | `ui-*` (15) + `visual-hierarchy` + `ui-expert` | **RESOLVED 2026-08-17: evict 13, keep+convert `ui-patterns`, slim `ui-expert`** | A/B (`evals/results/2026-08-17-ui-family.md`, gate PASS A=0.913/B=0.905): 13 prose skills (incl. `visual-hierarchy`) → `archive/ui-evicted/`; `ui-patterns` was the lone reproducible edge (scale-completeness) → converted to a slim objective; `ui-color`/`ui-spacing` checkers kept; `ui-expert` slimmed to a survivor index. |
 | **Design knowledge** | `design-composition`, `design-simplicity`, `design-visual-language`, `design-expert` | **EVICTED** | A/B tied; replaced by `design-explore` (generate-N-and-judge). `archive/design-evicted/`. |
 | **Backend knowledge** | `backend-*` (6) + `backend-expert` | **EVICTED** | A/B tied; keep only genuine org guardrails as objectives. `archive/backend-evicted/`. |
 | **Platform knowledge** | `platform-*` (5) + `platform-expert` | **EVICT / thin (partially converted)** | Keep org-specific deploy/secrets guardrails as objective + check; check layer landed on `platform-secrets-config`, the rest follow the light pattern. |
 | **Compliance / risk** | `compliance-*` (7), `threat-model`, `consult-expert` | **CONVERT: objective + pinned citation + automated checks** | Flagships (`accessibility`, `secrets`) done; the rest follow. Never a blind evict-A/B for external objectives. |
-| **Cross-cutting knowledge** | `async-patterns`, `error-handling`, `typescript-types` | **CONVERT → lint/types config, else EVICT** | Kept for now. Instrumented 2026-08-15 → `evals/cross_cutting_pilot_cases.json` (12 cases, 4/skill); run the same A/B as ui-* once the harness is warm, then CONVERT/EVICT on gate. |
+| **Cross-cutting knowledge** | `async-patterns`, `error-handling`, `typescript-types` | **RESOLVED 2026-08-17: evict eh + ap, CONVERT tt** | A/B run (`evals/results/2026-08-17-cross-cutting-family.md`, 204 pooled blind reps): bare model ties the skill on every case (A=0.992, B=0.997). `error-handling` (1.000/1.000, 0 violations) and `async-patterns` (0.975/1.000, 0 B-only violations) → **EVICT**. `typescript-types` ties on means but the bare model emits an unsafe cast/`any` the skill prevents, and that failure mode is deterministically caught by `tsc --strict` + `@typescript-eslint/no-unsafe-*` → **CONVERT** (objective + check, drop prose). |
 | **Routers** | `*-expert` (ui, design, react, python, backend, quality, platform, compliance), `consult-expert` | **Collapse** | A router over evicted children is dead weight. react/python/quality/backend/design experts already gone; `ui-expert` slims after the ui A/B; keep `consult-expert`/`compliance-expert` only as an index over the legislative families. |
 
 Net effect: roughly 70–80 of the ~132 skills are in the method/router bucket
@@ -163,9 +163,14 @@ The maintenance and routing attention you free goes into the part that scales:
   now documents how to run a family quality A/B end-to-end. **First pass run
   2026-08-15 → `evals/results/2026-08-15-retention-first-pass.md`**: sweeps all
   70 active packages; remaining work is exactly two trails — the instrumented
-  ui-* run (harness-gated) and the cross-cutting method trio (`async-patterns`,
-  `error-handling`, `typescript-types`) scheduled for the next A/B. Re-run this
-  pass after the ui-* verdict lands.
+  ui-* run and the cross-cutting method trio (`async-patterns`,
+  `error-handling`, `typescript-types`). **Both trails are now run and executed
+  (2026-08-17):** cross-cutting → evict eh+ap, convert tt
+  (`evals/results/2026-08-17-cross-cutting-family.md`); ui-* → evict 13 (incl.
+  `visual-hierarchy`), keep+convert `ui-patterns`, slim `ui-expert`
+  (`evals/results/2026-08-17-ui-family.md`). Active skills 70 → 55, all on branch
+  `chore/cross-cutting-ab`. No family trails remain; the next retention pass just
+  re-runs the standing gate as models improve.
 
 ## Per-skill decision gate (the checklist)
 
