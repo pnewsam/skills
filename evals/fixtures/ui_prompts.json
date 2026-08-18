@@ -1,0 +1,75 @@
+{
+  "note": "Prompts-only view of evals/ui_family_cases.json for the family A/B. No anchors, so answer arms never see the rubric. Keep prompts byte-identical to the case file.",
+  "cases": [
+    {
+      "id": "empty-state-copy",
+      "skill": "ui-content",
+      "prompt": "Our new invoices screen has no rows yet. What should we show instead of a blank table? Also, what should the empty-state button label be?"
+    },
+    {
+      "id": "row-action-overflow",
+      "skill": "ui-actions",
+      "prompt": "Every row in our projects table has 6 actions (edit, duplicate, share, archive, export, delete). All 6 as icon buttons feels noisy and wide. How should I present row-level actions?"
+    },
+    {
+      "id": "chart-choice",
+      "skill": "ui-data-viz",
+      "prompt": "Our dashboard shows total users over 12 months in a card, plus a second card with this month's total. I am choosing between a full line chart and a big number with a small trend indicator for the second card. Which and why?"
+    },
+    {
+      "id": "elevation-scale",
+      "skill": "ui-depth",
+      "prompt": "Cards, a modal, and a dropdown on one page all use the same large shadow and read as one blob. How do I differentiate elevation so depth reads without clutter?"
+    },
+    {
+      "id": "email-client-hell",
+      "skill": "ui-email",
+      "prompt": "My order-confirmation email renders fine in Gmail but breaks in Outlook: grid columns collapse and image spacing multiplies. What is the general approach to authoring cross-client email?"
+    },
+    {
+      "id": "toast-banner-inline",
+      "skill": "ui-feedback",
+      "prompt": "A user submits a form and the server times out. Should I show a toast? The app is also half-down, so a persistent system banner exists. How do I choose between inline error, toast, and banner here?"
+    },
+    {
+      "id": "settings-layout-choice",
+      "skill": "ui-forms",
+      "prompt": "A settings nav has 3 sections. One section holds 30 toggles and sliders; the other two have 5 fields each. Same page or tabs? And is toggles-everywhere even right?"
+    },
+    {
+      "id": "icon-only-accessibility",
+      "skill": "ui-icons",
+      "prompt": "We want a delete row with only a trash icon and a profile icon button, no text. Is icon-only acceptable? What exactly is required for it?"
+    },
+    {
+      "id": "settings-page-zoning",
+      "skill": "ui-layouts",
+      "prompt": "We have a settings page with 3 sections: account profile (5 fields), notifications (2 toggles), and permissions (2 selects). It looks thin and empty. Should I reorganize as cards, tabs, or a dashboard layout?"
+    },
+    {
+      "id": "first-run-value",
+      "skill": "ui-onboarding",
+      "prompt": "New users land on an empty project board. We spent a while reasoning about whether to show a checklist tour, a product-tour tooltip, or a blank-slate card. What is the better onboarding approach and when?"
+    },
+    {
+      "id": "table-vs-card-list",
+      "skill": "ui-patterns",
+      "prompt": "We display 40 deployments per environment. Customers need to scan by column (name, status, age, commit). Is a table, a card list, or a tile grid the right pattern here?"
+    },
+    {
+      "id": "responsive-breakpoint",
+      "skill": "ui-responsive",
+      "prompt": "Our desktop table is 9 columns wide. Which responsive pattern is the right one for narrow phones: horizontal scroll, collapse to cards, hide columns, or a separate view?"
+    },
+    {
+      "id": "type-scale",
+      "skill": "ui-typography",
+      "prompt": "We need a type scale for a marketing + app dashboard. We have 9 font sizes in use across screens. How do we build a sane scale from this?"
+    },
+    {
+      "id": "hierarchy-critique",
+      "skill": "visual-hierarchy",
+      "prompt": "A settings page has a big hero title, a prominent install banner, small form labels, and every button equally styled. Users cannot see what to do first. How do I fix the hierarchy without adding color or larger whitespace?"
+    }
+  ]
+}
