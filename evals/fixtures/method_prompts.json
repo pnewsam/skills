@@ -1,0 +1,55 @@
+{
+  "note": "Prompts-only view for the methodology-workflow A/B (evals/method_pilot_cases.json). Self-contained scenarios; no anchors. Both arms answer the same scenario; arm A additionally reads the skill.",
+  "cases": [
+    {
+      "id": "diag-flaky-test",
+      "skill": "diagnose-failure",
+      "prompt": "A test, `test_checkout_applies_discount`, passes locally but fails on CI about 1 in 5 runs with an assertion that the cart total is the pre-discount amount. It exercises code that reads the active promotions from a shared in-memory cache, applies matching ones to the cart, and asserts the total. The suite runs tests in parallel. When it fails, re-running just that test passes. How would you find the root cause? Give your diagnosis."
+    },
+    {
+      "id": "diag-intermittent-500",
+      "skill": "diagnose-failure",
+      "prompt": "Our API returns a 500 on the POST /orders endpoint for roughly 2% of requests, clustered in short bursts a few times an hour. The error log shows `connection pool exhausted` from the database client. Traffic is steady and well below peak. The endpoint does: validate -> begin transaction -> insert order -> call an external tax API -> commit. Diagnose the most likely root cause and what you'd check next."
+    },
+    {
+      "id": "arch-document-service",
+      "skill": "document-architecture",
+      "prompt": "Document the architecture of this system for a new engineer. It's a URL-shortener SaaS: a React SPA; an API gateway; a 'links' service (create/resolve short codes, writes to Postgres, caches hot codes in Redis); an 'analytics' service (consumes click events from a Kafka topic the links service publishes to, aggregates into ClickHouse); an auth service (JWT); and a nightly batch job that rolls up analytics. Deployed as containers on Kubernetes. Produce the architecture documentation."
+    },
+    {
+      "id": "arch-data-flow",
+      "skill": "document-architecture",
+      "prompt": "Document how data flows through this system. A mobile app uploads a photo to a REST API; the API stores the file in object storage (S3) and writes a record to Postgres; it publishes an 'image.uploaded' event to a queue; a worker consumes the event, generates thumbnails, writes them back to S3, and updates the Postgres record; a CDN serves the images. Users can later request their images, which the API lists from Postgres and returns CDN URLs. Produce the data-flow documentation, including where state lives and the boundaries crossed."
+    },
+    {
+      "id": "dir-product-gap",
+      "skill": "explore-directions",
+      "prompt": "A note-taking app has 40k users but flat growth and weak retention: people try it, take a few notes, and drift off within two weeks. Its charter is 'the fastest place to capture and find a thought.' Current features: fast capture, full-text search, tags, markdown. Where could the product go from here? Give me the strategic options to consider."
+    },
+    {
+      "id": "dir-stalled-growth",
+      "skill": "explore-directions",
+      "prompt": "A B2B invoicing tool for freelancers has strong usage among its ~5k paying users but has plateaued: acquisition is expensive and expansion revenue is near zero (everyone's on the same $12/mo plan). The team is unsure whether to push upmarket, broaden the product, or double down on the core. Lay out the directions worth considering before we commit."
+    },
+    {
+      "id": "tm-file-upload",
+      "skill": "threat-model",
+      "prompt": "We're adding a feature that lets any authenticated user upload a profile avatar image. The browser POSTs the file to our API, which stores it in S3 and serves it back from a public CDN URL to all users who view that profile. Threat-model this feature before we build it."
+    },
+    {
+      "id": "tm-webhook-integration",
+      "skill": "threat-model",
+      "prompt": "We're adding an inbound webhook: a payment provider will POST payment-status events to a new public endpoint `/webhooks/payments`, and our handler updates the corresponding order's paid/unpaid status in our database. Threat-model this integration."
+    },
+    {
+      "id": "polish-vague-bug",
+      "skill": "polish-issue",
+      "prompt": "Improve the clarity and readability of this bug issue WITHOUT changing its scope, requirements, or meaning. Return a cleaned-up title and description.\n\nTitle: search broken\n\nDescription: so when you type in the search box on the reports page and there's like an apostrophe or quote in what you type it just shows nothing even though there ARE matching reports (e.g. searching for O'Brien returns 0 but O'Brien's report is definitely there). only happens on reports page, the global search at the top is fine. saw it in chrome and firefox. needs to actually return the matching reports. pretty annoying, a few customers complained."
+    },
+    {
+      "id": "polish-feature-request",
+      "skill": "polish-issue",
+      "prompt": "Improve the clarity, structure, and tone of this feature request WITHOUT changing what is being asked for or its acceptance criteria. Return a cleaned-up title and description.\n\nTitle: export thing\n\nDescription: users want to be able to export their dashboard data to csv. should be a button on the dashboard toolbar. it should export whatever is currently filtered/visible not the whole dataset. needs to include all the columns shown. filename should have the date in it. must work for dashboards with up to like 100k rows without timing out. not doing pdf or excel for now, just csv. acceptance: button visible on dashboard, exports current filtered view as csv with date in filename, handles 100k rows."
+    }
+  ]
+}
