@@ -4,6 +4,27 @@ A plan to re-weight the skill registry away from hand-encoded method knowledge
 and toward objective-specification and ground-truth verification — the parts
 that keep their value (or gain value) as the base model improves.
 
+## Progress (2026-08-18c) — methodology workflows tested → KEEP all
+
+- **Methodology-workflow family A/B** (`diagnose-failure`, `document-architecture`,
+  `explore-directions`, `threat-model`, `polish-issue`) —
+  `evals/results/2026-08-18-method-family.md`. Content-quality tie everywhere
+  (A=0.972, B=0.972): the base model writes an equally good diagnosis, architecture
+  doc, direction set, threat model, and polished issue. **But content quality is not
+  the whole value** — the decision was made on convention/boundary value the A/B
+  can't score, and all five were KEPT:
+  - `document-architecture`, `explore-directions` → keep as artifact
+    conventions/contracts the planning pipeline consumes (docs/architecture,
+    docs/directions → plan-epic).
+  - `threat-model` → keep as the compliance security-evidence artifact.
+  - `diagnose-failure` → keep (user call): read-only "don't fix" effect-boundary +
+    anchors the core profile.
+  - `polish-issue` → keep as Linear plumbing (write mechanic + don't-change-scope
+    guardrail).
+  This confirms the KEEP categories are defensible: a convention/boundary/plumbing
+  objective is not derivable knowledge, even when the base model matches the content.
+  **No family or candidate trails remain.**
+
 ## Progress (2026-08-18b) — routers evicted
 
 - **Router family evicted (`consult-expert`, `compliance-expert`, `platform-expert`,
