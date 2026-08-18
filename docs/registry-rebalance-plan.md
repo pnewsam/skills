@@ -4,6 +4,24 @@ A plan to re-weight the skill registry away from hand-encoded method knowledge
 and toward objective-specification and ground-truth verification — the parts
 that keep their value (or gain value) as the base model improves.
 
+## Progress (2026-08-18) — main
+
+- **Cross-cutting + ui-* families resolved and merged (PR #29):** active skills
+  **70 → 55**. Evicted `error-handling`, `async-patterns`, and 13 ui-* prose skills
+  (incl. `visual-hierarchy`); converted `typescript-types` and `ui-patterns` to
+  objective+check; slimmed `ui-expert`. Evidence:
+  `evals/results/2026-08-17-{cross-cutting,ui}-family.md`. Fixed a silent
+  `score_ab.py --exclude` no-op and hardened the A/B harness against subagent
+  context-leakage (`evals/family_ab.workflow.js`, generalized over any family).
+- **compliance-*/platform-* check-layer verified complete (PR #30):** on audit, the
+  "objective + pinned citation + automated check" layer is present on all 13
+  reference skills; routers and `threat-model` don't need one. The only remaining
+  debt was stale handoff references to earlier-evicted skills (react-accessibility,
+  quality-*, backend-*) — repointed across compliance/platform + analyze-quality;
+  repo-wide sweep now clean.
+- **No family A/B trails remain.** Future retention passes just re-run the standing
+  gate as models improve.
+
 ## Progress (2026-08-15) — main
 
 - **Evicted (evidence-backed):** `react-*` (12), `python-*` (9), `quality-*`
