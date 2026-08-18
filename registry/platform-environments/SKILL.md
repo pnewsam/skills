@@ -82,5 +82,5 @@ The environment surface can be checked with config and CI scripts, so drift fail
 
 - Use `platform-secrets-config` when environment setup involves secrets, credentials, tokens, certificates, or sensitive config.
 - Use `platform-deployments-rollbacks` when environment promotion is part of a release.
-- Use `backend-persistence` when environment differences involve database migrations, data shape, or production data copies.
-- Use stack experts for framework-specific config loading and runtime behavior.
+- Database migrations/data-shape differences and framework-specific config loading
+  are base-model capability.

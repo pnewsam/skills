@@ -87,5 +87,5 @@ Is the CI graph itself verifiable? Enforce the structural invariants with toolin
 
 - Use `platform-deployments-rollbacks` when CI/CD changes alter release strategy or production rollout.
 - Use `platform-secrets-config` when workflows touch secrets, credentials, or env vars.
-- Use `quality-testing` or stack-specific testing skills for test selection and test design.
+- Test selection and test design are base-model capability; use the browser-test skills for real end-to-end coverage.
 - Use `compliance-security` for supply-chain, token permission, or CI/CD threat-model concerns.
