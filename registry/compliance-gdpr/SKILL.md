@@ -69,7 +69,6 @@ GDPR obligations are about how data flows and what the system can prove; the dur
 
 ## Handoff Rules
 
-- Use `compliance-privacy` for general data minimization and lifecycle design.
-- Use `compliance-security` for confidentiality/integrity controls.
-- Use `compliance-auditability` for accountability evidence.
+- General data minimization and lifecycle design, confidentiality/integrity controls, and accountability evidence are base-model capability.
+- Use `threat-model` when the outcome is a formal abuse-case model; use `analyze-security` to assess current controls against findings.
 - Use legal/privacy owner review for lawful basis, rights scope, transfer mechanism, DPIA, and breach notification.

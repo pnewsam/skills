@@ -320,18 +320,20 @@ converted to an objective + check (see Core Language).
 
 ### Compliance
 
-The `compliance-expert` router was evicted 2026-08-18 (the base model routes among
-the focused skills as well without it); consult the focused skills directly.
+The `compliance-expert` router was evicted 2026-08-18. On 2026-08-19 the prose
+best-practice compliance skills (`compliance-security`, `compliance-vulnerability-management`,
+`compliance-accessibility`, `compliance-privacy`, `compliance-auditability`) retired to
+`archive/platform-compliance-evicted/` after an A/B tied the base model on every case
+(`evals/results/2026-08-19-platform-compliance-family.md`). Kept: the GDPR and HIPAA
+skills as external-legal-objective references, and `threat-model` as the evidence
+artifact. Secure-coding, injection, secrets, a11y (WCAG), privacy, and vuln triage are
+base-model capability (use `ui-color` for contrast, `analyze-security` for a findings
+assessment).
 
 | Skill                                                                                      | Type      | Description                                                                                                                         |
 | ------------------------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [compliance-security](registry/compliance-security/SKILL.md)                               | reference | OWASP/NIST-anchored secure coding, auth/authz, injection, secrets, sessions, logging, supply chain, CI/CD, and secure defaults.     |
-| [compliance-vulnerability-management](registry/compliance-vulnerability-management/SKILL.md) | reference | CVE and advisory triage, exploitability, remediation sequencing, patch risk, risk acceptance, and evidence.                         |
-| [compliance-accessibility](registry/compliance-accessibility/SKILL.md)                     | reference | WCAG 2.2-oriented keyboard access, semantic structure, accessible names, focus order, contrast, forms, errors, and motion.          |
-| [compliance-privacy](registry/compliance-privacy/SKILL.md)                                 | reference | General personal data classification, minimization, purpose limits, retention, deletion, logging, analytics, and third-party flows. |
 | [compliance-gdpr](registry/compliance-gdpr/SKILL.md)                                       | reference | GDPR-specific principles, lawful basis, data subject rights, retention, breach escalation, DPIA triggers, and design/default.       |
 | [compliance-hipaa](registry/compliance-hipaa/SKILL.md)                                     | reference | HIPAA-oriented ePHI, safeguards, access controls, audit controls, integrity, transmission security, risk review, and vendor review. |
-| [compliance-auditability](registry/compliance-auditability/SKILL.md)                       | reference | Traceability, change records, approval evidence, audit logs, remediation proof, access records, and verifiable controls.            |
 | [threat-model](registry/threat-model/SKILL.md)                                             | workflow  | Scoped assets, actors, trust boundaries, abuse cases, controls, verification, and residual-risk analysis.                           |
 
 ### Core Language
@@ -346,16 +348,16 @@ model covers failure contracts and async control flow natively); see Quality.
 
 ### Platform
 
-The `platform-expert` router was evicted 2026-08-18 (the base model routes among
-the focused skills as well without it); consult the focused skills directly.
-
-| Skill                                                                            | Type      | Description                                                                                                                       |
-| -------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| [platform-environments](registry/platform-environments/SKILL.md)                 | reference | Local, preview, staging, and production parity; backing services, runtime config, feature flags, promotion, and readiness.        |
-| [platform-ci-cd](registry/platform-ci-cd/SKILL.md)                               | reference | Build/test/deploy pipelines, artifacts, workflow permissions, gates, provenance, supply-chain hardening, and release automation.  |
-| [platform-secrets-config](registry/platform-secrets-config/SKILL.md)             | reference | Secrets, credentials, env vars, config schemas, secret stores, runtime injection, rotation, redaction, and leakage prevention.    |
-| [platform-deployments-rollbacks](registry/platform-deployments-rollbacks/SKILL.md) | reference | Release strategy, canaries, blue/green, migration sequencing, health checks, smoke tests, rollback, roll-forward, and evidence.   |
-| [platform-infrastructure-as-code](registry/platform-infrastructure-as-code/SKILL.md) | reference | Terraform/OpenTofu/Pulumi/CDK/Kubernetes manifests, modules, state, drift, plans, review, GitOps, and infra change safety.      |
+The `platform-expert` router was evicted 2026-08-18. On 2026-08-19 the whole
+`platform-*` family (CI/CD, deployments/rollbacks, environments, infrastructure-as-code,
+secrets/config) retired to `archive/platform-compliance-evicted/` after an A/B tied the
+base model on every case, including the canonical traps — build-once/promote-the-tested-
+artifact, expand-contract migrations, dev/prod parity, IaC drift, and not committing
+secrets (`evals/results/2026-08-19-platform-compliance-family.md`). These are derivable
+engineering best practices with no bundled check to preserve; the base model also names
+the external tools (gitleaks, actionlint, checkov, SLSA) without being told. The
+`platform` catalog profile was removed. `docs/registry-rebalance-plan.md` records the
+disposition.
 
 ### Backend
 

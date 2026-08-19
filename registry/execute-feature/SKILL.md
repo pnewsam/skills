@@ -40,9 +40,9 @@ Inspect repository instructions, branch, status, diff, and relevant existing imp
 Route the item to the smallest relevant domain references:
 
 - quality or refactoring: `analyze-quality`, or `typescript-types` (type-level risk; base model covers failure contracts and async natively)
-- security: `compliance-security`, `compliance-vulnerability-management`, or the focused `compliance-*` skill
+- security: `analyze-security`; secure-coding and vulnerability triage are base-model capability, with `compliance-gdpr` or `compliance-hipaa` for regulated data and `threat-model` for a formal threat model
 - UI/design system: `design-explore`, `ui-patterns`, `ui-color`, or `ui-spacing`
-- platform work: the focused `platform-*` skill
+- platform work (CI/CD, deploys, environments, IaC, secrets): base-model capability
 
 Mark the selected plan item in progress only when the plan supports that state.
 

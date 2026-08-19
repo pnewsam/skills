@@ -25,13 +25,13 @@ The workflow may inspect source, history, existing tests, Storybook or other com
 
 Use the smallest relevant expert set:
 
-- `ui-patterns` for data-collection patterns and scale-completeness; functional patterns, state coverage, responsive behavior, and interaction consistency are base-model capability, with `compliance-accessibility` for WCAG expectations
+- `ui-patterns` for data-collection patterns and scale-completeness; functional patterns, state coverage, responsive behavior, and interaction consistency are base-model capability, with `ui-color` for contrast checks (WCAG expectations are otherwise base-model capability)
 - `design-explore` for open visual-language direction; scanning order and emphasis are base-model capability (the `visual-hierarchy` prose was evicted 2026-08-17)
 - evicted knowledge prose (react-*, quality-*, backend-*, design-* composition) is archived; rely on the base model plus focused mechanics skills
 
 Load focused children only for signals that need interpretation. Do not load React guidance for a non-React system. Once this workflow is active, use expert and focused-skill guidance as references; do not recursively reroute the same request or load every child in a router.
 
-Use `analyze-quality` when the primary question is general code health, correctness, test quality, or module structure rather than UI-system convergence. Use a focused `ui-*`, `design-*`, or `react-*` skill for one already-known design or implementation decision. Use `compliance-accessibility` for a dedicated accessibility compliance assessment. This workflow may record verified accessibility gaps that corroborate component or state fragmentation, but it is not a compliance audit.
+Use `analyze-quality` when the primary question is general code health, correctness, test quality, or module structure rather than UI-system convergence. Use a focused `ui-*` skill or `design-explore` for one already-known design or implementation decision. A dedicated accessibility assessment is base-model capability anchored to WCAG (use `ui-color` for contrast). This workflow may record verified accessibility gaps that corroborate component or state fragmentation, but it is not a compliance audit.
 
 ## Workflow
 

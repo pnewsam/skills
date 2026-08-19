@@ -69,27 +69,12 @@
         "validate-feature"
       ]
     },
-    "platform": {
-      "description": "Platform engineering, CI/CD, deployments, environments, infrastructure, and secrets.",
-      "skills": [
-        "platform-ci-cd",
-        "platform-deployments-rollbacks",
-        "platform-environments",
-        "platform-infrastructure-as-code",
-        "platform-secrets-config"
-      ]
-    },
     "compliance": {
-      "description": "Accessibility, auditability, privacy, security, GDPR, HIPAA, vulnerability management, and threat modeling.",
+      "description": "Regulated-data obligations (GDPR, HIPAA), threat modeling, and security-findings analysis.",
       "skills": [
         "analyze-security",
-        "compliance-accessibility",
-        "compliance-auditability",
         "compliance-gdpr",
         "compliance-hipaa",
-        "compliance-privacy",
-        "compliance-security",
-        "compliance-vulnerability-management",
         "threat-model"
       ]
     },
@@ -97,8 +82,6 @@
       "description": "Analyze security findings and deliver one verified remediation through the shared feature workflow.",
       "skills": [
         "analyze-security",
-        "compliance-security",
-        "compliance-vulnerability-management",
         "execute-feature",
         "plan-feature"
       ]
@@ -144,9 +127,8 @@
       ]
     },
     "advisory": {
-      "description": "Broad cross-domain consultation with every locally maintained specialist router and reference profile.",
+      "description": "Broad cross-domain consultation across the maintained reference profiles.",
       "includes": [
-        "platform",
         "compliance",
         "quality",
         "ui",

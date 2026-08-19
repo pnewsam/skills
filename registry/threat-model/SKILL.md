@@ -9,7 +9,7 @@ description: Threat-model a feature, service, architecture, integration, or plan
 
 Produce a scoped, evidence-backed threat model that helps engineering decide what must be prevented, detected, limited, tested, or explicitly accepted. Prioritize credible abuse paths over exhaustive checklist coverage.
 
-This is engineering security analysis, not legal advice or a penetration test. Use `compliance-security` for secure-coding guidance and applicable controls after the threats are understood.
+This is engineering security analysis, not legal advice or a penetration test. Secure-coding guidance and applicable controls are base-model capability once the threats are understood.
 
 ## Modes and effects
 
@@ -130,8 +130,8 @@ Use `references/threat_model_template.md`. In Document mode, preserve accurate e
 
 ## Handoffs
 
-- Use `compliance-security` when implementing identity, tenant, and permission boundaries.
-- Use `compliance-privacy`, `compliance-gdpr`, or `compliance-hipaa` for applicable data obligations.
+- Identity, tenant, and permission-boundary implementation is base-model capability.
+- Use `compliance-gdpr` or `compliance-hipaa` for applicable data obligations.
 - Use `analyze-security` when the model should be compared with current controls or combined with dependency and code-scanning evidence.
 - Use `plan-feature` in Convergence mode for one concrete remediation outcome.
 - Use `review-pr` Risk mode when evaluating the implementation diff.
