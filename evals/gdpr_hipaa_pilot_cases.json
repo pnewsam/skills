@@ -1,0 +1,101 @@
+{
+  "pilot": "compliance-gdpr + compliance-hipaa — the last prose-knowledge skills",
+  "created": "2026-08-19",
+  "purpose": "The only prose-knowledge skills left after the 2026-08-19 platform/compliance eviction, kept purely on the external-legal-objective argument (never A/B'd). Their claimed value is NOT better general advice but EXACT regulatory accuracy — specific article/rule citations, timelines, and scope boundaries the base model might state fluently but WRONG. So this run is deliberately harder than the generic family gate: must_include anchors require specific checkable legal facts, and must_exclude anchors are subtle legal errors (72h GDPR breach vs 60-day HIPAA rule confusion; the 'any health data = HIPAA' myth; purpose-limitation ignorance). A B-only must_exclude violation on a legal-accuracy anchor is exactly the KEEP/CONVERT signal — it means the skill prevents a confident-but-wrong citation the bare model emits.",
+  "arms": {
+    "A_control": "Reads registry/compliance-{gdpr,hipaa}/SKILL.md and applies it.",
+    "B_bare": "Capable bare model, same scenario, no skill, forbidden from reading registry/ or docs/.",
+    "C_substitute": "n/a — there is no deterministic external checker for 'did you cite Art. 33 correctly'; the CONVERT hypothesis for these would be a citation-pinned objective, which the A>>B (arm A wins) signal itself surfaces without a substitute note."
+  },
+  "protocol": "Blind answer + blind deterministic-anchor scoring (evals/family_ab.workflow.js), no arm C. Each case 3x per arm in fresh context; answering and scoring separate; scorer sees only prompt + answer + anchors. Score 0-1: (fraction must_include) minus 0.34 per must_exclude present, floored at 0. SKEPTICISM STEP (mandatory given prior flat results): read the raw bare answers and confirm they contain the SPECIFIC correct legal facts (the actual numbers/citations), not hand-waving the judge over-credited.",
+  "gate": {
+    "evict_if": "mean(B) >= mean(A) - 0.10 AND no B-only must_exclude violation where A has none (i.e. the bare model states the regulatory facts as accurately as the skill arm, with no legal-accuracy error the skill prevents)",
+    "keep_or_convert_if": "any B-only legal-accuracy must_exclude violation, OR a case where mean(A) - mean(B) > 0.10 driven by the skill supplying a correct citation the bare model missed → KEEP (or CONVERT to a citation-pinned objective). External legal objectives with a demonstrated bare-model error mode are not derivable knowledge."
+  },
+  "cases": [
+    {
+      "id": "gdpr-erasure-request",
+      "skill": "compliance-gdpr",
+      "kind": "canonical",
+      "prompt": "An EU user emails asking us to delete all their personal data. We're a SaaS company. What are our obligations and the timeline, and are there cases where we can lawfully refuse or retain some data?",
+      "must_include": [
+        "identifies the right to erasure (Art. 17) and the statutory response timeline: act without undue delay and within one month of the request, extendable by two further months for complex/numerous requests (with notice)",
+        "names legitimate grounds to refuse or retain despite the request — e.g. a legal retention obligation, establishment/exercise/defense of legal claims, or freedom of expression — while still responding to the data subject"
+      ],
+      "must_exclude": [
+        "states a wrong statutory deadline (e.g. '72 hours', '30 days by law', or 'immediately') for responding to the erasure request",
+        "claims erasure is absolute with no lawful exceptions, or conflates the erasure request with breach notification"
+      ]
+    },
+    {
+      "id": "gdpr-repurpose-ml",
+      "skill": "compliance-gdpr",
+      "kind": "openjudgment",
+      "prompt": "We already collected our users' account data for providing the service. Now we want to reuse it to train a new ML recommendation model. Under GDPR, can we, and what do we need to do first?",
+      "must_include": [
+        "recognizes this is a new purpose, so purpose limitation / compatibility (Art. 5(1)(b)) applies and a lawful basis under Art. 6 is required for the new processing (e.g. consent, or legitimate interests with a balancing test), not automatically covered by the original collection",
+        "flags the further obligations triggered: transparency/notice to data subjects, a DPIA if the processing is high-risk (Art. 35), special-category-data rules (Art. 9) if applicable, and honoring objection/withdrawal"
+      ],
+      "must_exclude": [
+        "asserts the data can be freely reused for the new purpose simply because it was already lawfully collected (ignores purpose limitation / a new lawful basis)",
+        "claims consent is the only possible lawful basis, or that calling the data 'aggregate/anonymized' avoids GDPR without actually anonymizing it"
+      ]
+    },
+    {
+      "id": "gdpr-breach-notification",
+      "skill": "compliance-gdpr",
+      "kind": "canonical",
+      "prompt": "A bug exposed some users' email addresses and hashed passwords to other logged-in users for about a week before we caught it. What does GDPR require us to do about this?",
+      "must_include": [
+        "notify the supervisory authority without undue delay and, where feasible, within 72 hours of becoming aware, unless the breach is unlikely to result in a risk to individuals' rights and freedoms (Art. 33), and document the breach regardless (Art. 33(5))",
+        "notify the affected data subjects without undue delay only where the breach is likely to result in a HIGH risk to their rights and freedoms (Art. 34)"
+      ],
+      "must_exclude": [
+        "states the wrong authority-notification window (e.g. '30 days', 'one month') or says no assessment/notification is ever needed",
+        "claims individuals must always be notified within 72 hours (conflating the Art. 33 authority window with the Art. 34 high-risk data-subject standard)"
+      ]
+    },
+    {
+      "id": "hipaa-startup-scope",
+      "skill": "compliance-hipaa",
+      "kind": "canonical",
+      "prompt": "We're a US health-tech startup building an app that stores patients' diagnoses and medications on behalf of clinics. What HIPAA obligations apply to us, and what must we implement?",
+      "must_include": [
+        "determines our role: serving covered-entity clinics makes us a Business Associate handling ePHI, which requires a Business Associate Agreement (BAA) with each clinic",
+        "requires the Security Rule's administrative, physical, AND technical safeguards (e.g. access control, audit controls, integrity, transmission security/encryption) plus the Privacy Rule's minimum-necessary principle"
+      ],
+      "must_exclude": [
+        "claims HIPAA does not apply to us or applies only to hospitals/insurers, missing the business-associate obligation",
+        "omits the BAA entirely, or asserts that encryption alone satisfies HIPAA"
+      ]
+    },
+    {
+      "id": "hipaa-consumer-app-myth",
+      "skill": "compliance-hipaa",
+      "kind": "openjudgment",
+      "prompt": "Our consumer fitness app lets users log workouts, weight, and heart rate. Investors keep asking whether we're 'HIPAA compliant.' Are we actually subject to HIPAA?",
+      "must_include": [
+        "explains HIPAA applies only to covered entities and their business associates, so a direct-to-consumer app that is not handling data on behalf of a covered entity or health plan is generally NOT subject to HIPAA even though the data is health-related",
+        "notes the data may still be regulated under other regimes (e.g. the FTC Health Breach Notification Rule, US state privacy laws, or GDPR for EU users), so 'HIPAA doesn't apply' does not mean 'no obligations'"
+      ],
+      "must_exclude": [
+        "asserts that any app handling health-related data is automatically subject to HIPAA (the common myth the question is probing)",
+        "concludes that because HIPAA does not apply there are no privacy or security obligations at all"
+      ]
+    },
+    {
+      "id": "hipaa-breach-rule",
+      "skill": "compliance-hipaa",
+      "kind": "canonical",
+      "prompt": "A laptop holding unencrypted ePHI for about 700 patients was stolen from our company, which operates as a business associate. What does HIPAA's Breach Notification Rule require?",
+      "must_include": [
+        "as a business associate, notify the covered entity without unreasonable delay and no later than 60 days from discovery (the covered entity then notifies affected individuals within 60 days)",
+        "because more than 500 individuals are affected, notification to HHS (and prominent media for the affected area) is required without unreasonable delay and within 60 days; the unencrypted data means the encryption safe harbor does not apply, so this is a reportable breach"
+      ],
+      "must_exclude": [
+        "states a wrong timeline such as '72 hours' (a GDPR window) or 'within 30 days' for the required notifications",
+        "claims no notification is required, or that the encryption safe harbor applies even though the ePHI was unencrypted"
+      ]
+    }
+  ]
+}

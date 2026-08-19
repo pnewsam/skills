@@ -320,20 +320,21 @@ converted to an objective + check (see Core Language).
 
 ### Compliance
 
-The `compliance-expert` router was evicted 2026-08-18. On 2026-08-19 the prose
-best-practice compliance skills (`compliance-security`, `compliance-vulnerability-management`,
-`compliance-accessibility`, `compliance-privacy`, `compliance-auditability`) retired to
-`archive/platform-compliance-evicted/` after an A/B tied the base model on every case
-(`evals/results/2026-08-19-platform-compliance-family.md`). Kept: the GDPR and HIPAA
-skills as external-legal-objective references, and `threat-model` as the evidence
-artifact. Secure-coding, injection, secrets, a11y (WCAG), privacy, and vuln triage are
-base-model capability (use `ui-color` for contrast, `analyze-security` for a findings
-assessment).
+The `compliance-expert` router was evicted 2026-08-18. On 2026-08-19 the entire
+prose compliance family retired to `archive/platform-compliance-evicted/`: first the
+best-practice skills (`compliance-security`, `compliance-vulnerability-management`,
+`compliance-accessibility`, `compliance-privacy`, `compliance-auditability`), then —
+after a targeted legal-accuracy A/B where the base model cited every GDPR article, HIPAA
+CFR section, and timeline correctly and avoided the planted traps (72h-vs-60-day, the
+"any health-data app is HIPAA" myth) — `compliance-gdpr` and `compliance-hipaa` as well
+(`evals/results/2026-08-19-{platform-compliance,gdpr-hipaa}-family.md`). Secure-coding,
+injection, secrets, a11y (WCAG), privacy, and GDPR/HIPAA engineering guidance are
+base-model capability; escalate legal interpretation to a privacy/legal owner, use
+`ui-color` for contrast, and `analyze-security` for a findings assessment. `threat-model`
+is kept as the security-evidence artifact.
 
 | Skill                                                                                      | Type      | Description                                                                                                                         |
 | ------------------------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [compliance-gdpr](registry/compliance-gdpr/SKILL.md)                                       | reference | GDPR-specific principles, lawful basis, data subject rights, retention, breach escalation, DPIA triggers, and design/default.       |
-| [compliance-hipaa](registry/compliance-hipaa/SKILL.md)                                     | reference | HIPAA-oriented ePHI, safeguards, access controls, audit controls, integrity, transmission security, risk review, and vendor review. |
 | [threat-model](registry/threat-model/SKILL.md)                                             | workflow  | Scoped assets, actors, trust boundaries, abuse cases, controls, verification, and residual-risk analysis.                           |
 
 ### Core Language

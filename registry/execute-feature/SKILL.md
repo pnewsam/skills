@@ -40,7 +40,7 @@ Inspect repository instructions, branch, status, diff, and relevant existing imp
 Route the item to the smallest relevant domain references:
 
 - quality or refactoring: `analyze-quality`, or `typescript-types` (type-level risk; base model covers failure contracts and async natively)
-- security: `analyze-security`; secure-coding and vulnerability triage are base-model capability, with `compliance-gdpr` or `compliance-hipaa` for regulated data and `threat-model` for a formal threat model
+- security: `analyze-security`; secure-coding, vulnerability triage, and regulated-data (GDPR/HIPAA) engineering guidance are base-model capability, with `threat-model` for a formal threat model (escalate legal interpretation to a privacy/legal owner)
 - UI/design system: `design-explore`, `ui-patterns`, `ui-color`, or `ui-spacing`
 - platform work (CI/CD, deploys, environments, IaC, secrets): base-model capability
 

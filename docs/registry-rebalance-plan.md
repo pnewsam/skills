@@ -33,8 +33,19 @@ that keep their value (or gain value) as the base model improves.
 - This corrects the 2026-08-15 "convert, not evict" call for these families: the "check
   layer" was prose pointing at external tools (gitleaks/actionlint/axe), not a bundled
   runnable check like `ui-color`/`ui-spacing`, and the base model names those tools itself.
-  Kept `compliance-gdpr`/`compliance-hipaa` as external legal objectives (specific
-  article/safeguard citations, high cost-of-miss), not yet tested.
+- **Follow-up same day — `compliance-gdpr` + `compliance-hipaa` also EVICTED.** These were
+  held out as the strong external-legal-objective keeps, then tested with a harder,
+  legal-accuracy-focused A/B (`evals/gdpr_hipaa_pilot_cases.json`, 6 cases, anchors requiring
+  exact article/CFR/timeline citations, `must_exclude` = subtle legal traps: 72h-vs-60-day,
+  the "any health-data app is HIPAA" myth, purpose-limitation ignorance). Result PASS
+  (A=1.000/B=1.000, 0 violations, run `wf_b077e72b-483`); the bare model cited Art. 17 / Art.
+  33/34 / §164.400-414 correctly and called out the planted traps by name. Read every bare
+  answer to confirm real accuracy, not a lenient judge. No artifact/boundary/plumbing value to
+  invoke (unlike the methodology KEEPs), so the tie is an evict. Archived to
+  `archive/platform-compliance-evicted/`; `compliance` profile now `analyze-security` +
+  `threat-model`; handoffs repointed with the "escalate legal interpretation to a privacy/legal
+  owner" guardrail preserved. Evidence: `evals/results/2026-08-19-gdpr-hipaa-family.md`.
+  **Active 43 → 41. No prose-knowledge skills remain; the rebalance is complete at 108 → 41.**
 
 ## Progress (2026-08-18c) — methodology workflows tested → KEEP all
 
@@ -186,7 +197,7 @@ Default: method families → Tier A; already-superseded one-offs → Tier B.
 | **Design knowledge** | `design-composition`, `design-simplicity`, `design-visual-language`, `design-expert` | **EVICTED** | A/B tied; replaced by `design-explore` (generate-N-and-judge). `archive/design-evicted/`. |
 | **Backend knowledge** | `backend-*` (6) + `backend-expert` | **EVICTED** | A/B tied; keep only genuine org guardrails as objectives. `archive/backend-evicted/`. |
 | **Platform knowledge** | `platform-*` (5) + `platform-expert` | **EVICTED 2026-08-19** | A/B tied the base model on every case incl. canonical traps; the "check layer" was prose naming external tools, not a bundled check. `archive/platform-compliance-evicted/`; `platform` profile removed. `evals/results/2026-08-19-platform-compliance-family.md`. |
-| **Compliance / risk** | `compliance-*` (7), `threat-model`, `consult-expert` | **RESOLVED 2026-08-19: evict 5 prose, keep gdpr/hipaa + threat-model** | `compliance-{security,privacy,accessibility,auditability,vulnerability-management}` A/B-tied the base model → `archive/platform-compliance-evicted/`. `compliance-gdpr`/`compliance-hipaa` kept as external legal objectives; `threat-model` kept as evidence artifact; `consult-expert`/`compliance-expert` routers already evicted 2026-08-18. |
+| **Compliance / risk** | `compliance-*` (7), `threat-model`, `consult-expert` | **RESOLVED 2026-08-19: evict all 7 prose, keep only `threat-model`** | All 5 best-practice skills + `compliance-gdpr`/`compliance-hipaa` A/B-tied the base model (the latter under a harder legal-accuracy gate) → `archive/platform-compliance-evicted/`. `threat-model` kept as evidence artifact; `consult-expert`/`compliance-expert` routers already evicted 2026-08-18. |
 | **Cross-cutting knowledge** | `async-patterns`, `error-handling`, `typescript-types` | **RESOLVED 2026-08-17: evict eh + ap, CONVERT tt** | A/B run (`evals/results/2026-08-17-cross-cutting-family.md`, 204 pooled blind reps): bare model ties the skill on every case (A=0.992, B=0.997). `error-handling` (1.000/1.000, 0 violations) and `async-patterns` (0.975/1.000, 0 B-only violations) → **EVICT**. `typescript-types` ties on means but the bare model emits an unsafe cast/`any` the skill prevents, and that failure mode is deterministically caught by `tsc --strict` + `@typescript-eslint/no-unsafe-*` → **CONVERT** (objective + check, drop prose). |
 | **Routers** | `*-expert` (ui, design, react, python, backend, quality, platform, compliance), `consult-expert` | **Collapse** | A router over evicted children is dead weight. react/python/quality/backend/design experts already gone; `ui-expert` slims after the ui A/B; keep `consult-expert`/`compliance-expert` only as an index over the legislative families. |
 

@@ -70,11 +70,9 @@
       ]
     },
     "compliance": {
-      "description": "Regulated-data obligations (GDPR, HIPAA), threat modeling, and security-findings analysis.",
+      "description": "Threat modeling and security-findings analysis.",
       "skills": [
         "analyze-security",
-        "compliance-gdpr",
-        "compliance-hipaa",
         "threat-model"
       ]
     },
