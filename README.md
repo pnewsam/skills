@@ -96,14 +96,14 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
       NNN-<slug>.md                    # quarter-level epic plans
     features/
       NNN-<slug>.md                    # feature plans
-      NNN-<slug>-validation.md         # validate-feature report
+      NNN-<slug>-validation.md         # validate (Feature mode) report
     security/
       threat-model-<scope>.md          # optional threat-model document
     tmp/
       wip-<name>.md                    # stash context breadcrumb when trackable
 ```
 
-`docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Product programs and deliberately managed multi-feature initiatives flow through epics. Bounded refactors, security remediations, design-system consolidation, defect fixes, dependency work, and other convergence improvements may go directly from an `analyze-*` result to `plan-feature`; a parent epic is optional in Convergence mode. `docs/tmp/` is reserved for ephemeral WIP handoff notes.
+`docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Product programs and deliberately managed multi-feature initiatives flow through epics. Bounded refactors, security remediations, design-system consolidation, defect fixes, dependency work, and other convergence improvements may go directly from an `analyze` result to `plan-feature`; a parent epic is optional in Convergence mode. `docs/tmp/` is reserved for ephemeral WIP handoff notes.
 
 ## Workflow Skills
 
@@ -123,7 +123,7 @@ flowchart TD
     SP -->|advances until complete| AE
     SP -->|prepares PR| PPR[prepare-pr]
     PF -->|produces docs/features/| EF[execute-feature]
-    EF -->|may receive final audit from| VF[validate-feature]
+    EF -->|may receive final audit from| VF[validate]
     PE --> AE[advance-epic]
     AE -.->|orchestrates| PF
     AE -.->|orchestrates| EF
@@ -154,9 +154,7 @@ stopping. Install the `linear-ops` profile when a team uses Linear.
 
 | Skill | Type | Phase | Description |
 | --- | --- | --- | --- |
-| [analyze-design-system](registry/analyze-design-system/SKILL.md) | workflow | analyze | Measure token, primitive, component-family, pattern, state, and migration convergence; rank bounded consolidation candidates without editing or planning. |
-| [analyze-quality](registry/analyze-quality/SKILL.md) | workflow | analyze | Measure and interpret quality signals across maintainability, correctness, testing, and reliability; rank bounded feature candidates without editing or planning. |
-| [analyze-security](registry/analyze-security/SKILL.md) | workflow | analyze | Verify and prioritize application-security posture gaps, dependency findings, and code-scanning findings without changing code or creating plans. |
+| [analyze](registry/analyze/SKILL.md) | workflow | analyze | Measure a codebase along a requested dimension — security posture and findings, design-system convergence, quality/maintainability hotspots, or another — and rank bounded feature-sized candidates, read-only. Dimension is a parameter, not a separate skill. |
 | [diagnose-failure](registry/diagnose-failure/SKILL.md) | workflow | analyze | Reproduce and localize a software failure, rank hypotheses, and report an evidence-backed cause without editing the project. |
 
 ### Skill Registry Maintenance
@@ -207,7 +205,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    TM[threat-model] -->|may identify controls| AS[analyze-security]
+    TM[threat-model] -->|may identify controls| AS[analyze]
     AS -->|one verified group| PF1[plan-feature]
     PF1 --> EF1[execute-feature]
 ```
@@ -215,29 +213,27 @@ flowchart LR
 | Skill | Type | Mode | Phase | Description |
 | --- | --- | --- | --- | --- |
 | [threat-model](registry/threat-model/SKILL.md) | workflow | divergence | analyze, document | Map assets, actors, data flows, trust boundaries, abuse cases, controls, and residual risk; save a document only when requested. |
-| [analyze-security](registry/analyze-security/SKILL.md) | workflow | convergence | analyze | Verify, normalize, group, and prioritize posture gaps, dependency advisories, and code-scanning findings. |
+| [analyze](registry/analyze/SKILL.md) | workflow | convergence | analyze | Verify, normalize, group, and prioritize posture gaps, dependency advisories, and code-scanning findings (Security dimension). |
 | [plan-feature](registry/plan-feature/SKILL.md) | workflow | convergence | plan | Record one verified remediation group with baseline, target, invariants, guardrails, and resolution evidence. |
 | [execute-feature](registry/execute-feature/SKILL.md) | workflow | convergence | execute | Apply and verify one planned security item using conditionally loaded security safeguards, then commit locally and stop. |
 
-### Testing Workflows
+### Validation
 
 ```mermaid
 flowchart LR
-    PBT -->|produces browser-test epic| PF2[plan-feature]
-    PBT -.->|Audit mode reports findings| AUD[read-only coverage audit]
-    PF2 --> ABT[add-browser-test]
-    PF2 --> FBT[fix-browser-test]
-    EF2[execute-feature] --> VC[validate-changes]
-    EF2 --> VF2[validate-feature]
+    EF2[execute-feature] --> V[validate]
+    V -.->|SHIP| PPR[prepare-pr]
+    V -.->|defect found| EF2
 ```
 
-| Skill                                                                      | Type     | Mode        | Phase         | Description                                                                                                                                    |
-| -------------------------------------------------------------------------- | -------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| [plan-browser-tests](registry/plan-browser-tests/SKILL.md)                 | workflow | divergence  | analyze, plan | Plan critical UI coverage or audit the current browser suite; planning writes an epic, while audit is read-only unless an epic refresh is requested. |
-| [add-browser-test](registry/add-browser-test/SKILL.md)                     | workflow | convergence | execute       | Implement one browser integration test from a planned browser-test feature, then verify and update the feature plan.                           |
-| [fix-browser-test](registry/fix-browser-test/SKILL.md)                     | workflow | convergence | execute       | Repair one broken or flaky browser test from a test failure or planned browser-test feature.                                                   |
-| [validate-changes](registry/validate-changes/SKILL.md)                     | workflow | convergence | execute       | Run targeted validation against recent code changes — maps diff to relevant tests, runs only those, and reports coverage gaps.                 |
-| [validate-feature](registry/validate-feature/SKILL.md)                     | workflow | convergence | execute       | Comprehensive post-build validation — targeted tests, full browser suite, acceptance criteria verification, and structured ship/no-ship report. |
+| Skill                                                | Type     | Mode        | Phase   | Description                                                                                                                   |
+| ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [validate](registry/validate/SKILL.md)               | workflow | convergence | execute | Read-only validation — spot-check recent changes (Changes mode) or verify a completed feature's acceptance criteria with a ship/no-ship report (Feature mode); owns the bundled `shot_diff.mjs` visual-regression check. |
+
+Browser/E2E test planning, authoring, and repair are the general loop plus base-model
+Playwright/Cypress knowledge: `plan-feature`/`plan-epic` to plan coverage, `execute-feature`
+to write a test, and `diagnose-failure` + `execute-feature` to fix a broken or flaky one. The
+domain-specialized browser-test skills were evicted — see Archived Families.
 
 ### Organization-Specific
 
@@ -261,7 +257,7 @@ among the focused skills as well without them; consult the skills directly.
 Visual direction is **searched, not prescribed**. `design-explore` generates
 several distinct directions, judges them against criteria derived from the brief,
 and synthesizes a recommendation, verified against ground truth (`ui-color`
-contrast, `ui-spacing` scale). `analyze-design-system` owns repository-wide
+contrast, `ui-spacing` scale). `analyze` (Design-system dimension) owns repository-wide
 convergence and pattern drift.
 
 | Skill                                                         | Type     | Description                                                                                                          |
@@ -315,7 +311,17 @@ for history, not discoverable or installable) rather than maintained as prose.
 Evicted families include `react-*`, `python-*`/`fastapi`, `quality-*`,
 `backend-*`, the prescriptive `design-*` and prose `ui-*` families, `platform-*`,
 `compliance-*`, the cross-cutting `error-handling`/`async-patterns` pair, and
-every `*-expert` router. Each eviction is A/B-backed;
+every `*-expert` router.
+
+A later pass evicted **domain-specialized workflows** on a functional-redundancy
+substitution A/B: the browser-test trio (`plan-/add-/fix-browser-test`), the validation
+pair (`validate-changes`, `validate-feature`), and the per-domain analyzers
+(`analyze-security`, `analyze-design-system`, `analyze-quality`) were reproduced by the
+general units-of-work loop and collapsed into two operation-verbs — `analyze` (dimension =
+parameter) and `validate` (mode) — the browser work absorbed by `plan-feature`/
+`execute-feature`/`diagnose-failure`.
+
+Each eviction is A/B-backed;
 [docs/registry-rebalance-plan.md](docs/registry-rebalance-plan.md) records the
 disposition and links the evidence scorecards under `evals/results/`.
 
