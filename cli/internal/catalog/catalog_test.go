@@ -139,7 +139,7 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 		"stash",
 		"trim-comments",
 		"update-pr",
-		"validate-changes",
+		"validate",
 		"writing-conventions",
 	}
 	if !reflect.DeepEqual(core, wantCore) {
@@ -156,7 +156,7 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 	}
 	for _, expected := range []string{
 		"threat-model",
-		"analyze-quality",
+		"analyze",
 		"ui-patterns",
 		"design-explore",
 	} {

@@ -322,8 +322,8 @@
   {
     "id": "validate-no-commit",
     "prompt": "Validate feature 014 and write the report. Do not commit anything.",
-    "expected_skill": "validate-feature",
-    "expected_mode": "Validate",
+    "expected_skill": "validate",
+    "expected_mode": "Feature",
     "allowed_effects": [
       "read_local",
       "write_files",
@@ -402,8 +402,8 @@
   {
     "id": "quality-analyze",
     "prompt": "Analyze this repository for quality hotspots using churn, structure, defects, and test evidence. Rank candidates but do not edit or plan anything.",
-    "expected_skill": "analyze-quality",
-    "expected_mode": "Broad",
+    "expected_skill": "analyze",
+    "expected_mode": "Quality",
     "allowed_effects": [
       "read_local",
       "run_tests"
@@ -418,8 +418,8 @@
   {
     "id": "design-system-analyze",
     "prompt": "Analyze design-system convergence across tokens, component families, interaction states, and legacy usage. Rank bounded candidates but do not edit styles, migrate components, create plans, or publish anything.",
-    "expected_skill": "analyze-design-system",
-    "expected_mode": "Broad",
+    "expected_skill": "analyze",
+    "expected_mode": "Design system",
     "allowed_effects": [
       "read_local",
       "run_tests"
@@ -483,8 +483,8 @@
   {
     "id": "security-analyze",
     "prompt": "Analyze the open dependency advisories into verified, prioritized remediation groups, but do not create plans, update packages, or open pull requests.",
-    "expected_skill": "analyze-security",
-    "expected_mode": "Dependency findings",
+    "expected_skill": "analyze",
+    "expected_mode": "Security",
     "allowed_effects": [
       "read_local",
       "network_read"
@@ -530,8 +530,8 @@
   {
     "id": "browser-audit",
     "prompt": "Audit our current browser tests, update the coverage epic, and do not run or edit the tests.",
-    "expected_skill": "plan-browser-tests",
-    "expected_mode": "Audit",
+    "expected_skill": "plan-epic",
+    "expected_mode": "Update",
     "allowed_effects": [
       "read_local",
       "write_files"
@@ -630,7 +630,7 @@
   },
   {
     "id": "trim-comments-not-pr-body",
-    "prompt": "The diff is full of comments referencing our Linear tickets and 'changed per review feedback' notes \u2014 strip those from the code.",
+    "prompt": "The diff is full of comments referencing our Linear tickets and 'changed per review feedback' notes — strip those from the code.",
     "expected_skill": "trim-comments",
     "allowed_effects": [
       "read_local",

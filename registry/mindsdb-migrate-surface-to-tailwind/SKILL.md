@@ -19,7 +19,7 @@ Stop after opening (or updating) the draft PR. Do not merge.
 
 - **Use** for the ENG-1017 phased migration, one surface at a time, or any "convert this view's inline styles to Tailwind / use tokens / snap to the scale" request in `cowork/`.
 - **Do not use** to build the design system itself (that is ENG-641 / the shared primitives) or to restyle a surface. This changes the *mechanism*, not the look — except pass 3, which only snaps to the existing scale.
-- Pair with `analyze-design-system` (to pick which surface) and `mindsdb-track-design-system-metrics` (to record the drop in arbitrary-value density).
+- Pair with `analyze` (Design-system dimension, to pick which surface) and `mindsdb-track-design-system-metrics` (to record the drop in arbitrary-value density).
 
 ## Modes and effects
 

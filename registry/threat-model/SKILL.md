@@ -132,6 +132,6 @@ Use `references/threat_model_template.md`. In Document mode, preserve accurate e
 
 - Identity, tenant, and permission-boundary implementation is base-model capability.
 - Regulated-data obligations (GDPR, HIPAA) are base-model capability for engineering guidance; escalate legal interpretation to a privacy/legal owner.
-- Use `analyze-security` when the model should be compared with current controls or combined with dependency and code-scanning evidence.
+- Use `analyze` (Security dimension) when the model should be compared with current controls or combined with dependency and code-scanning evidence.
 - Use `plan-feature` in Convergence mode for one concrete remediation outcome.
 - Use `review-pr` Risk mode when evaluating the implementation diff.

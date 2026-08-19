@@ -2,7 +2,7 @@
 /**
  * shot_diff.mjs — deterministic pixel diff between two screenshots.
  *
- * The render-evidence primitive for `validate-changes`: after a visual change,
+ * The render-evidence primitive for `validate`: after a visual change,
  * capture the affected screen before and after (headless Chrome, Playwright,
  * or the design-explore renderer), then diff the PNGs here. No third-party
  * dependencies — PNG decode/inflate/filter and the diff image are implemented
@@ -15,7 +15,7 @@
  *   --tolerance  max channel delta per pixel before a pixel counts as changed (0-255, default 32)
  *   --threshold  fraction of pixels that may differ before the run fails (default 0.01, i.e. 1%)
  *   --out        write a diff highlight PNG (changed pixels → magenta over the after image)
- *   --report     write machine-readable results JSON (for the validate-changes report)
+ *   --report     write machine-readable results JSON (for the validate report)
  *   --selftest   encode a known PNG, decode it, diff a variant, print results, exit 0
  *
  * Exit: 0 unchanged (ratio < threshold), 1 changed, 2 usage/IO error.

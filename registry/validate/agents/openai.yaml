@@ -1,0 +1,4 @@
+interface:
+  display_name: "Validate"
+  short_description: "Read-only validation of changes or a completed feature."
+  default_prompt: "Use $validate to run the relevant checks and report a pass/fail (or ship/no-ship) verdict without changing code."
