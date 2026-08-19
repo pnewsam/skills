@@ -137,7 +137,7 @@ Report:
 - Implementation and bookkeeping commit hashes, when created.
 - How many child features remain incomplete.
 - Recommended next steps:
-  - Run `validate-feature` to comprehensively validate the completed child feature.
+  - Run `validate` (Feature mode) to comprehensively validate the completed child feature.
   - Run `advance-epic` again for the next feature.
   - If all features are complete, recommend the relevant validation pass and `prepare-pr`; do not invoke or publish automatically.
 

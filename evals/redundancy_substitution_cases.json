@@ -1,0 +1,256 @@
+{
+  "pilot": "functional-redundancy substitution — Tiers 1-3 (browser-test trio, validate pair, analyze trio)",
+  "created": "2026-08-19",
+  "purpose": "Test whether domain-specialized WORKFLOW skills are redundant with the general units-of-work loop. This is NOT a knowledge-quality A/B: arm A reads the specialist skill; arm B reads the GENERAL skill(s) it would collapse into (the specialist treated as removed). Both answer the specialist's own trigger task. If the general substitute ties the specialist, the specialist adds no workflow the general loop lacks -> evict. Anchors capture both work quality AND the boundary/artifact conventions the specialist enforces (read-only, updates-the-plan, ranked-candidate output), so a unique convention the general skill can't reproduce shows up as a KEEP signal (arm B misses that anchor).",
+  "arms": {
+    "A_specialist": "Reads the specialist skill registry/<skill>/SKILL.md and applies it.",
+    "B_substitute": "Reads the general substitute skill(s) named per-case (the specialist is treated as removed) and applies them; forbidden from reading the specialist prose."
+  },
+  "protocol": "Blind answer + blind deterministic-anchor scoring (evals/substitution_ab.workflow.js). Each case 3x per arm in fresh context; answering and scoring separate; scorer sees only prompt + answer + anchors, never the arm label. Score 0-1: (fraction must_include) minus 0.34 per must_exclude present, floored. SKEPTICISM STEP: read raw arm-B answers to confirm the general skill actually reproduced the specialist's boundaries/artifacts, not just plausible-looking work.",
+  "gate": {
+    "evict_if": "mean(B_substitute) >= mean(A_specialist) - 0.10 AND no B-only must_exclude violation where A has none (the general loop covers the task, boundaries, and output as well as the specialist)",
+    "keep_if": "mean(A) - mean(B) > 0.10 driven by a boundary/artifact/output the general skill cannot reproduce -> the specialist carries irreducible workflow value; keep it (or migrate that specific contract into the general skill)."
+  },
+  "cases": [
+    {
+      "id": "bt-plan-coverage",
+      "skill": "plan-browser-tests",
+      "substitute": ["registry/plan-epic/SKILL.md", "registry/plan-feature/SKILL.md"],
+      "kind": "canonical",
+      "prompt": "Our React checkout app (cart, address, payment, confirmation) has no end-to-end tests. Plan high-value browser test coverage for it.",
+      "must_include": [
+        "identifies and prioritizes the critical user flows by risk/impact (e.g. the money path: add-to-cart -> address -> payment -> confirmation) rather than proposing exhaustive coverage",
+        "produces a plannable coverage artifact (an epic and/or bounded feature plans) that maps existing coverage and gaps, in the standard docs/epics or docs/features planning shape"
+      ],
+      "must_exclude": [
+        "writes actual test code instead of a plan (planning is the boundary here)",
+        "produces an unprioritized flat dump of every possible test with no risk ranking"
+      ]
+    },
+    {
+      "id": "bt-audit-suite",
+      "skill": "plan-browser-tests",
+      "substitute": ["registry/plan-epic/SKILL.md", "registry/plan-feature/SKILL.md"],
+      "kind": "openjudgment",
+      "prompt": "We already have a Playwright suite of ~40 tests but bugs still slip through and CI is flaky. Audit it and tell us what to keep, fix, or add.",
+      "must_include": [
+        "assesses the existing suite for value, staleness, and flakiness and identifies coverage gaps against the critical flows, grounded in the described state",
+        "prioritizes the resulting keep/fix/add work into bounded, plannable items rather than a vague list"
+      ],
+      "must_exclude": [
+        "rewrites or edits the tests instead of auditing/planning (stays read-only unless asked to change them)",
+        "ignores flakiness/staleness and only proposes net-new tests"
+      ]
+    },
+    {
+      "id": "bt-add-login",
+      "skill": "add-browser-test",
+      "substitute": ["registry/execute-feature/SKILL.md"],
+      "kind": "canonical",
+      "prompt": "From our browser-test feature plan, implement one Playwright test for the login -> dashboard flow: a user signs in with valid credentials and lands on the dashboard.",
+      "must_include": [
+        "implements one focused test covering that specific flow with resilient locators and meaningful assertions on the post-login state, and verifies it passes before claiming done",
+        "keeps scope to the single planned flow and updates/checks off the corresponding item in the feature plan"
+      ],
+      "must_exclude": [
+        "implements several unrelated tests or expands scope beyond the one planned flow",
+        "uses brittle selectors or arbitrary sleeps, or claims the test is done without running it"
+      ]
+    },
+    {
+      "id": "bt-add-wizard",
+      "skill": "add-browser-test",
+      "substitute": ["registry/execute-feature/SKILL.md"],
+      "kind": "openjudgment",
+      "prompt": "Add an end-to-end test for our multi-step signup wizard (account details -> plan selection -> payment -> welcome).",
+      "must_include": [
+        "models the full multi-step journey as one coherent test with stable waits/locators tied to state transitions and isolated test data",
+        "verifies the test passes and integrates it as one bounded, independently committable unit"
+      ],
+      "must_exclude": [
+        "relies on arbitrary timing/sleeps or shared mutable state that would make the test flaky",
+        "claims completion with no verification run"
+      ]
+    },
+    {
+      "id": "bt-fix-broken",
+      "skill": "fix-browser-test",
+      "substitute": ["registry/diagnose-failure/SKILL.md", "registry/execute-feature/SKILL.md"],
+      "kind": "canonical",
+      "prompt": "Our checkout.spec.ts Playwright test started failing after a refactor of the checkout component. Fix it.",
+      "must_include": [
+        "diagnoses the actual cause before editing (changed selector/markup, timing, or genuine behavior change) and distinguishes a stale test from a real product regression",
+        "applies the minimal correct fix and verifies the test passes afterward"
+      ],
+      "must_exclude": [
+        "blindly loosens or deletes the assertion, or adds a sleep to mask the failure, without diagnosing the cause",
+        "skips/quarantines the test as the fix, or reports it fixed without re-running"
+      ]
+    },
+    {
+      "id": "bt-fix-flaky",
+      "skill": "fix-browser-test",
+      "substitute": ["registry/diagnose-failure/SKILL.md", "registry/execute-feature/SKILL.md"],
+      "kind": "openjudgment",
+      "prompt": "This Cypress test passes about 70% of the time. Make it reliable.",
+      "must_include": [
+        "identifies the source of nondeterminism (async/race, animation, network, test-order or shared-state dependence) as the root cause before changing anything",
+        "fixes it deterministically (proper waits on state/conditions, isolation, stable data) and confirms stability across repeated runs"
+      ],
+      "must_exclude": [
+        "adds blind retries or fixed sleeps as the fix without finding the root cause",
+        "disables, skips, or deletes the test to make the suite green"
+      ]
+    },
+    {
+      "id": "val-changes-spotcheck",
+      "skill": "validate-changes",
+      "substitute": ["registry/execute-feature/SKILL.md"],
+      "kind": "canonical",
+      "prompt": "I just changed the auth middleware and a couple of components. Validate my recent changes before I commit — I don't want to run the whole suite.",
+      "must_include": [
+        "reads the diff, maps the changed areas to the relevant tests, and runs only those (not the whole suite, not nothing)",
+        "reports what was validated and what coverage gaps remain, and stays read-only (does not edit code to fix failures)"
+      ],
+      "must_exclude": [
+        "edits code to fix failures instead of just validating and reporting",
+        "claims the changes are validated without actually running the relevant tests, or blindly runs the entire suite"
+      ]
+    },
+    {
+      "id": "val-feature-shipcheck",
+      "skill": "validate-feature",
+      "substitute": ["registry/execute-feature/SKILL.md"],
+      "kind": "canonical",
+      "prompt": "execute-feature just finished feature 003 (docs/features/003-*.md). Do a full validation pass before we open a PR.",
+      "must_include": [
+        "reads the plan and verifies each acceptance criterion against evidence, running proportionate targeted and regression tests",
+        "produces a clear ship/no-ship judgment recorded as a validation report referenced from the plan, and stays read-only (does not fix, commit, push, or open a PR)"
+      ],
+      "must_exclude": [
+        "fixes failures, commits, pushes, or opens a PR (crosses the validation boundary)",
+        "declares the feature done without verifying the acceptance criteria against evidence"
+      ]
+    },
+    {
+      "id": "an-security-posture",
+      "skill": "analyze-security",
+      "substitute": ["docs/analyze-general-note.md"],
+      "kind": "canonical",
+      "prompt": "Do a security posture analysis of this repository and tell us the top things worth fixing.",
+      "must_include": [
+        "verifies and normalizes findings into reachability, exposure, and impact rather than reciting raw scanner output, and groups them into cohesive risks",
+        "hands off a small ranked set of feature-sized remediation candidates with the evidence behind each, and stays read-only (no code/dependency edits, no plan creation)"
+      ],
+      "must_exclude": [
+        "edits code or dependencies, or writes remediation plans, instead of analyzing",
+        "dumps unverified/ungrouped findings by raw severity count with no reachability or prioritization"
+      ]
+    },
+    {
+      "id": "an-security-triage",
+      "skill": "analyze-security",
+      "substitute": ["docs/analyze-general-note.md"],
+      "kind": "openjudgment",
+      "prompt": "We have ~200 Dependabot alerts and a handful of CodeQL findings. Where should we start?",
+      "must_include": [
+        "prioritizes by exploitability/reachability and exposure combined with severity, not by raw alert count",
+        "groups the work into a few bounded, evidence-backed candidates a planning step can pick up, staying read-only"
+      ],
+      "must_exclude": [
+        "says fix everything by count, or dismisses the alerts wholesale, with no reachability-based triage",
+        "starts changing dependencies or code rather than analyzing"
+      ]
+    },
+    {
+      "id": "an-designsys-convergence",
+      "skill": "analyze-design-system",
+      "substitute": ["docs/analyze-general-note.md"],
+      "kind": "canonical",
+      "prompt": "Analyze our UI for design-system convergence and rank the consolidation work worth doing.",
+      "must_include": [
+        "measures drift with concrete signals — token usage, primitive/component-family duplication, pattern and state coverage — rather than giving an impression",
+        "ranks bounded consolidation candidates by impact/effort with evidence, and stays read-only (does not change styles or components)"
+      ],
+      "must_exclude": [
+        "starts editing styles/components instead of measuring and ranking",
+        "gives vague 'make it more consistent' advice with no measured drift or ranked candidates"
+      ]
+    },
+    {
+      "id": "an-quality-hotspots",
+      "skill": "analyze-quality",
+      "substitute": ["docs/analyze-general-note.md"],
+      "kind": "openjudgment",
+      "prompt": "What's the highest-leverage maintainability work in this codebase?",
+      "must_include": [
+        "uses measured signals (change history/churn, complexity, test health, defect-prone areas) to locate hotspots rather than generic advice",
+        "hands off an evidence-backed, impact-ranked set of bounded candidates, staying read-only (no refactoring)"
+      ],
+      "must_exclude": [
+        "starts refactoring code instead of analyzing and ranking",
+        "gives a generic unranked wishlist with no measured hotspots or evidence"
+      ]
+    },
+    {
+      "id": "val-changes-refactor",
+      "skill": "validate-changes",
+      "substitute": ["registry/execute-feature/SKILL.md"],
+      "kind": "openjudgment",
+      "prompt": "Spot-check that my refactor of the pricing module didn't break anything, quickly.",
+      "must_include": [
+        "selects the tests relevant to the pricing change (and its callers) and runs those specifically rather than the whole suite or nothing",
+        "gives an honest pass/fail plus a gap report on what was and wasn't covered, without editing code"
+      ],
+      "must_exclude": [
+        "overstates coverage or claims safety without running the relevant tests",
+        "starts fixing or refactoring instead of validating"
+      ]
+    },
+    {
+      "id": "val-feature-done",
+      "skill": "validate-feature",
+      "substitute": ["registry/execute-feature/SKILL.md"],
+      "kind": "openjudgment",
+      "prompt": "Is feature 007 actually done and shippable, or not?",
+      "must_include": [
+        "checks the feature's acceptance criteria against real evidence and runs regression proportionate to the blast radius",
+        "gives a clear ship/no-ship call with the remaining gaps, staying read-only (does not start fixing)"
+      ],
+      "must_exclude": [
+        "rubber-stamps it done without verifying acceptance criteria against evidence",
+        "begins fixing failures, commits, or opens a PR instead of judging shippability"
+      ]
+    },
+    {
+      "id": "an-designsys-debt",
+      "skill": "analyze-design-system",
+      "substitute": ["docs/analyze-general-note.md"],
+      "kind": "openjudgment",
+      "prompt": "Where is the biggest design-system debt in our component library?",
+      "must_include": [
+        "inventories duplication and drift with concrete evidence (repeated primitives, divergent tokens, inconsistent states) rather than an impression",
+        "ranks the debt by impact so the biggest items are clear, and stays read-only"
+      ],
+      "must_exclude": [
+        "starts editing components instead of measuring the debt",
+        "offers an unmeasured opinion with no evidence or ranking"
+      ]
+    },
+    {
+      "id": "an-quality-refactor",
+      "skill": "analyze-quality",
+      "substitute": ["docs/analyze-general-note.md"],
+      "kind": "canonical",
+      "prompt": "Analyze this codebase's quality and tell us what refactoring is actually worth doing.",
+      "must_include": [
+        "grounds the analysis in measured signals (churn x complexity, test coverage/health, defect-prone modules) to find real hotspots",
+        "hands off a small ranked set of bounded, feature-sized refactoring candidates with evidence, staying read-only (does not refactor)"
+      ],
+      "must_exclude": [
+        "starts refactoring instead of analyzing",
+        "produces generic best-practice advice with no measured hotspots or ranking"
+      ]
+    }
+  ]
+}

@@ -29,7 +29,7 @@ registry):
   constraint) → it can KEEP as an objective/citation/check skeleton. Say what
   must be true, pin the citation or convention, and attach a runnable check.
 - **Does it connect to ground truth?** (run, render, test, measure, review:
-  `validate-changes`, `analyze-*`, `review-pr`, a `scripts/` validator) → keep
+  `validate`, `analyze`, `review-pr`, a `scripts/` validator) → keep
   and consider growing; verification is where value rises as models improve.
 - **Is it method knowledge with a deterministic check?** → CONVERT: keep the
   check (a script or an existing linter), delete the how-to prose. See
@@ -146,16 +146,21 @@ provider prefix merely because the workflow calls that provider's tools.
 
 For repeatable convergence families, use consistent stage verbs:
 
-- `analyze-<domain>` examines evidence and produces ranked candidates.
+- `analyze` examines evidence along a requested dimension and produces ranked candidates.
 - `plan-feature` creates one bounded product or convergence work unit.
 - `execute-feature` performs and verifies one planned item.
+- `validate` verifies changes or a completed feature, read-only.
 
-Name an analysis workflow for the domain or condition it examines, not for a
-generic repository container. Prefer `analyze-quality`, `analyze-security`, or
-`analyze-design-system` over `analyze-codebase`. Add a domain-specific
-planning or execution workflow only when it has materially different
-artifacts, effects, recovery semantics, or proof obligations that cannot be
-expressed through the feature workflow.
+Model work as **operations on a unit of work** (analyze, plan, execute, validate,
+review, deliver), not as domain-flavored copies of the loop. Keep the dimension or
+domain a *parameter* of one general workflow rather than a separate skill: a single
+`analyze` (dimension) and `validate` (mode) replaced the per-domain analyzers and the
+browser-test trio once a substitution A/B showed the general loop reproduced their
+tasks, boundaries, and artifacts
+(`evals/results/2026-08-19-redundancy-substitution-family.md`). Add a domain-specific
+analysis, planning, or execution workflow only when it has materially different
+artifacts, effects, recovery semantics, or proof obligations that cannot be expressed
+through the general workflow — and prove that before adding it.
 
 ## Recommended workflow anatomy
 

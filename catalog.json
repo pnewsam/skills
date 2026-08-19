@@ -26,7 +26,7 @@
         "stash",
         "trim-comments",
         "update-pr",
-        "validate-changes",
+        "validate",
         "writing-conventions"
       ]
     },
@@ -46,9 +46,10 @@
       ]
     },
     "product-delivery": {
-      "description": "Product direction, durable planning, incremental delivery, architecture documentation, and feature validation.",
+      "description": "Product direction, durable planning, analysis, incremental delivery, architecture documentation, and feature validation.",
       "skills": [
         "advance-epic",
+        "analyze",
         "create-charter",
         "document-architecture",
         "execute-feature",
@@ -56,30 +57,20 @@
         "plan-epic",
         "plan-feature",
         "ship-epic",
-        "validate-feature"
-      ]
-    },
-    "browser-testing": {
-      "description": "Browser-test coverage planning and audit, implementation, repair, and validation.",
-      "skills": [
-        "add-browser-test",
-        "fix-browser-test",
-        "plan-browser-tests",
-        "validate-changes",
-        "validate-feature"
+        "validate"
       ]
     },
     "compliance": {
       "description": "Threat modeling and security-findings analysis.",
       "skills": [
-        "analyze-security",
+        "analyze",
         "threat-model"
       ]
     },
     "security-delivery": {
       "description": "Analyze security findings and deliver one verified remediation through the shared feature workflow.",
       "skills": [
-        "analyze-security",
+        "analyze",
         "execute-feature",
         "plan-feature"
       ]
@@ -91,7 +82,7 @@
         "ui"
       ],
       "skills": [
-        "analyze-design-system",
+        "analyze",
         "execute-feature",
         "plan-feature"
       ]
@@ -104,9 +95,9 @@
       ]
     },
     "quality": {
-      "description": "Language-agnostic correctness, clarity, modularity, reliability, testing, refactoring, async, errors, and TypeScript guidance.",
+      "description": "Read-only quality and maintainability analysis plus the TypeScript type-safety objective and check.",
       "skills": [
-        "analyze-quality",
+        "analyze",
         "typescript-types"
       ]
     },

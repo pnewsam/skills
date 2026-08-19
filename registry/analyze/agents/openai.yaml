@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze"
+  short_description: "Measure a dimension and rank feature-sized candidates."
+  default_prompt: "Use $analyze to produce a read-only, evidence-ranked set of candidates along the requested dimension, then stop."

@@ -14,7 +14,7 @@ Use `references/feature_template.md` when writing the plan.
 ## Modes and effects
 
 - **Product mode:** plan a user-facing or enabling capability. Require a relevant charter and parent epic, and preserve their goals and non-goals.
-- **Convergence mode:** plan one evidence-backed improvement from `analyze-quality`, `analyze-security`, another `analyze-*` workflow, or equivalent user-supplied evidence. A parent epic is optional. Do not invent a user story when the real outcome is maintainability, security, reliability, consistency, or defect reduction.
+- **Convergence mode:** plan one evidence-backed improvement from the `analyze` workflow (any dimension — quality, security, design-system, …) or equivalent user-supplied evidence. A parent epic is optional. Do not invent a user story when the real outcome is maintainability, security, reliability, consistency, or defect reduction.
 
 This workflow may create or update one local feature plan. It must not modify source or configuration, create branches or commits, push, publish, or update external trackers.
 

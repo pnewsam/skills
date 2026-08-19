@@ -4,6 +4,33 @@ A plan to re-weight the skill registry away from hand-encoded method knowledge
 and toward objective-specification and ground-truth verification — the parts
 that keep their value (or gain value) as the base model improves.
 
+## Progress (2026-08-19b) — functional-redundancy pass (Tiers 1-3) → collapse to operation-verbs
+
+- **New axis, new instrument.** After the knowledge axis was exhausted, tested *functional*
+  redundancy: are domain-specialized WORKFLOW skills redundant with the general units-of-work
+  loop? Built a **substitution A/B** (`evals/substitution_ab.workflow.js`): arm A reads the
+  specialist; **arm B reads the general skill(s) it would collapse into** (specialist treated
+  as removed). Anchors encode each specialist's boundaries/artifacts so a general skill failing
+  to reproduce a unique convention shows up as a KEEP signal. Gate: evict if B ties A.
+- **Result: PASS on all 16 cases** (8 specialists × 2), A=1.000/B=1.000, 0 violations, run
+  `wf_4a6721de-6f9`. Skepticism pass confirmed arm B reproduced the real conventions — the
+  validation report + read-only stance, the plan-checkbox flip, diagnose-first flaky fixes,
+  and domain-correct read-only ranked analyses (the contested analyze-* collapse held).
+  Evidence: `evals/results/2026-08-19-redundancy-substitution-family.md`.
+- **Executed (Tier 1-3, "operation-verbs" shape):** evicted the browser-test trio
+  (`plan/add/fix-browser-test`), the validate pair (`validate-changes`, `validate-feature`),
+  and the analyze trio (`analyze-security/-design-system/-quality`) → `archive/redundancy-evicted/`.
+  Created two general operation-verbs: **`analyze`** (dimension = parameter) and **`validate`**
+  (modes: changes / feature), the latter owning the migrated `shot_diff.mjs` visual-diff tool.
+  Deleted the `browser-testing` profile; repointed `core`/`product-delivery`/`compliance`/
+  `security-delivery`/`design-system-delivery`/`quality` profiles and all handoffs onto the two
+  verbs; updated 5 routing cases, catalog_test.go, and AUTHORING.md (whose guidance now teaches
+  operations-on-a-unit, not per-domain analyzers). **Active 41 → 35.**
+- The thesis held: `plan-feature`/`execute-feature`/`plan-epic`/`diagnose-failure` were already
+  the domain-general loop; domain narrowing (browser vs code, security vs design-system vs
+  quality) added no workflow the general skills lack. Registry is now organized as operations on
+  a unit of work (analyze → plan → execute → validate → deliver), not domain-flavored copies.
+
 ## Progress (2026-08-19) — platform-* + soft compliance-* tested → EVICT
 
 - **The last untested classification-argument KEEPs, now measured.** platform-* and

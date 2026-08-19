@@ -39,8 +39,8 @@ Inspect repository instructions, branch, status, diff, and relevant existing imp
 
 Route the item to the smallest relevant domain references:
 
-- quality or refactoring: `analyze-quality`, or `typescript-types` (type-level risk; base model covers failure contracts and async natively)
-- security: `analyze-security`; secure-coding, vulnerability triage, and regulated-data (GDPR/HIPAA) engineering guidance are base-model capability, with `threat-model` for a formal threat model (escalate legal interpretation to a privacy/legal owner)
+- quality or refactoring: `analyze` (Quality dimension), or `typescript-types` (type-level risk; base model covers failure contracts and async natively)
+- security: `analyze` (Security dimension); secure-coding, vulnerability triage, and regulated-data (GDPR/HIPAA) engineering guidance are base-model capability, with `threat-model` for a formal threat model (escalate legal interpretation to a privacy/legal owner)
 - UI/design system: `design-explore`, `ui-patterns`, `ui-color`, or `ui-spacing`
 - platform work (CI/CD, deploys, environments, IaC, secrets): base-model capability
 
@@ -64,7 +64,7 @@ Run the plan's verification and the smallest relevant regression checks. Record
 the selected validation tier and any prior aggregate evidence reused. For
 Convergence mode, repeat the baseline method when practical and report the
 before/after result, guardrails, and limitations. When the plan names an
-analyzer (`analyze-quality`, `analyze-design-system`, `analyze-security`, or a
+analyzer (`analyze` with the plan's dimension, or a
 named metrics script), **re-run that analyzer as the verification method** and
 record its evidence — do not defer it to a separate on-request run. A new
 aggregate backend, full-browser, screenshot, or rehearsal run requires a
@@ -83,7 +83,7 @@ When verification passes:
 - create one conventional local commit that references the feature ID
 - report the commit hash, evidence, remaining items, and any gaps
 
-Stop after the commit. Recommend another `execute-feature` run when items remain, or `validate-feature` and then `prepare-pr` when the feature is complete. Do not invoke them automatically.
+Stop after the commit. Recommend another `execute-feature` run when items remain, or `validate` (Feature mode) and then `prepare-pr` when the feature is complete. Do not invoke them automatically.
 
 ## Safety and idempotency
 
