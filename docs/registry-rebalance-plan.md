@@ -4,6 +4,49 @@ A plan to re-weight the skill registry away from hand-encoded method knowledge
 and toward objective-specification and ground-truth verification — the parts
 that keep their value (or gain value) as the base model improves.
 
+## Progress (2026-08-19) — platform-* + soft compliance-* tested → EVICT
+
+- **The last untested classification-argument KEEPs, now measured.** platform-* and
+  compliance-* had been deferred as CONVERT ("external objectives, a blind evict-A/B is
+  the wrong instrument") and never A/B'd. Ran the standard family gate on the 10 prose
+  best-practice skills — `platform-*` (5) + `compliance-{security,privacy,accessibility,
+  auditability,vulnerability-management}` (5) — holding `compliance-gdpr`/`compliance-hipaa`
+  out as the strong external-legal-objective keeps.
+- **Result: PASS (evict) on all 10.** Overall **A=1.000, B=1.000**, every one of 20 cases
+  (each skill: 1 canonical + 1 openjudgment) a tie, zero `must_exclude` violations, arm C
+  never triggered (no gap to recover → no CONVERT signal). 240 agents, 0 dead. Anchors
+  were written as genuine traps (commit a secret, couple a migration to its rollback, hand
+  a secret to fork PR code, soft-delete-only, log full PANs); the bare model avoided every
+  one and on two cases exceeded the skill prose. The flat 1.000 was skeptically checked:
+  raw bare answers + judge reasoning read on the 6 hardest cases; the judge is
+  discriminating (it correctly reasoned a `pull_request_target` mention gated as a "footgun"
+  did NOT trip the danger anchor), not a rubber stamp. Evidence:
+  `evals/results/2026-08-19-platform-compliance-family.md` (+ `-scores.tsv`),
+  case file `evals/platform_compliance_pilot_cases.json`, run `wf_86a02bd3-a62`.
+- **Executed:** git-mv'd the 10 skills to `archive/platform-compliance-evicted/`; deleted
+  the `platform` catalog profile, slimmed `compliance` (→ analyze-security, gdpr, hipaa,
+  threat-model) and `security-delivery` (→ analyze-security, plan-feature, execute-feature),
+  dropped `platform` from the now-headless `advisory`; repointed all handoff refs
+  (analyze-security/-design-system, execute-feature, threat-model, compliance-gdpr/-hipaa)
+  to base-model capability or surviving skills; updated README + catalog_test.go advisory
+  assertion. Active skills **53 → 43**, validator green (0 errors), Go tests pass.
+- This corrects the 2026-08-15 "convert, not evict" call for these families: the "check
+  layer" was prose pointing at external tools (gitleaks/actionlint/axe), not a bundled
+  runnable check like `ui-color`/`ui-spacing`, and the base model names those tools itself.
+- **Follow-up same day — `compliance-gdpr` + `compliance-hipaa` also EVICTED.** These were
+  held out as the strong external-legal-objective keeps, then tested with a harder,
+  legal-accuracy-focused A/B (`evals/gdpr_hipaa_pilot_cases.json`, 6 cases, anchors requiring
+  exact article/CFR/timeline citations, `must_exclude` = subtle legal traps: 72h-vs-60-day,
+  the "any health-data app is HIPAA" myth, purpose-limitation ignorance). Result PASS
+  (A=1.000/B=1.000, 0 violations, run `wf_b077e72b-483`); the bare model cited Art. 17 / Art.
+  33/34 / §164.400-414 correctly and called out the planted traps by name. Read every bare
+  answer to confirm real accuracy, not a lenient judge. No artifact/boundary/plumbing value to
+  invoke (unlike the methodology KEEPs), so the tie is an evict. Archived to
+  `archive/platform-compliance-evicted/`; `compliance` profile now `analyze-security` +
+  `threat-model`; handoffs repointed with the "escalate legal interpretation to a privacy/legal
+  owner" guardrail preserved. Evidence: `evals/results/2026-08-19-gdpr-hipaa-family.md`.
+  **Active 43 → 41. No prose-knowledge skills remain; the rebalance is complete at 108 → 41.**
+
 ## Progress (2026-08-18c) — methodology workflows tested → KEEP all
 
 - **Methodology-workflow family A/B** (`diagnose-failure`, `document-architecture`,
@@ -153,8 +196,8 @@ Default: method families → Tier A; already-superseded one-offs → Tier B.
 | **UI knowledge** | `ui-*` (15) + `visual-hierarchy` + `ui-expert` | **RESOLVED 2026-08-17: evict 13, keep+convert `ui-patterns`, slim `ui-expert`** | A/B (`evals/results/2026-08-17-ui-family.md`, gate PASS A=0.913/B=0.905): 13 prose skills (incl. `visual-hierarchy`) → `archive/ui-evicted/`; `ui-patterns` was the lone reproducible edge (scale-completeness) → converted to a slim objective; `ui-color`/`ui-spacing` checkers kept; `ui-expert` slimmed to a survivor index. |
 | **Design knowledge** | `design-composition`, `design-simplicity`, `design-visual-language`, `design-expert` | **EVICTED** | A/B tied; replaced by `design-explore` (generate-N-and-judge). `archive/design-evicted/`. |
 | **Backend knowledge** | `backend-*` (6) + `backend-expert` | **EVICTED** | A/B tied; keep only genuine org guardrails as objectives. `archive/backend-evicted/`. |
-| **Platform knowledge** | `platform-*` (5) + `platform-expert` | **EVICT / thin (partially converted)** | Keep org-specific deploy/secrets guardrails as objective + check; check layer landed on `platform-secrets-config`, the rest follow the light pattern. |
-| **Compliance / risk** | `compliance-*` (7), `threat-model`, `consult-expert` | **CONVERT: objective + pinned citation + automated checks** | Flagships (`accessibility`, `secrets`) done; the rest follow. Never a blind evict-A/B for external objectives. |
+| **Platform knowledge** | `platform-*` (5) + `platform-expert` | **EVICTED 2026-08-19** | A/B tied the base model on every case incl. canonical traps; the "check layer" was prose naming external tools, not a bundled check. `archive/platform-compliance-evicted/`; `platform` profile removed. `evals/results/2026-08-19-platform-compliance-family.md`. |
+| **Compliance / risk** | `compliance-*` (7), `threat-model`, `consult-expert` | **RESOLVED 2026-08-19: evict all 7 prose, keep only `threat-model`** | All 5 best-practice skills + `compliance-gdpr`/`compliance-hipaa` A/B-tied the base model (the latter under a harder legal-accuracy gate) → `archive/platform-compliance-evicted/`. `threat-model` kept as evidence artifact; `consult-expert`/`compliance-expert` routers already evicted 2026-08-18. |
 | **Cross-cutting knowledge** | `async-patterns`, `error-handling`, `typescript-types` | **RESOLVED 2026-08-17: evict eh + ap, CONVERT tt** | A/B run (`evals/results/2026-08-17-cross-cutting-family.md`, 204 pooled blind reps): bare model ties the skill on every case (A=0.992, B=0.997). `error-handling` (1.000/1.000, 0 violations) and `async-patterns` (0.975/1.000, 0 B-only violations) → **EVICT**. `typescript-types` ties on means but the bare model emits an unsafe cast/`any` the skill prevents, and that failure mode is deterministically caught by `tsc --strict` + `@typescript-eslint/no-unsafe-*` → **CONVERT** (objective + check, drop prose). |
 | **Routers** | `*-expert` (ui, design, react, python, backend, quality, platform, compliance), `consult-expert` | **Collapse** | A router over evicted children is dead weight. react/python/quality/backend/design experts already gone; `ui-expert` slims after the ui A/B; keep `consult-expert`/`compliance-expert` only as an index over the legislative families. |
 

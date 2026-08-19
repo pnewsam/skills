@@ -51,7 +51,7 @@ Suggested inventory:
 
 ## Posture findings
 
-Use `compliance-security` and the relevant stack or platform expert to inspect:
+Inspect the following directly — secure-coding assessment is base-model capability:
 
 - authentication, authorization, tenant, and object ownership boundaries
 - injection and unsafe interpreter boundaries

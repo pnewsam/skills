@@ -1,0 +1,298 @@
+{
+  "pilot": "platform-* (5) + soft compliance-* (5) knowledge family",
+  "created": "2026-08-19",
+  "purpose": "The last untested classification-argument KEEPs. platform-* and compliance-* were deferred as CONVERT ('external objectives, blind evict-A/B is the wrong instrument') and never A/B'd, unlike react/python/quality/ui/cross-cutting. Neither family bundles a runnable check — their 'Checks' sections are prose pointing at external tools (gitleaks, actionlint, axe, semgrep). This run isolates whether that prose changes answer quality beyond the base model. SCOPE: 5 platform-* + 5 soft compliance-* (security, privacy, accessibility, auditability, vulnerability-management). compliance-gdpr and compliance-hipaa are deliberately EXCLUDED and held as the strong external-legal-objective keeps (specific article/safeguard citations, high cost-of-miss). Routing/effect-boundary cases stay in high_use_cases.json; this file is quality cases only and is deliberately not parsed by validate_registry.py.",
+  "arms": {
+    "A_control": "Reads the skill's registry/<skill>/SKILL.md guidance and applies it to the scenario.",
+    "B_bare": "Capable bare model, same scenario, no skill, forbidden from reading registry/ or docs/.",
+    "C_substitute": "Arm B plus docs/platform-compliance-substitute-note.md, which names ONLY the deterministic external tools/checks each family points at (no prose method). Runs only as a recovery test on cases where mean(A) - mean(B) > 0.15 — i.e. tests whether naming the tool recovers the gap without the prose (the CONVERT hypothesis)."
+  },
+  "protocol": "Blind answer + blind deterministic-anchor scoring (evals/family_ab.workflow.js). Each case 3x per arm in fresh context; answering and scoring are separate agents; the scorer sees only prompt + answer + anchors, never the arm label. Score 0-1: (fraction of must_include satisfied) minus 0.34 per must_exclude present, floored at 0. Exclude degenerate reps and note them.",
+  "gate": {
+    "evict_if": "mean(B) >= mean(A) - 0.10 AND no B-only must_exclude violation where A has none",
+    "convert_if": "a case where mean(A) - mean(B) > 0.25 AND arm C recovers it (meanC >= meanA - 0.10) flags that skill as CONVERT (keep the tool pointer as a thin objective, drop the prose), not a blanket keep. A B-only must_exclude violation on a safety anchor (secret leak, injection, dropped rollback) is itself a CONVERT signal: keep the guardrail.",
+    "note": "compliance-gdpr / compliance-hipaa are out of scope this run and kept regardless of result."
+  },
+  "cases": [
+    {
+      "id": "cicd-build-once",
+      "skill": "platform-ci-cd",
+      "kind": "canonical",
+      "prompt": "Our deploy job runs the test suite and then, in the same job, rebuilds the Docker image and pushes it straight to production. A reviewer says to split it up. Why does this matter, and how should the pipeline be shaped instead?",
+      "must_include": [
+        "promote the exact tested artifact: build once, test that artifact, then deploy the same immutable artifact rather than rebuilding for prod",
+        "separate/least-privilege permissions or credentials between the test/PR stage and the deploy stage (deploy gated on the checks that validated the artifact)"
+      ],
+      "must_exclude": [
+        "endorses rebuilding the image at deploy time so what ships was never the thing that was tested",
+        "ignores workflow permission or credential scoping entirely"
+      ]
+    },
+    {
+      "id": "cicd-fork-pr-secret",
+      "skill": "platform-ci-cd",
+      "kind": "openjudgment",
+      "prompt": "A contributor opened a PR from their fork. Our integration tests need a real API key to run. How do we set CI up so those tests can run without creating a security hole?",
+      "must_include": [
+        "recognizes that exposing repository secrets to untrusted fork PR code is the core risk and isolates untrusted PR validation from any secret-bearing job (e.g. gated/approved runs, a separate trusted workflow, or no secret on the fork path)",
+        "uses scoped/short-lived credentials or withholds the real secret from fork-triggered runs (e.g. run full integration only after maintainer approval or on trusted branches)"
+      ],
+      "must_exclude": [
+        "hands the real secret directly to fork PR code with no isolation or approval gate",
+        "recommends pull_request_target-style patterns that run untrusted checked-out code with secrets available, without noting the danger"
+      ]
+    },
+    {
+      "id": "deploy-migration-rollback",
+      "skill": "platform-deployments-rollbacks",
+      "kind": "canonical",
+      "prompt": "One deploy ships a DB migration that adds a NOT NULL column plus the app code that writes it. Our rollback plan is just 'redeploy the previous image.' Is that a safe rollback plan?",
+      "must_include": [
+        "identifies that coupling a backward-incompatible schema change with the code in one deploy breaks the rollback: redeploying the old image leaves old code against the new schema (or a half-applied migration)",
+        "recommends expand/contract (backward-compatible steps: add nullable, backfill, then enforce) and decoupling/ordering schema vs code deploys so each step is independently reversible or forward-compatible"
+      ],
+      "must_exclude": [
+        "treats 'redeploy the previous image' as a sufficient rollback despite the incompatible/irreversible schema change",
+        "ships schema and code together with no expand-contract, forward-compatibility, or migration reversibility consideration"
+      ]
+    },
+    {
+      "id": "deploy-risky-rollout",
+      "skill": "platform-deployments-rollbacks",
+      "kind": "openjudgment",
+      "prompt": "We need to roll out a risky change to our high-traffic checkout service. What deployment strategy should we use, and how do we decide during the rollout whether it's safe to continue or to pull it back?",
+      "must_include": [
+        "proposes a progressive strategy (canary / blue-green / percentage ramp) rather than switching everyone at once, with a smoke/health check after deploy",
+        "defines objective go/no-go signals (error rate, latency, SLO) and an explicit rollback or roll-forward trigger tied to those signals"
+      ],
+      "must_exclude": [
+        "recommends a big-bang all-at-once cutover for a change described as risky and high-traffic",
+        "gives no measurable promotion criteria or rollback trigger — 'watch it and see'"
+      ]
+    },
+    {
+      "id": "env-parity",
+      "skill": "platform-environments",
+      "kind": "canonical",
+      "prompt": "Staging runs SQLite and an in-memory job queue; production runs Postgres and SQS. We keep shipping bugs that only appear in production. What's the underlying issue and what should we change?",
+      "must_include": [
+        "names environment / dev-prod parity as the root cause: the backing services differ, so staging cannot catch the class of bugs that depend on the real service semantics",
+        "recommends matching the backing-service types across environments (or the closest feasible equivalents) so staging exercises the same behavior as prod"
+      ],
+      "must_exclude": [
+        "ignores the backing-service divergence as the cause",
+        "only suggests 'test more' or 'add logging in prod' without addressing parity"
+      ]
+    },
+    {
+      "id": "env-preview",
+      "skill": "platform-environments",
+      "kind": "openjudgment",
+      "prompt": "We want an ephemeral preview environment spun up automatically for each pull request. What do we need to think about for its configuration, data, and lifecycle?",
+      "must_include": [
+        "environment-specific runtime configuration and isolation: no production secrets or production data in previews; config injected per environment",
+        "lifecycle management: previews are ephemeral with automatic teardown/expiry, seeded with synthetic or anonymized non-prod data"
+      ],
+      "must_exclude": [
+        "reuses production data or production credentials inside preview environments",
+        "leaves previews with no teardown/expiry (unbounded cost and exposure sprawl)"
+      ]
+    },
+    {
+      "id": "iac-console-drift",
+      "skill": "platform-infrastructure-as-code",
+      "kind": "canonical",
+      "prompt": "During an outage a teammate fixed the load balancer by editing it directly in the AWS console. All our infra is managed in Terraform. What's the concern now, and what should we do?",
+      "must_include": [
+        "identifies configuration drift: real infrastructure state now diverges from the Terraform code, and the next apply will fight or revert the manual change",
+        "recommends reconciling the change back into code (import/update the module to match, then plan/apply) and discouraging out-of-band console changes going forward (plan+review / GitOps)"
+      ],
+      "must_exclude": [
+        "endorses leaving the manual console change permanently outside of code",
+        "tells them to just run terraform apply without first reconciling the drift into the code (which would clobber the fix or corrupt state)"
+      ]
+    },
+    {
+      "id": "iac-state-structure",
+      "skill": "platform-infrastructure-as-code",
+      "kind": "openjudgment",
+      "prompt": "We're setting up Terraform for three environments (dev, staging, prod) with a small team. How should we structure state and modules?",
+      "must_include": [
+        "isolates state per environment (separate state files/backends) so a prod change cannot blast-radius dev/staging, with remote state and locking",
+        "reusable modules parameterized per environment, with a plan/review-before-apply flow and least-privilege credentials for prod"
+      ],
+      "must_exclude": [
+        "puts all three environments in one monolithic shared state",
+        "applies to prod with no plan/review step or with broad long-lived static credentials"
+      ]
+    },
+    {
+      "id": "secrets-env-example",
+      "skill": "platform-secrets-config",
+      "kind": "canonical",
+      "prompt": "To make onboarding faster I put our real staging database password and API keys into .env.example so new devs can just copy the file. Is that a good idea?",
+      "must_include": [
+        "no: .env.example is checked into the repo, so this commits real secrets — real credentials must never live in committed files; keep only placeholder/shape in .env.example and inject real values from a secret manager / runtime",
+        "the already-exposed credentials must be treated as leaked: rotate/revoke them now (and scan history), since committing is disclosure"
+      ],
+      "must_exclude": [
+        "approves putting real secret values in .env.example or any committed file",
+        "omits that the exposed credentials must be rotated/revoked after being committed"
+      ]
+    },
+    {
+      "id": "secrets-k8s-runtime",
+      "skill": "platform-secrets-config",
+      "kind": "openjudgment",
+      "prompt": "Where should our production API keys live, and how should the service actually get them at runtime? We deploy on Kubernetes.",
+      "must_include": [
+        "stored in a secret manager or Kubernetes Secret (ideally external-secrets/CSI rather than baked into the image) and injected at runtime, not build time",
+        "least-privilege scoping, redaction in logs, and a preference for short-lived/rotatable credentials or workload identity/OIDC over static long-lived keys"
+      ],
+      "must_exclude": [
+        "bakes the secrets into the container image or build artifact",
+        "commits production secrets to the repo or logs them in plaintext"
+      ]
+    },
+    {
+      "id": "sec-sql-injection",
+      "skill": "compliance-security",
+      "kind": "canonical",
+      "prompt": "This endpoint runs: db.query('SELECT * FROM users WHERE id = ' + req.params.id). Is this fine? What should I check for across the rest of the app?",
+      "must_include": [
+        "identifies SQL injection and requires parameterized queries / prepared statements (bound parameters), not string concatenation of request input",
+        "generalizes to reviewing untrusted-input trust boundaries across the app (other injection sinks: queries, shell, templates, etc.)"
+      ],
+      "must_exclude": [
+        "claims manual escaping or input validation alone is a sufficient substitute for parameterized queries",
+        "treats it as a cosmetic/style nit rather than an exploitable vulnerability"
+      ]
+    },
+    {
+      "id": "sec-password-reset",
+      "skill": "compliance-security",
+      "kind": "openjudgment",
+      "prompt": "We're adding a password-reset-by-email flow. What security properties does it need to have?",
+      "must_include": [
+        "single-use, expiring, high-entropy tokens delivered out-of-band, and invalidating sessions / the token after use",
+        "resistance to account enumeration (uniform responses regardless of whether the email exists) and rate limiting/throttling on the request and verify steps"
+      ],
+      "must_exclude": [
+        "reveals whether an account exists (user enumeration) or returns the reset token/new password in the response body",
+        "uses long-lived or reusable reset tokens, or embeds the secret token where it gets logged"
+      ]
+    },
+    {
+      "id": "priv-log-pii",
+      "skill": "compliance-privacy",
+      "kind": "canonical",
+      "prompt": "Our analytics team wants to log the full HTTP request body for every request to help with debugging. The body includes email, home address, and payment fields. Any privacy concerns?",
+      "must_include": [
+        "invokes data minimization / purpose limitation: don't log sensitive personal or payment data wholesale just for convenience; log only what the purpose needs",
+        "requires redaction/tokenization of sensitive fields plus retention limits and access restriction on whatever is logged"
+      ],
+      "must_exclude": [
+        "approves logging full PII / payment data for debugging convenience",
+        "ignores minimization, retention, and access-control concerns entirely"
+      ]
+    },
+    {
+      "id": "priv-export-delete",
+      "skill": "compliance-privacy",
+      "kind": "openjudgment",
+      "prompt": "We're building 'export my data' and 'delete my account' features for account settings. What should each actually cover to be done correctly?",
+      "must_include": [
+        "export returns the personal data actually held about the user in a portable/readable form, sourced across the systems that hold it",
+        "deletion genuinely removes or anonymizes the data across stores — including backups, logs, derived datasets, and data shared with third parties — with verification and explicit handling of legal-retention exceptions"
+      ],
+      "must_exclude": [
+        "implements deletion as only a soft-delete/flag while retaining the personal data indefinitely with no anonymization",
+        "ignores copies in backups, logs, analytics, or third-party processors"
+      ]
+    },
+    {
+      "id": "a11y-div-dropdown",
+      "skill": "compliance-accessibility",
+      "kind": "canonical",
+      "prompt": "We built a custom dropdown menu out of clickable <div>s with onClick handlers. It looks great but QA says it isn't accessible. What's wrong and how should we fix it?",
+      "must_include": [
+        "the control is not keyboard operable and lacks semantics: use a native element (<button>/<select>) or correct ARIA roles/states (e.g. role, aria-expanded) with real focus management",
+        "full keyboard support (tab to reach, arrow/enter/escape to operate), an accessible name, and a visible focus indicator"
+      ],
+      "must_exclude": [
+        "fixes only the visuals or adds a click handler without making it keyboard operable or semantically labeled",
+        "suggests hiding it from assistive tech (aria-hidden / removing from the a11y tree) as the fix"
+      ]
+    },
+    {
+      "id": "a11y-form-checks",
+      "skill": "compliance-accessibility",
+      "kind": "openjudgment",
+      "prompt": "What accessibility checks should we run on a new signup form before we ship it, and which of those can we automate versus do by hand?",
+      "must_include": [
+        "covers programmatic labels/associations, error identification and messaging, focus order + visible focus, and color contrast, anchored to WCAG success criteria",
+        "distinguishes what automated tooling can catch (axe/lint/contrast checker) from what needs manual or assistive-technology testing (screen-reader pass, keyboard walkthrough)"
+      ],
+      "must_exclude": [
+        "claims an automated scan alone is sufficient proof of accessibility",
+        "omits keyboard/focus or contrast from the checklist"
+      ]
+    },
+    {
+      "id": "audit-change-evidence",
+      "skill": "compliance-auditability",
+      "kind": "canonical",
+      "prompt": "For a SOC 2 audit we've been asked to show who approved and who deployed each production change. Right now we just merge PRs to main. What evidence should we be producing?",
+      "must_include": [
+        "durable change records that link each change to its approver, deployer, timestamp, and the deployed artifact (PR approval + CI evidence + deploy log + artifact identity)",
+        "traceability from the originating requirement/ticket through the merged change to the production deploy, with the records protected from tampering"
+      ],
+      "must_exclude": [
+        "asserts that raw git history alone is sufficient with no approval, deploy, or actor evidence",
+        "proposes evidence that is editable/untraceable (no immutability, no actor attribution)"
+      ]
+    },
+    {
+      "id": "audit-admin-action",
+      "skill": "compliance-auditability",
+      "kind": "openjudgment",
+      "prompt": "We're adding an admin action that lets a support agent refund any customer. What should we record about it for auditability?",
+      "must_include": [
+        "an append-only audit record of who did what to whom and when: actor identity, target customer, amount, reason/authorization basis, and time",
+        "the record is tamper-resistant and retained so the action can be reconstructed and reviewed later"
+      ],
+      "must_exclude": [
+        "records only that 'a refund happened' with no actor, target, or authorization detail",
+        "uses a mutable log the acting admin could later alter, or writes sensitive data (full card number) into the trail"
+      ]
+    },
+    {
+      "id": "vuln-dependabot-triage",
+      "skill": "compliance-vulnerability-management",
+      "kind": "canonical",
+      "prompt": "Dependabot just opened 40 alerts on our repo. Do we have to fix all of them right now? How should we decide what to do with them?",
+      "must_include": [
+        "prioritize by exploitability/reachability and exposure (is the vulnerable code path actually used and reachable, is it internet-facing) combined with severity — not by raw alert count or CVSS alone",
+        "a triage process with proportionate SLAs: remediate, defer with an explicit risk-acceptance decision, or accept — and record the decision as evidence"
+      ],
+      "must_exclude": [
+        "says fix everything immediately by count with no prioritization, or dismisses all alerts as noise",
+        "ranks purely on CVSS severity ignoring whether the vulnerable path is reachable/used"
+      ]
+    },
+    {
+      "id": "vuln-critical-cve",
+      "skill": "compliance-vulnerability-management",
+      "kind": "openjudgment",
+      "prompt": "A critical CVE just dropped for a library we depend on. Walk me through how we should respond.",
+      "must_include": [
+        "first assess whether and how we're actually affected — the installed version and whether the vulnerable path is reachable/exposed — before acting",
+        "remediate (patch/upgrade/mitigate) on a timeline matched to the assessed risk, then verify the fix closed it (re-scan / test) and record the closure evidence"
+      ],
+      "must_exclude": [
+        "patches blindly or panics without checking whether the code is actually affected",
+        "closes the alert with no verification or re-scan that the vulnerability is actually resolved"
+      ]
+    }
+  ]
+}

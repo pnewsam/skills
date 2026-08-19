@@ -70,7 +70,6 @@ Like security, HIPAA-relevant tooling gates known classes; audit and access cont
 
 ## Handoff Rules
 
-- Use `compliance-security` for concrete access, encryption, logging, and transmission controls.
-- Use `compliance-privacy` for data minimization and lifecycle design.
-- Use `compliance-auditability` for audit logs and evidence.
+- Concrete access, encryption, logging, and transmission controls, data minimization and lifecycle design, and audit logs and evidence are base-model capability.
+- Use `threat-model` when the outcome is a formal abuse-case model; use `analyze-security` to assess current controls against findings.
 - Escalate applicability, BAA, breach, and policy decisions to legal/privacy/security owners.
