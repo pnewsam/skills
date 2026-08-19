@@ -42,8 +42,8 @@ Classify a skill on four operational facets:
 
 | Facet | Values | Why it matters |
 | --- | --- | --- |
-| **Kind** | router, workflow, reference | Determines the skill's expected structure |
-| **Domain** | product, Git/PR, UI, design, React, Python, quality, compliance, platform, testing, and others | Controls installation and routing neighborhoods |
+| **Kind** | workflow, reference | Determines the skill's expected structure |
+| **Domain** | product, Git/PR, Linear, UI, design, quality, security, testing, and others | Controls installation and routing neighborhoods |
 | **Stage** | analyze, plan, execute, review, preserve | Shows where the skill fits in a lifecycle |
 | **Effect** | read-only, local files, local Git, network read, external write | Makes authorization and stopping points explicit |
 
@@ -57,8 +57,8 @@ registry-maintained. Externally sourced skill bodies are validated against their
 origin commit and must be updated from upstream rather than edited locally.
 
 Profiles may include other profiles. `core` intentionally stays small and
-operational; install `advisory` when broad cross-domain routing is useful. The
-advisory profile composes the maintained specialist profiles but deliberately
+operational; install `advisory` when broad cross-domain reference is useful. The
+advisory profile composes the maintained reference profiles but deliberately
 does not include externally sourced references. Install `linear-ops` for the
 focused Linear issue and project creation workflows. Install
 `skill-maintenance` only when curating a skill registry, and install
@@ -111,7 +111,7 @@ Workflow skills do work: they analyze a situation, produce planning artifacts, m
 
 ### Product Direction And Delivery
 
-Workflow skills for product direction, planning, cross-domain consultation, epic/feature delivery, and PR preparation.
+Workflow skills for product direction, planning, epic/feature delivery, and PR preparation.
 
 ```mermaid
 flowchart TD
@@ -178,19 +178,18 @@ flowchart LR
     RP -->|Risk intent| RA[merge-risk assessment]
     RP -->|iterative repair| HP[harden-pr]
     HP -->|fresh review| RP
-    RP --> RVP[revise-pr]
+    RP --> UP[update-pr]
 ```
 
 | Skill                                              | Type     | Mode        | Phase   | Description                                                                                                         |
 | -------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
 | [stash](registry/stash/SKILL.md)                   | workflow | convergence | preserve | Preserve related in-progress work on a local `wip/` branch in one commit with a context note.                     |
-| [harden-pr](registry/harden-pr/SKILL.md)           | workflow | convergence | execute, review | Iteratively alternate independent PR reviews with traceable fixes and validation until a bounded convergence or stop condition. |
 | [prepare-pr](registry/prepare-pr/SKILL.md)         | workflow |             | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR.     |
-| [rebase-pr](registry/rebase-pr/SKILL.md)           | workflow | convergence | execute | Rebase one or more PR branches onto their base (default staging), reconcile changes upstream already made, then optionally force-push and re-review. |
-| [address-review](registry/address-review/SKILL.md) | workflow | convergence | execute, review | Triage inbound reviewer comments — fix, reply, defer, or fold into another PR — then implement, reply to threads, and resolve; gates the push that could dismiss an approval. |
-| [polish-pr](registry/polish-pr/SKILL.md)           | workflow | convergence | edit | Improve a PR's language without changing its substance, template, or checklist state. |
-| [revise-pr](registry/revise-pr/SKILL.md)           | workflow | convergence | execute | Revise an existing PR to ensure the title, description, and checklist accurately reflect the latest commits.        |
 | [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze, review | Review a pull request for actionable defects or assess operational and merge risk; post only when explicitly requested. |
+| [harden-pr](registry/harden-pr/SKILL.md)           | workflow | convergence | execute, review | Iteratively alternate independent PR reviews with traceable fixes and validation until a bounded convergence or stop condition. |
+| [address-review](registry/address-review/SKILL.md) | workflow | convergence | execute, review | Triage inbound reviewer comments — fix, reply, defer, or fold into another PR — then implement, reply to threads, and resolve; gates the push that could dismiss an approval. |
+| [rebase-pr](registry/rebase-pr/SKILL.md)           | workflow | convergence | execute | Rebase one or more PR branches onto their base (default staging), reconcile changes upstream already made, then optionally force-push and re-review. |
+| [update-pr](registry/update-pr/SKILL.md)           | workflow | convergence | edit | Sync a PR's title and body to the current diff, or polish their language without changing facts; editing GitHub is a separate step. |
 | [trim-comments](registry/trim-comments/SKILL.md)   | workflow | convergence | edit | Trim low-value comments a branch's diff introduced — process narration, external ticket/plan references, restated-obvious lines — keeping durable rationale and tool directives. |
 
 ### Architecture Documentation
@@ -240,33 +239,62 @@ flowchart LR
 | [validate-changes](registry/validate-changes/SKILL.md)                     | workflow | convergence | execute       | Run targeted validation against recent code changes — maps diff to relevant tests, runs only those, and reports coverage gaps.                 |
 | [validate-feature](registry/validate-feature/SKILL.md)                     | workflow | convergence | execute       | Comprehensive post-build validation — targeted tests, full browser suite, acceptance criteria verification, and structured ship/no-ship report. |
 
-## Expert Routers And Reference Skills
+### Organization-Specific
 
-Expert routers select and synthesize the smallest relevant specialist set.
-Reference skills provide principles, patterns, conventions, and domain
-judgment. Both guide agents while workflow skills perform planning,
-implementation, validation, and delivery.
+Skills scoped to specific organization repositories, installed via the `mindsdb`
+profile and not part of the generic registry.
 
-### Design Principles
+| Skill | Type | Phase | Description |
+| --- | --- | --- | --- |
+| [mindsdb-migrate-surface-to-tailwind](registry/mindsdb-migrate-surface-to-tailwind/SKILL.md) | workflow | execute | Migrate one MindsHub Cowork UI surface's inline styles to Tailwind and design tokens as three separately-committed passes on a draft PR. |
+| [mindsdb-track-design-system-metrics](registry/mindsdb-track-design-system-metrics/SKILL.md) | workflow | analyze | Measure design-system convergence metrics for a configured scope and post one weekly progress comment to a Linear tracking issue. |
+
+## Reference Skills
+
+Reference skills provide objectives, conventions, and runnable checks the base
+model should apply or verify against, rather than method prose it can already
+produce. The former `*-expert` routers were evicted once the base model routed
+among the focused skills as well without them; consult the skills directly.
+
+### Design
 
 Visual direction is **searched, not prescribed**. `design-explore` generates
-several distinct directions, judges them against criteria derived from the
-brief, and synthesizes a recommendation (generate-N-and-judge Workflow),
-verified against ground truth (`ui-color` contrast, `ui-spacing` scale), and
-`analyze-design-system` owns repository-wide convergence and pattern drift.
-
-The prescriptive `design-*` references (composition, simplicity,
-visual-language) were retired to `archive/design-evicted/`, and `visual-hierarchy`
-followed to `archive/ui-evicted/` on 2026-08-17, after A/B evidence showed the base
-model matches them on their own trigger prompts
-(`evals/results/2026-08-15-design-retire.md`,
-`evals/results/2026-08-17-ui-family.md`). They, and other legacy critique
-workflows, are retained under `archive/` for history only — not discoverable or
-installable.
+several distinct directions, judges them against criteria derived from the brief,
+and synthesizes a recommendation, verified against ground truth (`ui-color`
+contrast, `ui-spacing` scale). `analyze-design-system` owns repository-wide
+convergence and pattern drift.
 
 | Skill                                                         | Type     | Description                                                                                                          |
 | ------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
 | [design-explore](registry/design-explore/SKILL.md)            | workflow | Generate several distinct visual directions, judge against explicit criteria, synthesize. Search over prescription.  |
+
+### UI
+
+The prose UI family was evicted (see Archived Families); what remains is what the
+model can't derive or should verify — a collection scale-completeness objective
+and two runnable checkers.
+
+| Skill                                                | Type      | Description                                                                                                                                           |
+| ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [ui-patterns](registry/ui-patterns/SKILL.md)         | reference | Collection objectives — match the container to the data, and the scale-completeness checklist (filter/search, pagination, density, empty/overflow) the model tends to omit. |
+| [ui-color](registry/ui-color/SKILL.md)               | reference | Color-system objectives plus a runnable WCAG contrast check (`scripts/check_contrast.py`).                                                             |
+| [ui-spacing](registry/ui-spacing/SKILL.md)           | reference | Spacing objectives plus a runnable scale-conformance lint (`scripts/check_spacing.py`).                                                                |
+
+### Core Language
+
+| Skill                                                        | Type      | Description                                                                                                                  |
+| ------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| [typescript-types](registry/typescript-types/SKILL.md)       | reference | Type-safety objectives (unrepresentable invalid states, no `any`/unsafe casts, derive-from-value, branded ids, exhaustiveness) enforced by `tsc --strict` + `@typescript-eslint/no-unsafe-*`. |
+
+### Shared Conventions
+
+Kernel skills other skills reference for a consistent PR standard and house prose
+voice.
+
+| Skill                                                        | Type      | Description                                                                                                                  |
+| ------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| [pr-conventions](registry/pr-conventions/SKILL.md)           | reference | The shared PR standard — description shape, conventional commits, GitHub interaction mechanics, and the code-review finding model. |
+| [writing-conventions](registry/writing-conventions/SKILL.md) | reference | Shared prose conventions for the concise, human technical writing across PRs, issues, plans, and commit messages. |
 
 ### External Design References
 
@@ -279,114 +307,17 @@ profiles.
 | [svg-animations](registry/svg-animations/SKILL.md)   | reference | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
 | [emil-design-eng](registry/emil-design-eng/SKILL.md) | reference | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great.                | [emilkowalski](https://github.com/emilkowalski/skill)                                      |
 
-### UI Patterns
+## Archived Families
 
-The `ui-*` prose family (layouts, forms, actions, feedback, content, typography,
-icons, depth, responsive, onboarding, email) plus `visual-hierarchy` was evicted to
-`archive/ui-evicted/` on 2026-08-17 after a family A/B showed the base model
-produces equal-quality UI on those concerns unaided
-(`evals/results/2026-08-17-ui-family.md`; 14 cases, gate PASS at A=0.913/B=0.905).
-What remains is what the model can't derive or should verify: `ui-patterns`
-(collection scale-completeness — the one skill with a reproducible edge, converted to
-a slim objective) and the two runnable checkers `ui-color` (WCAG contrast) and
-`ui-spacing` (scale conformance). Open visual direction goes to `design-explore`;
-repository-wide drift to `analyze-design-system`. The `ui-expert` router was itself
-evicted 2026-08-18 (`evals/results/2026-08-18-router-family.md`) — the base model
-routes among these few skills as well without it.
-
-| Skill                                                | Type      | Description                                                                                                                                           |
-| ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [ui-patterns](registry/ui-patterns/SKILL.md)         | reference | Collection objectives — match the container to the data, and the scale-completeness checklist (filter/search, pagination, density, empty/overflow) the model tends to omit. |
-| [ui-color](registry/ui-color/SKILL.md)               | reference | Color-system objectives plus a runnable WCAG contrast check (`scripts/check_contrast.py`).                                                             |
-| [ui-spacing](registry/ui-spacing/SKILL.md)           | reference | Spacing objectives plus a runnable scale-conformance lint (`scripts/check_spacing.py`).                                                                |
-
-**References:** [components.build](https://www.components.build/) · [frontend-guidelines](https://github.com/bendc/frontend-guidelines)
-
-### Quality
-
-The `quality-*` interpretive family (clarity, modularity, refactoring,
-correctness, testing, reliability) was retired to `archive/quality-evicted/`
-after strict A/B evidence (`evals/results/2026-08-14-*`). What remains is the
-part that scales: `analyze-quality` measures and ranks candidates, and the base
-model interprets the signal. The cross-cutting method trio was resolved by A/B on
-2026-08-17 (`evals/results/2026-08-17-cross-cutting-family.md`): `error-handling`
-and `async-patterns` were evicted to `archive/cross-cutting-evicted/` (the base
-model ties them with no residual failure mode), and `typescript-types` was
-converted to an objective + check (see Core Language).
-
-| Skill                                              | Type      | Purpose                                                            |
-| -------------------------------------------------- | --------- | ----------------------------------------------------------------- |
-| [analyze-quality](registry/analyze-quality/SKILL.md) | workflow | Read-only measurement and ranking of bounded quality candidates. |
-
-### Compliance
-
-The `compliance-expert` router was evicted 2026-08-18. On 2026-08-19 the entire
-prose compliance family retired to `archive/platform-compliance-evicted/`: first the
-best-practice skills (`compliance-security`, `compliance-vulnerability-management`,
-`compliance-accessibility`, `compliance-privacy`, `compliance-auditability`), then —
-after a targeted legal-accuracy A/B where the base model cited every GDPR article, HIPAA
-CFR section, and timeline correctly and avoided the planted traps (72h-vs-60-day, the
-"any health-data app is HIPAA" myth) — `compliance-gdpr` and `compliance-hipaa` as well
-(`evals/results/2026-08-19-{platform-compliance,gdpr-hipaa}-family.md`). Secure-coding,
-injection, secrets, a11y (WCAG), privacy, and GDPR/HIPAA engineering guidance are
-base-model capability; escalate legal interpretation to a privacy/legal owner, use
-`ui-color` for contrast, and `analyze-security` for a findings assessment. `threat-model`
-is kept as the security-evidence artifact.
-
-| Skill                                                                                      | Type      | Description                                                                                                                         |
-| ------------------------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [threat-model](registry/threat-model/SKILL.md)                                             | workflow  | Scoped assets, actors, trust boundaries, abuse cases, controls, verification, and residual-risk analysis.                           |
-
-### Core Language
-
-TypeScript type-safety as an objective plus the deterministic check that enforces
-it. `error-handling` and `async-patterns` were evicted here on 2026-08-17 (the base
-model covers failure contracts and async control flow natively); see Quality.
-
-| Skill                                                        | Type      | Description                                                                                                                  |
-| ------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| [typescript-types](registry/typescript-types/SKILL.md)       | reference | Type-safety objectives (unrepresentable invalid states, no `any`/unsafe casts, derive-from-value, branded ids, exhaustiveness) enforced by `tsc --strict` + `@typescript-eslint/no-unsafe-*`. |
-
-### Platform
-
-The `platform-expert` router was evicted 2026-08-18. On 2026-08-19 the whole
-`platform-*` family (CI/CD, deployments/rollbacks, environments, infrastructure-as-code,
-secrets/config) retired to `archive/platform-compliance-evicted/` after an A/B tied the
-base model on every case, including the canonical traps — build-once/promote-the-tested-
-artifact, expand-contract migrations, dev/prod parity, IaC drift, and not committing
-secrets (`evals/results/2026-08-19-platform-compliance-family.md`). These are derivable
-engineering best practices with no bundled check to preserve; the base model also names
-the external tools (gitleaks, actionlint, checkov, SLSA) without being told. The
-`platform` catalog profile was removed. `docs/registry-rebalance-plan.md` records the
-disposition.
-
-### Backend
-
-The `backend-*` family (API design, service boundaries, persistence, jobs,
-integrations, auth) retired to `archive/backend-evicted/` after A/B evidence —
-advice and code tasks — showed the base model matches it
-(`evals/results/2026-08-14-rollout-backend.md`). Keep only genuine
-org-specific guardrails as objectives; `docs/registry-rebalance-plan.md`
-records the disposition.
-
-### React
-
-The `react-*` knowledge family (12 skills, ~2,497 lines) was retired to
-`archive/react-pilot/` after the eviction pilot: an advice A/B and a code-gap
-eval showed the bare model writes code with the same skill-taught properties
-(`evals/results/2026-08-14-*`). The deterministic substitutes now do that
-work: `eslint-plugin-react-hooks` (rules-of-hooks, exhaustive-deps),
-`eslint-plugin-jsx-a11y`, React Testing Library conventions, and profiler
-evidence — enforced by lint and tests, not prose.
-
-### Python And FastAPI
-
-The `python-*` + `fastapi-architecture` family was retired to
-`archive/python-evicted/` under the same gate (rollout + extrapolation
-confirmation, `evals/results/2026-08-14-*`). Tooling already enforces most of
-its claims — `ruff` for lint/format, `mypy`/pyright for typing, `pytest` for
-behavior, SqlAlchemy/async guardrails in code — so project config and CI
-replace the prose.
+The registry was rebalanced around the bitter lesson: knowledge families whose
+guidance the base model reproduces unaided were retired to `archive/` (retained
+for history, not discoverable or installable) rather than maintained as prose.
+Evicted families include `react-*`, `python-*`/`fastapi`, `quality-*`,
+`backend-*`, the prescriptive `design-*` and prose `ui-*` families, `platform-*`,
+`compliance-*`, the cross-cutting `error-handling`/`async-patterns` pair, and
+every `*-expert` router. Each eviction is A/B-backed;
+[docs/registry-rebalance-plan.md](docs/registry-rebalance-plan.md) records the
+disposition and links the evidence scorecards under `evals/results/`.
 
 ## Other Skill Collections
 
