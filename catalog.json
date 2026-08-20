@@ -46,25 +46,16 @@
       ]
     },
     "product-delivery": {
-      "description": "Product direction, durable planning, analysis, incremental delivery, architecture documentation, and feature validation.",
+      "description": "Product direction, durable planning, analysis, incremental delivery, and feature validation.",
       "skills": [
         "advance-epic",
         "analyze",
         "create-charter",
-        "document-architecture",
         "execute-feature",
-        "explore-directions",
         "plan-epic",
         "plan-feature",
         "ship-epic",
         "validate"
-      ]
-    },
-    "compliance": {
-      "description": "Threat modeling and security-findings analysis.",
-      "skills": [
-        "analyze",
-        "threat-model"
       ]
     },
     "security-delivery": {
@@ -118,7 +109,6 @@
     "advisory": {
       "description": "Broad cross-domain consultation across the maintained reference profiles.",
       "includes": [
-        "compliance",
         "quality",
         "ui",
         "design"

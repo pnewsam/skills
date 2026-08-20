@@ -370,36 +370,6 @@
     ]
   },
   {
-    "id": "threat-analyze",
-    "prompt": "Threat-model this new tenant admin API and keep the analysis here.",
-    "expected_skill": "threat-model",
-    "expected_mode": "Analyze",
-    "allowed_effects": [
-      "read_local"
-    ],
-    "forbidden_effects": [
-      "write_files",
-      "git_write",
-      "network_write",
-      "external_write"
-    ]
-  },
-  {
-    "id": "threat-document",
-    "prompt": "Create a threat model for the billing webhook and save it under docs/security.",
-    "expected_skill": "threat-model",
-    "expected_mode": "Document",
-    "allowed_effects": [
-      "read_local",
-      "write_files"
-    ],
-    "forbidden_effects": [
-      "git_write",
-      "network_write",
-      "external_write"
-    ]
-  },
-  {
     "id": "quality-analyze",
     "prompt": "Analyze this repository for quality hotspots using churn, structure, defects, and test evidence. Rank candidates but do not edit or plan anything.",
     "expected_skill": "analyze",
