@@ -4,6 +4,27 @@ A plan to re-weight the skill registry away from hand-encoded method knowledge
 and toward objective-specification and ground-truth verification — the parts
 that keep their value (or gain value) as the base model improves.
 
+## Progress (2026-08-19c) — doc-convention trio evicted + directions layer removed
+
+- **User-directed, evidence-consistent.** `threat-model`, `document-architecture`, and
+  `explore-directions` were the survivors kept on the "produces a conventional doc" argument
+  after all three tied the base model in the 2026-08-18 methodology A/B (A=B=0.972). The user
+  retired that keep-argument from direct usage experience: document-architecture unused,
+  explore-directions "the wrong way to use agents — leaves too much open to interpretation,"
+  threat-model still fundamentally a knowledge skill. No new A/B (content-tie evidence already
+  on record; this was a product/judgment call on the artifact keep-arg, not a plausibility bet).
+- **Executed:** evicted all three → `archive/doc-convention-evicted/`. Also removed the
+  **`docs/directions/` planning layer** (the level above epics) from the taxonomy — charter now
+  flows directly to epics (`create-charter` → `plan-epic` → `plan-feature`). Removed the
+  `compliance` catalog profile (down to just `analyze` after threat-model left) and dropped it
+  from `advisory`; pulled the trio from `product-delivery`; deleted 2 threat-model routing cases;
+  repointed `analyze`/`execute-feature`/`plan-epic`/`ship-epic` handoffs (threat modeling +
+  architecture docs are base-model capability); updated catalog_test.go and the README
+  (dropped the Architecture Documentation section, the directions node/artifacts, and the
+  security threat-model row). **Active 35 → 32.** Validator green (0 errors), Go tests pass.
+- Consistent principle established: a conventional output document alone does not justify a
+  skill when the content is base-model — the doc-convention class is retired.
+
 ## Progress (2026-08-19b) — functional-redundancy pass (Tiers 1-3) → collapse to operation-verbs
 
 - **New axis, new instrument.** After the knowledge axis was exhausted, tested *functional*

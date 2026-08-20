@@ -88,22 +88,16 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
     CHARTER.md                         # product north star
     METHODS.md                         # project methods, engineering principles, and operating approach
     PRESENTATION.md                    # product presentation, identity, voice, and visual direction
-    architecture/
-      ARCHITECTURE.md                  # derived current-state system architecture
-    directions/
-      NNN-<slug>.md                    # strategic options from explore-directions
     epics/
       NNN-<slug>.md                    # quarter-level epic plans
     features/
       NNN-<slug>.md                    # feature plans
       NNN-<slug>-validation.md         # validate (Feature mode) report
-    security/
-      threat-model-<scope>.md          # optional threat-model document
     tmp/
       wip-<name>.md                    # stash context breadcrumb when trackable
 ```
 
-`docs/directions/`, `docs/epics/`, and `docs/features/` are the standard durable planning surfaces. Product programs and deliberately managed multi-feature initiatives flow through epics. Bounded refactors, security remediations, design-system consolidation, defect fixes, dependency work, and other convergence improvements may go directly from an `analyze` result to `plan-feature`; a parent epic is optional in Convergence mode. `docs/tmp/` is reserved for ephemeral WIP handoff notes.
+`docs/epics/` and `docs/features/` are the standard durable planning surfaces. Product programs and deliberately managed multi-feature initiatives flow through epics. Bounded refactors, security remediations, design-system consolidation, defect fixes, dependency work, and other convergence improvements may go directly from an `analyze` result to `plan-feature`; a parent epic is optional in Convergence mode. `docs/tmp/` is reserved for ephemeral WIP handoff notes.
 
 ## Workflow Skills
 
@@ -115,8 +109,7 @@ Workflow skills for product direction, planning, epic/feature delivery, and PR p
 
 ```mermaid
 flowchart TD
-    CC[create-charter] -->|produces docs/CHARTER.md| ED[explore-directions]
-    ED -->|produces docs/directions/| PE[plan-epic]
+    CC[create-charter] -->|produces docs/CHARTER.md| PE[plan-epic]
     PE -->|produces docs/epics/| PF[plan-feature]
     PE --> SP[ship-epic]
     SP -->|plans missing features| PF
@@ -131,7 +124,6 @@ flowchart TD
 
 | Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
 | ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [explore-directions](registry/explore-directions/SKILL.md) | workflow | divergence | analyze | Analyze the product's current state and generate 3–5 distinct strategic directions with evidence and trade-offs for review. |
 | [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
 | [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create or update one charter-aligned epic, including deduplicating bug-bash or app-feedback observations into coherent child features. |
 | [plan-feature](registry/plan-feature/SKILL.md)         | workflow | convergence | plan | Plan one bounded product feature or evidence-backed convergence improvement; parent epics are optional in Convergence mode. |
@@ -190,30 +182,17 @@ flowchart LR
 | [update-pr](registry/update-pr/SKILL.md)           | workflow | convergence | edit | Sync a PR's title and body to the current diff, or polish their language without changing facts; editing GitHub is a separate step. |
 | [trim-comments](registry/trim-comments/SKILL.md)   | workflow | convergence | edit | Trim low-value comments a branch's diff introduced — process narration, external ticket/plan references, restated-obvious lines — keeping durable rationale and tool directives. |
 
-### Architecture Documentation
-
-```mermaid
-flowchart LR
-    DA[document-architecture] -->|produces docs/architecture/ARCHITECTURE.md| AR[Architecture Reference]
-```
-
-| Skill                                                | Type     | Mode        | Phase   | Description                                                                                                                   |
-| ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [document-architecture](registry/document-architecture/SKILL.md) | workflow | convergence | analyze | Create or refresh derived `docs/architecture/ARCHITECTURE.md` from the codebase, including Mermaid diagrams for system context, runtime flows, boundaries, and data shape. |
-
 ### Security Analysis And Shared Delivery
 
 ```mermaid
 flowchart LR
-    TM[threat-model] -->|may identify controls| AS[analyze]
-    AS -->|one verified group| PF1[plan-feature]
+    AS[analyze] -->|one verified group| PF1[plan-feature]
     PF1 --> EF1[execute-feature]
 ```
 
 | Skill | Type | Mode | Phase | Description |
 | --- | --- | --- | --- | --- |
-| [threat-model](registry/threat-model/SKILL.md) | workflow | divergence | analyze, document | Map assets, actors, data flows, trust boundaries, abuse cases, controls, and residual risk; save a document only when requested. |
-| [analyze](registry/analyze/SKILL.md) | workflow | convergence | analyze | Verify, normalize, group, and prioritize posture gaps, dependency advisories, and code-scanning findings (Security dimension). |
+| [analyze](registry/analyze/SKILL.md) | workflow | convergence | analyze | Verify, normalize, group, and prioritize posture gaps, dependency advisories, and code-scanning findings (Security dimension). Threat modeling and architecture documentation are base-model capability. |
 | [plan-feature](registry/plan-feature/SKILL.md) | workflow | convergence | plan | Record one verified remediation group with baseline, target, invariants, guardrails, and resolution evidence. |
 | [execute-feature](registry/execute-feature/SKILL.md) | workflow | convergence | execute | Apply and verify one planned security item using conditionally loaded security safeguards, then commit locally and stop. |
 
@@ -320,6 +299,13 @@ pair (`validate-changes`, `validate-feature`), and the per-domain analyzers
 general units-of-work loop and collapsed into two operation-verbs — `analyze` (dimension =
 parameter) and `validate` (mode) — the browser work absorbed by `plan-feature`/
 `execute-feature`/`diagnose-failure`.
+
+A final pass retired the **doc-convention workflows** — `threat-model`,
+`document-architecture`, and `explore-directions` — whose content already tied the base
+model in the methodology A/B and which were kept only for their output documents. Threat
+modeling and architecture documentation are base-model capability; the `docs/directions/`
+planning layer (a level above epics) was removed as too open-ended, so charter now flows
+directly to epics.
 
 Each eviction is A/B-backed;
 [docs/registry-rebalance-plan.md](docs/registry-rebalance-plan.md) records the

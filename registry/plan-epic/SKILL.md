@@ -1,6 +1,6 @@
 ---
 name: plan-epic
-description: Create or update one charter-aligned epic plan for a cohesive 4–12 week initiative. Use for strategic initiatives or large collections of bug-bash, app-feedback, or quality observations that need deduplication and grouping into independently plannable child features. Reads the charter, directions, and existing plans and writes one docs/epics/ document; never modifies source code, Git, or external systems.
+description: Create or update one charter-aligned epic plan for a cohesive 4–12 week initiative. Use for strategic initiatives or large collections of bug-bash, app-feedback, or quality observations that need deduplication and grouping into independently plannable child features. Reads the charter and existing plans and writes one docs/epics/ document; never modifies source code, Git, or external systems.
 ---
 
 # Plan Epic
@@ -15,7 +15,6 @@ Use `plan-epic` when one cohesive initiative needs roughly 4–12 weeks of work 
 
 - Use `plan-feature` directly for one bounded 1–2 week deliverable.
 - Use `create-charter` when `docs/CHARTER.md` is absent or no longer provides a usable product direction.
-- Use `explore-directions` when several strategic paths remain plausible and none has been selected.
 - For a read-only question about an existing epic's status, inspect the plan and linked evidence directly in chat; do not create a permanent audit artifact unless the user explicitly requests a document.
 
 ## Effects and inputs
@@ -36,7 +35,7 @@ Treat dictated notes and rough observations as evidence to normalize, not as ver
 
 Read `docs/CHARTER.md` fully. Capture the relevant value proposition, guiding principles, north-star or leading indicators, and non-goals. If the initiative cannot be connected to the charter in one clear sentence, stop and recommend a charter or direction decision.
 
-Inspect `docs/directions/`, `docs/epics/`, and `docs/features/` for a chosen direction, overlapping plans, dependencies, and the next available epic ID. When updating, read the existing epic and preserve its ID, completed child features, decisions, and supported progress.
+Inspect `docs/epics/` and `docs/features/` for overlapping plans, dependencies, and the next available epic ID. When updating, read the existing epic and preserve its ID, completed child features, decisions, and supported progress.
 
 Clarify the intended outcome, affected users or systems, time horizon, deadlines, dependencies, and non-goals. If the scope is smaller than one epic, route to `plan-feature`.
 

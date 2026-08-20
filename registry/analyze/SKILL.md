@@ -61,7 +61,6 @@ scanner summary) so a later run can measure movement.
 - Use `plan-feature` (Convergence mode) to turn one ranked candidate into a plan.
 - Use `execute-feature` to implement and verify a planned candidate; it can re-run this
   analysis as the before/after verification method when a plan names the dimension.
-- Use `threat-model` when the outcome should be a formal asset/actor/trust-boundary/abuse-case
-  model rather than a findings assessment.
-- Use `document-architecture` when the goal is a current-state architecture document, not a
-  ranked improvement backlog.
+- A different output framing — a formal asset/actor/trust-boundary/abuse-case threat model, or
+  a current-state architecture document — is base-model capability; produce it directly rather
+  than routing to a dedicated skill.

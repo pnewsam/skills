@@ -155,7 +155,7 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 		inAdvisory[name] = true
 	}
 	for _, expected := range []string{
-		"threat-model",
+		"typescript-types",
 		"analyze",
 		"ui-patterns",
 		"design-explore",
