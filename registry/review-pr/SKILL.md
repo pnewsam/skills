@@ -118,6 +118,7 @@ Present the review — in chat and in a posted review body — in this shape, ti
 ## Code Review
 
 **Verdict: <APPROVE | REQUEST CHANGES | COMMENT>**
+**Model: <exact id of the model that produced this review, e.g. claude-opus-4-8; "unknown" if not reliably known>**
 
 <Two to four sentences. Only: what you reviewed (scope), the one reason the verdict holds, and the bottom line (e.g. "No actionable findings."). Do NOT narrate or re-explain the change — the author wrote it and knows what it does — or list every path you traced; that belongs in Validation or the findings. If a reader needs the diff summarized back to them, the summary is too long.>
 
@@ -125,6 +126,8 @@ Present the review — in chat and in a posted review body — in this shape, ti
 
 - <what you actually ran or inspected, with real results — one line each, a few bullets at most>
 ```
+
+Record on the **Model** line the exact identifier of the model that actually produced the review, so a reader knows what generated the verdict — this line is required in both chat and any posted review. State the real model; do not guess or infer it from writing style, and write "unknown" when the running model is not reliably known. The risk template carries the same attribution in its scope footer.
 
 Validation lists only what you genuinely did; never imply a pass you did not observe. Findings are ordered most severe first. Default to an inline comment anchored to the changed line; reserve the summary for findings that do not map to a single diff line. In Analyze mode, where there is no diff to attach to, still tag each finding with its `file:line` so it reads as an inline-bound finding and can be posted as one without rework:
 

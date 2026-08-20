@@ -89,7 +89,7 @@ State High, Medium, or Low confidence and what evidence would materially change 
 
 - <monitoring, staging, flag, rollback, or "no special action needed">
 
-_Assessment scope: <head> → <base> at <head SHA> · <date>_
+_Assessment scope: <head> → <base> at <head SHA> · <date> · model <exact id of the model that produced this assessment, or "unknown">_
 ```
 
 Omit recommendations that do not materially reduce risk. If the evidence supports Low risk, say so without manufacturing precautions.
