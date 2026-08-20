@@ -39,8 +39,8 @@ Inspect repository instructions, branch, status, diff, and relevant existing imp
 
 Route the item to the smallest relevant domain references:
 
-- quality or refactoring: `analyze` (Quality dimension), or `typescript-types` (type-level risk; base model covers failure contracts and async natively)
-- security: `analyze` (Security dimension); secure-coding, vulnerability triage, threat modeling, and regulated-data (GDPR/HIPAA) engineering guidance are base-model capability (escalate legal interpretation to a privacy/legal owner)
+- quality or refactoring: `typescript-types` (type-level risk); general quality and maintainability judgment is base-model capability
+- security: secure-coding, vulnerability triage, threat modeling, and regulated-data (GDPR/HIPAA) engineering guidance are base-model capability (escalate legal interpretation to a privacy/legal owner)
 - UI/design system: `design-explore`, `ui-patterns`, `ui-color`, or `ui-spacing`
 - platform work (CI/CD, deploys, environments, IaC, secrets): base-model capability
 
@@ -63,10 +63,10 @@ If the item is already implemented, verify the evidence, update the plan when ap
 Run the plan's verification and the smallest relevant regression checks. Record
 the selected validation tier and any prior aggregate evidence reused. For
 Convergence mode, repeat the baseline method when practical and report the
-before/after result, guardrails, and limitations. When the plan names an
-analyzer (`analyze` with the plan's dimension, or a
-named metrics script), **re-run that analyzer as the verification method** and
-record its evidence — do not defer it to a separate on-request run. A new
+before/after result, guardrails, and limitations. When the plan names a
+measurable baseline or metrics script, **re-run that measurement as the
+verification method** and
+record its before/after evidence — do not defer it to a separate on-request run. A new
 aggregate backend, full-browser, screenshot, or rehearsal run requires a
 recorded changed checkpoint and why focused proof is insufficient; this never
 waives a required delivery boundary. Use manual, visual, scanner, or runtime
@@ -83,7 +83,7 @@ When verification passes:
 - create one conventional local commit that references the feature ID
 - report the commit hash, evidence, remaining items, and any gaps
 
-Stop after the commit. Recommend another `execute-feature` run when items remain, or `validate` (Feature mode) and then `prepare-pr` when the feature is complete. Do not invoke them automatically.
+Stop after the commit. Recommend another `execute-feature` run when items remain, or `prepare-pr` when the feature is complete and its checks pass. Do not invoke them automatically.
 
 ## Safety and idempotency
 

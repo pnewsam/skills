@@ -130,7 +130,6 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 	}
 	wantCore := []string{
 		"address-review",
-		"diagnose-failure",
 		"harden-pr",
 		"pr-conventions",
 		"prepare-pr",
@@ -139,7 +138,6 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 		"stash",
 		"trim-comments",
 		"update-pr",
-		"validate",
 		"writing-conventions",
 	}
 	if !reflect.DeepEqual(core, wantCore) {
@@ -156,7 +154,7 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 	}
 	for _, expected := range []string{
 		"typescript-types",
-		"analyze",
+		"ui-color",
 		"ui-patterns",
 		"design-explore",
 	} {

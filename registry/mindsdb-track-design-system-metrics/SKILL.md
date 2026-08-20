@@ -9,7 +9,7 @@ description: Measure reproducible design-system convergence metrics for a config
 
 Produce one weekly progress comment on a tracking Linear issue that reports current design-system convergence counts, their week-over-week change, and the top offending files, then stop.
 
-This is a lightweight recurring tracker, not an audit. Use `analyze` (Design-system dimension) when the goal is to interpret drift and rank bounded consolidation candidates for `plan-feature`; use this skill only to record and post the trend line for an initiative that already exists.
+This is a lightweight recurring tracker, not an audit. To interpret drift and rank bounded consolidation candidates for `plan-feature`, assess the codebase directly; use this skill only to record and post the trend line for an initiative that already exists.
 
 ## Modes and effects
 

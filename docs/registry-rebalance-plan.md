@@ -4,6 +4,29 @@ A plan to re-weight the skill registry away from hand-encoded method knowledge
 and toward objective-specification and ground-truth verification — the parts
 that keep their value (or gain value) as the base model improves.
 
+## Progress (2026-08-19d) — analysis/validation trim; PR as the discrete unit of work
+
+- **User-directed reorientation.** The organizing principle is now the **PR as the discrete unit
+  of delivery**; analysis, diagnosis, and verification are base-model capabilities the model
+  performs inline while working, and `review-pr` assesses the result — none needs a dedicated skill.
+- **Evicted (4) → `archive/analysis-validation-evicted/`:** `analyze` and `validate` (created
+  earlier this same day, but too vague / too much overlap with `review-pr`; "run the tests" and
+  "measure a dimension" are base-model when asked), `diagnose-failure` (base-model-native root-causing),
+  and `ingest-skill` (unneeded). `validate`'s bundled `shot_diff.mjs` visual-regression tool was
+  migrated to `review-pr/scripts/` (kept as a deterministic check, documented as optional visual
+  evidence for a UI PR).
+- **KEEP:** the full planning stack (create-charter, plan-epic, plan-feature, execute-feature,
+  advance-epic, ship-epic) and all PR operations. The conservative trim ("PR-centric radius: analysis/
+  validation only") — the feature/epic machinery stays.
+- **Plumbing:** removed the `skill-maintenance` and `security-delivery` profiles; dropped `analyze`/
+  `validate` from `core`/`product-delivery`/`design-system-delivery`/`quality`; removed 8 routing
+  cases; repointed advance-epic/execute-feature/plan-feature/ship-epic/mindsdb handoffs to base-model
+  verification/analysis; updated catalog_test.go, AUTHORING.md (workflow anatomy now teaches
+  PR-as-unit), and the README (removed the Analysis/Validation/Security-Analysis/Skill-Maintenance
+  sections and, per the user, the whole **Archived Families** section). **Active 32 → 28.**
+- Principle: the registry is now operation-verbs on a unit of work, with the **PR** as the delivery
+  unit; standalone analysis/verification skills are retired because the base model does them inline.
+
 ## Progress (2026-08-19c) — doc-convention trio evicted + directions layer removed
 
 - **User-directed, evidence-consistent.** `threat-model`, `document-architecture`, and

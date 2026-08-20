@@ -61,7 +61,6 @@ operational; install `advisory` when broad cross-domain reference is useful. The
 advisory profile composes the maintained reference profiles but deliberately
 does not include externally sourced references. Install `linear-ops` for the
 focused Linear issue and project creation workflows. Install
-`skill-maintenance` only when curating a skill registry, and install
 `external-creative` when explicitly opting into preserved third-party creative
 references.
 
@@ -92,12 +91,11 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
       NNN-<slug>.md                    # quarter-level epic plans
     features/
       NNN-<slug>.md                    # feature plans
-      NNN-<slug>-validation.md         # validate (Feature mode) report
     tmp/
       wip-<name>.md                    # stash context breadcrumb when trackable
 ```
 
-`docs/epics/` and `docs/features/` are the standard durable planning surfaces. Product programs and deliberately managed multi-feature initiatives flow through epics. Bounded refactors, security remediations, design-system consolidation, defect fixes, dependency work, and other convergence improvements may go directly from an `analyze` result to `plan-feature`; a parent epic is optional in Convergence mode. `docs/tmp/` is reserved for ephemeral WIP handoff notes.
+`docs/epics/` and `docs/features/` are the standard durable planning surfaces. Product programs and deliberately managed multi-feature initiatives flow through epics. Bounded refactors, security remediations, design-system consolidation, defect fixes, dependency work, and other convergence improvements may go directly from analysis evidence to `plan-feature`; a parent epic is optional in Convergence mode. `docs/tmp/` is reserved for ephemeral WIP handoff notes.
 
 ## Workflow Skills
 
@@ -116,7 +114,7 @@ flowchart TD
     SP -->|advances until complete| AE
     SP -->|prepares PR| PPR[prepare-pr]
     PF -->|produces docs/features/| EF[execute-feature]
-    EF -->|may receive final audit from| VF[validate]
+    EF -->|opens a PR| PPR
     PE --> AE[advance-epic]
     AE -.->|orchestrates| PF
     AE -.->|orchestrates| EF
@@ -142,22 +140,9 @@ stopping. Install the `linear-ops` profile when a team uses Linear.
 | [create-project](registry/create-project/SKILL.md) | workflow | plan | Resolve live workspace fields, create one Linear project, verify it, and stop. |
 | [polish-issue](registry/polish-issue/SKILL.md) | workflow | edit | Improve an issue's language without changing its substance or properties. |
 
-### Analysis Workflows
-
-| Skill | Type | Phase | Description |
-| --- | --- | --- | --- |
-| [analyze](registry/analyze/SKILL.md) | workflow | analyze | Measure a codebase along a requested dimension — security posture and findings, design-system convergence, quality/maintainability hotspots, or another — and rank bounded feature-sized candidates, read-only. Dimension is a parameter, not a separate skill. |
-| [diagnose-failure](registry/diagnose-failure/SKILL.md) | workflow | analyze | Reproduce and localize a software failure, rank hypotheses, and report an evidence-backed cause without editing the project. |
-
-### Skill Registry Maintenance
-
-| Skill | Type | Phase | Description |
-| --- | --- | --- | --- |
-| [ingest-skill](registry/ingest-skill/SKILL.md) | workflow | analyze, execute | Evaluate one externally created skill, then decline it, merge durable guidance into an existing maintained skill, create one new local skill, or recommend a separate commit-backed external preservation. |
-
-Assess mode is read-only. Apply mode may merge or create locally maintained
-skills, but never executes source-provided code, edits preserved packages,
-commits, pushes, installs, or publishes.
+Analysis ("what to change"), diagnosis ("why it fails"), and verification ("does it
+pass") are base-model capabilities the model performs inline while working; `review-pr`
+assesses the resulting pull request. None is a separate skill.
 
 ### Git And PR Workflow
 
@@ -182,38 +167,6 @@ flowchart LR
 | [update-pr](registry/update-pr/SKILL.md)           | workflow | convergence | edit | Sync a PR's title and body to the current diff, or polish their language without changing facts; editing GitHub is a separate step. |
 | [trim-comments](registry/trim-comments/SKILL.md)   | workflow | convergence | edit | Trim low-value comments a branch's diff introduced — process narration, external ticket/plan references, restated-obvious lines — keeping durable rationale and tool directives. |
 
-### Security Analysis And Shared Delivery
-
-```mermaid
-flowchart LR
-    AS[analyze] -->|one verified group| PF1[plan-feature]
-    PF1 --> EF1[execute-feature]
-```
-
-| Skill | Type | Mode | Phase | Description |
-| --- | --- | --- | --- | --- |
-| [analyze](registry/analyze/SKILL.md) | workflow | convergence | analyze | Verify, normalize, group, and prioritize posture gaps, dependency advisories, and code-scanning findings (Security dimension). Threat modeling and architecture documentation are base-model capability. |
-| [plan-feature](registry/plan-feature/SKILL.md) | workflow | convergence | plan | Record one verified remediation group with baseline, target, invariants, guardrails, and resolution evidence. |
-| [execute-feature](registry/execute-feature/SKILL.md) | workflow | convergence | execute | Apply and verify one planned security item using conditionally loaded security safeguards, then commit locally and stop. |
-
-### Validation
-
-```mermaid
-flowchart LR
-    EF2[execute-feature] --> V[validate]
-    V -.->|SHIP| PPR[prepare-pr]
-    V -.->|defect found| EF2
-```
-
-| Skill                                                | Type     | Mode        | Phase   | Description                                                                                                                   |
-| ---------------------------------------------------- | -------- | ----------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [validate](registry/validate/SKILL.md)               | workflow | convergence | execute | Read-only validation — spot-check recent changes (Changes mode) or verify a completed feature's acceptance criteria with a ship/no-ship report (Feature mode); owns the bundled `shot_diff.mjs` visual-regression check. |
-
-Browser/E2E test planning, authoring, and repair are the general loop plus base-model
-Playwright/Cypress knowledge: `plan-feature`/`plan-epic` to plan coverage, `execute-feature`
-to write a test, and `diagnose-failure` + `execute-feature` to fix a broken or flaky one. The
-domain-specialized browser-test skills were evicted — see Archived Families.
-
 ### Organization-Specific
 
 Skills scoped to specific organization repositories, installed via the `mindsdb`
@@ -236,8 +189,8 @@ among the focused skills as well without them; consult the skills directly.
 Visual direction is **searched, not prescribed**. `design-explore` generates
 several distinct directions, judges them against criteria derived from the brief,
 and synthesizes a recommendation, verified against ground truth (`ui-color`
-contrast, `ui-spacing` scale). `analyze` (Design-system dimension) owns repository-wide
-convergence and pattern drift.
+contrast, `ui-spacing` scale). Repository-wide design-system convergence and pattern
+drift are base-model analysis.
 
 | Skill                                                         | Type     | Description                                                                                                          |
 | ------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -245,9 +198,8 @@ convergence and pattern drift.
 
 ### UI
 
-The prose UI family was evicted (see Archived Families); what remains is what the
-model can't derive or should verify — a collection scale-completeness objective
-and two runnable checkers.
+The prose UI family was evicted; what remains is what the model can't derive or
+should verify — a collection scale-completeness objective and two runnable checkers.
 
 | Skill                                                | Type      | Description                                                                                                                                           |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -281,35 +233,6 @@ profiles.
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | [svg-animations](registry/svg-animations/SKILL.md)   | reference | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
 | [emil-design-eng](registry/emil-design-eng/SKILL.md) | reference | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great.                | [emilkowalski](https://github.com/emilkowalski/skill)                                      |
-
-## Archived Families
-
-The registry was rebalanced around the bitter lesson: knowledge families whose
-guidance the base model reproduces unaided were retired to `archive/` (retained
-for history, not discoverable or installable) rather than maintained as prose.
-Evicted families include `react-*`, `python-*`/`fastapi`, `quality-*`,
-`backend-*`, the prescriptive `design-*` and prose `ui-*` families, `platform-*`,
-`compliance-*`, the cross-cutting `error-handling`/`async-patterns` pair, and
-every `*-expert` router.
-
-A later pass evicted **domain-specialized workflows** on a functional-redundancy
-substitution A/B: the browser-test trio (`plan-/add-/fix-browser-test`), the validation
-pair (`validate-changes`, `validate-feature`), and the per-domain analyzers
-(`analyze-security`, `analyze-design-system`, `analyze-quality`) were reproduced by the
-general units-of-work loop and collapsed into two operation-verbs — `analyze` (dimension =
-parameter) and `validate` (mode) — the browser work absorbed by `plan-feature`/
-`execute-feature`/`diagnose-failure`.
-
-A final pass retired the **doc-convention workflows** — `threat-model`,
-`document-architecture`, and `explore-directions` — whose content already tied the base
-model in the methodology A/B and which were kept only for their output documents. Threat
-modeling and architecture documentation are base-model capability; the `docs/directions/`
-planning layer (a level above epics) was removed as too open-ended, so charter now flows
-directly to epics.
-
-Each eviction is A/B-backed;
-[docs/registry-rebalance-plan.md](docs/registry-rebalance-plan.md) records the
-disposition and links the evidence scorecards under `evals/results/`.
 
 ## Other Skill Collections
 
