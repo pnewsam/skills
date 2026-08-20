@@ -20,7 +20,7 @@
 - **Owner:** <role or person>
 - **Parent Epic:** <optional in convergence mode>
 - **Product Basis:** <charter and parent epic; Product mode only>
-- **Source Analysis:** <analyze-* result or stable finding IDs; Convergence mode only>
+- **Source Analysis:** <analysis result or stable finding IDs; Convergence mode only>
 
 Omit the metadata field that does not apply to the selected mode.
 

@@ -134,6 +134,14 @@ Validation lists only what you genuinely did; never imply a pass you did not obs
 
 Give evidence proportional to the finding and the smallest useful fix. If nothing is actionable, say "No actionable findings." and omit the list.
 
+For a PR with a deterministic visual change, optional pixel evidence is available via the bundled dependency-free helper — capture the same screen before and after and diff the PNGs (identical exits 0, any real difference exits 1):
+
+```bash
+node scripts/shot_diff.mjs BEFORE.png AFTER.png [--tolerance 32] [--out diff.png] [--report report.json]
+```
+
+This never replaces tests or code review; it is supporting evidence for a visual finding.
+
 ### Keep sentences short
 
 The shape above controls length; this controls density. Follow the sentence-level style in the shared `writing-conventions/references/prose.md` — one idea per sentence, active voice, plain words, no clause-chaining — and apply it to the summary and validation prose, not just findings. A finding reads better as three short sentences (problem, evidence, fix) than one long one, which the `<problem>. <evidence>. <fix>.` shape already implies.

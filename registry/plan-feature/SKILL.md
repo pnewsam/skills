@@ -1,6 +1,6 @@
 ---
 name: plan-feature
-description: Create or update a structured plan for one bounded, independently verifiable product feature or convergence improvement. Use after product direction is clear or after an analyze-* workflow identifies a quality, security, design-system, defect, dependency, testing, or other maintenance candidate. Product mode aligns to a charter and parent epic; Convergence mode consumes evidence directly and records a baseline, target, invariants, guardrails, and verification. Writes local docs/features planning artifacts only and never implements, commits, pushes, or publishes.
+description: Create or update a structured plan for one bounded, independently verifiable product feature or convergence improvement. Use after product direction is clear or after analysis identifies a quality, security, design-system, defect, dependency, testing, or other maintenance candidate. Product mode aligns to a charter and parent epic; Convergence mode consumes evidence directly and records a baseline, target, invariants, guardrails, and verification. Writes local docs/features planning artifacts only and never implements, commits, pushes, or publishes.
 ---
 
 # Plan Feature
@@ -14,7 +14,7 @@ Use `references/feature_template.md` when writing the plan.
 ## Modes and effects
 
 - **Product mode:** plan a user-facing or enabling capability. Require a relevant charter and parent epic, and preserve their goals and non-goals.
-- **Convergence mode:** plan one evidence-backed improvement from the `analyze` workflow (any dimension — quality, security, design-system, …) or equivalent user-supplied evidence. A parent epic is optional. Do not invent a user story when the real outcome is maintainability, security, reliability, consistency, or defect reduction.
+- **Convergence mode:** plan one evidence-backed improvement from analysis evidence — measured signals you gather (quality, security, design-system, dependency, …), scanner or metrics output, or user-supplied evidence. A parent epic is optional. Do not invent a user story when the real outcome is maintainability, security, reliability, consistency, or defect reduction.
 
 This workflow may create or update one local feature plan. It must not modify source or configuration, create branches or commits, push, publish, or update external trackers.
 
@@ -35,7 +35,7 @@ Convergence mode needs:
 - measurement method, window, exclusions, and confidence when metrics are used
 - verification and rollback or recovery expectations
 
-If the evidence is unverified, ambiguous, or still a long inventory, stop and recommend the relevant `analyze-*` workflow. If the work contains independent outcomes, plan only one and leave the others for separate invocations.
+If the evidence is unverified, ambiguous, or still a long inventory, stop and gather or verify the analysis evidence first. If the work contains independent outcomes, plan only one and leave the others for separate invocations.
 
 ## Workflow
 

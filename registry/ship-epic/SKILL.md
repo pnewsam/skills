@@ -1,13 +1,13 @@
 ---
 name: ship-epic
-description: Complete an epic end-to-end by planning all missing child features, advancing the epic until every feature is complete, validating the completed work, and preparing a pull request. Use when the user asks to run plan-feature until all features are planned, advance-epic until all features are complete, and prepare-pr afterward. Orchestrates plan-feature, advance-epic, validate, and prepare-pr while preserving context, stopping on blockers, and avoiding duplicate plans or unrelated git changes.
+description: Complete an epic end-to-end by planning all missing child features, advancing the epic until every feature is complete, validating the completed work, and preparing a pull request. Use when the user asks to run plan-feature until all features are planned, advance-epic until all features are complete, and prepare-pr afterward. Orchestrates plan-feature, advance-epic, execute-feature, and prepare-pr while preserving context, stopping on blockers, and avoiding duplicate plans or unrelated git changes.
 ---
 
 # Ship Epic
 
 ## Overview
 
-Drive one epic from planned initiative to PR-ready branch. This skill is an orchestrator: it does not replace `plan-feature`, `advance-epic`, `execute-feature`, `validate`, or `prepare-pr`; it runs them in the right order until the epic is complete or a blocker requires user input.
+Drive one epic from planned initiative to PR-ready branch. This skill is an orchestrator: it does not replace `plan-feature`, `advance-epic`, `execute-feature`, or `prepare-pr`; it runs them in the right order until the epic is complete or a blocker requires user input.
 
 Use this when the user wants the full sequence:
 
@@ -24,7 +24,7 @@ Use this when the user wants the full sequence:
 - Do not create duplicate feature plans. Reuse existing `docs/features/` files when they match a child feature.
 - Do not run `prepare-pr` until the epic is complete or the user explicitly asks for a partial PR.
 - Stop if the working tree contains unrelated changes and ask what should be included.
-- Stop on any blocker reported by `plan-feature`, `advance-epic`, `execute-feature`, `validate`, or `prepare-pr`.
+- Stop on any blocker reported by `plan-feature`, `advance-epic`, `execute-feature`, or `prepare-pr`.
 - Keep a progress summary after every loop so the run can resume safely if interrupted.
 
 ## Workflow
@@ -102,7 +102,7 @@ When the epic appears complete:
 2. Confirm all child feature checkboxes are complete.
 3. Confirm no planned acceptance criteria remain unchecked.
 4. Run the most relevant validation available for the repo:
-   - `validate` for the final or highest-risk feature
+   - the acceptance-criteria and regression checks for the final or highest-risk feature
    - project test/build commands if known
    - browser tests when the epic touches critical UI flows
 5. If validation fails, stop and report the failure before preparing a PR.

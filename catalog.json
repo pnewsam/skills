@@ -14,10 +14,9 @@
   },
   "profiles": {
     "core": {
-      "description": "Minimal daily workflows for diagnosis, local Git, pull requests, and validation.",
+      "description": "Minimal daily workflows for local Git and pull requests.",
       "skills": [
         "address-review",
-        "diagnose-failure",
         "harden-pr",
         "pr-conventions",
         "prepare-pr",
@@ -26,14 +25,7 @@
         "stash",
         "trim-comments",
         "update-pr",
-        "validate",
         "writing-conventions"
-      ]
-    },
-    "skill-maintenance": {
-      "description": "Evaluate externally created skills and assimilate durable value into the local registry without implicit publication.",
-      "skills": [
-        "ingest-skill"
       ]
     },
     "linear-ops": {
@@ -46,34 +38,23 @@
       ]
     },
     "product-delivery": {
-      "description": "Product direction, durable planning, analysis, incremental delivery, and feature validation.",
+      "description": "Product direction, durable planning, and incremental delivery through the shared feature workflow.",
       "skills": [
         "advance-epic",
-        "analyze",
         "create-charter",
         "execute-feature",
         "plan-epic",
         "plan-feature",
-        "ship-epic",
-        "validate"
-      ]
-    },
-    "security-delivery": {
-      "description": "Analyze security findings and deliver one verified remediation through the shared feature workflow.",
-      "skills": [
-        "analyze",
-        "execute-feature",
-        "plan-feature"
+        "ship-epic"
       ]
     },
     "design-system-delivery": {
-      "description": "Analyze design-system drift and deliver bounded consolidation work through the shared feature workflow.",
+      "description": "Deliver bounded design-system consolidation work through the shared feature workflow with UI and design references.",
       "includes": [
         "design",
         "ui"
       ],
       "skills": [
-        "analyze",
         "execute-feature",
         "plan-feature"
       ]
@@ -86,9 +67,8 @@
       ]
     },
     "quality": {
-      "description": "Read-only quality and maintainability analysis plus the TypeScript type-safety objective and check.",
+      "description": "The TypeScript type-safety objective plus the deterministic check that enforces it.",
       "skills": [
-        "analyze",
         "typescript-types"
       ]
     },

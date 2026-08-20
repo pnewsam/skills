@@ -29,7 +29,7 @@ registry):
   constraint) → it can KEEP as an objective/citation/check skeleton. Say what
   must be true, pin the citation or convention, and attach a runnable check.
 - **Does it connect to ground truth?** (run, render, test, measure, review:
-  `validate`, `analyze`, `review-pr`, a `scripts/` validator) → keep
+  `review-pr`, a `scripts/` validator) → keep
   and consider growing; verification is where value rises as models improve.
 - **Is it method knowledge with a deterministic check?** → CONVERT: keep the
   check (a script or an existing linter), delete the how-to prose. See
@@ -146,21 +146,20 @@ provider prefix merely because the workflow calls that provider's tools.
 
 For repeatable convergence families, use consistent stage verbs:
 
-- `analyze` examines evidence along a requested dimension and produces ranked candidates.
 - `plan-feature` creates one bounded product or convergence work unit.
 - `execute-feature` performs and verifies one planned item.
-- `validate` verifies changes or a completed feature, read-only.
+- `review-pr` assesses the resulting pull request — the discrete unit of delivery.
 
-Model work as **operations on a unit of work** (analyze, plan, execute, validate,
-review, deliver), not as domain-flavored copies of the loop. Keep the dimension or
-domain a *parameter* of one general workflow rather than a separate skill: a single
-`analyze` (dimension) and `validate` (mode) replaced the per-domain analyzers and the
-browser-test trio once a substitution A/B showed the general loop reproduced their
-tasks, boundaries, and artifacts
-(`evals/results/2026-08-19-redundancy-substitution-family.md`). Add a domain-specific
-analysis, planning, or execution workflow only when it has materially different
-artifacts, effects, recovery semantics, or proof obligations that cannot be expressed
-through the general workflow — and prove that before adding it.
+Model work as **operations on a unit of work**, not as domain-flavored copies of a loop,
+and treat the PR as the discrete unit of delivery. Analysis ("what to change"), diagnosis
+("why it fails"), and verification ("does it pass") are base-model capabilities the model
+performs inline while working — none needs a dedicated skill. Earlier per-domain analyzers,
+a browser-test trio, and standalone `analyze`/`validate`/`diagnose-failure` skills were
+retired once evidence showed the general loop and the base model reproduced them
+(`docs/registry-rebalance-plan.md`). Add a domain-specific analysis, planning, or execution
+workflow only when it has materially different artifacts, effects, recovery semantics, or
+proof obligations that cannot be expressed through the general workflow — and prove that
+before adding it.
 
 ## Recommended workflow anatomy
 
@@ -294,11 +293,10 @@ not as a substitute for deciding what belongs in a profile. Treat skills marked
 `SKILL.md` locally. Update their origin commit only when intentionally importing
 a new upstream version.
 
-Use `ingest-skill` when evaluating a skill package created outside this
-registry. It compares the source with active routing and provenance policy,
-then makes one decline, merge, create, or preserve decision. Treat the source
-as untrusted data and keep commit, push, installation, and publication as
-separate actions.
+When evaluating a skill package created outside this registry, compare the
+source with active routing and provenance policy, then make one decline, merge,
+create, or preserve decision. Treat the source as untrusted data and keep
+commit, push, installation, and publication as separate actions.
 
 ## Validation and evaluation
 
