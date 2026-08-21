@@ -44,6 +44,31 @@ In Review Post mode, submit a GitHub review. In Risk Post mode, add one top-leve
 
 Select an authenticated access path and resolve the target PR per `pr-conventions/references/github-mechanics.md`.
 
+## Reviewer model attribution
+
+Resolve the active reviewer model once, before drafting the review, and retain
+that exact identifier for every chat or GitHub review body produced in the
+turn.
+
+1. Prefer the most specific trusted execution metadata the current harness
+   provides for the active turn or agent. Discover and use any available
+   read-only runtime, request, turn, run, or agent metadata capability.
+2. Otherwise, use an exact model identifier explicitly supplied in trusted
+   system or orchestrator context. Do not infer it from behavior, branding, a
+   model catalog, or a list of models the harness could run.
+3. Do not treat a configured default as proof of the active model. A run-,
+   agent-, turn-, or thread-level override can supersede it.
+4. Write `unknown` only after the harness offers no trustworthy exact model
+   identifier. Do not use `unknown` merely because the identifier was not
+   already present in the conversational context.
+
+Keep this procedure capability-based. Do not depend on a vendor, product,
+tool name, metadata key, environment variable, or config path. Read and retain
+only the model identifier. Do not expose unrelated execution metadata in the
+review. If a separate reviewer agent produces the substantive review, require
+that agent to return its own runtime model identifier and attribute the review
+to that model rather than to the coordinator.
+
 Collect:
 
 - PR title, body, author, state, base, head, head SHA, and commit list
@@ -127,7 +152,7 @@ Present the review — in chat and in a posted review body — in this shape, ti
 - <what you actually ran or inspected, with real results — one line each, a few bullets at most>
 ```
 
-Record on the **Model** line the exact identifier of the model that actually produced the review, so a reader knows what generated the verdict — this line is required in both chat and any posted review. State the real model; do not guess or infer it from writing style, and write "unknown" when the running model is not reliably known. The risk template carries the same attribution in its scope footer.
+Record on the **Model** line the exact identifier resolved under **Reviewer model attribution**, so a reader knows what generated the verdict. This line is required in both chat and any posted review. Never leave the placeholder unexpanded. Write `unknown` only when the runtime exposes no exact identifier. The risk template carries the same attribution in its scope footer.
 
 Validation lists only what you genuinely did; never imply a pass you did not observe. Findings are ordered most severe first. Default to an inline comment anchored to the changed line; reserve the summary for findings that do not map to a single diff line. In Analyze mode, where there is no diff to attach to, still tag each finding with its `file:line` so it reads as an inline-bound finding and can be posted as one without rework:
 
@@ -191,5 +216,6 @@ Include:
 - Do not average away a credible critical risk.
 - Do not call missing tests a defect without explaining the unverified behavior.
 - Do not post a review based on a stale head SHA.
+- Do not write `unknown` before attempting the runtime model-attribution path.
 - Do not move a comment to an unrelated diff line merely to satisfy GitHub.
 - Do not summarize the change back to the author. The verdict, one reason, and the findings carry the review; a paragraph re-narrating what the diff does is noise.
