@@ -72,6 +72,7 @@ to that model rather than to the coordinator.
 Collect:
 
 - PR title, body, author, state, base, head, head SHA, and commit list
+- the linked ticket or issue, when the PR references one — read it for the intended behavior and acceptance criteria the diff should satisfy
 - complete changed-file list and patches
 - relevant surrounding code and repository guidance
 - tests and validation changed or referenced by the PR
@@ -86,7 +87,7 @@ When the environment supports it, run the smallest read-only check that would co
 
 ### 1. Understand the change
 
-Restate the intended behavior, affected boundaries, and claims made in the PR description. Note mismatches between the stated and actual scope.
+Restate the intended behavior, affected boundaries, and claims made in the PR description. When the PR links a ticket or issue, read it and treat its requirements and acceptance criteria as the intended behavior. Note mismatches between the stated and actual scope, and between the linked ticket and the diff.
 
 ### 2. Inspect every relevant hunk
 
