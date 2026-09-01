@@ -1,17 +1,6 @@
 {
   "version": 1,
-  "skills": {
-    "emil-design-eng": {
-      "provenance": "external",
-      "origin_commit": "3612234",
-      "policy": "preserve"
-    },
-    "svg-animations": {
-      "provenance": "external",
-      "origin_commit": "f6165ea",
-      "policy": "preserve"
-    }
-  },
+  "skills": {},
   "profiles": {
     "core": {
       "description": "Minimal daily workflows for local Git and pull requests.",
@@ -85,13 +74,6 @@
         "ui"
       ],
       "skills": []
-    },
-    "external-creative": {
-      "description": "Externally sourced design-engineering and SVG-animation references preserved without local edits.",
-      "skills": [
-        "emil-design-eng",
-        "svg-animations"
-      ]
     }
   }
 }

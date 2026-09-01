@@ -90,6 +90,26 @@ that keep their value (or gain value) as the base model improves.
   Updated naming examples; `ship-pr`'s SKILL.md now calls itself the driver
   operation, not the top-level runbook. Taxonomy now consistent across README +
   AUTHORING + skill self-labels.
+- **Coherence pass (first-principles audit) — 2026-09-01.** User asked whether the
+  README coheres as a way of working. Found the "operations kernel" incoherent: it
+  claimed abstract operations that delegate to runbooks, but populated the kernel
+  with concrete PR skills (which are the opposite of abstract) plus four phantom
+  phases. Resolved by two shifts: (1) **base-model phases** — the kernel has no
+  Frame/Plan/Build/Verify/Merge skills by design (a verb there would be the
+  base-model-derivable prose the rebalance evicted); this reverses the earlier
+  "a skill per phase" instinct, on the user's call. (2) **operation/runbook line is
+  generality, not abstraction** — operations are the general PR/Git delivery loop;
+  runbooks are narrow per-tool/domain procedures. Rewrote the README opener into a
+  "How this registry works" narrative (base-model does the reasoning; skills are the
+  non-derivable margin), made the lifecycle table honest (5 of 8 phases base-model),
+  and retuned AUTHORING to match.
+- **External creative refs evicted (user call).** `svg-animations` +
+  `emil-design-eng` → `archive/external-creative-evicted/`; removed their catalog
+  provenance entries and the now-empty `external-creative` profile, dropped the
+  README External Design References section and profile mentions, and removed the
+  stale `catalog_test.go` assertion that named them. **Active 26 → 24.**
+- **Orchestration:** left in the README as-is for now (user call); the epic/feature
+  stack stays framed as the layer above the loop.
 - **Runbook-vs-playbook closed:** one `runbook` kind, branching allowed. The
   conventional split (runbook = linear/deterministic, playbook = branching/
   judgment) gives no clean partition here — every runbook we have branches — and
