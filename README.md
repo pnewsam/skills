@@ -104,7 +104,7 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
 
 ## Workflow Skills
 
-Workflow skills do work: they analyze a situation, produce planning artifacts, modify code, validate behavior, prepare delivery, or create pull requests. Each is either an **operation** — a leaf verb acting in one lifecycle phase — or a **runbook** that composes operations and owns the loops between them (`advance-epic`, `ship-epic`, `harden-pr`).
+Workflow skills do work: they analyze a situation, produce planning artifacts, modify code, validate behavior, prepare delivery, or create pull requests. Each is either an **operation** — a leaf verb acting in one lifecycle phase — or a **runbook** that composes operations and owns the loops between them (`advance-epic`, `ship-epic`, `ship-pr`).
 
 ### Product Direction And Delivery
 
@@ -153,12 +153,12 @@ assesses the resulting pull request. None is a separate skill.
 
 ```mermaid
 flowchart LR
-    PUB[publish-pr] -->|opens PR| RP[review-pr]
+    SPR[ship-pr] -->|opens/updates PR| PUB[publish-pr]
+    PUB --> RP[review-pr]
     RP -->|Review intent| CR[code-review verdict]
     RP -->|Risk intent| RA[merge-risk assessment]
-    RP -->|iterative repair| HP[harden-pr]
-    HP -->|fresh review| RP
-    RP -->|body needs sync/polish| PUB
+    RP -->|findings| SPR
+    SPR -->|revise then re-review| RP
 ```
 
 | Skill | Type | Phase | Description |
@@ -166,7 +166,7 @@ flowchart LR
 | [stash](registry/stash/SKILL.md) | operation | preserve | Preserve related in-progress work on a local `wip/` branch in one commit with a context note. |
 | [publish-pr](registry/publish-pr/SKILL.md) | operation | execute, edit | Take a branch to a pull request (branch, commit, push, open), or update an existing PR's title and body (sync to the diff, or polish); detects which is needed and forks. Each effect separately authorized. |
 | [review-pr](registry/review-pr/SKILL.md) | operation | analyze, review | Review a pull request for actionable defects or assess operational and merge risk; post only when explicitly requested. |
-| [harden-pr](registry/harden-pr/SKILL.md) | runbook | execute, review | Iteratively alternate independent PR reviews with traceable fixes and validation until a bounded convergence or stop condition. |
+| [ship-pr](registry/ship-pr/SKILL.md) | runbook | execute, review | Drive one change through its whole lifecycle to a merge-ready PR — build, verify, publish, then model-diverse review→revise→verify rounds until it converges or hits a bounded stop. Stops before merge. |
 | [address-review](registry/address-review/SKILL.md) | operation | execute, review | Triage inbound reviewer comments — fix, reply, defer, or fold into another PR — then implement, reply to threads, and resolve; gates the push that could dismiss an approval. |
 | [rebase-pr](registry/rebase-pr/SKILL.md) | operation | execute | Rebase one or more PR branches onto their base (default staging), reconcile changes upstream already made, then optionally force-push and re-review. |
 | [trim-comments](registry/trim-comments/SKILL.md) | operation | edit | Trim low-value comments a branch's diff introduced — process narration, external ticket/plan references, restated-obvious lines — keeping durable rationale and tool directives. |

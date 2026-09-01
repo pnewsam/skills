@@ -89,8 +89,9 @@ edges between them (re-verify after a fix, rethink on new evidence). Keep a
 runbook only when the sequence encodes control the base model would not reliably
 infer — non-obvious gates, loop termination, durable state, or recovery. A
 runbook that merely lists the obvious order is dead weight: delete it and let the
-model sequence the operations itself. (`ship-epic` and `advance-epic` are
-runbooks; `harden-pr` is the PR review-and-fix loop.)
+model sequence the operations itself. (`ship-epic`, `advance-epic`, and `ship-pr`
+are runbooks — `ship-pr` drives one PR through its whole lifecycle, absorbing the
+model-diverse review-and-fix loop.)
 
 Router was a fourth kind for selecting among an expert family; every `*-expert`
 router was evicted once the base model routed among focused skills without them.

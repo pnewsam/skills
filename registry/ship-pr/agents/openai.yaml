@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ship PR"
+  short_description: "Drive a change to a merge-ready PR; stop before merge."
+  default_prompt: "Use $ship-pr to take this change through to a merge-ready pull request — build, publish, and run model-diverse review-and-fix rounds until it converges."

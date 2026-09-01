@@ -35,10 +35,24 @@ that keep their value (or gain value) as the base model improves.
   harden-pr, ship-epic, advance-epic, execute-feature, stash, trim-comments,
   mindsdb-migrate-surface-to-tailwind, AUTHORING, evals/README. **Active 28 →
   27.** Validator green (0 errors), Go tests pass.
-- **Still open (proposal, not yet executed):** delete `harden-pr` in favor of a
-  top-level flow runbook (`ship-pr`) that absorbs its convergence loop; fold or
-  delete `design-explore` into `plan-feature`; decide the empty Frame/Merge
-  phases and runbook-vs-playbook.
+- **ship-pr runbook (decision #2, executed).** Created `registry/ship-pr/` as the
+  top-level **whole-lifecycle** runbook for one PR (Frame→Plan→Build→Verify→
+  Publish→Review→Revise→merge-ready; stops before merge). Delegates each phase to
+  its operation (plan-feature, execute-feature, publish-pr, review-pr,
+  address-review) and owns the loop: the model-diverse review→revise→verify
+  convergence engine, convergence contract, bounded stop, ledger, effect ladder
+  (Local/Publish/Respond), and scope discipline — all ported from `harden-pr`,
+  whose review/repair prose is now delegated to review-pr/address-review
+  (bundled references `reviewer-independence.md` + `hardening-summary.md`).
+  Whole-lifecycle scope + `ship-pr` name were user decisions; sibling to
+  `ship-epic` at the single-PR grain (future: ship-epic delegates delivery to
+  ship-pr). `harden-pr` → `archive/ship-pr-merge-evicted/`; core profile, 4
+  routing cases, README (table + mermaid), pr-conventions, finding-model,
+  address-review, AUTHORING repointed. Active stays **27** (−harden +ship). Spec
+  `docs/ship-pr-spec.md`. Validator green, Go tests pass.
+- **Still open (proposal, not yet executed):** fold or delete `design-explore`
+  into `plan-feature` (decision #3); decide the empty Frame/Merge phases and
+  runbook-vs-playbook.
 
 ## Progress (2026-08-19d) — analysis/validation trim; PR as the discrete unit of work
 

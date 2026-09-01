@@ -1,11 +1,11 @@
 ---
 name: pr-conventions
-description: Canonical PR conventions shared across the PR skills — the standard PR description shape, deferring to a repository template, concise language, conventional-commit format, the GitHub interaction mechanics (access-path selection, target-PR resolution, merged/closed handling, and write-once-then-verify), and the code-review finding model (verify-before-reporting, severity, confidence, and dedup). Use when preparing, updating, reviewing, or hardening a pull request, or when asked what the project's PR standards are. Invoked by publish-pr, review-pr, and harden-pr as their shared core.
+description: Canonical PR conventions shared across the PR skills — the standard PR description shape, deferring to a repository template, concise language, conventional-commit format, the GitHub interaction mechanics (access-path selection, target-PR resolution, merged/closed handling, and write-once-then-verify), and the code-review finding model (verify-before-reporting, severity, confidence, and dedup). Use when preparing, updating, reviewing, or hardening a pull request, or when asked what the project's PR standards are. Invoked by publish-pr, review-pr, and ship-pr as their shared core.
 ---
 
 # PR conventions
 
-Shared kernel for the PR skills. `publish-pr`, `review-pr`, and `harden-pr` apply these conventions so that every PR — however it is produced — follows one standard. Read the reference that fits the task:
+Shared kernel for the PR skills. `publish-pr`, `review-pr`, and `ship-pr` apply these conventions so that every PR — however it is produced — follows one standard. Read the reference that fits the task:
 
 - **`references/pr-standard.md`** — how a PR description should read: the canonical body shape, deferring to a repository template, concise language, conventional-commit format, and grouping changes by intent. Apply when writing or updating a PR title, body, or commit message.
 - **`references/github-mechanics.md`** — how to interact with GitHub safely: selecting one authenticated access path, resolving the target PR, handling merged or closed PRs, and the write-once-then-verify discipline. Apply whenever a PR skill reads or writes GitHub state.
