@@ -81,13 +81,16 @@ that keep their value (or gain value) as the base model improves.
   both would share identical anatomy, routing, and authoring rules, so a second
   kind would add a category and a boundary question with no downstream effect.
   Revisit only if a future member genuinely needs different structure.
-- **Router concept (raised, open):** routing in two senses — skill-selection
-  (which skill to invoke) stays a base-model/harness job (the `*-expert` routers
-  were evicted as redundant), and operation-dispatch within a UOW (which verb/
-  phase next; fork on state or type) is already a **capability of runbooks**
-  (`publish-pr` Step-0 detect-and-fork, `ship-pr` phase forks). Proposed home:
-  document routing as a runbook capability rather than resurrecting a Router
-  kind; not yet executed.
+- **Router concept (raised, deferred).** User flagged wanting a router concept but
+  was unsure where it fits, and chose to revisit later. Working analysis to pick
+  up from: routing has two senses — skill-selection (which skill to invoke) stays
+  a base-model/harness job (the `*-expert` routers were evicted as redundant), and
+  operation-dispatch within a UOW (which verb/phase next; fork on state or type)
+  is already a **capability of runbooks** (`publish-pr` Step-0 detect-and-fork,
+  `ship-pr` phase forks). A possible third sense is a top-level front-door triage
+  (which UOW/entry point for a request) — base-model unless it encodes org-specific
+  logic. Proposed home when revisited: document routing as a runbook capability
+  rather than a Router kind. Not executed; AUTHORING's router section left as-is.
 
 ## Progress (2026-08-19d) — analysis/validation trim; PR as the discrete unit of work
 
