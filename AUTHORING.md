@@ -73,31 +73,40 @@ on consistent evidence. Re-run this retention test when the base model or toolin
 
 ## Skill kinds
 
-Use four categories. A skill has one primary category.
+The base model does the general reasoning at every step of a unit of work; a
+skill earns its place only where it adds something the model cannot reliably
+derive — a safety gate, a runnable check, a fixed domain procedure, or a house
+convention. Most lifecycle phases have no skill, by design. When a skill does earn
+its place, it has one primary category:
 
 | Category | Purpose | Typical shape |
 | --- | --- | --- |
-| Operation | One abstract step in the unit-of-work lifecycle | Outcome, decision heuristics, gate, one primary Effect, output |
-| Runbook | One concrete, domain-specific procedure an operation delegates to | Preconditions, exact ordered steps (commands/code), verification, output |
+| Operation | Advance any unit of work through a delivery phase | Outcome, gates/effects, safety, verification, output |
+| Runbook | One fixed procedure for a specific tool, domain, or task | Preconditions, exact ordered steps (commands/code), verification, output |
 | Orchestration | Coordinate many units of work through the operations | Composed steps, gates, loop-termination, durable state, recovery |
 | Reference | Supply judgment in one decision domain | Decision rubric, examples, failure modes, review checklist |
 
-An **operation** is an abstract step in the lifecycle — heuristics, gates, and
-principles that hold across any kind of work, not domain-specific mechanics. It
-has one primary Effect, stops at a gate, and delegates concrete steps to runbooks.
-Most operations serve one phase; one — the **driver** (`ship-pr`) — runs the whole
-loop for a single unit of work and owns its back-edges, and still counts as an
-operation because it stays within one unit.
+An **operation** is a general-purpose skill for advancing a unit of work — the
+PR/Git delivery loop that applies to essentially any code change on any project.
+It is concrete (it carries mechanics), but it is not tied to one narrow tool or
+domain, and its value is the non-derivable part: the effect ladder, the safety
+gates, the finding model, git safety. It has one primary Effect and stops at a
+gate. One operation — the **driver** (`ship-pr`) — runs the whole loop for a
+single unit and owns its back-edges, and still counts as an operation because it
+stays within one unit.
 
-A **runbook** is one concrete, domain-specific procedure an operation delegates
-to: the exact commands and fixed sequence for a single task (open a GitHub PR,
-create a Linear issue). This is where code snippets and highly specific step
-sequences belong. Keep a runbook when the sequence is fragile, error-prone, or
-domain-specific enough that encoding it prevents mistakes; delete it when the
-steps are obvious. Runbooks are open-ended — a registry can hold dozens, and
-eventually a marketplace of them. Branching within one runbook is fine and does
-not make a separate "playbook" kind: that split gives no clean partition and adds
-a boundary question with no downstream effect.
+A **runbook** is one fixed procedure for a specific tool, domain, or task: the
+exact steps and calls to file a Linear issue, run an organization's migration, or
+drive one narrow API. This is where code snippets and highly specific sequences
+belong. Keep a runbook when the sequence is fragile, error-prone, or specific
+enough that encoding it prevents mistakes; delete it when the steps are obvious.
+Runbooks are open-ended — a registry can hold dozens, and eventually a
+marketplace of them. Branching within one runbook is fine and does not make a
+separate "playbook" kind: that split gives no clean partition and adds a boundary
+question with no downstream effect.
+
+The operation/runbook line is **generality**, not abstraction: operations are the
+cross-project delivery machinery; runbooks are narrow, per-tool procedures.
 
 **Orchestration** is a level above a single unit of work: it composes operations
 and runbooks across many units and owns the multi-unit sequencing, gates, loop

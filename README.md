@@ -36,27 +36,33 @@ Claude-oriented installs commonly use these locations:
 
 Codex or other clients may use analogous roots such as `~/.codex/skills/`, `~/.agents/skills/`, or `<project>/.codex/skills/` depending on client configuration. The registry source remains `registry/<skill-name>/`.
 
-## Skill categories
+## How this registry works
 
-Every skill falls into one of four categories:
+The unit of work is a **pull request**. It moves through a lifecycle (below), and
+at each step the **base model does the general reasoning** — understanding the
+task, weighing approaches, writing the code, judging whether it works. A **skill**
+enters only where it adds something the base model cannot reliably derive on its
+own: a safety gate, a runnable check, a fixed domain procedure, or a house
+convention. That is the organizing principle — skills are the non-derivable margin
+around a capable base model, not a script it must follow. Many phases of the
+lifecycle have no skill at all, and that is by design.
 
-- **Operation** — an abstract step in the unit-of-work lifecycle (below). It
-  carries heuristics, gates, and principles that hold across any kind of work,
-  not domain-specific mechanics. The operations form a small, stable **kernel**.
-- **Runbook** — a concrete, domain-specific procedure an operation delegates to:
-  the exact commands and fixed sequence for one task, such as opening a GitHub PR
-  or creating a Linear issue. Runbooks are open-ended — a registry can hold
-  dozens, and eventually a marketplace of them.
-- **Orchestration** — a skill a level *above* a single unit of work, coordinating
-  many: planning an epic and driving its features to completion.
-- **Reference** — passive knowledge a skill pulls in (conventions, objectives,
-  runnable checks); never invoked on its own.
+Skills come in four kinds, distinguished by what they add:
+
+- **Operation** — a general-purpose skill for advancing a unit of work: the
+  PR/Git loop that applies to essentially any code change. Concrete, but not tied
+  to one narrow tool or domain.
+- **Runbook** — a fixed procedure for one specific tool, domain, or task (filing a
+  Linear issue, an organization's migration). Narrow by design; this catalog can
+  grow without bound.
+- **Orchestration** — the layer *above* a single unit of work, coordinating many:
+  the charter → epic → feature planning stack.
+- **Reference** — passive knowledge a skill or the base model pulls in
+  (conventions, objectives, runnable checks); never invoked on its own.
 
 Each skill also declares its **Effect** — read-only, local files, local Git,
 network read, or external write — so authorization and stopping points stay
-explicit. An operation acts within a single phase and stops at a gate; a runbook
-runs one concrete sequence; the feedback edges that send work back to an earlier
-phase belong to the lifecycle driver (`ship-pr`), not to any single operation.
+explicit.
 
 `catalog.json` is the machine-readable source for curated install profiles and
 external-source preservation policy. Skills not explicitly marked external are
@@ -68,9 +74,9 @@ references.
 
 ## The unit-of-work lifecycle
 
-Every PR is a **unit of work** that moves through eight phases. Each phase is
-served by one **operation**; operations delegate concrete mechanics to
-**runbooks**; **references** are pulled in as judgment.
+Every PR is a **unit of work** that moves through eight phases. Most of the work
+is base-model reasoning; skills appear only at the phases with non-derivable
+value.
 
 ```mermaid
 stateDiagram-v2
@@ -98,30 +104,30 @@ framing or the approach. `ship-pr` is the **driver**: the operation that runs th
 loop end to end for one PR and owns the back-edges. It sits with the operations,
 not above them.
 
-| Phase | Question | Operation | Status |
-| --- | --- | --- | --- |
-| Frame | What is the work? | *(candidate)* | base-model today |
-| Plan | What's the approach? | *(candidate)* | base-model today |
-| Build | Make the change | *(candidate)* | base-model today |
-| Verify | Does it work? | `verify` | built-in |
-| Publish | Make it a shared PR | `publish-pr` | concrete — extract runbook |
-| Review | Is it correct? | `review-pr` | concrete |
-| Revise | Fold in findings | `address-review`, `rebase-pr` | concrete |
-| Merge | Deliver it | *(candidate)* | base-model / `gh` today |
+| Phase | Question | Handled by |
+| --- | --- | --- |
+| Frame | What is the work? | base model |
+| Plan | What's the approach? | base model |
+| Build | Make the change | base model |
+| Verify | Does it work? | base model (drive the change; the `verify` built-in helps) |
+| Publish | Make it a shared PR | `publish-pr` |
+| Review | Is it correct? | `review-pr` |
+| Revise | Fold in findings | `address-review`, `rebase-pr` |
+| Merge | Deliver it | base model / `gh` |
 
-The kernel is a work in progress. Operations should be **abstract and
-cross-domain** — heuristics and gates, not mechanics — with the exact steps
-(the `git`/`gh` sequence to open a PR, the API calls to file a Linear issue)
-living in a **runbook** the operation delegates to. Today several phases have no
-standalone operation skill yet (Frame, Plan, Build, Merge), and several existing
-operations still carry their mechanics inline (`publish-pr`, `review-pr`,
-`address-review`); creating the missing operations and extracting the embedded
-runbooks is planned work.
+Five of the eight phases are pure base-model reasoning — no skill improves on the
+model understanding the task, choosing an approach, writing the change, or
+merging it. Skills earn their place only in the delivery half, where the value is
+non-derivable: `publish-pr`'s effect ladder and safety gates, `review-pr`'s
+finding model, the revise operations' git safety. `ship-pr` is the **driver** —
+the operation that runs the whole loop for one PR and owns the back-edges; it sits
+with the operations. `stash` and `trim-comments` are cross-cutting operations
+usable from any phase.
 
-Type-specific pathways differ only in the early phases — a bug reproduces in Frame
-and adds a regression test in Build; a feature clarifies requirements; a chore
-states an invariant — then converge at Publish, which is why the delivery-half
-operations are type-agnostic and share one kernel.
+Type-specific pathways differ only in the base-model phases — a bug reproduces in
+Frame and adds a regression test in Build; a feature clarifies requirements; a
+chore states an invariant — then converge at Publish, which is why the delivery
+operations are type-agnostic.
 
 ## Artifacts
 
@@ -147,8 +153,9 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
 
 ## Operations — the kernel
 
-The small, stable set of skills that complete one unit of work; see the lifecycle
-above for how they connect. Install the `core` profile for the PR operations.
+General-purpose skills that carry a unit of work through the delivery half of the
+lifecycle. They apply to essentially any code change on any project; see the
+lifecycle above for how they connect. Install the `core` profile.
 
 | Skill | Phase | Description |
 | --- | --- | --- |
@@ -160,10 +167,10 @@ above for how they connect. Install the `core` profile for the PR operations.
 | [stash](registry/stash/SKILL.md) | cross-cutting | Preserve related in-progress work on a local `wip/` branch in one commit with a context note; shelve or resume from any phase. |
 | [trim-comments](registry/trim-comments/SKILL.md) | cross-cutting | Trim low-value comments a branch's diff introduced — process narration, external ticket/plan references, restated-obvious lines — keeping durable rationale and tool directives. |
 
-Frame, Plan, Build, Verify, and Merge are handled by the base model or built-ins
-today; they are candidates to formalize as abstract operation skills. Analysis
-("what to change"), diagnosis ("why it fails"), and verification ("does it pass")
-are base-model capabilities the model performs inline while working.
+Frame, Plan, Build, Verify, and Merge carry no skill by design — the base model
+handles them inline. Analysis ("what to change"), diagnosis ("why it fails"), and
+verification ("does it pass") are base-model capabilities, so no operation
+duplicates them.
 
 ## Runbooks — concrete procedures
 
@@ -179,9 +186,8 @@ task. This layer is open-ended — the entries below are a start, not a ceiling.
 | [mindsdb-track-design-system-metrics](registry/mindsdb-track-design-system-metrics/SKILL.md) | MindsDB | Measure design-system convergence metrics for a configured scope and post one weekly progress comment to a Linear tracking issue. |
 
 Install the `linear-ops` profile for the Linear runbooks and `mindsdb` for the
-organization-specific ones. The concrete mechanics currently embedded in the PR
-operations (opening a PR, syncing a body) are candidates to extract into runbooks
-here.
+organization-specific ones. This is the category meant to grow — new tools and
+domains add runbooks here without touching the operations kernel.
 
 ## Orchestration — above the unit of work
 
