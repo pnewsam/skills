@@ -93,6 +93,13 @@ model sequence the operations itself. (`ship-epic`, `advance-epic`, and `ship-pr
 are runbooks — `ship-pr` drives one PR through its whole lifecycle, absorbing the
 model-diverse review-and-fix loop.)
 
+One runbook kind covers both linear and branching control flow. A runbook that
+branches — forking on state or type, looping to convergence, taking a back-edge
+on new evidence — is still one runbook, not a separate "playbook" kind: branching
+is a property of the individual runbook, and a second kind would share identical
+anatomy, routing, and authoring rules while adding a boundary question with no
+downstream effect.
+
 Router was a fourth kind for selecting among an expert family; every `*-expert`
 router was evicted once the base model routed among focused skills without them.
 The Routers section below is retained as historical authoring guidance, not a

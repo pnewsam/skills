@@ -130,12 +130,11 @@ ledger, effect modes, summary-comment shape) ports over intact.
 - **Scope:** whole-lifecycle (Frame→…→merge-ready for one PR).
 - **Name:** `ship-pr`, parallel to `ship-epic`; both stop before merge.
 - **Publish:** `ship-pr` owns it (runs `publish-pr` when no PR exists).
+- **Kind:** `runbook`. One runbook kind covers linear and branching flows alike;
+  `ship-pr`'s branching (phase skips, converged-vs-loop, early-stops, the OODA
+  back-edges) is a property of this runbook, not a reason for a second kind.
 
 ## Still open
 
-- **Runbook vs. playbook.** `ship-pr` branches heavily (phase skips, converged-vs-
-  loop, early-stops, the OODA back-edges). Consistent with keeping one `runbook`
-  kind with branching allowed (per the taxonomy decision) — revisit only if a
-  second branching runbook makes a distinct `playbook` kind pay for itself.
 - **`ship-epic` delegation.** Future: `ship-epic` delegates each feature's delivery
   to `ship-pr`. Deferred; leave `ship-epic` as-is for now.

@@ -75,9 +75,19 @@ that keep their value (or gain value) as the base model improves.
   and a phase→verb→kind table; renamed the `Stage` facet to `Phase` with the
   lifecycle vocabulary; aligned the Git/PR + product Phase columns; removed the
   stale analyze→plan→execute mini-flowchart.
-- **Still open (design question only):** runbook-vs-playbook — keep one `runbook`
-  kind with branching allowed unless a second branching runbook makes a distinct
-  `playbook` kind pay for itself.
+- **Runbook-vs-playbook closed:** one `runbook` kind, branching allowed. The
+  conventional split (runbook = linear/deterministic, playbook = branching/
+  judgment) gives no clean partition here — every runbook we have branches — and
+  both would share identical anatomy, routing, and authoring rules, so a second
+  kind would add a category and a boundary question with no downstream effect.
+  Revisit only if a future member genuinely needs different structure.
+- **Router concept (raised, open):** routing in two senses — skill-selection
+  (which skill to invoke) stays a base-model/harness job (the `*-expert` routers
+  were evicted as redundant), and operation-dispatch within a UOW (which verb/
+  phase next; fork on state or type) is already a **capability of runbooks**
+  (`publish-pr` Step-0 detect-and-fork, `ship-pr` phase forks). Proposed home:
+  document routing as a runbook capability rather than resurrecting a Router
+  kind; not yet executed.
 
 ## Progress (2026-08-19d) — analysis/validation trim; PR as the discrete unit of work
 
