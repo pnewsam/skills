@@ -54,5 +54,6 @@ A collection view is not done until, **at the scale it will actually hold**:
 - Tabs are peers with stable order and URL-reflected state; never nest horizontal
   tabs in horizontal tabs.
 
-For open visual direction see `design-explore`; for contrast/color tokens `ui-color`;
+For open visual direction, generate and judge a few distinct directions
+(base-model search over prescription); for contrast/color tokens `ui-color`;
 for spacing scale `ui-spacing`.

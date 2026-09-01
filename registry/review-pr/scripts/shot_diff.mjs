@@ -4,7 +4,7 @@
  *
  * The render-evidence primitive for `review-pr`: after a visual change,
  * capture the affected screen before and after (headless Chrome, Playwright,
- * or the design-explore renderer), then diff the PNGs here. No third-party
+ * or any headless renderer), then diff the PNGs here. No third-party
  * dependencies — PNG decode/inflate/filter and the diff image are implemented
  * on Node's built-in `zlib`.
  *

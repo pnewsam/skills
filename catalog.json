@@ -17,14 +17,13 @@
       "description": "Minimal daily workflows for local Git and pull requests.",
       "skills": [
         "address-review",
-        "harden-pr",
         "pr-conventions",
-        "prepare-pr",
+        "publish-pr",
         "rebase-pr",
         "review-pr",
+        "ship-pr",
         "stash",
         "trim-comments",
-        "update-pr",
         "writing-conventions"
       ]
     },
@@ -49,9 +48,8 @@
       ]
     },
     "design-system-delivery": {
-      "description": "Deliver bounded design-system consolidation work through the shared feature workflow with UI and design references.",
+      "description": "Deliver bounded design-system consolidation work through the shared feature workflow with UI references.",
       "includes": [
-        "design",
         "ui"
       ],
       "skills": [
@@ -80,18 +78,11 @@
         "ui-spacing"
       ]
     },
-    "design": {
-      "description": "Visual composition, hierarchy, simplicity, and visual language.",
-      "skills": [
-        "design-explore"
-      ]
-    },
     "advisory": {
       "description": "Broad cross-domain consultation across the maintained reference profiles.",
       "includes": [
         "quality",
-        "ui",
-        "design"
+        "ui"
       ],
       "skills": []
     },

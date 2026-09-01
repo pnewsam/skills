@@ -130,14 +130,13 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 	}
 	wantCore := []string{
 		"address-review",
-		"harden-pr",
 		"pr-conventions",
-		"prepare-pr",
+		"publish-pr",
 		"rebase-pr",
 		"review-pr",
+		"ship-pr",
 		"stash",
 		"trim-comments",
-		"update-pr",
 		"writing-conventions",
 	}
 	if !reflect.DeepEqual(core, wantCore) {
@@ -156,7 +155,6 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 		"typescript-types",
 		"ui-color",
 		"ui-patterns",
-		"design-explore",
 	} {
 		if !inAdvisory[expected] {
 			t.Errorf("advisory does not include %q", expected)

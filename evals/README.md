@@ -75,7 +75,7 @@ and verify the live result.
 Use the small fixtures in `fixtures/` as source templates; copy them to a new
 temporary directory and initialize Git there for every trial.
 
-- `git-app/` is the clean base for `prepare-pr` and `stash`.
+- `git-app/` is the clean base for `publish-pr` and `stash`.
 - Overlay `git-change/` after the base commit to create a coherent dirty
   working tree whose tests pass.
 - `tiny-app/` contains feature and epic plans for delivery workflow trials.

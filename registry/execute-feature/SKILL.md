@@ -41,7 +41,7 @@ Route the item to the smallest relevant domain references:
 
 - quality or refactoring: `typescript-types` (type-level risk); general quality and maintainability judgment is base-model capability
 - security: secure-coding, vulnerability triage, threat modeling, and regulated-data (GDPR/HIPAA) engineering guidance are base-model capability (escalate legal interpretation to a privacy/legal owner)
-- UI/design system: `design-explore`, `ui-patterns`, `ui-color`, or `ui-spacing`
+- UI/design system: `ui-patterns`, `ui-color`, or `ui-spacing` (open visual direction is base-model search)
 - platform work (CI/CD, deploys, environments, IaC, secrets): base-model capability
 
 Mark the selected plan item in progress only when the plan supports that state.
@@ -83,7 +83,7 @@ When verification passes:
 - create one conventional local commit that references the feature ID
 - report the commit hash, evidence, remaining items, and any gaps
 
-Stop after the commit. Recommend another `execute-feature` run when items remain, or `prepare-pr` when the feature is complete and its checks pass. Do not invoke them automatically.
+Stop after the commit. Recommend another `execute-feature` run when items remain, or `publish-pr` when the feature is complete and its checks pass. Do not invoke them automatically.
 
 ## Safety and idempotency
 

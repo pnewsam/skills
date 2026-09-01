@@ -7,7 +7,7 @@ description: "Triage inbound reviewer comments on a GitHub PR, decide per commen
 
 ## Overview
 
-Handle the receiving side of code review: a reviewer left comments and you need to resolve them without churn. This is distinct from `review-pr` (you writing an outbound review) and `harden-pr` (your own review→fix loop). The recurring constraint here is that **pushing new commits can dismiss an existing approval** — so changes are batched and the push is always confirmed, and non-urgent items may be deferred rather than forced into an approved PR.
+Handle the receiving side of code review: a reviewer left comments and you need to resolve them without churn. This is distinct from `review-pr` (you writing an outbound review) and `ship-pr` (your own review→fix loop). The recurring constraint here is that **pushing new commits can dismiss an existing approval** — so changes are batched and the push is always confirmed, and non-urgent items may be deferred rather than forced into an approved PR.
 
 Apply the shared kernels: `pr-conventions/references/github-mechanics.md` for access, PR resolution, and write-once-then-verify; `writing-conventions` for reply and follow-up prose.
 
