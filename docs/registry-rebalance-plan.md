@@ -64,8 +64,20 @@ that keep their value (or gain value) as the base model improves.
   (`wantCore` + advisory list were left stale by the publish-pr/ship-pr commits;
   the Go test cache had masked the failure — always `go test -count=1`). **Active
   27 → 26.** Validator green, Go tests pass.
-- **Still open (design questions, not consolidation):** decide the empty
-  Frame/Merge phases (base-model-only vs a thin verb) and runbook-vs-playbook.
+- **Frame/Merge decided: base-model bookends, no verb.** Frame (understand the
+  work) is the retired analysis/what-to-change capability — no durable check, no
+  irreducible boundary, no orchestration → a verb there fails the bitter-lesson
+  bar. Merge is a one-liner with irreversible consequences that `ship-pr` already
+  gates via its convergence contract; a `merge-pr` verb would duplicate that and
+  risk normalizing auto-merge. The lifecycle keeps base-model bookends by design.
+- **README reflects the new thinking:** added a `## The unit-of-work lifecycle`
+  section with the 8-phase state-machine mermaid (forward path + OODA back-edges)
+  and a phase→verb→kind table; renamed the `Stage` facet to `Phase` with the
+  lifecycle vocabulary; aligned the Git/PR + product Phase columns; removed the
+  stale analyze→plan→execute mini-flowchart.
+- **Still open (design question only):** runbook-vs-playbook — keep one `runbook`
+  kind with branching allowed unless a second branching runbook makes a distinct
+  `playbook` kind pay for itself.
 
 ## Progress (2026-08-19d) — analysis/validation trim; PR as the discrete unit of work
 
