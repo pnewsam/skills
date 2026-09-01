@@ -50,9 +50,22 @@ that keep their value (or gain value) as the base model improves.
   routing cases, README (table + mermaid), pr-conventions, finding-model,
   address-review, AUTHORING repointed. Active stays **27** (−harden +ship). Spec
   `docs/ship-pr-spec.md`. Validator green, Go tests pass.
-- **Still open (proposal, not yet executed):** fold or delete `design-explore`
-  into `plan-feature` (decision #3); decide the empty Frame/Merge phases and
-  runbook-vs-playbook.
+- **design-explore evicted (decision #3, executed).** Deleted rather than folded
+  into `plan-feature`: folding solves no essential gap. The canonical ground-truth
+  checks it leaned on already live in `ui-color` (`check_contrast.py`) and
+  `ui-spacing` (`check_spacing.py`), so no verification is lost; its unique bits —
+  the generate-N-directions-and-judge orchestration and a headless render wrapper
+  (`render_direction.mjs`) — are a base-model + Workflow-tool pattern, and folding
+  them in would only contaminate a general planning verb with UI-rendering
+  machinery. Archived to `archive/design-explore-evicted/`. Removed the `design`
+  profile and dropped it from `advisory` and `design-system-delivery` includes;
+  repointed `execute-feature`, `ui-patterns`, and the `shot_diff.mjs` comment;
+  removed the README Design section. Also **fixed a stale `catalog_test.go`**
+  (`wantCore` + advisory list were left stale by the publish-pr/ship-pr commits;
+  the Go test cache had masked the failure — always `go test -count=1`). **Active
+  27 → 26.** Validator green, Go tests pass.
+- **Still open (design questions, not consolidation):** decide the empty
+  Frame/Merge phases (base-model-only vs a thin verb) and runbook-vs-playbook.
 
 ## Progress (2026-08-19d) — analysis/validation trim; PR as the discrete unit of work
 

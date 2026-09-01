@@ -188,18 +188,6 @@ model should apply or verify against, rather than method prose it can already
 produce. The former `*-expert` routers were evicted once the base model routed
 among the focused skills as well without them; consult the skills directly.
 
-### Design
-
-Visual direction is **searched, not prescribed**. `design-explore` generates
-several distinct directions, judges them against criteria derived from the brief,
-and synthesizes a recommendation, verified against ground truth (`ui-color`
-contrast, `ui-spacing` scale). Repository-wide design-system convergence and pattern
-drift are base-model analysis.
-
-| Skill                                                         | Type     | Description                                                                                                          |
-| ------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
-| [design-explore](registry/design-explore/SKILL.md)            | operation | Generate several distinct visual directions, judge against explicit criteria, synthesize. Search over prescription.  |
-
 ### UI
 
 The prose UI family was evicted; what remains is what the model can't derive or
