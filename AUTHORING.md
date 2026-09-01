@@ -73,37 +73,45 @@ on consistent evidence. Re-run this retention test when the base model or toolin
 
 ## Skill kinds
 
-Use three kinds. A skill should have one primary kind.
+Use four categories. A skill has one primary category.
 
-| Kind | Purpose | Typical shape |
+| Category | Purpose | Typical shape |
 | --- | --- | --- |
-| Operation | Perform one bounded action in a single lifecycle phase | Preconditions, modes/effects, ordered procedure, verification, output |
-| Runbook | Sequence operations across phases and own the loops between them | Composed steps, gates, loop-termination and recovery semantics |
+| Operation | One abstract step in the unit-of-work lifecycle | Outcome, decision heuristics, gate, one primary Effect, output |
+| Runbook | One concrete, domain-specific procedure an operation delegates to | Preconditions, exact ordered steps (commands/code), verification, output |
+| Orchestration | Coordinate many units of work through the operations | Composed steps, gates, loop-termination, durable state, recovery |
 | Reference | Supply judgment in one decision domain | Decision rubric, examples, failure modes, review checklist |
 
-An **operation** is a leaf: it acts, has one primary Effect, and stops at a gate.
-It may read references but does not invoke other skills.
+An **operation** is an abstract step in the lifecycle — heuristics, gates, and
+principles that hold across any kind of work, not domain-specific mechanics. It
+has one primary Effect, stops at a gate, and delegates concrete steps to runbooks.
+Most operations serve one phase; one — the **driver** (`ship-pr`) — runs the whole
+loop for a single unit of work and owns its back-edges, and still counts as an
+operation because it stays within one unit.
 
-A **runbook** composes operations across lifecycle phases and owns the feedback
-edges between them (re-verify after a fix, rethink on new evidence). Keep a
-runbook only when the sequence encodes control the base model would not reliably
-infer — non-obvious gates, loop termination, durable state, or recovery. A
-runbook that merely lists the obvious order is dead weight: delete it and let the
-model sequence the operations itself. (`ship-epic`, `advance-epic`, and `ship-pr`
-are runbooks — `ship-pr` drives one PR through its whole lifecycle, absorbing the
-model-diverse review-and-fix loop.)
+A **runbook** is one concrete, domain-specific procedure an operation delegates
+to: the exact commands and fixed sequence for a single task (open a GitHub PR,
+create a Linear issue). This is where code snippets and highly specific step
+sequences belong. Keep a runbook when the sequence is fragile, error-prone, or
+domain-specific enough that encoding it prevents mistakes; delete it when the
+steps are obvious. Runbooks are open-ended — a registry can hold dozens, and
+eventually a marketplace of them. Branching within one runbook is fine and does
+not make a separate "playbook" kind: that split gives no clean partition and adds
+a boundary question with no downstream effect.
 
-One runbook kind covers both linear and branching control flow. A runbook that
-branches — forking on state or type, looping to convergence, taking a back-edge
-on new evidence — is still one runbook, not a separate "playbook" kind: branching
-is a property of the individual runbook, and a second kind would share identical
-anatomy, routing, and authoring rules while adding a boundary question with no
-downstream effect.
+**Orchestration** is a level above a single unit of work: it composes operations
+and runbooks across many units and owns the multi-unit sequencing, gates, loop
+termination, durable state, and recovery — the charter/epic/feature stack
+(`create-charter`, `plan-epic`, `plan-feature`, `execute-feature`, `advance-epic`,
+`ship-epic`). Keep an orchestration skill only when it encodes control the base
+model would not reliably infer; one that merely lists the obvious order is dead
+weight — delete it and let the model sequence the steps itself.
 
-Router was a fourth kind for selecting among an expert family; every `*-expert`
-router was evicted once the base model routed among focused skills without them.
-The Routers section below is retained as historical authoring guidance, not a
-current kind.
+Router was a candidate category for selecting among an expert family; every
+`*-expert` router was evicted once the base model routed among focused skills
+without them. Routing as a concept is deferred (see `docs/registry-rebalance-plan.md`);
+the Routers section below is retained as historical authoring guidance, not a
+current category.
 
 ## Scope and granularity
 
@@ -147,9 +155,9 @@ description: Clear routing contract with triggers, exclusions, and material effe
 ---
 ```
 
-The directory and `name` must match. Use a verb phrase for operations and
-runbooks (`publish-pr`, `ship-epic`) and a decision-domain noun phrase for
-references (`react-state-management`).
+The directory and `name` must match. Use a verb phrase for operations, runbooks,
+and orchestration (`publish-pr`, `create-issue`, `ship-epic`) and a
+decision-domain noun phrase for references (`react-state-management`).
 
 For workflow names, prefer `<verb>-<object>` using the target system's canonical
 noun: `create-issue`, `create-project`, `review-pr`. Keep singular nouns for

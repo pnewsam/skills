@@ -9,9 +9,9 @@ description: "Drive one PR-sized unit of work through its whole lifecycle to a m
 
 Take one PR-sized change from intent to a merge-ready pull request whose latest
 exact state has no credible merge-blocking findings — or stop with a precise
-account of what still prevents that claim. This is the top-level runbook for a
-single PR: it drives the whole lifecycle and owns the feedback loops, delegating
-each atomic step to the operation that owns it.
+account of what still prevents that claim. This is the **driver** operation for a
+single PR: it runs the whole lifecycle and owns the feedback loops, delegating
+each atomic step to the operation — and, in turn, the runbook — that owns it.
 
 It never merges. Merge is a separate, explicitly authorized action.
 
