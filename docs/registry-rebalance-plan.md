@@ -64,17 +64,28 @@ that keep their value (or gain value) as the base model improves.
   (`wantCore` + advisory list were left stale by the publish-pr/ship-pr commits;
   the Go test cache had masked the failure — always `go test -count=1`). **Active
   27 → 26.** Validator green, Go tests pass.
-- **Frame/Merge decided: base-model bookends, no verb.** Frame (understand the
-  work) is the retired analysis/what-to-change capability — no durable check, no
-  irreducible boundary, no orchestration → a verb there fails the bitter-lesson
-  bar. Merge is a one-liner with irreversible consequences that `ship-pr` already
-  gates via its convergence contract; a `merge-pr` verb would duplicate that and
-  risk normalizing auto-merge. The lifecycle keeps base-model bookends by design.
-- **README reflects the new thinking:** added a `## The unit-of-work lifecycle`
-  section with the 8-phase state-machine mermaid (forward path + OODA back-edges)
-  and a phase→verb→kind table; renamed the `Stage` facet to `Phase` with the
-  lifecycle vocabulary; aligned the Git/PR + product Phase columns; removed the
-  stale analyze→plan→execute mini-flowchart.
+- **Frame/Merge — reversed to candidate operations (user call).** Earlier this
+  session they were "base-model bookends, no verb"; the user then decided the
+  kernel should have a skill for each of the 8 phases, so Frame/Plan/Build/Merge
+  are now candidate operations to create (base-model today). Open tension to
+  watch: an abstract Frame/Build/Merge operation that conveys only base-model
+  heuristics could fail the bitter-lesson bar — resolve per-skill at creation.
+- **README restructured around three skill tiers (user-directed).** Simplified
+  the taxonomy to four categories — **operation** (abstract kernel step),
+  **runbook** (concrete domain procedure an operation delegates to; e.g. open a
+  GitHub PR, create a Linear issue — a catalog, eventually a marketplace),
+  **orchestration** (above one UOW: charter/epic/feature stack), **reference**
+  (knowledge). Note this **redefines runbook**: it is now the concrete leaf, not
+  the high-level composer. README sections are now Operations (kernel: ship-pr
+  driver + publish-pr/review-pr/address-review/rebase-pr/stash/trim-comments,
+  with Frame/Plan/Build/Verify/Merge as base-model/candidates), Runbooks
+  (create-issue/create-project/polish-issue/mindsdb-*), Orchestration (the epic
+  stack), Reference (unchanged). Added the 8-phase state-machine mermaid + the
+  operations kernel table. `ship-pr` is the kernel **driver**, not a runbook.
+- **NOT yet aligned (follow-up):** AUTHORING still defines Kind as operation/
+  runbook/reference with runbook = composer and no orchestration category; and
+  `ship-pr`'s own SKILL.md still calls itself a runbook. These need a matching
+  pass so the taxonomy is consistent across README + AUTHORING + skill self-labels.
 - **Runbook-vs-playbook closed:** one `runbook` kind, branching allowed. The
   conventional split (runbook = linear/deterministic, playbook = branching/
   judgment) gives no clean partition here — every runbook we have branches — and

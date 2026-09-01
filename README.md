@@ -36,50 +36,41 @@ Claude-oriented installs commonly use these locations:
 
 Codex or other clients may use analogous roots such as `~/.codex/skills/`, `~/.agents/skills/`, or `<project>/.codex/skills/` depending on client configuration. The registry source remains `registry/<skill-name>/`.
 
-## Taxonomy
+## Skill categories
 
-Classify a skill on four operational facets:
+Every skill falls into one of four categories:
 
-| Facet | Values | Why it matters |
-| --- | --- | --- |
-| **Kind** | operation, runbook, reference | Determines the skill's expected structure |
-| **Domain** | product, Git/PR, Linear, UI, design, quality, security, testing, and others | Controls installation and routing neighborhoods |
-| **Phase** | frame, plan, build, verify, publish, review, revise, merge | Where the skill acts in the unit-of-work lifecycle (below) |
-| **Effect** | read-only, local files, local Git, network read, external write | Makes authorization and stopping points explicit |
+- **Operation** — an abstract step in the unit-of-work lifecycle (below). It
+  carries heuristics, gates, and principles that hold across any kind of work,
+  not domain-specific mechanics. The operations form a small, stable **kernel**.
+- **Runbook** — a concrete, domain-specific procedure an operation delegates to:
+  the exact commands and fixed sequence for one task, such as opening a GitHub PR
+  or creating a Linear issue. Runbooks are open-ended — a registry can hold
+  dozens, and eventually a marketplace of them.
+- **Orchestration** — a skill a level *above* a single unit of work, coordinating
+  many: planning an epic and driving its features to completion.
+- **Reference** — passive knowledge a skill pulls in (conventions, objectives,
+  runnable checks); never invoked on its own.
 
-The three **Kind** values name three planes. An **operation** is a leaf verb: it
-acts within one lifecycle phase, has one primary Effect, and stops at a gate. A
-**runbook** composes operations across phases and owns the feedback loops between
-them; it earns its place only by encoding control the base model would not
-reliably infer — non-obvious gates, loop termination, durable state, recovery —
-never by listing an obvious order. A **reference** is never invoked; it supplies
-judgment a verb pulls in. (The earlier divergence/convergence lens is retired: it
-never drove routing or installation.)
+Each skill also declares its **Effect** — read-only, local files, local Git,
+network read, or external write — so authorization and stopping points stay
+explicit. An operation acts within a single phase and stops at a gate; a runbook
+runs one concrete sequence; the feedback edges that send work back to an earlier
+phase belong to the lifecycle driver (`ship-pr`), not to any single operation.
 
 `catalog.json` is the machine-readable source for curated install profiles and
 external-source preservation policy. Skills not explicitly marked external are
-registry-maintained. Externally sourced skill bodies are validated against their
-origin commit and must be updated from upstream rather than edited locally.
-
-Profiles may include other profiles. `core` intentionally stays small and
-operational; install `advisory` when broad cross-domain reference is useful. The
-advisory profile composes the maintained reference profiles but deliberately
-does not include externally sourced references. Install `linear-ops` for the
-focused Linear issue and project creation workflows. Install
-`external-creative` when explicitly opting into preserved third-party creative
+registry-maintained; externally sourced bodies are validated against their origin
+commit and updated from upstream rather than edited locally. `core` stays small
+and operational; install `advisory` for broad cross-domain reference, `linear-ops`
+for the Linear runbooks, and `external-creative` for preserved third-party
 references.
-
-A single operation uses no more than three linear phases and stops at a gate.
-Approval is a gate between planning and building, validation belongs inside
-building, and publication is a separate delivery action. The feedback edges that
-send work back to an earlier phase belong to a **runbook**, not the operation —
-see the lifecycle below.
 
 ## The unit-of-work lifecycle
 
 Every PR is a **unit of work** that moves through eight phases. Each phase is
-served by at most one **operation** verb; **runbooks** compose those verbs and
-own the feedback edges between phases; **references** are pulled in as judgment.
+served by one **operation**; operations delegate concrete mechanics to
+**runbooks**; **references** are pulled in as judgment.
 
 ```mermaid
 stateDiagram-v2
@@ -100,38 +91,37 @@ stateDiagram-v2
     Merge --> [*]
 ```
 
-The solid forward path is the happy case; the back-edges are the OODA loops a
-runbook owns — the tight `Verify → Build` inner loop, the `Review → Revise →
-Verify` outer loop, and the `→ Frame` / `→ Plan` escape hatches taken when
-evidence contradicts the framing or the approach.
+The solid forward path is the happy case; the back-edges are the OODA loops — the
+tight `Verify → Build` inner loop, the `Review → Revise → Verify` outer loop, and
+the `→ Frame` / `→ Plan` escape hatches taken when evidence contradicts the
+framing or the approach. `ship-pr` is the **driver**: the operation that runs this
+loop end to end for one PR and owns the back-edges. It sits with the operations,
+not above them.
 
-| Phase | Question | Verb | Kind |
+| Phase | Question | Operation | Status |
 | --- | --- | --- | --- |
-| Frame | What is the work? | *base-model* | — |
-| Plan | What's the approach? | `plan-feature` | operation |
-| Build | Make the change | `execute-feature` | operation |
-| Verify | Does it work? | `verify` *(base-model)* | — |
-| Publish | Make it a shared PR | `publish-pr` | operation |
-| Review | Is it correct? | `review-pr` | operation |
-| Revise | Fold in findings | `address-review`, `rebase-pr` | operation |
-| Merge | Deliver it | *base-model / `gh`* | — |
+| Frame | What is the work? | *(candidate)* | base-model today |
+| Plan | What's the approach? | *(candidate)* | base-model today |
+| Build | Make the change | *(candidate)* | base-model today |
+| Verify | Does it work? | `verify` | built-in |
+| Publish | Make it a shared PR | `publish-pr` | concrete — extract runbook |
+| Review | Is it correct? | `review-pr` | concrete |
+| Revise | Fold in findings | `address-review`, `rebase-pr` | concrete |
+| Merge | Deliver it | *(candidate)* | base-model / `gh` today |
 
-`ship-pr` is the runbook that drives Frame→…→merge-ready for one PR and owns the
-loops; `ship-epic` does the same at the epic grain. `stash` is cross-cutting
-(shelve or resume from any phase); `pr-conventions` is the shared kernel every
-Publish/Review/Revise verb reads.
+The kernel is a work in progress. Operations should be **abstract and
+cross-domain** — heuristics and gates, not mechanics — with the exact steps
+(the `git`/`gh` sequence to open a PR, the API calls to file a Linear issue)
+living in a **runbook** the operation delegates to. Today several phases have no
+standalone operation skill yet (Frame, Plan, Build, Merge), and several existing
+operations still carry their mechanics inline (`publish-pr`, `review-pr`,
+`address-review`); creating the missing operations and extracting the embedded
+runbooks is planned work.
 
-**Frame and Merge are deliberately base-model bookends.** The registry supplies a
-verb only where it adds value the base model cannot derive — a gate, an effect,
-verification, or orchestration. Observing the work and performing the merge are
-base-model, and merge stays a separately authorized action rather than a skill
-that could normalize auto-merge.
-
-Type-specific pathways differ only in the early phases — a bug reproduces in
-Frame and adds a regression test in Build; a feature clarifies requirements and
-may plan a visual direction; a chore states an invariant to hold — then all
-converge at Publish, which is why the delivery-half verbs are type-agnostic and
-share one kernel.
+Type-specific pathways differ only in the early phases — a bug reproduces in Frame
+and adds a regression test in Build; a feature clarifies requirements; a chore
+states an invariant — then converge at Publish, which is why the delivery-half
+operations are type-agnostic and share one kernel.
 
 ## Artifacts
 
@@ -155,84 +145,69 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
 
 `docs/epics/` and `docs/features/` are the standard durable planning surfaces. Product programs and deliberately managed multi-feature initiatives flow through epics. Bounded refactors, security remediations, design-system consolidation, defect fixes, dependency work, and other convergence improvements may go directly from analysis evidence to `plan-feature`; a parent epic is optional in Convergence mode. `docs/tmp/` is reserved for ephemeral WIP handoff notes.
 
-## Workflow Skills
+## Operations — the kernel
 
-Workflow skills do work: they analyze a situation, produce planning artifacts, modify code, validate behavior, prepare delivery, or create pull requests. Each is either an **operation** — a leaf verb acting in one lifecycle phase — or a **runbook** that composes operations and owns the loops between them (`advance-epic`, `ship-epic`, `ship-pr`).
+The small, stable set of skills that complete one unit of work; see the lifecycle
+above for how they connect. Install the `core` profile for the PR operations.
 
-### Product Direction And Delivery
+| Skill | Phase | Description |
+| --- | --- | --- |
+| [ship-pr](registry/ship-pr/SKILL.md) | driver | Drive one change through the whole lifecycle to a merge-ready PR — build, verify, publish, then model-diverse review→revise→verify rounds until it converges or hits a bounded stop. Owns the back-edges; stops before merge. |
+| [publish-pr](registry/publish-pr/SKILL.md) | publish | Take a branch to a pull request (branch, commit, push, open), or update an existing PR's title and body (sync to the diff, or polish); detects which is needed and forks. Each effect separately authorized. |
+| [review-pr](registry/review-pr/SKILL.md) | review | Review a pull request for actionable defects or assess operational and merge risk; post only when explicitly requested. |
+| [address-review](registry/address-review/SKILL.md) | revise | Triage inbound reviewer comments — fix, reply, defer, or fold into another PR — then implement, reply to threads, and resolve; gates the push that could dismiss an approval. |
+| [rebase-pr](registry/rebase-pr/SKILL.md) | revise | Rebase one or more PR branches onto their base (default staging), reconcile changes upstream already made, then optionally force-push and re-review. |
+| [stash](registry/stash/SKILL.md) | cross-cutting | Preserve related in-progress work on a local `wip/` branch in one commit with a context note; shelve or resume from any phase. |
+| [trim-comments](registry/trim-comments/SKILL.md) | cross-cutting | Trim low-value comments a branch's diff introduced — process narration, external ticket/plan references, restated-obvious lines — keeping durable rationale and tool directives. |
 
-Workflow skills for product direction, planning, epic/feature delivery, and PR preparation.
+Frame, Plan, Build, Verify, and Merge are handled by the base model or built-ins
+today; they are candidates to formalize as abstract operation skills. Analysis
+("what to change"), diagnosis ("why it fails"), and verification ("does it pass")
+are base-model capabilities the model performs inline while working.
+
+## Runbooks — concrete procedures
+
+Domain-specific sequences an operation delegates to: exact steps and calls for one
+task. This layer is open-ended — the entries below are a start, not a ceiling.
+
+| Skill | Domain | Description |
+| --- | --- | --- |
+| [create-issue](registry/create-issue/SKILL.md) | Linear | Resolve live workspace fields, create one Linear issue, verify it, and stop. |
+| [create-project](registry/create-project/SKILL.md) | Linear | Resolve live workspace fields, create one Linear project, verify it, and stop. |
+| [polish-issue](registry/polish-issue/SKILL.md) | Linear | Improve an issue's language without changing its substance or properties. |
+| [mindsdb-migrate-surface-to-tailwind](registry/mindsdb-migrate-surface-to-tailwind/SKILL.md) | MindsDB | Migrate one Cowork UI surface's inline styles to Tailwind and design tokens as three separately-committed passes on a draft PR. |
+| [mindsdb-track-design-system-metrics](registry/mindsdb-track-design-system-metrics/SKILL.md) | MindsDB | Measure design-system convergence metrics for a configured scope and post one weekly progress comment to a Linear tracking issue. |
+
+Install the `linear-ops` profile for the Linear runbooks and `mindsdb` for the
+organization-specific ones. The concrete mechanics currently embedded in the PR
+operations (opening a PR, syncing a body) are candidates to extract into runbooks
+here.
+
+## Orchestration — above the unit of work
+
+Skills a level above a single unit of work: they plan and coordinate many units
+through the shared operations. Install the `product-delivery` profile.
 
 ```mermaid
 flowchart TD
     CC[create-charter] -->|produces docs/CHARTER.md| PE[plan-epic]
     PE -->|produces docs/epics/| PF[plan-feature]
-    PE --> SP[ship-epic]
-    SP -->|plans missing features| PF
-    SP -->|advances until complete| AE
-    SP -->|prepares PR| PPR[publish-pr]
-    PF -->|produces docs/features/| EF[execute-feature]
-    EF -->|opens a PR| PPR
     PE --> AE[advance-epic]
-    AE -.->|orchestrates| PF
-    AE -.->|orchestrates| EF
+    PF -->|produces docs/features/| EF[execute-feature]
+    SE[ship-epic] -->|plans missing features| PF
+    SE -->|advances until complete| AE
+    SE -->|prepares a PR| SP[ship-pr]
+    AE -.->|one step| EF
 ```
 
-| Skill | Type | Phase | Description |
-| --- | --- | --- | --- |
-| [create-charter](registry/create-charter/SKILL.md) | operation | plan | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning. |
-| [plan-epic](registry/plan-epic/SKILL.md) | operation | plan | Create or update one charter-aligned epic, including deduplicating bug-bash or app-feedback observations into coherent child features. |
-| [plan-feature](registry/plan-feature/SKILL.md) | operation | plan | Plan one bounded product feature or evidence-backed convergence improvement; parent epics are optional in Convergence mode. |
-| [execute-feature](registry/execute-feature/SKILL.md) | operation | build | Implement and verify one unchecked item from any product or convergence feature plan, create one local commit, and stop. |
-| [advance-epic](registry/advance-epic/SKILL.md) | runbook | spans | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete. |
-| [ship-epic](registry/ship-epic/SKILL.md) | runbook | spans | Complete an epic end-to-end — plan missing features, advance until all child features are complete, validate, and prepare a PR. |
-
-### Linear Operations
-
-Focused workflows for creating or polishing one verified Linear record and
-stopping. Install the `linear-ops` profile when a team uses Linear.
-
-| Skill | Type | Phase | Description |
-| --- | --- | --- | --- |
-| [create-issue](registry/create-issue/SKILL.md) | operation | plan | Resolve live workspace fields, create one Linear issue, verify it, and stop. |
-| [create-project](registry/create-project/SKILL.md) | operation | plan | Resolve live workspace fields, create one Linear project, verify it, and stop. |
-| [polish-issue](registry/polish-issue/SKILL.md) | operation | edit | Improve an issue's language without changing its substance or properties. |
-
-Analysis ("what to change"), diagnosis ("why it fails"), and verification ("does it
-pass") are base-model capabilities the model performs inline while working; `review-pr`
-assesses the resulting pull request. None is a separate skill.
-
-### Git And PR Workflow
-
-```mermaid
-flowchart LR
-    SPR[ship-pr] -->|opens/updates PR| PUB[publish-pr]
-    PUB --> RP[review-pr]
-    RP -->|Review intent| CR[code-review verdict]
-    RP -->|Risk intent| RA[merge-risk assessment]
-    RP -->|findings| SPR
-    SPR -->|revise then re-review| RP
-```
-
-| Skill | Type | Phase | Description |
-| --- | --- | --- | --- |
-| [stash](registry/stash/SKILL.md) | operation | cross-cutting | Preserve related in-progress work on a local `wip/` branch in one commit with a context note. |
-| [publish-pr](registry/publish-pr/SKILL.md) | operation | publish | Take a branch to a pull request (branch, commit, push, open), or update an existing PR's title and body (sync to the diff, or polish); detects which is needed and forks. Each effect separately authorized. |
-| [review-pr](registry/review-pr/SKILL.md) | operation | review | Review a pull request for actionable defects or assess operational and merge risk; post only when explicitly requested. |
-| [ship-pr](registry/ship-pr/SKILL.md) | runbook | spans | Drive one change through its whole lifecycle to a merge-ready PR — build, verify, publish, then model-diverse review→revise→verify rounds until it converges or hits a bounded stop. Stops before merge. |
-| [address-review](registry/address-review/SKILL.md) | operation | revise | Triage inbound reviewer comments — fix, reply, defer, or fold into another PR — then implement, reply to threads, and resolve; gates the push that could dismiss an approval. |
-| [rebase-pr](registry/rebase-pr/SKILL.md) | operation | revise | Rebase one or more PR branches onto their base (default staging), reconcile changes upstream already made, then optionally force-push and re-review. |
-| [trim-comments](registry/trim-comments/SKILL.md) | operation | build | Trim low-value comments a branch's diff introduced — process narration, external ticket/plan references, restated-obvious lines — keeping durable rationale and tool directives. |
-
-### Organization-Specific
-
-Skills scoped to specific organization repositories, installed via the `mindsdb`
-profile and not part of the generic registry.
-
-| Skill | Type | Phase | Description |
-| --- | --- | --- | --- |
-| [mindsdb-migrate-surface-to-tailwind](registry/mindsdb-migrate-surface-to-tailwind/SKILL.md) | operation | build | Migrate one MindsHub Cowork UI surface's inline styles to Tailwind and design tokens as three separately-committed passes on a draft PR. |
-| [mindsdb-track-design-system-metrics](registry/mindsdb-track-design-system-metrics/SKILL.md) | operation | analyze | Measure design-system convergence metrics for a configured scope and post one weekly progress comment to a Linear tracking issue. |
+| Skill | Artifact | Description |
+| --- | --- | --- |
+| [create-charter](registry/create-charter/SKILL.md) | `docs/CHARTER.md` | Create or refresh a product charter that serves as the north star for all downstream planning. |
+| [plan-epic](registry/plan-epic/SKILL.md) | `docs/epics/` | Create or update one charter-aligned epic, deduplicating bug-bash or app-feedback observations into coherent child features. |
+| [plan-feature](registry/plan-feature/SKILL.md) | `docs/features/` | Plan one bounded product feature or evidence-backed convergence improvement; parent epics are optional in Convergence mode. |
+| [execute-feature](registry/execute-feature/SKILL.md) | one commit | Implement and verify one unchecked item from any feature plan, create one local commit, and stop. |
+| [advance-epic](registry/advance-epic/SKILL.md) | one step | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete. |
+| [ship-epic](registry/ship-epic/SKILL.md) | PR-ready epic | Complete an epic end-to-end — plan missing features, advance until all are complete, validate, and prepare a PR. |
 
 ## Reference Skills
 
@@ -271,8 +246,7 @@ voice.
 ### External Design References
 
 These packages retain upstream bodies and are available through the
-`external-creative` profile rather than the maintained `design` or `advisory`
-profiles.
+`external-creative` profile rather than the maintained `advisory` profile.
 
 | Skill                                                | Type      | Description                                                                                                                                           | Origin                                                                                     |
 | ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
