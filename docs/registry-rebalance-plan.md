@@ -82,10 +82,14 @@ that keep their value (or gain value) as the base model improves.
   (create-issue/create-project/polish-issue/mindsdb-*), Orchestration (the epic
   stack), Reference (unchanged). Added the 8-phase state-machine mermaid + the
   operations kernel table. `ship-pr` is the kernel **driver**, not a runbook.
-- **NOT yet aligned (follow-up):** AUTHORING still defines Kind as operation/
-  runbook/reference with runbook = composer and no orchestration category; and
-  `ship-pr`'s own SKILL.md still calls itself a runbook. These need a matching
-  pass so the taxonomy is consistent across README + AUTHORING + skill self-labels.
+- **AUTHORING + ship-pr aligned (done).** Rewrote AUTHORING's kinds section to the
+  four categories (operation / runbook / orchestration / reference): runbook is now
+  the concrete domain procedure with its own admission bar (fragile/error-prone/
+  domain-specific mechanics), orchestration carries the compose-and-own-the-loops
+  semantics with the non-obvious-control bar, and `ship-pr` is the driver operation.
+  Updated naming examples; `ship-pr`'s SKILL.md now calls itself the driver
+  operation, not the top-level runbook. Taxonomy now consistent across README +
+  AUTHORING + skill self-labels.
 - **Runbook-vs-playbook closed:** one `runbook` kind, branching allowed. The
   conventional split (runbook = linear/deterministic, playbook = branching/
   judgment) gives no clean partition here — every runbook we have branches — and
