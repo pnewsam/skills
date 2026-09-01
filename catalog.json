@@ -19,12 +19,11 @@
         "address-review",
         "harden-pr",
         "pr-conventions",
-        "prepare-pr",
+        "publish-pr",
         "rebase-pr",
         "review-pr",
         "stash",
         "trim-comments",
-        "update-pr",
         "writing-conventions"
       ]
     },

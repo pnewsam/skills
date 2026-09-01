@@ -77,13 +77,25 @@ Use three kinds. A skill should have one primary kind.
 
 | Kind | Purpose | Typical shape |
 | --- | --- | --- |
-| Router | Select the smallest relevant expert set | Routing table, overlap boundaries, synthesis rules |
-| Workflow | Produce a repeatable outcome | Preconditions, modes/effects, ordered procedure, verification, output |
+| Operation | Perform one bounded action in a single lifecycle phase | Preconditions, modes/effects, ordered procedure, verification, output |
+| Runbook | Sequence operations across phases and own the loops between them | Composed steps, gates, loop-termination and recovery semantics |
 | Reference | Supply judgment in one decision domain | Decision rubric, examples, failure modes, review checklist |
 
-An orchestrator is a workflow that invokes other workflows. Keep it only when
-the sequence has durable state and recovery semantics; do not create an
-orchestrator merely to save the user from naming the next obvious skill.
+An **operation** is a leaf: it acts, has one primary Effect, and stops at a gate.
+It may read references but does not invoke other skills.
+
+A **runbook** composes operations across lifecycle phases and owns the feedback
+edges between them (re-verify after a fix, rethink on new evidence). Keep a
+runbook only when the sequence encodes control the base model would not reliably
+infer — non-obvious gates, loop termination, durable state, or recovery. A
+runbook that merely lists the obvious order is dead weight: delete it and let the
+model sequence the operations itself. (`ship-epic` and `advance-epic` are
+runbooks; `harden-pr` is the PR review-and-fix loop.)
+
+Router was a fourth kind for selecting among an expert family; every `*-expert`
+router was evicted once the base model routed among focused skills without them.
+The Routers section below is retained as historical authoring guidance, not a
+current kind.
 
 ## Scope and granularity
 
@@ -127,10 +139,9 @@ description: Clear routing contract with triggers, exclusions, and material effe
 ---
 ```
 
-The directory and `name` must match. Use a verb phrase for workflows
-(`prepare-pr`) and a decision-domain noun phrase for references
-(`react-state-management`). Router names may use `-expert` when they genuinely
-route among focused children.
+The directory and `name` must match. Use a verb phrase for operations and
+runbooks (`publish-pr`, `ship-epic`) and a decision-domain noun phrase for
+references (`react-state-management`).
 
 For workflow names, prefer `<verb>-<object>` using the target system's canonical
 noun: `create-issue`, `create-project`, `review-pr`. Keep singular nouns for
@@ -144,7 +155,7 @@ behavior is the user-recognizable operation or when two same-named workflows
 must coexist in one installation, as with `gh-address-comments`. Do not add a
 provider prefix merely because the workflow calls that provider's tools.
 
-For repeatable convergence families, use consistent stage verbs:
+For the unit-of-work lifecycle, use consistent phase verbs:
 
 - `plan-feature` creates one bounded product or convergence work unit.
 - `execute-feature` performs and verifies one planned item.
@@ -222,9 +233,12 @@ Avoid encyclopedic background that does not alter a decision. Link to
 authoritative primary sources when facts are unstable or precise attribution
 matters; do not copy a documentation corpus into the skill.
 
-## Routers
+## Routers (retired kind)
 
-Routers should:
+Router is not one of the three current kinds; every `*-expert` router was evicted
+once the base model routed among focused skills without them. This section is
+retained for historical context and for anyone evaluating an imported external
+router package. Routers should:
 
 - Load the smallest set of focused skills needed for the request.
 - Activate when the dominant child is unclear or the request spans two or more

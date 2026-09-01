@@ -83,7 +83,7 @@ When verification passes:
 - create one conventional local commit that references the feature ID
 - report the commit hash, evidence, remaining items, and any gaps
 
-Stop after the commit. Recommend another `execute-feature` run when items remain, or `prepare-pr` when the feature is complete and its checks pass. Do not invoke them automatically.
+Stop after the commit. Recommend another `execute-feature` run when items remain, or `publish-pr` when the feature is complete and its checks pass. Do not invoke them automatically.
 
 ## Safety and idempotency
 

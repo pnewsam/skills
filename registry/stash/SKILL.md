@@ -9,7 +9,7 @@ description: Preserve related in-progress work on a local wip branch in one desc
 
 Preserve in-progress work by moving it to a dedicated local branch with a clear commit message and a markdown context file that captures what was being worked on and why. The working tree is left clean on the original branch so you can switch tasks.
 
-This is for work that is not ready to push — you want to save your place without creating a PR or touching origin. When you later return and decide to push, use `prepare-pr`.
+This is for work that is not ready to push — you want to save your place without creating a PR or touching origin. When you later return and decide to push, use `publish-pr`.
 
 ## Safety rules
 

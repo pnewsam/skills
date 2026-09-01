@@ -1,13 +1,13 @@
 ---
 name: ship-epic
-description: Complete an epic end-to-end by planning all missing child features, advancing the epic until every feature is complete, validating the completed work, and preparing a pull request. Use when the user asks to run plan-feature until all features are planned, advance-epic until all features are complete, and prepare-pr afterward. Orchestrates plan-feature, advance-epic, execute-feature, and prepare-pr while preserving context, stopping on blockers, and avoiding duplicate plans or unrelated git changes.
+description: Complete an epic end-to-end by planning all missing child features, advancing the epic until every feature is complete, validating the completed work, and preparing a pull request. Use when the user asks to run plan-feature until all features are planned, advance-epic until all features are complete, and publish-pr afterward. Orchestrates plan-feature, advance-epic, execute-feature, and publish-pr while preserving context, stopping on blockers, and avoiding duplicate plans or unrelated git changes.
 ---
 
 # Ship Epic
 
 ## Overview
 
-Drive one epic from planned initiative to PR-ready branch. This skill is an orchestrator: it does not replace `plan-feature`, `advance-epic`, `execute-feature`, or `prepare-pr`; it runs them in the right order until the epic is complete or a blocker requires user input.
+Drive one epic from planned initiative to PR-ready branch. This skill is an orchestrator: it does not replace `plan-feature`, `advance-epic`, `execute-feature`, or `publish-pr`; it runs them in the right order until the epic is complete or a blocker requires user input.
 
 Use this when the user wants the full sequence:
 
@@ -22,9 +22,9 @@ Use this when the user wants the full sequence:
 - Do not invent child feature scope. Missing or unclear feature scope must go through `plan-feature`.
 - Do not implement directly. Delegate feature implementation to `advance-epic`, which delegates to `execute-feature`.
 - Do not create duplicate feature plans. Reuse existing `docs/features/` files when they match a child feature.
-- Do not run `prepare-pr` until the epic is complete or the user explicitly asks for a partial PR.
+- Do not run `publish-pr` until the epic is complete or the user explicitly asks for a partial PR.
 - Stop if the working tree contains unrelated changes and ask what should be included.
-- Stop on any blocker reported by `plan-feature`, `advance-epic`, `execute-feature`, or `prepare-pr`.
+- Stop on any blocker reported by `plan-feature`, `advance-epic`, `execute-feature`, or `publish-pr`.
 - Keep a progress summary after every loop so the run can resume safely if interrupted.
 
 ## Workflow
@@ -109,9 +109,9 @@ When the epic appears complete:
 
 ### 5. Prepare the PR
 
-Once the epic is complete and validation has passed, run `prepare-pr`.
+Once the epic is complete and validation has passed, run `publish-pr`.
 
-`prepare-pr` owns:
+`publish-pr` owns:
 
 - branch inspection
 - staging decisions
@@ -120,7 +120,7 @@ Once the epic is complete and validation has passed, run `prepare-pr`.
 - push
 - PR creation
 
-If there are unrelated changes, suspicious files, or generated artifacts, follow `prepare-pr` and ask before staging.
+If there are unrelated changes, suspicious files, or generated artifacts, follow `publish-pr` and ask before staging.
 
 ### 6. Final Response
 
@@ -148,4 +148,4 @@ If this skill is re-run after interruption:
 - Use `plan-epic` when no epic exists.
 - Use `plan-feature` when only one feature needs planning.
 - Use `advance-epic` when the user wants exactly one child feature advanced.
-- Use `prepare-pr` when the work is already complete and only PR preparation remains.
+- Use `publish-pr` when the work is already complete and only PR preparation remains.

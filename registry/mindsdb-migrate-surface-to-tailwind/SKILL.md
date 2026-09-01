@@ -89,4 +89,4 @@ Before claiming a pass is done, from `cowork/` with the Node 20 PATH:
 
 ## Output contract
 
-A draft PR on `staging` (via `prepare-pr`/`gh`, `--draft`), body per `pr-conventions`, linking the ENG-1017 child issue. State per-pass what changed and the validation results. Flag: pass 3 as **intentional pixel changes** (offer before/after screenshots — the app is Electron; run via the `run` skill or `npm run dev`), the `tailwind.config.js` change for reviewers, and any **stacking** (which PR must merge first). List what was deliberately left inline (dynamic) and left arbitrary (off-scale), so coverage reads honestly.
+A draft PR on `staging` (via `publish-pr`/`gh`, `--draft`), body per `pr-conventions`, linking the ENG-1017 child issue. State per-pass what changed and the validation results. Flag: pass 3 as **intentional pixel changes** (offer before/after screenshots — the app is Electron; run via the `run` skill or `npm run dev`), the `tailwind.config.js` change for reviewers, and any **stacking** (which PR must merge first). List what was deliberately left inline (dynamic) and left arbitrary (off-scale), so coverage reads honestly.

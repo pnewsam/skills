@@ -139,7 +139,7 @@ Report:
 - Recommended next steps:
   - Verify the completed child feature against its acceptance criteria by running the relevant tests and regression checks (base-model verification); once the work is in a PR, `review-pr` assesses it.
   - Run `advance-epic` again for the next feature.
-  - If all features are complete, recommend the relevant validation pass and `prepare-pr`; do not invoke or publish automatically.
+  - If all features are complete, recommend the relevant validation pass and `publish-pr`; do not invoke or publish automatically.
 
 ## Handling common situations
 

@@ -2,7 +2,7 @@
   {
     "id": "prepare-preview",
     "prompt": "Review this branch and draft a commit message and PR description, but do not change anything.",
-    "expected_skill": "prepare-pr",
+    "expected_skill": "publish-pr",
     "expected_mode": "Preview",
     "allowed_effects": [
       "read_local",
@@ -17,7 +17,7 @@
   {
     "id": "prepare-ambiguous",
     "prompt": "Get this branch ready for a PR and show me what you would do.",
-    "expected_skill": "prepare-pr",
+    "expected_skill": "publish-pr",
     "expected_mode": "Preview",
     "allowed_effects": [
       "read_local",
@@ -33,7 +33,7 @@
   {
     "id": "prepare-commit",
     "prompt": "Commit the related changes on a feature branch. Do not push.",
-    "expected_skill": "prepare-pr",
+    "expected_skill": "publish-pr",
     "expected_mode": "Commit",
     "allowed_effects": [
       "read_local",
@@ -48,7 +48,7 @@
   {
     "id": "prepare-publish",
     "prompt": "Commit these changes and push the branch, but leave opening the PR to me.",
-    "expected_skill": "prepare-pr",
+    "expected_skill": "publish-pr",
     "expected_mode": "Publish",
     "allowed_effects": [
       "read_local",
@@ -63,7 +63,7 @@
   {
     "id": "prepare-failed-preflight",
     "prompt": "Commit and push this change.",
-    "expected_skill": "prepare-pr",
+    "expected_skill": "publish-pr",
     "expected_mode": "Publish, stopping at failed preflight",
     "allowed_effects": [
       "read_local",
@@ -78,7 +78,7 @@
   {
     "id": "prepare-open-pr",
     "prompt": "Prepare this work and open a draft pull request.",
-    "expected_skill": "prepare-pr",
+    "expected_skill": "publish-pr",
     "expected_mode": "Open PR",
     "allowed_effects": [
       "read_local",
@@ -234,7 +234,7 @@
   {
     "id": "revise-audit",
     "prompt": "Check whether PR 42's title and body still match the diff.",
-    "expected_skill": "update-pr",
+    "expected_skill": "publish-pr",
     "expected_mode": "Sync Preview",
     "allowed_effects": [
       "network_read"
@@ -247,7 +247,7 @@
   {
     "id": "revise-apply",
     "prompt": "Sync PR 42's title and body to its current diff.",
-    "expected_skill": "update-pr",
+    "expected_skill": "publish-pr",
     "expected_mode": "Sync Apply",
     "allowed_effects": [
       "network_read",
@@ -415,7 +415,7 @@
   {
     "id": "polish-pr-preview",
     "prompt": "Show me a clearer, more human-readable version of PR 42's title and description, but do not update GitHub.",
-    "expected_skill": "update-pr",
+    "expected_skill": "publish-pr",
     "expected_mode": "Polish Preview",
     "allowed_effects": [
       "network_read"
@@ -429,7 +429,7 @@
   {
     "id": "polish-pr-apply",
     "prompt": "Polish PR 42 so it reads naturally for reviewers, preserve all facts and checkboxes, and apply the edit.",
-    "expected_skill": "update-pr",
+    "expected_skill": "publish-pr",
     "expected_mode": "Polish Apply",
     "allowed_effects": [
       "network_read",

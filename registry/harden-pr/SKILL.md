@@ -1,6 +1,6 @@
 ---
 name: harden-pr
-description: Iteratively harden an open GitHub pull request by alternating model-diverse independent code-review passes with traceable fixes and validation until it converges or reaches a bounded stop. Use when asked to harden a PR, address review feedback and re-review it, repeat review-and-fix cycles, use a different model to review a prepared PR, or make a PR merge-ready. Modifies the local PR branch by default; commits, pushes, review replies, thread resolution, a posted hardening summary comment, posted reviews, and merges require their own explicit authorization. Use review-pr for one read-only review and update-pr for PR title or body synchronization.
+description: Iteratively harden an open GitHub pull request by alternating model-diverse independent code-review passes with traceable fixes and validation until it converges or reaches a bounded stop. Use when asked to harden a PR, address review feedback and re-review it, repeat review-and-fix cycles, use a different model to review a prepared PR, or make a PR merge-ready. Modifies the local PR branch by default; commits, pushes, review replies, thread resolution, a posted hardening summary comment, posted reviews, and merges require their own explicit authorization. Use review-pr for one read-only review and publish-pr for PR title or body synchronization.
 ---
 
 # Harden PR

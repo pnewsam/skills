@@ -1,6 +1,6 @@
 ---
 name: trim-comments
-description: "Trim low-value code comments introduced by a branch or pull request's changes — process and chat-history narration, external ticket or plan references, restatements of the obvious, review chatter, and leftover commented-out code — while preserving comments that carry durable rationale, warnings, API docs, and tool directives. Use when asked to trim, prune, clean up, or tidy the comments on a PR or diff, or to strip noisy or AI-generated comments before review. Scoped to the lines the change touches; edits source files in the working tree and stops before committing. Does not rewrite the PR description (see update-pr) or review code for defects (see review-pr)."
+description: "Trim low-value code comments introduced by a branch or pull request's changes — process and chat-history narration, external ticket or plan references, restatements of the obvious, review chatter, and leftover commented-out code — while preserving comments that carry durable rationale, warnings, API docs, and tool directives. Use when asked to trim, prune, clean up, or tidy the comments on a PR or diff, or to strip noisy or AI-generated comments before review. Scoped to the lines the change touches; edits source files in the working tree and stops before committing. Does not rewrite the PR description (see publish-pr) or review code for defects (see review-pr)."
 ---
 
 # Trim comments
@@ -12,7 +12,7 @@ The comments a branch adds or changes carry only durable value. Noise a reader o
 ## Use / do not use
 
 - **Use** to clean up the comments a diff introduced, before or during review.
-- **Not** for the PR title or body — that's `update-pr`. Not for finding defects — that's `review-pr`. Not for a repo-wide comment sweep unrelated to a change — this skill is scoped to one branch's diff.
+- **Not** for the PR title or body — that's `publish-pr`. Not for finding defects — that's `review-pr`. Not for a repo-wide comment sweep unrelated to a change — this skill is scoped to one branch's diff.
 
 ## Scope: only what the change touched
 

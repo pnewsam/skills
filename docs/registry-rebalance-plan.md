@@ -4,6 +4,42 @@ A plan to re-weight the skill registry away from hand-encoded method knowledge
 and toward objective-specification and ground-truth verification — the parts
 that keep their value (or gain value) as the base model improves.
 
+## Progress (2026-09-01) — UOW-lifecycle taxonomy + publish-pr merge
+
+- **Reframe.** Adopted a unit-of-work lifecycle model (`docs/uow-lifecycle.md`): a
+  PR is a UOW moving through phases (Frame → Plan → Build → Verify → Publish →
+  Review → Revise → Merge), each served by at most one **operation** verb, with
+  **runbooks** owning the feedback edges between phases. Goal: one generalizable
+  verb per phase.
+- **Taxonomy cleanup (pure classification, no code enforcement — facets live in
+  README + AUTHORING only).** Retired the divergence/convergence lens (never
+  drove routing or installation). Split the `Kind` axis `workflow → operation +
+  runbook`, giving `operation | runbook | reference`. Reclassified the README
+  tables (dropped the Mode column; `advance-epic`/`ship-epic`/`harden-pr` →
+  runbook, the rest → operation) and rewrote AUTHORING's kinds table with the
+  runbook bitter-lesson bar (a runbook that lists the obvious order is dead
+  weight). Router marked a retired kind.
+- **publish-pr merge.** Collapsed `prepare-pr` + `update-pr` → one `publish-pr`
+  operation that detects PR state in Step 0 and forks: no PR → prepare/commit/
+  push/create; PR exists → sync-or-polish. Preserves both effect ladders, the
+  open-vs-update fork, and the union of safety rules; ported both `references/`
+  output-template files. **Decided on design grounds** (refactor-equivalence,
+  not a base-model-subsumption question) rather than via the substitution A/B —
+  the empirical gate is a transient eviction instrument, and both arms here would
+  still read skills. A generalized merge A/B (`merge_ab.workflow.js` + cases) was
+  drafted, then removed unused per that reasoning; the candidate became the live
+  skill.
+- **Plumbing:** `prepare-pr` + `update-pr` → `archive/publish-pr-merge-evicted/`;
+  `core` profile repointed to `publish-pr`; 10 `high_use_cases.json` routing
+  cases remapped to `publish-pr`; cross-references updated in pr-conventions,
+  harden-pr, ship-epic, advance-epic, execute-feature, stash, trim-comments,
+  mindsdb-migrate-surface-to-tailwind, AUTHORING, evals/README. **Active 28 →
+  27.** Validator green (0 errors), Go tests pass.
+- **Still open (proposal, not yet executed):** delete `harden-pr` in favor of a
+  top-level flow runbook (`ship-pr`) that absorbs its convergence loop; fold or
+  delete `design-explore` into `plan-feature`; decide the empty Frame/Merge
+  phases and runbook-vs-playbook.
+
 ## Progress (2026-08-19d) — analysis/validation trim; PR as the discrete unit of work
 
 - **User-directed reorientation.** The organizing principle is now the **PR as the discrete unit

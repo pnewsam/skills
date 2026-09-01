@@ -42,14 +42,19 @@ Classify a skill on four operational facets:
 
 | Facet | Values | Why it matters |
 | --- | --- | --- |
-| **Kind** | workflow, reference | Determines the skill's expected structure |
+| **Kind** | operation, runbook, reference | Determines the skill's expected structure |
 | **Domain** | product, Git/PR, Linear, UI, design, quality, security, testing, and others | Controls installation and routing neighborhoods |
 | **Stage** | analyze, plan, execute, review, preserve | Shows where the skill fits in a lifecycle |
 | **Effect** | read-only, local files, local Git, network read, external write | Makes authorization and stopping points explicit |
 
-Use **divergence** and **convergence** as optional product-thinking lenses, not
-as the primary registry hierarchy. A planning skill may contain both; an
-operational Git skill often fits neither.
+The three **Kind** values name three planes. An **operation** is a leaf verb: it
+acts within one lifecycle phase, has one primary Effect, and stops at a gate. A
+**runbook** composes operations across phases and owns the feedback loops between
+them; it earns its place only by encoding control the base model would not
+reliably infer — non-obvious gates, loop termination, durable state, recovery —
+never by listing an obvious order. A **reference** is never invoked; it supplies
+judgment a verb pulls in. (The earlier divergence/convergence lens is retired: it
+never drove routing or installation.)
 
 `catalog.json` is the machine-readable source for curated install profiles and
 external-source preservation policy. Skills not explicitly marked external are
@@ -64,10 +69,10 @@ focused Linear issue and project creation workflows. Install
 `external-creative` when explicitly opting into preserved third-party creative
 references.
 
-Routine convergence workflows use no more than three linear stages. Approval is
+A routine operation uses no more than three linear phases. Approval is
 a gate between planning and execution, validation belongs inside execution, and
 publication remains a separate delivery action. New evidence can send work back
-to analysis or planning.
+to an earlier phase — the feedback edges a runbook owns.
 
 ```mermaid
 flowchart LR
@@ -99,7 +104,7 @@ Root-level all-caps docs are foundational or constitutional: they describe inten
 
 ## Workflow Skills
 
-Workflow skills do work: they analyze a situation, produce planning artifacts, modify code, validate behavior, prepare delivery, or create pull requests.
+Workflow skills do work: they analyze a situation, produce planning artifacts, modify code, validate behavior, prepare delivery, or create pull requests. Each is either an **operation** — a leaf verb acting in one lifecycle phase — or a **runbook** that composes operations and owns the loops between them (`advance-epic`, `ship-epic`, `harden-pr`).
 
 ### Product Direction And Delivery
 
@@ -112,7 +117,7 @@ flowchart TD
     PE --> SP[ship-epic]
     SP -->|plans missing features| PF
     SP -->|advances until complete| AE
-    SP -->|prepares PR| PPR[prepare-pr]
+    SP -->|prepares PR| PPR[publish-pr]
     PF -->|produces docs/features/| EF[execute-feature]
     EF -->|opens a PR| PPR
     PE --> AE[advance-epic]
@@ -120,14 +125,14 @@ flowchart TD
     AE -.->|orchestrates| EF
 ```
 
-| Skill                                                  | Type     | Mode       | Phase   | Description                                                                                                                   |
-| ------------------------------------------------------ | -------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [create-charter](registry/create-charter/SKILL.md)     | workflow | divergence | plan    | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning.                   |
-| [plan-epic](registry/plan-epic/SKILL.md)               | workflow | divergence | plan    | Create or update one charter-aligned epic, including deduplicating bug-bash or app-feedback observations into coherent child features. |
-| [plan-feature](registry/plan-feature/SKILL.md)         | workflow | convergence | plan | Plan one bounded product feature or evidence-backed convergence improvement; parent epics are optional in Convergence mode. |
-| [execute-feature](registry/execute-feature/SKILL.md)   | workflow | convergence | execute | Implement and verify one unchecked item from any product or convergence feature plan, create one local commit, and stop. |
-| [advance-epic](registry/advance-epic/SKILL.md)         | workflow | convergence | execute | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete.    |
-| [ship-epic](registry/ship-epic/SKILL.md)               | workflow | convergence | execute | Complete an epic end-to-end — plan missing features, advance until all child features are complete, validate, and prepare a PR. |
+| Skill | Type | Phase | Description |
+| --- | --- | --- | --- |
+| [create-charter](registry/create-charter/SKILL.md) | operation | plan | Create or refresh a product charter (CHARTER.md) that serves as the north star for all downstream planning. |
+| [plan-epic](registry/plan-epic/SKILL.md) | operation | plan | Create or update one charter-aligned epic, including deduplicating bug-bash or app-feedback observations into coherent child features. |
+| [plan-feature](registry/plan-feature/SKILL.md) | operation | plan | Plan one bounded product feature or evidence-backed convergence improvement; parent epics are optional in Convergence mode. |
+| [execute-feature](registry/execute-feature/SKILL.md) | operation | execute | Implement and verify one unchecked item from any product or convergence feature plan, create one local commit, and stop. |
+| [advance-epic](registry/advance-epic/SKILL.md) | runbook | execute | Advance an epic by planning and implementing its next incomplete child feature. Run repeatedly until the epic is complete. |
+| [ship-epic](registry/ship-epic/SKILL.md) | runbook | execute | Complete an epic end-to-end — plan missing features, advance until all child features are complete, validate, and prepare a PR. |
 
 ### Linear Operations
 
@@ -136,9 +141,9 @@ stopping. Install the `linear-ops` profile when a team uses Linear.
 
 | Skill | Type | Phase | Description |
 | --- | --- | --- | --- |
-| [create-issue](registry/create-issue/SKILL.md) | workflow | plan | Resolve live workspace fields, create one Linear issue, verify it, and stop. |
-| [create-project](registry/create-project/SKILL.md) | workflow | plan | Resolve live workspace fields, create one Linear project, verify it, and stop. |
-| [polish-issue](registry/polish-issue/SKILL.md) | workflow | edit | Improve an issue's language without changing its substance or properties. |
+| [create-issue](registry/create-issue/SKILL.md) | operation | plan | Resolve live workspace fields, create one Linear issue, verify it, and stop. |
+| [create-project](registry/create-project/SKILL.md) | operation | plan | Resolve live workspace fields, create one Linear project, verify it, and stop. |
+| [polish-issue](registry/polish-issue/SKILL.md) | operation | edit | Improve an issue's language without changing its substance or properties. |
 
 Analysis ("what to change"), diagnosis ("why it fails"), and verification ("does it
 pass") are base-model capabilities the model performs inline while working; `review-pr`
@@ -148,24 +153,23 @@ assesses the resulting pull request. None is a separate skill.
 
 ```mermaid
 flowchart LR
-    PP[prepare-pr] -->|creates PR| RP[review-pr]
+    PUB[publish-pr] -->|opens PR| RP[review-pr]
     RP -->|Review intent| CR[code-review verdict]
     RP -->|Risk intent| RA[merge-risk assessment]
     RP -->|iterative repair| HP[harden-pr]
     HP -->|fresh review| RP
-    RP --> UP[update-pr]
+    RP -->|body needs sync/polish| PUB
 ```
 
-| Skill                                              | Type     | Mode        | Phase   | Description                                                                                                         |
-| -------------------------------------------------- | -------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
-| [stash](registry/stash/SKILL.md)                   | workflow | convergence | preserve | Preserve related in-progress work on a local `wip/` branch in one commit with a context note.                     |
-| [prepare-pr](registry/prepare-pr/SKILL.md)         | workflow |             | execute | Prepare a pull request from a local branch — inspect changes, write a conventional commit, push, and open a PR.     |
-| [review-pr](registry/review-pr/SKILL.md)           | workflow |             | analyze, review | Review a pull request for actionable defects or assess operational and merge risk; post only when explicitly requested. |
-| [harden-pr](registry/harden-pr/SKILL.md)           | workflow | convergence | execute, review | Iteratively alternate independent PR reviews with traceable fixes and validation until a bounded convergence or stop condition. |
-| [address-review](registry/address-review/SKILL.md) | workflow | convergence | execute, review | Triage inbound reviewer comments — fix, reply, defer, or fold into another PR — then implement, reply to threads, and resolve; gates the push that could dismiss an approval. |
-| [rebase-pr](registry/rebase-pr/SKILL.md)           | workflow | convergence | execute | Rebase one or more PR branches onto their base (default staging), reconcile changes upstream already made, then optionally force-push and re-review. |
-| [update-pr](registry/update-pr/SKILL.md)           | workflow | convergence | edit | Sync a PR's title and body to the current diff, or polish their language without changing facts; editing GitHub is a separate step. |
-| [trim-comments](registry/trim-comments/SKILL.md)   | workflow | convergence | edit | Trim low-value comments a branch's diff introduced — process narration, external ticket/plan references, restated-obvious lines — keeping durable rationale and tool directives. |
+| Skill | Type | Phase | Description |
+| --- | --- | --- | --- |
+| [stash](registry/stash/SKILL.md) | operation | preserve | Preserve related in-progress work on a local `wip/` branch in one commit with a context note. |
+| [publish-pr](registry/publish-pr/SKILL.md) | operation | execute, edit | Take a branch to a pull request (branch, commit, push, open), or update an existing PR's title and body (sync to the diff, or polish); detects which is needed and forks. Each effect separately authorized. |
+| [review-pr](registry/review-pr/SKILL.md) | operation | analyze, review | Review a pull request for actionable defects or assess operational and merge risk; post only when explicitly requested. |
+| [harden-pr](registry/harden-pr/SKILL.md) | runbook | execute, review | Iteratively alternate independent PR reviews with traceable fixes and validation until a bounded convergence or stop condition. |
+| [address-review](registry/address-review/SKILL.md) | operation | execute, review | Triage inbound reviewer comments — fix, reply, defer, or fold into another PR — then implement, reply to threads, and resolve; gates the push that could dismiss an approval. |
+| [rebase-pr](registry/rebase-pr/SKILL.md) | operation | execute | Rebase one or more PR branches onto their base (default staging), reconcile changes upstream already made, then optionally force-push and re-review. |
+| [trim-comments](registry/trim-comments/SKILL.md) | operation | edit | Trim low-value comments a branch's diff introduced — process narration, external ticket/plan references, restated-obvious lines — keeping durable rationale and tool directives. |
 
 ### Organization-Specific
 
@@ -174,8 +178,8 @@ profile and not part of the generic registry.
 
 | Skill | Type | Phase | Description |
 | --- | --- | --- | --- |
-| [mindsdb-migrate-surface-to-tailwind](registry/mindsdb-migrate-surface-to-tailwind/SKILL.md) | workflow | execute | Migrate one MindsHub Cowork UI surface's inline styles to Tailwind and design tokens as three separately-committed passes on a draft PR. |
-| [mindsdb-track-design-system-metrics](registry/mindsdb-track-design-system-metrics/SKILL.md) | workflow | analyze | Measure design-system convergence metrics for a configured scope and post one weekly progress comment to a Linear tracking issue. |
+| [mindsdb-migrate-surface-to-tailwind](registry/mindsdb-migrate-surface-to-tailwind/SKILL.md) | operation | execute | Migrate one MindsHub Cowork UI surface's inline styles to Tailwind and design tokens as three separately-committed passes on a draft PR. |
+| [mindsdb-track-design-system-metrics](registry/mindsdb-track-design-system-metrics/SKILL.md) | operation | analyze | Measure design-system convergence metrics for a configured scope and post one weekly progress comment to a Linear tracking issue. |
 
 ## Reference Skills
 
@@ -194,7 +198,7 @@ drift are base-model analysis.
 
 | Skill                                                         | Type     | Description                                                                                                          |
 | ------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
-| [design-explore](registry/design-explore/SKILL.md)            | workflow | Generate several distinct visual directions, judge against explicit criteria, synthesize. Search over prescription.  |
+| [design-explore](registry/design-explore/SKILL.md)            | operation | Generate several distinct visual directions, judge against explicit criteria, synthesize. Search over prescription.  |
 
 ### UI
 
