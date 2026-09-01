@@ -102,10 +102,14 @@ that keep their value (or gain value) as the base model improves.
   runbooks are narrow per-tool/domain procedures. Rewrote the README opener into a
   "How this registry works" narrative (base-model does the reasoning; skills are the
   non-derivable margin), made the lifecycle table honest (5 of 8 phases base-model),
-  and retuned AUTHORING to match. Open reassessments noted, not yet done: external
-  creative refs (`svg-animations`/`emil-design-eng`) look vestigial; orchestration
-  is a heavier separable subsystem whose relationship to the loop could be framed
-  more explicitly.
+  and retuned AUTHORING to match.
+- **External creative refs evicted (user call).** `svg-animations` +
+  `emil-design-eng` → `archive/external-creative-evicted/`; removed their catalog
+  provenance entries and the now-empty `external-creative` profile, dropped the
+  README External Design References section and profile mentions, and removed the
+  stale `catalog_test.go` assertion that named them. **Active 26 → 24.**
+- **Orchestration:** left in the README as-is for now (user call); the epic/feature
+  stack stays framed as the layer above the loop.
 - **Runbook-vs-playbook closed:** one `runbook` kind, branching allowed. The
   conventional split (runbook = linear/deterministic, playbook = branching/
   judgment) gives no clean partition here — every runbook we have branches — and

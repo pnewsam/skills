@@ -65,12 +65,9 @@ network read, or external write — so authorization and stopping points stay
 explicit.
 
 `catalog.json` is the machine-readable source for curated install profiles and
-external-source preservation policy. Skills not explicitly marked external are
-registry-maintained; externally sourced bodies are validated against their origin
-commit and updated from upstream rather than edited locally. `core` stays small
-and operational; install `advisory` for broad cross-domain reference, `linear-ops`
-for the Linear runbooks, and `external-creative` for preserved third-party
-references.
+external-source preservation policy. `core` stays small and operational; install
+`advisory` for broad cross-domain reference and `linear-ops` for the Linear
+runbooks.
 
 ## The unit-of-work lifecycle
 
@@ -248,16 +245,6 @@ voice.
 | ------------------------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | [pr-conventions](registry/pr-conventions/SKILL.md)           | reference | The shared PR standard — description shape, conventional commits, GitHub interaction mechanics, and the code-review finding model. |
 | [writing-conventions](registry/writing-conventions/SKILL.md) | reference | Shared prose conventions for the concise, human technical writing across PRs, issues, plans, and commit messages. |
-
-### External Design References
-
-These packages retain upstream bodies and are available through the
-`external-creative` profile rather than the maintained `advisory` profile.
-
-| Skill                                                | Type      | Description                                                                                                                                           | Origin                                                                                     |
-| ---------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| [svg-animations](registry/svg-animations/SKILL.md)   | reference | Create performant SVG animations and illustrations: path animations, shape morphing, loading spinners, animated logos, gradients, masks, and filters. | [supermemoryai](https://github.com/supermemoryai/skills/blob/main/svg-animations/SKILL.md) |
-| [emil-design-eng](registry/emil-design-eng/SKILL.md) | reference | Design engineering philosophy — polished animations, thoughtful component design, and invisible details that make software feel great.                | [emilkowalski](https://github.com/emilkowalski/skill)                                      |
 
 ## Other Skill Collections
 
