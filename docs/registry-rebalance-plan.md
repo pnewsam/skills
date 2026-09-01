@@ -64,8 +64,48 @@ that keep their value (or gain value) as the base model improves.
   (`wantCore` + advisory list were left stale by the publish-pr/ship-pr commits;
   the Go test cache had masked the failure — always `go test -count=1`). **Active
   27 → 26.** Validator green, Go tests pass.
-- **Still open (design questions, not consolidation):** decide the empty
-  Frame/Merge phases (base-model-only vs a thin verb) and runbook-vs-playbook.
+- **Frame/Merge — reversed to candidate operations (user call).** Earlier this
+  session they were "base-model bookends, no verb"; the user then decided the
+  kernel should have a skill for each of the 8 phases, so Frame/Plan/Build/Merge
+  are now candidate operations to create (base-model today). Open tension to
+  watch: an abstract Frame/Build/Merge operation that conveys only base-model
+  heuristics could fail the bitter-lesson bar — resolve per-skill at creation.
+- **README restructured around three skill tiers (user-directed).** Simplified
+  the taxonomy to four categories — **operation** (abstract kernel step),
+  **runbook** (concrete domain procedure an operation delegates to; e.g. open a
+  GitHub PR, create a Linear issue — a catalog, eventually a marketplace),
+  **orchestration** (above one UOW: charter/epic/feature stack), **reference**
+  (knowledge). Note this **redefines runbook**: it is now the concrete leaf, not
+  the high-level composer. README sections are now Operations (kernel: ship-pr
+  driver + publish-pr/review-pr/address-review/rebase-pr/stash/trim-comments,
+  with Frame/Plan/Build/Verify/Merge as base-model/candidates), Runbooks
+  (create-issue/create-project/polish-issue/mindsdb-*), Orchestration (the epic
+  stack), Reference (unchanged). Added the 8-phase state-machine mermaid + the
+  operations kernel table. `ship-pr` is the kernel **driver**, not a runbook.
+- **AUTHORING + ship-pr aligned (done).** Rewrote AUTHORING's kinds section to the
+  four categories (operation / runbook / orchestration / reference): runbook is now
+  the concrete domain procedure with its own admission bar (fragile/error-prone/
+  domain-specific mechanics), orchestration carries the compose-and-own-the-loops
+  semantics with the non-obvious-control bar, and `ship-pr` is the driver operation.
+  Updated naming examples; `ship-pr`'s SKILL.md now calls itself the driver
+  operation, not the top-level runbook. Taxonomy now consistent across README +
+  AUTHORING + skill self-labels.
+- **Runbook-vs-playbook closed:** one `runbook` kind, branching allowed. The
+  conventional split (runbook = linear/deterministic, playbook = branching/
+  judgment) gives no clean partition here — every runbook we have branches — and
+  both would share identical anatomy, routing, and authoring rules, so a second
+  kind would add a category and a boundary question with no downstream effect.
+  Revisit only if a future member genuinely needs different structure.
+- **Router concept (raised, deferred).** User flagged wanting a router concept but
+  was unsure where it fits, and chose to revisit later. Working analysis to pick
+  up from: routing has two senses — skill-selection (which skill to invoke) stays
+  a base-model/harness job (the `*-expert` routers were evicted as redundant), and
+  operation-dispatch within a UOW (which verb/phase next; fork on state or type)
+  is already a **capability of runbooks** (`publish-pr` Step-0 detect-and-fork,
+  `ship-pr` phase forks). A possible third sense is a top-level front-door triage
+  (which UOW/entry point for a request) — base-model unless it encodes org-specific
+  logic. Proposed home when revisited: document routing as a runbook capability
+  rather than a Router kind. Not executed; AUTHORING's router section left as-is.
 
 ## Progress (2026-08-19d) — analysis/validation trim; PR as the discrete unit of work
 
