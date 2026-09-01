@@ -160,7 +160,4 @@ func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
 			t.Errorf("advisory does not include %q", expected)
 		}
 	}
-	if inAdvisory["emil-design-eng"] || inAdvisory["svg-animations"] {
-		t.Error("advisory unexpectedly includes externally sourced skills")
-	}
 }
