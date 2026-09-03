@@ -7,7 +7,7 @@ description: Review a GitHub pull request for actionable correctness, security, 
 
 ## Outcome
 
-Provide an evidence-backed code review or merge-risk assessment of the actual pull-request diff. Keep findings specific, calibrated, and useful to the merge decision.
+Provide an evidence-backed code review or merge-risk assessment of the actual pull-request diff — and of how that diff behaves in the system it lands in. Keep findings specific, calibrated, and useful to the merge decision.
 
 This skill never edits source, branches, commits, or PR metadata.
 
@@ -85,9 +85,9 @@ When the environment supports it, run the smallest read-only check that would co
 
 ## Review workflow
 
-### 1. Understand the change
+### 1. Understand the change and why it exists
 
-Restate the intended behavior, affected boundaries, and claims made in the PR description. When the PR links a ticket or issue, read it and treat its requirements and acceptance criteria as the intended behavior. Note mismatches between the stated and actual scope, and between the linked ticket and the diff.
+Before inspecting any hunk, establish what the change is for. Restate the intended behavior, affected boundaries, and claims made in the PR description. When the PR links a ticket or issue, read it first — including the rationale and the problem behind the work, not only its acceptance criteria — because the reason for a change can change how a hunk should be read and which risks matter. Note mismatches between the stated and actual scope, and between the linked ticket and the diff.
 
 ### 2. Inspect every relevant hunk
 
@@ -101,7 +101,11 @@ Evaluate:
 - tests for new behavior, failures, and regressions
 - maintainability issues only when they create a concrete future failure mode
 
-Read enough unchanged context to understand the hunk. Do not report an issue in unrelated pre-existing code unless the PR makes it reachable or materially worse.
+Read outward far enough to judge the change, not just to understand the hunk. Beyond the correctness of the changed lines, evaluate the change against the system it lands in: the callers of what changed, the invariants and assumptions it relies on but does not touch, and the states and data the diff does not show. A hunk can be internally correct and still break the system around it — that is the failure this review most often misses.
+
+Scale this to the change's reach. A localized, low-blast-radius change — a copy string, a comment, an isolated constant — needs little beyond the hunk. A change to a shared contract, a caller-heavy function, shared state, or a migration earns a deliberate pass over what depends on it. Spend the system-level effort where the blast radius is real.
+
+Do not report an issue in unrelated pre-existing code unless the PR makes it reachable or materially worse.
 
 Track coverage internally across every changed file: reviewed, mechanically inspected, sampled, or not reviewed. Do not stop because a Blocking or Major finding already surfaced — continue through the planned scope and collect all credible findings. Before finalizing, reconcile the ledger against the complete changed-file list. Surface it in the output only when material areas were sampled or left unreviewed.
 
@@ -219,4 +223,5 @@ Include:
 - Do not post a review based on a stale head SHA.
 - Do not write `unknown` before attempting the runtime model-attribution path.
 - Do not move a comment to an unrelated diff line merely to satisfy GitHub.
+- Do not clear a hunk as correct on its own terms without checking what outside the diff depends on it, whenever its reach is nontrivial.
 - Do not summarize the change back to the author. The verdict, one reason, and the findings carry the review; a paragraph re-narrating what the diff does is noise.
