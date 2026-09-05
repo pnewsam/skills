@@ -77,6 +77,21 @@ Each child unit uses the operations above. Independent units can advance while a
 | [pr-conventions](registry/pr-conventions/SKILL.md) | PR content and review findings |
 | [writing-conventions](registry/writing-conventions/SKILL.md) | Shared prose preferences |
 
+## Planning artifacts and handoffs
+
+An **epic** records a combined outcome and the units needed to achieve it. A **work record** describes one independently reviewable outcome, normally one PR. A product feature may span several work units. Reuse existing issues and feature plans rather than creating duplicate records.
+
+| Artifact | Default location for new local records | What belongs there |
+| --- | --- | --- |
+| Epic | `docs/epics/<id>-<slug>.md` | Problem, overall acceptance, child links and prerequisites, coordination, decisions, integration |
+| Work unit | `docs/work/<id>-<slug>.md` | Rationale, required acceptance, approach, planned checks, candidate, observed evidence, next action |
+| Existing feature plan | Its current `docs/features/` location | Keep a bounded plan as the work record; link child units when the feature spans PRs |
+| Supporting evidence | Linked from its record | Detailed measurements, reports, or captures |
+
+Use the [epic template](registry/plan-epic/references/epic-record.md), [work template](registry/work-conventions/references/work-record.md), and [artifact conventions](registry/work-conventions/references/artifacts.md) as readable defaults. Keep stable IDs and parent/child links. Omit irrelevant sections; a small uninterrupted task can use task context. Persist enough detail before a handoff that a fresh worker can continue without the original conversation.
+
+For larger initiatives, the coordinator owns the epic index and assignments; each worker owns its unit's detail and evidence. [The coordination protocol](registry/ship-epic/references/coordination.md) explains how to dispatch, checkpoint, replan, integrate, and recover. Planned checks, isolated unit success, and verified combined behavior are distinct claims.
+
 ## Installation profiles
 
 Choose **`general`** for the complete general registry, or **`core`** for the six operations and their required supporting packages. More focused profiles are available below.

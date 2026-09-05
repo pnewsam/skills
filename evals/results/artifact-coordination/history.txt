@@ -1,0 +1,16 @@
+* 3956486 docs(epic): reconcile current handoff and historical checkpoints
+* 55f1da7 docs(epic): checkpoint verified EP-1 local completion
+* 2b1d41e docs(reporting): add executable named-money examples
+* 3d0f5e8 test(reporting): prove real normalization across consumers
+*   334c67c feat(export): integrate preserved export alongside receipt
+|\
+| * dd5f190 Implement record export on independent branch
+* | e2ba3b3 docs(epic): checkpoint completed U2 and remaining integration
+* |   c5ff759 fix(receipt): integrate preserved receipt with named money contract
+|\ \
+| * | 55134df Implement receipt against original tuple money contract
+| |/
+* | aac42f1 Record initiative checkpoint after interrupted parallel work
+* | 877b905 U1: Adopt named money fields and exact decimal rounding
+|/
+* 2b15124 Initial money reporting package

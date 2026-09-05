@@ -326,7 +326,9 @@
         "deliver-work"
       ],
       "optional_skills": [],
-      "resources": []
+      "resources": [
+        "references/coordination.md"
+      ]
     },
     "validate-work": {
       "layer": "operation",
@@ -363,6 +365,7 @@
       "requires": [],
       "optional_skills": [],
       "resources": [
+        "references/artifacts.md",
         "references/work-record.md"
       ]
     },

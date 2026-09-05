@@ -9,7 +9,7 @@ One work unit is one independently reviewable outcome, normally one PR. It may s
 
 ## One record, proportionate to the work
 
-Use the existing issue, feature plan, or other agreed record as the source of intent. Do not create a parallel plan merely to fit a skill. For a small uninterrupted task, concise task context is enough; persist a record before coordination, interruption, or handoff would lose intent. Use `references/work-record.md` when a new record helps. Existing `docs/features/` records remain valid; `docs/work/` is a default for new records, not a migration requirement.
+Use the existing issue, feature plan, or other agreed record as the source of intent. Do not create a parallel plan merely to fit a skill. For a small uninterrupted task, concise task context is enough; persist a record before coordination, interruption, or handoff would lose intent. Read `references/artifacts.md` when creating or coordinating durable records; it defines default locations, identity, ownership, and planned versus observed evidence. Use `references/work-record.md` when a new record helps. Existing `docs/features/` records remain valid; `docs/work/` is a default for new records, not a migration requirement.
 
 Record outcome and non-goals, observable acceptance, necessary context and dependencies, progress and evidence, requested delivery boundary, blockers and next action. Omit empty fields. Link large evidence rather than copying logs. Git and external systems remain authoritative for their actual state; record what was observed and when.
 

@@ -17,10 +17,10 @@ Define units around independently reviewable outcomes. Each needs a stable ident
 
 Represent dependency edges and the condition that satisfies each: for example an API contract available on a branch, or a prerequisite merged. Identify integration checkpoints and the epic-level acceptance that individual tests cannot establish. Detect cycles or blocked prerequisites before execution. Use stacked branches only when the repository and request permit them; otherwise sequence dependent work after merge.
 
-Plan independent units so they can be selected by readiness and value. Do not prescribe parallel agents unless authorized. Record overall non-goals, risks, and recovery expectations when material.
+Plan independent units so they can be selected by readiness and value. Do not prescribe parallel agents unless authorized. Record overall non-goals, risks, and recovery expectations when material. Name the coordination and integration owner/location for a managed run, with overall acceptance and checkpoint conditions. Distinguish planned verification from observed integration results.
 
 ## Record and continue
 
-Use `references/epic-record.md` when no suitable record exists. Prefer `docs/epics/` for a new local record, preserving existing IDs, completed history, and evidence. Creating external projects or issues is a separate requested effect, handled through the relevant runbooks.
+Read `work-conventions/references/artifacts.md` for identity, links, and record ownership. Use `references/epic-record.md` when no suitable record exists. Prefer `docs/epics/` for a new local record, preserving existing IDs, completed history, and evidence. Creating external projects or issues is a separate requested effect, handled through the relevant runbooks.
 
 Write enough child scope to begin; use `plan-work` just before executing a child when details depend on earlier results. Do not require fully detailed plans for every child before any work starts. Return the dependency graph, next ready unit, and integration proof. Continue to `ship-epic` when the user requested execution; a planning-only request ends here.

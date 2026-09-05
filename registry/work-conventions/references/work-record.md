@@ -1,14 +1,45 @@
-# Work: <outcome>
+# Work <id>: <outcome>
 
-- Record: <existing issue URL or durable local identity>
-- Outcome: <one independently reviewable result>
-- Scope / non-goals: <boundaries>
-- Acceptance: <observable conditions>
-- Context / dependencies: <only what affects implementation or sequencing>
-- Delivery requested: <local changes, commit, draft PR, merge, or another explicit endpoint>
-- Candidate: <base/head and any local changes; add branch/PR when they exist>
-- Evidence: <criterion → method, result, candidate, limitations>
-- Progress: <implemented / validated / reviewed / published / merged, as established>
-- Remaining: <blocker or next action>
+- Record: <stable identity or existing issue link> · Parent: <epic/feature link when applicable>
+- Owner: <responsible worker when coordinated> · Updated: <last meaningful update>
+- State: <activity and separately evidenced delivery state> · Endpoint: <requested boundary>
 
-Use only relevant fields. The record may be an existing issue or feature plan instead of this template. Optional enhancements never block completion of required acceptance unless the user makes them required. Keep completed historical records intact.
+## Problem and outcome
+
+<What is true today, why this matters, and the one independently reviewable result. Link source intent.>
+
+Scope / non-goals: <what is included and deliberately excluded>
+
+## Required acceptance
+
+- [ ] <Observable condition, with a stable criterion ID when evidence needs cross-references>
+
+Optional improvements: <only when relevant; never silently become completion requirements>
+
+## Approach and constraints
+
+<Only decisions needed to execute without rediscovering intent. Include prerequisite identities and required state, preserved invariants, compatibility, rollout/recovery, and unresolved decisions where material.>
+
+## Planned verification
+
+| Criterion / invariant | Method and expected result |
+| --- | --- |
+| <acceptance or guardrail> | <test, runtime check, measurement, or inspection> |
+
+For a measured improvement, include baseline, target, method/window, and exclusions. A planned check is not completed evidence.
+
+## Progress and evidence
+
+Candidate: <base/head, branch or PR, plus relevant local changes>
+
+| Criterion / invariant | Observed result | Candidate / evidence |
+| --- | --- | --- |
+| <criterion> | <pass, fail, or unverified and material limits> | <check/artifact link and identity> |
+
+Remaining / next action: <what another worker should do next, or evidence that the endpoint was reached>
+
+## Decisions and handoff — when needed
+
+<Changed assumptions and rationale; dependency or scope revision; unresolved blocker and unblock condition. At handoff include assignment identity, branch/checkout, uncommitted state, last verified evidence, and the next safe action.>
+
+Adapt this structure to existing records. Omit irrelevant sections rather than filling placeholders. Keep completed historical evidence intact and distinguish implementation, validation, review, publication, merge, and deployment.
