@@ -1,0 +1,18 @@
+{
+  "input": "/private/tmp/registry-render-live/synthesis.json",
+  "viewport": {
+    "w": 1280,
+    "h": 800
+  },
+  "captureRequested": true,
+  "candidates": [
+    {
+      "id": "synthesis",
+      "html": "/private/tmp/registry-render-live/synthesis.html",
+      "sha256": "85777f80f359d9d646712a4751e7e45a0639a6b4da57305e4cc89a1b68d19d23",
+      "rendered": true,
+      "screenshot": "/private/tmp/registry-render-live/capture-final-cleanup/synthesis.png",
+      "screenshotSha256": "e74d490f9583f18e95afba5d0c842d19427699e9fc5da2e238ac55db7b9362bf"
+    }
+  ]
+}

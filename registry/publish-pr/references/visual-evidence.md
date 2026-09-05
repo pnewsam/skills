@@ -17,7 +17,7 @@ Default: capture from the **real running app**. Everything below is the fallback
 
 Try in order; stop at the first that works. Note in the PR which one you used.
 
-1. **Real app, driven headlessly.** Launch via the `run` skill or the project's dev command — prefer a **dev server over a full production build**; a build is almost never required just for a screenshot. Drive it with a headless browser (Playwright/Chromium already vendored in most web repos) to the states the diff changed. **Look at each screenshot before delivering it** — a blank or unstyled frame is a failed capture, not evidence.
+1. **Real app, driven headlessly.** Launch via the project's documented dev command — prefer a **dev server over a full production build**; a build is almost never required just for a screenshot. Drive it with a headless browser (Playwright/Chromium already vendored in most web repos) to the states the diff changed. **Look at each screenshot before delivering it** — a blank or unstyled frame is a failed capture, not evidence.
 2. **User's already-running app.** If the app gates behind interactive login/SSO you cannot complete headlessly (see gotchas), the fastest authentic shot is the user's own running instance: give them the exact click path and ask them to grab it. Do not screen-scrape their live window uninvited.
 3. **Isolated-component harness.** Fully in your control, no backend or auth. Mount the *real* component on the project's dev bundler with mock props, drive and shoot it. Use this when the route is deep, data-gated, or auth-walled. Getting it to render faithfully has sharp edges — see the styling gotcha.
 
@@ -37,10 +37,10 @@ Try in order; stop at the first that works. Note in the PR which one you used.
 
 ## Hosting and embedding in the PR
 
-GitHub's drag-drop image CDN can't be written headlessly (it needs a browser session + CSRF token a `gh`/PAT token lacks), but it's the right host — permanent, attached to the PR, nothing to clean up. So:
+Use an available attachment mechanism only when the integration supports it. Do not assume API access to a browser-only upload path. Sharing images is an external effect with a destination and visibility boundary:
 
-- **Default — stage for drag-drop.** Save PNGs to a Finder-friendly folder (`~/Desktop/pr-screenshots/<pr>/`, ordered names) and put one labeled placeholder per image in the PR body (e.g. ``_⬇️ drag `1-before-after.png` here_``). Tell the user the folder; they drag them in. Don't embed URLs they're about to replace.
-- **Headless only (cron/CI)** — upload to durable object storage (e.g. S3/R2, public read), embed the URL, and verify it's `image/*` and present in the live body.
+- **Local fallback.** Save PNGs in a permitted task artifact directory with clear names and provide their paths. If a PR body update is authorized, label any missing attachments truthfully. Do not claim local files are already accessible to remote reviewers.
+- **Hosted evidence.** Upload only to a destination with visibility explicitly authorized by the user or established project policy. Headless execution does not authorize public storage or changing access controls. If no approved host is available, keep local artifacts and report the attachment gap. Verify authorized uploads and the actual live embed.
 - **Avoid** per-PR throwaway branches as an image host — the embeds die when the ref is deleted, across every PR that used it.
 
 ## Cleanup and safety
@@ -55,5 +55,5 @@ GitHub's drag-drop image CDN can't be written headlessly (it needs a browser ses
 - [ ] Captured the states the diff changed, not one happy-path shot.
 - [ ] Viewed each image; it is styled and non-blank.
 - [ ] Before/after present, or after-only with a reason.
-- [ ] Default: files staged + labeled placeholders in the PR body, user told where to drop; headless: durable host, URLs verified `image/*`.
+- [ ] Evidence is local with an explicit attachment gap, or hosted at an authorized destination with visibility and live URLs verified.
 - [ ] Temporary scaffolding removed; only my own dev processes stopped.

@@ -33,7 +33,7 @@ skills install -t claude -y
 skills install -t codex -y
 
 # Install one or more curated profiles
-skills install -t codex --profile core --profile quality
+skills install -t codex --profile core --profile orchestration
 
 # Project install (copies into <cwd>/.claude/skills)
 skills install -p -y
@@ -52,14 +52,11 @@ By default, the CLI creates **symlinks** from each harness's skills directory ba
 
 Project installs (`-p`) and custom directory installs (`-d`) use copies, since the repo may not be available on other machines. Existing destinations are preserved by default; pass `--force` only when replacement is intentional.
 
-When `--profile` is present, only the union of the named profiles and any
-profiles they include is installed. Use `-y` with profiles to skip harness
-prompts; it does not expand the selection to every skill.
+When `--profile` is present, the selected profiles, included profiles, and required package dependencies are installed. Required dependencies are also included for interactive individual selections. Optional skill recommendations do not expand the selection. Use `-y` to skip prompts without changing the profile selection.
 
-`core` is the intentionally small daily set. `advisory` composes the maintained
-backend, platform, compliance, Python, React, quality, UI, and design profiles
-for broad consultation. Externally sourced creative references remain a
-separate opt-in profile.
+`core` contains the six work operations and required contracts/PR mechanics. `general` contains all seventeen general skills. `orchestration`, `runbooks`, and `linear-ops` provide focused choices. MindsDB packages are available through a separate optional profile.
+
+Profiles from the older taxonomy such as `advisory`, `quality`, and `product-delivery` are retired. Inspect `skills status` and the migration map before replacing a client installation. Installing the new profile does not delete old copies or dangling links; preserve local customizations and explicitly remove only entries confirmed retired. The CLI never silently prunes a user's installation.
 
 ### `skills profiles`
 

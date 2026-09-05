@@ -11,7 +11,7 @@ Create one correctly scoped Linear issue, verify its live fields, return its ide
 
 ## Preconditions and effect
 
-Require an authenticated Linear MCP connection. If it is unavailable, follow the Linear connection and OAuth setup, then stop because Codex must restart before continuing.
+Require an authenticated Linear MCP connection. If unavailable, preserve the prepared payload and report the missing connection. Use the current environment's supported connection flow; do not assume a restart is required.
 
 This workflow performs one external create operation. The user's explicit request to create or file an issue authorizes that operation; it does not authorize creating a project, label, cycle, or another issue.
 

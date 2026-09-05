@@ -1,359 +1,54 @@
 # Authoring and maintaining skills
 
-Skills are compact operating manuals for agents. They should add repeatable
-judgment, safe workflow, or domain knowledge that the base model and repository
-instructions do not already provide.
+Skills must improve task outcomes, consistency, or efficiency enough to justify their discovery, context, and maintenance cost. The model already knows general technique. Keep only guidance that changes useful decisions, constraints it cannot infer, fragile mechanics, and tools or evidence contracts that earn their place. A verifier is not automatically valuable, and a short preference is not automatically redundant.
 
-## Loading model
+## Architecture
 
-Clients normally discover a skill from its `name` and `description`, then load
-the full `SKILL.md` only when selected. This has two consequences:
-
-- Every installed description consumes routing attention even when the skill is
-  never invoked. Prefer a relevant install profile over installing everything.
-- The full skill competes with the task, code, and conversation for context.
-  Keep the main file focused and move optional detail to named resources.
-
-Descriptions are routing contracts, not summaries. State what the skill does,
-concrete trigger phrases or situations, important exclusions, and any material
-effects such as writing files, committing, pushing, or posting externally.
-
-## Admission and retention test
-
-Sort every proposed or existing skill on the **method / objective / verification
-axis** first (docs/registry-rebalance-plan.md applies it to the whole
-registry):
-
-- **Does it specify an objective, taste, or org fact the model cannot derive?**
-  (a house style, a company workflow, a regulatory requirement, a platform
-  constraint) → it can KEEP as an objective/citation/check skeleton. Say what
-  must be true, pin the citation or convention, and attach a runnable check.
-- **Does it connect to ground truth?** (run, render, test, measure, review:
-  `review-pr`, a `scripts/` validator) → keep
-  and consider growing; verification is where value rises as models improve.
-- **Is it method knowledge with a deterministic check?** → CONVERT: keep the
-  check (a script or an existing linter), delete the how-to prose. See
-  `ui-color` and `ui-spacing` for the reference shape.
-- **Is it method knowledge with no durable check?** → do not add it. If it
-  exists, EVICT to `archive/` unless a quality A/B (`evals/*_pilot_cases.json`)
-  shows it clearly beats the base model on its own trigger prompts — the model
-  as a whole already absorbed most canonical knowledge prose.
-
-A skill also needs a plausible recurring audience and must be complete,
-maintainable, distinct from neighboring skills, and proportionate to its
-routing cost. The older retention categories still apply underneath:
-
-- **Recurring workflow:** it adds non-obvious decisions, fragile mechanics,
-  safety boundaries, state recovery, or verification to a task people perform
-  repeatedly — the durable part is the verification and the boundary, not the
-  derived method.
-- **Evergreen reference:** it carries *external objective* context (standards,
-  org conventions, taste commitments), not technique the model is already good
-  at.
-- **Necessary router:** it resolves real overlap among a maintained family and
-  adds synthesis the child descriptions cannot alone — and it gets collapsed
-  the moment its children leave.
-
-Archive or decline a skill when it is primarily:
-
-- method/taste of prose that restates what the base model applies from its own
-  knowledge — encode the check, not the lesson;
-- one-time project setup or generic scaffolding recoverable from current
-  framework documentation;
-- a prompt template, conversational ritual, or ordinary capable-agent behavior;
-- a narrow executor already owned by a shared workflow with the same effects
-  and proof obligations;
-- incomplete, stale, or dependent on missing resources;
-- useful only for one historical repository incident with no transferable
-  decision logic.
-
-Do not use frequency alone. A lower-frequency skill may still earn its place
-when the operation is high-risk, externally effectful, or unusually dependent
-on consistent evidence. Re-run this retention test when the base model or tooling improves; a skill that was once useful becomes redundant exactly as the base agent absorbs what its prose taught (run a quality A/B prior to evicting a family — `evals/README.md`).
-
-## Skill kinds
-
-The base model does the general reasoning at every step of a unit of work; a
-skill earns its place only where it adds something the model cannot reliably
-derive — a safety gate, a runnable check, a fixed domain procedure, or a house
-convention. Most lifecycle phases have no skill, by design. When a skill does earn
-its place, it has one primary category:
-
-| Category | Purpose | Typical shape |
+| Layer | Owns | Does not own |
 | --- | --- | --- |
-| Operation | Advance any unit of work through a delivery phase | Outcome, gates/effects, safety, verification, output |
-| Runbook | One fixed procedure for a specific tool, domain, or task | Preconditions, exact ordered steps (commands/code), verification, output |
-| Orchestration | Coordinate many units of work through the operations | Composed steps, gates, loop-termination, durable state, recovery |
-| Reference | Supply judgment in one decision domain | Decision rubric, examples, failure modes, review checklist |
+| Operation | A meaningful result within one independently reviewable work unit | A mandatory phase or approval ritual |
+| Runbook | Concrete task mechanics, effects, verification, and recovery | A second general delivery policy |
+| Reference | Compact conventions, requirements, or decision guidance | External actions or an encyclopedia |
+| Orchestration | Dependencies, progress, recovery, and proof across several units | Implementation mechanics within a single PR |
 
-An **operation** is a general-purpose skill for advancing a unit of work — the
-PR/Git delivery loop that applies to essentially any code change on any project.
-It is concrete (it carries mechanics), but it is not tied to one narrow tool or
-domain, and its value is the non-derivable part: the effect ladder, the safety
-gates, the finding model, git safety. It has one primary Effect and stops at a
-gate. One operation — the **driver** (`ship-pr`) — runs the whole loop for a
-single unit and owns its back-edges, and still counts as an operation because it
-stays within one unit.
+The six operations are analyze-work, plan-work, execute-work, validate-work, review-work, and deliver-work. Their shared contract is `registry/work-conventions/SKILL.md`. The agent owns the task and continues through authorized operations without a seventh lifecycle wrapper. Runbooks remain directly callable. Routing is a capability, not a separate layer.
 
-A **runbook** is one fixed procedure for a specific tool, domain, or task: the
-exact steps and calls to file a Linear issue, run an organization's migration, or
-drive one narrow API. This is where code snippets and highly specific sequences
-belong. Keep a runbook when the sequence is fragile, error-prone, or specific
-enough that encoding it prevents mistakes; delete it when the steps are obvious.
-Runbooks are open-ended — a registry can hold dozens, and eventually a
-marketplace of them. Branching within one runbook is fine and does not make a
-separate "playbook" kind: that split gives no clean partition and adds a boundary
-question with no downstream effect.
+One unit normally produces one PR and may span multiple commits and sessions. Reuse an issue or feature plan as its record; do not impose a new file hierarchy. Separate implemented, validated, reviewed, published, merged, and deployed using actual evidence. Initiative records coordinate multiple units and integration criteria.
 
-The operation/runbook line is **generality**, not abstraction: operations are the
-cross-project delivery machinery; runbooks are narrow, per-tool procedures.
+## Admission and retention
 
-**Orchestration** is a level above a single unit of work: it composes operations
-and runbooks across many units and owns the multi-unit sequencing, gates, loop
-termination, durable state, and recovery — the charter/epic/feature stack
-(`create-charter`, `plan-epic`, `plan-feature`, `execute-feature`, `advance-epic`,
-`ship-epic`). Keep an orchestration skill only when it encodes control the base
-model would not reliably infer; one that merely lists the obvious order is dead
-weight — delete it and let the model sequence the steps itself.
+Identify the recurring user request, the non-obvious value, and the smallest owner before adding a package. First consider ordinary agent behavior, an existing operation, a conditional resource, or an existing tool. Do not preserve an obsolete family by moving all of its prose into a large reference.
 
-Router was a candidate category for selecting among an expert family; every
-`*-expert` router was evicted once the base model routed among focused skills
-without them. Routing as a concept is deferred (see `docs/registry-rebalance-plan.md`);
-the Routers section below is retained as historical authoring guidance, not a
-current category.
+Keep a separate runbook when mechanics, recovery, effects, or proof are distinct. Keep a reference when it expresses an actual preference, applicable obligation, or repeatedly useful corrective emphasis. Keep a checker only when its measured property is relevant and its limitations are explicit. Model judgment and metrics are not ground truth.
 
-## Scope and granularity
+Compare realistic tasks with and without the skill, including a minimal-agent baseline. Evaluate completion, correctness, evidence, preservation of user work, avoidable questions, recovery, time, and context. Claims of quality improvement need actual trials; package validation is not behavioral evaluation. No category is exempt. Reassess when models, tools, or project needs change.
 
-A skill should cover one user-recognizable decision domain or one bounded
-workflow outcome.
+Retire redundant entry points rather than maintaining permanent aliases. Preserve useful history in archive/ and record migrations in docs/registry-rebuild.md. Only extract material with an identified current caller and decision benefit. Keep project-specific and external packages optional.
 
-Split a skill when:
+## Package contract
 
-- Different requests use disjoint sections.
-- It mixes a reusable knowledge base with a long operational procedure.
-- It has multiple independent external effects or ambiguous stopping points.
-- Its description needs several unrelated trigger clauses.
-- The main file exceeds roughly 500 lines and optional detail can be loaded
-  lazily.
+Each active package has `SKILL.md` with name and description frontmatter, matching its directory. The description explains the actual trigger and material boundaries. Include matching `agents/openai.yaml` client metadata without changing existing invocation policy unnecessarily. Automatic discovery stays enabled unless the user asks otherwise.
 
-Keep related material together when splitting would make an ordinary request
-load several tiny skills or when the decisions form one natural cascade.
+Use `references/`, `scripts/`, and `assets/` only for actual conditional detail, reusable executable mechanics, or output assets. Link every resource from the entry point at the point it is relevant. Longer references need a short contents section. Resolve helper paths from the installed package, not the user's working directory. Avoid generic command catalogs, redundant safety recitations, and mandatory template padding.
 
-Line count is a diagnostic, not a target. Fifty precise lines can be valuable;
-two hundred repetitive lines are not. Prefer the shortest instructions that
-reliably change agent behavior.
+Workflow instructions need a result, scope/effects, meaningful decisions, recovery, evidence, and return contract. Use as many sections as clarity requires; neither three phases nor six operations is a mandatory sequence. Detailed steps are justified by fragile mechanics, not habit.
 
-## Required package structure
+## Authorization and continuation
 
-```text
-<skill-name>/
-  SKILL.md                 # required
-  agents/
-    openai.yaml            # recommended client metadata
-  references/              # optional, loaded only when named by SKILL.md
-  scripts/                 # optional deterministic helpers
-  assets/                  # optional output inputs, not prompt material
-```
+User and repository instructions govern. Carry established authorization across operations. A user asking to implement a clear change does not need a new plan or approval first. A request to analyze only remains analysis only. Publication, messages, merge, deployment, and external tracker mutations need authorization from the request or established context; completing an earlier stage does not grant it.
 
-Keep `SKILL.md` frontmatter limited to:
+Preserve unrelated changes; isolate when possible, clarify only when ownership or consequence is genuinely ambiguous. Do not stop merely at the end of a skill when the task still contains authorized work. Do not record unavailable evidence as passing. After ambiguous external writes, read actual state before retrying; never bypass a permission rejection through a different path.
 
-```yaml
----
-name: kebab-case-name
-description: Clear routing contract with triggers, exclusions, and material effects.
----
-```
+## Catalog and installation
 
-The directory and `name` must match. Use a verb phrase for operations, runbooks,
-and orchestration (`publish-pr`, `create-issue`, `ship-epic`) and a
-decision-domain noun phrase for references (`react-state-management`).
+`catalog.json` records every active package's layer, scope, possible effects, required dependencies, optional skill routes, and resources. Effects describe possible operations across modes, not permission grants. `requires` are acyclic package dependencies installed transitively. `optional_skills` are conditional recommendations that do not expand an installation. If an optional skill is unavailable, use the ordinary capability or state the specific limitation; do not promise an unavailable delegate.
 
-For workflow names, prefer `<verb>-<object>` using the target system's canonical
-noun: `create-issue`, `create-project`, `review-pr`. Keep singular nouns for
-one-record effects and plural nouns for collection or bulk operations. Put
-synonyms such as "ticket" in the description for routing instead of creating
-competing names.
+Profiles compose use cases; the general profile contains the seventeen general skills. Source layout stays flat. A cross-package resource path requires a declared dependency. Profiles and individual selections install required dependencies; optional organization packages remain separate.
 
-Let the installed profile and the skill description identify an ordinary
-substrate such as Linear. Add a provider prefix only when the provider-specific
-behavior is the user-recognizable operation or when two same-named workflows
-must coexist in one installation, as with `gh-address-comments`. Do not add a
-provider prefix merely because the workflow calls that provider's tools.
+Preserved external bodies must match their recorded origin commit; update upstream intentionally, never silently rewrite them. Local project rules belong in repository instructions rather than the generic registry.
 
-For the unit-of-work lifecycle, use consistent phase verbs:
+## Validation
 
-- `plan-feature` creates one bounded product or convergence work unit.
-- `execute-feature` performs and verifies one planned item.
-- `review-pr` assesses the resulting pull request — the discrete unit of delivery.
+Run `python3 scripts/validate_registry.py`, `python3 -m unittest discover -s scripts -p 'test_*.py'`, `node --test tests/*.test.mjs`, and `go test -count=1 ./...` from cli/ for changes to this architecture/tooling. Run narrower relevant checks for a small later edit. Validate schemas, resource/dependency integrity, active routes, profile closure, and preserved external bodies.
 
-Model work as **operations on a unit of work**, not as domain-flavored copies of a loop,
-and treat the PR as the discrete unit of delivery. Analysis ("what to change"), diagnosis
-("why it fails"), and verification ("does it pass") are base-model capabilities the model
-performs inline while working — none needs a dedicated skill. Earlier per-domain analyzers,
-a browser-test trio, and standalone `analyze`/`validate`/`diagnose-failure` skills were
-retired once evidence showed the general loop and the base model reproduced them
-(`docs/registry-rebalance-plan.md`). Add a domain-specific analysis, planning, or execution
-workflow only when it has materially different artifacts, effects, recovery semantics, or
-proof obligations that cannot be expressed through the general workflow — and prove that
-before adding it.
-
-## Recommended workflow anatomy
-
-Use only the sections the workflow needs:
-
-1. **Outcome** — the observable result and the natural stopping point.
-2. **Use / do not use** — boundaries with neighboring skills.
-3. **Modes and effects** — read-only, local files, local Git, network read, or
-   external write.
-4. **Inputs and preconditions** — required artifacts, tools, and repository
-   state.
-5. **Workflow** — ordered decisions and actions, with proportional detail.
-6. **Safety and idempotency** — what reruns do and how user work is preserved.
-7. **Verification** — evidence required before claiming success.
-8. **Output contract** — what is returned or written, including incomplete work.
-
-Do not encode product-level approval rituals inside a skill. If the user already
-explicitly requested an in-scope action, an extra confirmation is usually noise.
-Ask only when the target, scope, or material consequence remains ambiguous.
-
-For multi-effect workflows, define explicit stop points. For example:
-
-```text
-preview -> local commit -> push -> external PR write
-```
-
-Completion of one stage never authorizes the next stage.
-
-Keep a normal linear workflow to no more than three top-level phases. Approval
-is a gate, not a phase. Put proportionate verification inside execution; keep
-publication, deployment, or external writes as separately authorized delivery
-actions. Internal substeps may be more detailed when they clarify a fragile
-decision without creating additional lifecycle stages.
-
-For metric-driven analysis and convergence planning, preserve this contract:
-
-- baseline
-- target
-- guardrails or invariants
-- reproducible measurement method and window
-- exclusions, confidence, and limitations
-- before/after evidence
-
-Metrics identify investigation candidates; they do not establish defects by
-themselves. Prefer repository-relative trends and corroborating signals over
-universal thresholds or composite quality scores.
-
-## Recommended reference anatomy
-
-A reference skill should contain:
-
-- A concise position or default.
-- A decision rubric ordered by practical importance.
-- Context-sensitive exceptions and trade-offs.
-- Common failure modes, especially plausible agent mistakes.
-- A review checklist that can be applied to real work.
-- Handoff rules for adjacent domains.
-
-Avoid encyclopedic background that does not alter a decision. Link to
-authoritative primary sources when facts are unstable or precise attribution
-matters; do not copy a documentation corpus into the skill.
-
-## Routers (retired kind)
-
-Router is not one of the three current kinds; every `*-expert` router was evicted
-once the base model routed among focused skills without them. This section is
-retained for historical context and for anyone evaluating an imported external
-router package. Routers should:
-
-- Load the smallest set of focused skills needed for the request.
-- Activate when the dominant child is unclear or the request spans two or more
-  child domains that need synthesis.
-- Yield directly to one focused child when exactly one bounded concern is
-  clear.
-- Define overlap boundaries and precedence.
-- Preserve disagreements instead of flattening them into generic advice.
-- Synthesize one recommendation and identify the next workflow, if any.
-- Avoid duplicating the child skills' substantive guidance.
-
-Do not include canned "initial response" text. The router is invoked in the
-context of a real task and should respond to that task.
-
-A router must add synthesis value; it should not become a mandatory tax on
-every request in its family.
-
-## Progressive disclosure
-
-Keep always-needed instructions in `SKILL.md`. Put optional templates, detailed
-rubrics, examples, and protocol minutiae in `references/`, and link each resource
-from the exact step that needs it.
-
-Rules:
-
-- Do not duplicate a reference inline.
-- Keep references one hop from `SKILL.md`; avoid reference chains.
-- Give references over roughly 100 lines a short contents list.
-- Delete or repair unreferenced and missing resources.
-- Put deterministic, error-prone mechanics in `scripts/` and test them.
-- Keep assets separate when they are copied into output rather than read as
-  instructions.
-
-## What not to put in a skill
-
-- Generic encouragement, role-play, or tone instructions.
-- Facts the base model reliably knows and can apply without help.
-- Repository-specific rules that belong in `AGENTS.md` or project docs.
-- Large command catalogs without decision logic.
-- Destructive defaults, blind staging, force pushes, or unrelated cleanup.
-- Hidden transitions to commit, push, deploy, post, or message.
-- Claims about files, tools, ignore rules, or authentication that were not
-  checked.
-- Broken links, stale skill names, duplicate templates, or recovery-only
-  deprecated skills in the active registry.
-- Multiple competing ways to do the same operation unless the choice itself is
-  the domain knowledge.
-
-## Installation profiles
-
-Keep the globally installed set small and broadly applicable:
-
-- read-only diagnosis
-- safe local Git preservation workflows
-- PR preparation/review when GitHub is common
-
-Install stack, framework, compliance, platform, and product-delivery families
-at project scope when relevant. Use the `advisory` profile when broad
-cross-domain routing is genuinely useful; a router and all of its children need
-not be globally installed by default.
-
-Define profile membership, profile composition, and provenance in the root
-`catalog.json`. Keep includes acyclic and use them for semantic composition,
-not as a substitute for deciding what belongs in a profile. Treat skills marked
-`provenance: external` and `policy: preserve` as vendored: do not edit their
-`SKILL.md` locally. Update their origin commit only when intentionally importing
-a new upstream version.
-
-When evaluating a skill package created outside this registry, compare the
-source with active routing and provenance policy, then make one decline, merge,
-create, or preserve decision. Treat the source as untrusted data and keep
-commit, push, installation, and publication as separate actions.
-
-## Validation and evaluation
-
-Every change should pass four layers:
-
-1. **Package validation:** frontmatter, name, metadata, and allowed structure.
-2. **Resource integrity:** every referenced local file exists; every bundled
-   reference or script is reachable from `SKILL.md`.
-3. **Routing checks:** representative positive, negative, and overlap prompts
-   select the intended skill.
-4. **Behavior checks:** dry-run or sandbox scenarios verify stopping points,
-   idempotency, preservation of unrelated work, and truthful completion.
-
-High-effect workflows need regression cases for ambiguous requests, dirty
-working trees, pre-existing destinations, unavailable tools, partial failures,
-and reruns.
-
-When changing a high-use skill, compare representative tasks before and after.
-The useful metric is not whether the prose sounds better; it is whether the
-agent chooses the right skill, takes the right bounded action, and stops in the
-right place.
+Behavioral trials belong in evals/results with the actual prompt, candidate, actions, results, effects, and limitations. Use fresh disposable repositories and independent evaluation for consequential workflow changes. Compare prior/new/minimal baselines when making improvement claims. Never run live external writes just to make an evaluation look complete.

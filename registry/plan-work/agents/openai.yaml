@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Work"
+  short_description: "Plan work with clear scope and evidence"
+  default_prompt: "Use $plan-work for the requested task, preserving scope and evidence."

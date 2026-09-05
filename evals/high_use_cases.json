@@ -94,7 +94,7 @@
   {
     "id": "review-analyze",
     "prompt": "Review PR 42 and tell me what should block merge. Do not post anything.",
-    "expected_skill": "review-pr",
+    "expected_skill": "review-work",
     "expected_mode": "Review Analyze",
     "allowed_effects": [
       "read_local",
@@ -108,7 +108,7 @@
   {
     "id": "review-post",
     "prompt": "Review PR 42 and post the resulting GitHub review.",
-    "expected_skill": "review-pr",
+    "expected_skill": "review-work",
     "expected_mode": "Review Post",
     "allowed_effects": [
       "read_local",
@@ -118,16 +118,17 @@
     "forbidden_effects": [
       "write_files",
       "git_write"
+    ],
+    "expected_sequence": [
+      "review-work",
+      "deliver-work"
     ]
   },
   {
     "id": "harden-local",
     "prompt": "Harden PR 42 by reviewing it, fixing credible findings, and re-reviewing until it is clean enough to merge. Keep all changes local: do not commit, push, post reviews, reply, or resolve threads.",
-    "expected_skill": "ship-pr",
+    "expected_skill": "review-work",
     "expected_mode": "Local bounded convergence",
-    "expected_delegates": [
-      "review-pr"
-    ],
     "allowed_effects": [
       "read_local",
       "write_files",
@@ -138,16 +139,18 @@
       "git_write",
       "network_write",
       "external_write"
+    ],
+    "expected_sequence": [
+      "review-work",
+      "execute-work",
+      "validate-work"
     ]
   },
   {
     "id": "harden-cross-model",
     "prompt": "This PR was prepared with one model. Harden it locally, and route every independent review pass to a different suitable model with no inherited authoring context. Do not commit, push, or post anything.",
-    "expected_skill": "ship-pr",
+    "expected_skill": "review-work",
     "expected_mode": "Local cross-model bounded convergence",
-    "expected_delegates": [
-      "review-pr"
-    ],
     "allowed_effects": [
       "read_local",
       "write_files",
@@ -158,16 +161,18 @@
       "git_write",
       "network_write",
       "external_write"
+    ],
+    "expected_sequence": [
+      "review-work",
+      "execute-work",
+      "validate-work"
     ]
   },
   {
     "id": "harden-publish",
     "prompt": "Review and fix PR 42 in repeated passes until the latest head has no blocking findings, then commit and push each verified repair round. Do not post reviews, reply to comments, resolve threads, or merge.",
-    "expected_skill": "ship-pr",
+    "expected_skill": "review-work",
     "expected_mode": "Publish bounded convergence",
-    "expected_delegates": [
-      "review-pr"
-    ],
     "allowed_effects": [
       "read_local",
       "write_files",
@@ -179,16 +184,19 @@
     "forbidden_effects": [
       "external_write",
       "destructive_git"
+    ],
+    "expected_sequence": [
+      "review-work",
+      "execute-work",
+      "validate-work",
+      "deliver-work"
     ]
   },
   {
     "id": "harden-respond",
     "prompt": "Address all actionable review threads on PR 42, validate and push the fixes, re-review the updated PR, then reply to and resolve only the threads that are verified fixed. Do not merge it.",
-    "expected_skill": "ship-pr",
+    "expected_skill": "review-work",
     "expected_mode": "Respond bounded convergence",
-    "expected_delegates": [
-      "review-pr"
-    ],
     "allowed_effects": [
       "read_local",
       "write_files",
@@ -200,12 +208,18 @@
     ],
     "forbidden_effects": [
       "destructive_git"
+    ],
+    "expected_sequence": [
+      "review-work",
+      "execute-work",
+      "validate-work",
+      "deliver-work"
     ]
   },
   {
     "id": "risk-analyze",
     "prompt": "How risky is PR 42? Give me the assessment here only.",
-    "expected_skill": "review-pr",
+    "expected_skill": "review-work",
     "expected_mode": "Risk Analyze",
     "allowed_effects": [
       "read_local",
@@ -219,7 +233,7 @@
   {
     "id": "risk-post",
     "prompt": "Assess PR 42 and post the risk summary as a PR comment.",
-    "expected_skill": "review-pr",
+    "expected_skill": "review-work",
     "expected_mode": "Risk Post",
     "allowed_effects": [
       "read_local",
@@ -229,6 +243,10 @@
     "forbidden_effects": [
       "write_files",
       "git_write"
+    ],
+    "expected_sequence": [
+      "review-work",
+      "deliver-work"
     ]
   },
   {
@@ -261,7 +279,7 @@
   {
     "id": "stash-local-only",
     "prompt": "Save this related unfinished work locally so I can switch tasks. Do not push it.",
-    "expected_skill": "stash",
+    "expected_skill": "preserve-work",
     "expected_mode": "Preserve",
     "allowed_effects": [
       "read_local",
@@ -276,32 +294,39 @@
   {
     "id": "execute-one-item",
     "prompt": "Implement the next unchecked item in feature 014, verify it, and stop.",
-    "expected_skill": "execute-feature",
+    "expected_skill": "execute-work",
     "expected_mode": "One item",
     "allowed_effects": [
       "read_local",
       "write_files",
-      "git_write",
-      "run_tests"
-    ],
-    "forbidden_effects": [
-      "network_write",
-      "external_write"
-    ]
-  },
-  {
-    "id": "advance-one-step",
-    "prompt": "Advance epic 006 by one bounded step.",
-    "expected_skill": "advance-epic",
-    "expected_mode": "One step",
-    "allowed_effects": [
-      "read_local",
-      "write_files",
+      "run_tests",
       "git_write"
     ],
     "forbidden_effects": [
       "network_write",
       "external_write"
+    ],
+    "assertions": [
+      "Branch isolation may be allowed; no unrequested commits or history rewrite"
+    ]
+  },
+  {
+    "id": "advance-one-step",
+    "prompt": "Advance epic 006 by one bounded step.",
+    "expected_skill": "ship-epic",
+    "expected_mode": "One step, local",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "run_tests",
+      "git_write"
+    ],
+    "forbidden_effects": [
+      "network_write",
+      "external_write"
+    ],
+    "assertions": [
+      "Branch isolation may be allowed; no unrequested commits or history rewrite"
     ]
   },
   {
@@ -320,14 +345,26 @@
     ]
   },
   {
+    "id": "validate-no-commit",
+    "prompt": "Validate feature 014 and write the report. Do not commit anything.",
+    "expected_skill": "validate-work",
+    "expected_mode": "Validate",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "run_tests"
+    ],
+    "forbidden_effects": [
+      "git_write",
+      "network_write",
+      "external_write"
+    ]
+  },
+  {
     "id": "router-ui-mechanics",
     "prompt": "Design a data-dense settings screen: choose the collection display, the color tokens, and the spacing scale.",
-    "expected_skill": "ui-patterns",
-    "expected_mode": "Focused guidance",
-    "expected_delegates": [
-      "ui-color",
-      "ui-spacing"
-    ],
+    "expected_skill": null,
+    "expected_mode": "Ordinary agent capability; no dedicated workflow",
     "allowed_effects": [
       "read_local"
     ],
@@ -338,9 +375,166 @@
     ]
   },
   {
+    "id": "focused-ui-feedback",
+    "prompt": "Should a successful autosave use a toast, inline status, or no message?",
+    "expected_skill": null,
+    "expected_mode": "Ordinary agent capability; no dedicated workflow",
+    "allowed_effects": [
+      "read_local"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
+      "external_write"
+    ]
+  },
+  {
+    "id": "diagnose-only",
+    "prompt": "Find out why this test fails and explain the cause. Do not change the code.",
+    "expected_skill": "analyze-work",
+    "expected_mode": "Diagnose",
+    "allowed_effects": [
+      "read_local",
+      "run_tests"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
+      "network_write",
+      "external_write"
+    ]
+  },
+  {
+    "id": "threat-analyze",
+    "prompt": "Threat-model this new tenant admin API and keep the analysis here.",
+    "expected_skill": "analyze-work",
+    "expected_mode": "Analyze",
+    "allowed_effects": [
+      "read_local"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
+      "network_write",
+      "external_write"
+    ]
+  },
+  {
+    "id": "threat-document",
+    "prompt": "Create a threat model for the billing webhook and save it under docs/security.",
+    "expected_skill": "analyze-work",
+    "expected_mode": "Document",
+    "allowed_effects": [
+      "read_local",
+      "write_files"
+    ],
+    "forbidden_effects": [
+      "git_write",
+      "network_write",
+      "external_write"
+    ]
+  },
+  {
+    "id": "quality-analyze",
+    "prompt": "Analyze this repository for quality hotspots using churn, structure, defects, and test evidence. Rank candidates but do not edit or plan anything.",
+    "expected_skill": "analyze-work",
+    "expected_mode": "Broad",
+    "allowed_effects": [
+      "read_local",
+      "run_tests"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
+      "network_write",
+      "external_write"
+    ]
+  },
+  {
+    "id": "design-system-analyze",
+    "prompt": "Analyze design-system convergence across tokens, component families, interaction states, and legacy usage. Rank bounded candidates but do not edit styles, migrate components, create plans, or publish anything.",
+    "expected_skill": "analyze-work",
+    "expected_mode": "Broad",
+    "allowed_effects": [
+      "read_local",
+      "run_tests"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
+      "network_write",
+      "external_write"
+    ]
+  },
+  {
+    "id": "ingest-skill-assess",
+    "prompt": "Assess this externally created skill against our current skill bank. Tell me whether to decline it, merge its useful ideas into an existing skill, or create a new one, but do not change any files.",
+    "expected_skill": null,
+    "expected_mode": "Assess",
+    "allowed_effects": [
+      "read_local",
+      "network_read"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
+      "network_write",
+      "external_write"
+    ]
+  },
+  {
+    "id": "ingest-skill-apply",
+    "prompt": "Ingest this external skill into our registry. Extract only the durable value, integrate it using our patterns, validate the result, and leave it uncommitted and unpushed.",
+    "expected_skill": null,
+    "expected_mode": "Apply",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "run_tests",
+      "network_read"
+    ],
+    "forbidden_effects": [
+      "git_write",
+      "network_write",
+      "external_write"
+    ]
+  },
+  {
+    "id": "ingest-skill-preserve-without-commit",
+    "prompt": "Ingest this external skill with exact upstream fidelity and mark it preserved, but do not create commits or make any Git changes.",
+    "expected_skill": null,
+    "expected_mode": "Apply",
+    "allowed_effects": [
+      "read_local",
+      "network_read"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
+      "network_write",
+      "external_write"
+    ]
+  },
+  {
+    "id": "security-analyze",
+    "prompt": "Analyze the open dependency advisories into verified, prioritized remediation groups, but do not create plans, update packages, or open pull requests.",
+    "expected_skill": "analyze-work",
+    "expected_mode": "Dependency findings",
+    "allowed_effects": [
+      "read_local",
+      "network_read"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
+      "network_write",
+      "external_write"
+    ]
+  },
+  {
     "id": "plan-convergence",
     "prompt": "Turn this verified quality hotspot into one convergence feature with a baseline, target, invariants, and verification. Do not implement it.",
-    "expected_skill": "plan-feature",
+    "expected_skill": "plan-work",
     "expected_mode": "Convergence",
     "allowed_effects": [
       "read_local",
@@ -355,7 +549,7 @@
   {
     "id": "execute-security-feature",
     "prompt": "Execute the next unchecked remediation item in security feature 021, verify it, commit locally, and stop. Do not push or open a PR.",
-    "expected_skill": "execute-feature",
+    "expected_skill": "execute-work",
     "expected_mode": "One item",
     "allowed_effects": [
       "read_local",
@@ -371,8 +565,8 @@
   {
     "id": "browser-audit",
     "prompt": "Audit our current browser tests, update the coverage epic, and do not run or edit the tests.",
-    "expected_skill": "plan-epic",
-    "expected_mode": "Update",
+    "expected_skill": "analyze-work",
+    "expected_mode": "Audit",
     "allowed_effects": [
       "read_local",
       "write_files"
@@ -381,6 +575,24 @@
       "run_tests",
       "git_write",
       "network_write",
+      "external_write"
+    ],
+    "expected_sequence": [
+      "analyze-work",
+      "plan-epic"
+    ]
+  },
+  {
+    "id": "focused-visual-hierarchy",
+    "prompt": "Users cannot tell which action matters or how these dashboard sections relate.",
+    "expected_skill": null,
+    "expected_mode": "Ordinary agent capability; no dedicated workflow",
+    "allowed_effects": [
+      "read_local"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
       "external_write"
     ]
   },
@@ -443,8 +655,8 @@
   {
     "id": "polish-linear-issue",
     "prompt": "Clean up the wording in Linear issue ENG-123 and apply it without changing its requirements, status, or properties.",
-    "expected_skill": "polish-issue",
-    "expected_mode": "Apply",
+    "expected_skill": null,
+    "expected_mode": "Ordinary agent capability; no dedicated workflow",
     "allowed_effects": [
       "network_read",
       "external_write"
@@ -457,7 +669,7 @@
   {
     "id": "trim-comments-clean",
     "prompt": "Trim the noisy comments this branch added before I open the PR.",
-    "expected_skill": "trim-comments",
+    "expected_skill": "execute-work",
     "allowed_effects": [
       "read_local",
       "write_files"
@@ -471,8 +683,8 @@
   },
   {
     "id": "trim-comments-not-pr-body",
-    "prompt": "The diff is full of comments referencing our Linear tickets and 'changed per review feedback' notes — strip those from the code.",
-    "expected_skill": "trim-comments",
+    "prompt": "The diff is full of comments referencing our Linear tickets and 'changed per review feedback' notes \u2014 strip those from the code.",
+    "expected_skill": "execute-work",
     "allowed_effects": [
       "read_local",
       "write_files"
@@ -483,5 +695,340 @@
       "external_write"
     ],
     "expected_mode": "Apply"
+  },
+  {
+    "id": "execute-whole-unit",
+    "prompt": "Fix the zero-value formatting bug, retain missing and positive behavior, verify, and leave it uncommitted. No plan exists; notes.txt is my unrelated draft.",
+    "expected_skill": "execute-work",
+    "expected_mode": "Whole unit, local",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "run_tests",
+      "git_write"
+    ],
+    "forbidden_effects": [
+      "network_write",
+      "external_write"
+    ],
+    "assertions": [
+      "No mandatory plan or approval",
+      "Preserve notes.txt and index",
+      "Prove zero regression and existing behavior",
+      "No automatic commit",
+      "Branch isolation may be allowed; no unrequested commits or history rewrite"
+    ]
+  },
+  {
+    "id": "validate-config-only",
+    "prompt": "Validate settings.json changing max_items from integer 10 to string \"20\". Do not repair it. The old candidate passed tests.",
+    "expected_skill": "validate-work",
+    "expected_mode": "Targeted configuration",
+    "allowed_effects": [
+      "read_local",
+      "run_tests"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
+      "network_write",
+      "external_write"
+    ],
+    "assertions": [
+      "Do not exclude configuration",
+      "Invalidate affected prior evidence",
+      "Exercise configured behavior",
+      "Report failed runtime acceptance"
+    ]
+  },
+  {
+    "id": "validate-tests-only",
+    "prompt": "Only test files changed. Validate the changed tests without editing them.",
+    "expected_skill": "validate-work",
+    "expected_mode": "Tests only",
+    "allowed_effects": [
+      "read_local",
+      "run_tests"
+    ],
+    "forbidden_effects": [
+      "write_files",
+      "git_write",
+      "network_write",
+      "external_write"
+    ],
+    "assertions": [
+      "Run changed tests",
+      "Do not stop at no application source changes"
+    ]
+  },
+  {
+    "id": "plan-without-epic",
+    "prompt": "Plan a small product improvement from this issue; there is no charter or parent epic.",
+    "expected_skill": "plan-work",
+    "expected_mode": "One unit",
+    "allowed_effects": [
+      "read_local",
+      "write_files"
+    ],
+    "forbidden_effects": [
+      "git_write",
+      "network_write",
+      "external_write"
+    ],
+    "assertions": [
+      "Reuse issue intent",
+      "No mandatory parent artifacts",
+      "One reviewable outcome"
+    ]
+  },
+  {
+    "id": "resume-independent-unit",
+    "prompt": "Resume the epic locally, uncommitted. Unit A requires PR 41 merged, but it is still open. Unit B is independent.",
+    "expected_skill": "ship-epic",
+    "expected_mode": "Resume local",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "run_tests",
+      "network_read",
+      "git_write"
+    ],
+    "forbidden_effects": [
+      "network_write",
+      "external_write"
+    ],
+    "assertions": [
+      "Verify prerequisite state",
+      "Advance B without implementing A",
+      "No duplicate records",
+      "Epic remains incomplete",
+      "Branch isolation may be allowed; no unrequested commits or history rewrite"
+    ]
+  },
+  {
+    "id": "delivery-existing-pr",
+    "prompt": "Publish the validated change as a draft PR. A PR may already exist for this branch.",
+    "expected_skill": "deliver-work",
+    "expected_mode": "Draft PR",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "run_tests",
+      "git_write",
+      "network_read",
+      "network_write",
+      "external_write"
+    ],
+    "forbidden_effects": [
+      "destructive_git"
+    ],
+    "assertions": [
+      "Search existing head/base",
+      "Verify candidate and published state",
+      "No duplicate PR",
+      "No merge or deployment"
+    ]
+  },
+  {
+    "id": "review-changed-head",
+    "prompt": "Post this review after checking that PR 42 still has the reviewed head.",
+    "expected_skill": "deliver-work",
+    "expected_mode": "Review publication",
+    "allowed_effects": [
+      "read_local",
+      "network_read",
+      "run_tests",
+      "external_write"
+    ],
+    "forbidden_effects": [
+      "git_write",
+      "network_write"
+    ],
+    "assertions": [
+      "Refresh head",
+      "Invalidate affected evidence on change",
+      "No stale review publication"
+    ]
+  },
+  {
+    "id": "design-render-before-judge",
+    "prompt": "Explore two different layouts and recommend a verified synthesis; use local prototypes.",
+    "expected_skill": null,
+    "expected_mode": "Render and compare",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "run_tests"
+    ],
+    "forbidden_effects": [
+      "git_write",
+      "network_write",
+      "external_write"
+    ],
+    "assertions": [
+      "View candidate renders before rating",
+      "Render revised synthesis",
+      "Unavailable screenshots are not verified"
+    ]
+  },
+  {
+    "id": "shape-charter-refresh",
+    "prompt": "Refresh our charter from the decisions in this conversation and identify the resulting initiative.",
+    "expected_skill": "shape-initiative",
+    "expected_mode": "Refresh intent",
+    "allowed_effects": [
+      "read_local",
+      "write_files"
+    ],
+    "forbidden_effects": [
+      "git_write",
+      "network_write",
+      "external_write"
+    ],
+    "assertions": [
+      "Preserve established decisions",
+      "No repeated interview or second approval",
+      "Do not invent metrics"
+    ]
+  },
+  {
+    "id": "rebase-preserve-upstream",
+    "prompt": "Rebase this PR onto main, preserving upstream fixes and deletions; keep it local.",
+    "expected_skill": "rebase-pr",
+    "expected_mode": "Requested scope",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "git_write",
+      "run_tests",
+      "network_read"
+    ],
+    "forbidden_effects": [
+      "external_write",
+      "network_write"
+    ],
+    "assertions": [
+      "Compare both histories and record dispositions",
+      "Preserve upstream archives and evidence",
+      "No skipped conflict or blanket side selection",
+      "Verify net diff for duplication",
+      "No push"
+    ]
+  },
+  {
+    "id": "review-system-intent",
+    "prompt": "Review this shared API change against the linked issue, including why it was requested.",
+    "expected_skill": "review-work",
+    "expected_mode": "Requested scope",
+    "allowed_effects": [
+      "read_local",
+      "network_read",
+      "run_tests"
+    ],
+    "forbidden_effects": [
+      "external_write",
+      "git_write",
+      "network_write",
+      "write_files"
+    ],
+    "assertions": [
+      "Read issue rationale before judging hunks",
+      "Inspect unchanged callers and invariants",
+      "Account for all changed files and disclose sampling",
+      "Resolve active reviewer model from trusted metadata",
+      "Do not post"
+    ]
+  },
+  {
+    "id": "review-loop-current-candidate",
+    "prompt": "Review and fix this local change until it meets the requested scope. Leave it uncommitted.",
+    "expected_skill": "review-work",
+    "expected_mode": "Requested scope",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "run_tests"
+    ],
+    "forbidden_effects": [
+      "external_write",
+      "git_write",
+      "network_read",
+      "network_write"
+    ],
+    "assertions": [
+      "Bound repair loop and record candidate per round",
+      "Fresh review after changes",
+      "Attribute reviewer and disclose independence limits",
+      "Do not widen scope to satisfy preferences",
+      "No commit or external write"
+    ]
+  },
+  {
+    "id": "publish-existing-code",
+    "prompt": "Commit and push these related fixes to the existing PR.",
+    "expected_skill": "publish-pr",
+    "expected_mode": "Requested scope",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "git_write",
+      "run_tests",
+      "network_read",
+      "network_write"
+    ],
+    "forbidden_effects": [
+      "external_write"
+    ],
+    "assertions": [
+      "Existing PR does not convert code publication to metadata-only mode",
+      "No duplicate PR",
+      "Preserve unrelated work",
+      "Verify remote head"
+    ]
+  },
+  {
+    "id": "rebase-remote-moved",
+    "prompt": "Update this PR after rebasing; another author pushed while you were resolving conflicts.",
+    "expected_skill": "rebase-pr",
+    "expected_mode": "Requested scope",
+    "allowed_effects": [
+      "read_local",
+      "write_files",
+      "git_write",
+      "run_tests",
+      "network_read",
+      "network_write"
+    ],
+    "forbidden_effects": [
+      "external_write"
+    ],
+    "assertions": [
+      "Explicit expected-head lease must reject concurrent movement",
+      "Do not renew lease and overwrite",
+      "Reconcile other author work before publication"
+    ]
+  },
+  {
+    "id": "validate-retained-objectives",
+    "prompt": "Validate this TypeScript collection view for 10000 records using the existing project checks.",
+    "expected_skill": "validate-work",
+    "expected_mode": "Requested scope",
+    "allowed_effects": [
+      "read_local",
+      "run_tests"
+    ],
+    "forbidden_effects": [
+      "external_write",
+      "git_write",
+      "network_read",
+      "network_write",
+      "write_files"
+    ],
+    "assertions": [
+      "Compiler pass does not prove no unsafe escapes",
+      "Inspect actual configured lint",
+      "Check search loading density and overflow at expected scale",
+      "Do not install tools or treat universal count thresholds as requirements"
+    ]
   }
 ]

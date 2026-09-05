@@ -1,0 +1,10 @@
+{
+  "before": "/private/tmp/registry-render-live/capture-2/compact.png",
+  "after": "/private/tmp/registry-render-live/capture-2/compact.png",
+  "tolerance": 32,
+  "threshold": 0,
+  "changed": 0,
+  "total": 1024000,
+  "ratio": 0,
+  "verdict": "unchanged"
+}

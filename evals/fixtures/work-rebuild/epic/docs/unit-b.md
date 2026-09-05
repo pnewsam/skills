@@ -1,0 +1,1 @@
+Outcome: strip leading and trailing whitespace before slug conversion. Non-goals: punctuation/Unicode normalization. Acceptance: padded input becomes hello-world, existing plain input unchanged. Endpoint: uncommitted local candidate.

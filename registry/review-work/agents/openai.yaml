@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Work"
+  short_description: "Review work with clear scope and evidence"
+  default_prompt: "Use $review-work for the requested task, preserving scope and evidence."

@@ -1,3 +1,5 @@
+> Historical design record preserved from main. Current architecture and dispositions are in [registry-rebuild.md](registry-rebuild.md).
+
 # The unit-of-work lifecycle
 
 A proposed organizing model for the PR skills: treat every PR as a **unit of work

@@ -1,3 +1,5 @@
+> Historical design record preserved from main. Current architecture and dispositions are in [registry-rebuild.md](registry-rebuild.md).
+
 # General `analyze` skill (substitution-test context)
 
 This note describes a single, domain-general `analyze` skill that would replace the

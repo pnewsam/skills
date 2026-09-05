@@ -1,0 +1,83 @@
+{
+  "bug": {
+    "head": "1127c5cb0421948dbe3cfe8493753df3617c541d",
+    "branch": "main",
+    "status": {
+      "exit": 0,
+      "stdout": " M app.py\n M notes.txt\n M test_app.py\n",
+      "stderr": ""
+    },
+    "staged": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "commits": {
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    "diff_check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "candidate_diff_sha256": "11bb7ac40fc90b1060f85a87a2881b6b9f5f87d3e3f563cb480d8827f3993ba4",
+    "unrelated_notes_preserved": true
+  },
+  "config": {
+    "head": "324a77eb84af7fc6c6940f24aa2eecdb79463591",
+    "branch": "main",
+    "status": {
+      "exit": 0,
+      "stdout": " M settings.json\n",
+      "stderr": ""
+    },
+    "staged": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "commits": {
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    "diff_check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "candidate_diff_sha256": "901e6c5c72d56cf164da31e589ecd0e36d31009c99d9cb75738db62130c75a94",
+    "required_check": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "test_boundary (test_app.Limits) ... ERROR\n\n======================================================================\nERROR: test_boundary (test_app.Limits)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/tmp/registry-work-trials-4me0oanv/config/test_app.py\", line 6, in test_boundary\n    self.assertTrue(allowed(10))\n  File \"/private/tmp/registry-work-trials-4me0oanv/config/app.py\", line 7, in allowed\n    raise ValueError(\"max_items must be a positive integer\")\nValueError: max_items must be a positive integer\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n"
+    }
+  },
+  "epic": {
+    "head": "1cda1f375412eb65475795516631b1ac8621dd33",
+    "branch": "codex/unit-b",
+    "status": {
+      "exit": 0,
+      "stdout": " M app.py\n M docs/epic.md\n M docs/unit-b.md\n M test_app.py\n",
+      "stderr": ""
+    },
+    "staged": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "commits": {
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    "diff_check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "candidate_diff_sha256": "253889060d927ce140ac8dc6846cca9c73b93429b02704017e054e1f65c8707c"
+  }
+}

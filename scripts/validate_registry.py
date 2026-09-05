@@ -25,6 +25,87 @@ EFFECTS = {
 }
 
 
+
+def dependency_closure(names: set[str], skills: dict) -> set[str]:
+    result: set[str] = set()
+    def visit(name: str, stack: tuple[str, ...]) -> None:
+        if name in stack:
+            raise ValueError("skill dependency cycle: " + " -> ".join((*stack, name)))
+        if name not in skills:
+            raise ValueError(f"unknown required skill: {name}")
+        if name in result:
+            return
+        metadata = skills[name]
+        if not isinstance(metadata, dict):
+            raise ValueError(f"invalid skill metadata: {name}")
+        children = metadata.get("requires", [])
+        if not isinstance(children, list) or not all(isinstance(child, str) for child in children):
+            raise ValueError(f"invalid required skills: {name}")
+        for child in children:
+            visit(child, (*stack, name))
+        result.add(name)
+    for name in sorted(names):
+        visit(name, ())
+    return result
+
+
+def validate_metadata(catalog: dict, registry: Path) -> list[str]:
+    errors: list[str] = []
+    skills = catalog.get("skills", {})
+    active = {p.parent.name for p in registry.glob("*/SKILL.md")}
+    for name in sorted(active ^ set(skills)):
+        errors.append(f"catalog metadata does not match active package: {name}")
+    cross_path = re.compile(r"`([a-z][a-z0-9-]*)/((?:references|scripts|assets)/[^`\s]+)`")
+    retired = {p.parent.name for p in (registry.parent / "archive").rglob("SKILL.md")} - active
+    for name in sorted(active & set(skills)):
+        meta = skills[name]
+        if not isinstance(meta, dict):
+            errors.append(f"{name}: metadata must be an object")
+            continue
+        if meta.get("layer") not in {"operation", "runbook", "reference", "orchestration"}:
+            errors.append(f"{name}: invalid layer")
+        if meta.get("scope") not in {"work", "initiative", "shared", "project", "registry"}:
+            errors.append(f"{name}: invalid scope")
+        valid = True
+        for field in ("requires", "optional_skills", "resources", "effects"):
+            value = meta.get(field)
+            if not isinstance(value, list) or not all(isinstance(v, str) for v in value):
+                errors.append(f"{name}: {field} must be a string list")
+                valid = False
+            elif len(value) != len(set(value)):
+                errors.append(f"{name}: duplicate {field}")
+        if not valid:
+            continue
+        if set(meta["effects"]) - EFFECTS:
+            errors.append(f"{name}: unknown effects")
+        if set(meta["optional_skills"]) - active:
+            errors.append(f"{name}: optional route names inactive skills")
+        if set(meta["requires"]) & set(meta["optional_skills"]):
+            errors.append(f"{name}: dependency is both required and optional")
+        try:
+            closure = dependency_closure({name}, skills)
+        except ValueError as exc:
+            errors.append(f"{name}: {exc}")
+            closure = {name}
+        resources = {str(p.relative_to(registry / name)) for folder in RESOURCE_DIRS
+                     for p in (registry / name / folder).rglob("*") if p.is_file()}
+        if resources != set(meta["resources"]):
+            errors.append(f"{name}: catalog resources differ from package contents")
+        if meta.get("provenance") == "external":
+            continue
+        for doc in (registry / name).rglob("*.md"):
+            content = doc.read_text(encoding="utf-8")
+            for target, relative in cross_path.findall(content):
+                if target not in closure:
+                    errors.append(f"{name}: undeclared resource dependency {target}/{relative}")
+                if not (registry / target / relative).is_file():
+                    errors.append(f"{name}: missing cross-package resource {target}/{relative}")
+            for token in re.findall(r"`([a-z][a-z0-9-]*)`", content):
+                if token in retired:
+                    errors.append(f"{name}: route to retired skill {token}")
+    return errors
+
+
 def frontmatter(text: str) -> tuple[dict[str, str], list[str]]:
     errors: list[str] = []
     if not text.startswith("---\n"):
@@ -144,6 +225,7 @@ def main() -> int:
     warnings: list[str] = []
     catalog_file = ROOT / "catalog.json"
     catalog = json.loads(catalog_file.read_text(encoding="utf-8"))
+    errors.extend(validate_metadata(catalog, REGISTRY))
     external = {
         name: metadata
         for name, metadata in catalog.get("skills", {}).items()
@@ -186,6 +268,10 @@ def main() -> int:
         resolved = set(profile.get("skills", []))
         for included_name in profile.get("includes", []):
             resolved.update(resolve_profile(included_name, (*stack, profile_name)))
+        try:
+            resolved = dependency_closure(resolved, catalog.get("skills", {}))
+        except ValueError as exc:
+            report_profile_error(f"catalog: profile {profile_name!r}: {exc}")
         resolved_profiles[profile_name] = resolved
         return resolved
 
@@ -252,7 +338,7 @@ def main() -> int:
             if case_id in seen_ids:
                 errors.append(f"evals: duplicate case id {case_id!r}")
             seen_ids.add(case_id)
-            if case.get("expected_skill") not in active_names:
+            if case.get("expected_skill") is not None and case.get("expected_skill") not in active_names:
                 errors.append(
                     f"evals: {case_id} references inactive skill "
                     f"{case.get('expected_skill')!r}"
@@ -260,6 +346,9 @@ def main() -> int:
             if not case.get("prompt") or not case.get("expected_mode"):
                 errors.append(f"evals: {case_id} is missing a prompt or expected mode")
             delegates = case.get("expected_delegates", [])
+            for target in case.get("expected_sequence", []):
+                if target not in active_names:
+                    errors.append(f"evals: {case_id} sequence references inactive skill {target!r}")
             duplicate_delegates = sorted(
                 name for name in set(delegates) if delegates.count(name) > 1
             )

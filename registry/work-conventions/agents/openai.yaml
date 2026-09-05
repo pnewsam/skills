@@ -1,0 +1,4 @@
+interface:
+  display_name: "Work Conventions"
+  short_description: "Shared scope, evidence, and completion contract"
+  default_prompt: "Use $work-conventions for the requested task, preserving scope and evidence."

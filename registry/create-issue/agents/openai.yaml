@@ -1,7 +1,7 @@
 interface:
-  display_name: "Create Linear Issue"
-  short_description: "Create one verified issue in Linear."
-  default_prompt: "Use $create-issue to create this issue in Linear."
+  display_name: "Create Issue"
+  short_description: "Create issue with clear scope and evidence"
+  default_prompt: "Use $create-issue for the requested task, preserving scope and evidence."
 dependencies:
   tools:
     - type: "mcp"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deliver Work"
+  short_description: "Deliver work with clear scope and evidence"
+  default_prompt: "Use $deliver-work for the requested task, preserving scope and evidence."

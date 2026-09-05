@@ -1,79 +1,440 @@
 {
   "version": 1,
-  "skills": {},
+  "skills": {
+    "analyze-work": {
+      "layer": "operation",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "run_tests",
+        "network_read",
+        "write_files"
+      ],
+      "requires": [
+        "work-conventions"
+      ],
+      "optional_skills": [
+        "plan-work",
+        "plan-epic"
+      ],
+      "resources": [
+        "references/browser-coverage.md",
+        "references/design-system.md",
+        "references/quality.md",
+        "references/security.md"
+      ]
+    },
+    "create-issue": {
+      "layer": "runbook",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "network_read",
+        "external_write"
+      ],
+      "requires": [
+        "writing-conventions"
+      ],
+      "optional_skills": [],
+      "resources": []
+    },
+    "create-project": {
+      "layer": "runbook",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "network_read",
+        "external_write"
+      ],
+      "requires": [
+        "writing-conventions"
+      ],
+      "optional_skills": [],
+      "resources": []
+    },
+    "deliver-work": {
+      "layer": "operation",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "git_write",
+        "network_read",
+        "network_write",
+        "external_write"
+      ],
+      "requires": [
+        "work-conventions",
+        "publish-pr"
+      ],
+      "optional_skills": [
+        "validate-work",
+        "review-work",
+        "create-issue",
+        "create-project",
+        "preserve-work",
+        "rebase-pr"
+      ],
+      "resources": [
+        "references/github-delivery.md"
+      ]
+    },
+    "execute-work": {
+      "layer": "operation",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "write_files",
+        "run_tests",
+        "git_write"
+      ],
+      "requires": [
+        "work-conventions"
+      ],
+      "optional_skills": [
+        "plan-work",
+        "validate-work",
+        "review-work",
+        "publish-pr",
+        "deliver-work"
+      ],
+      "resources": [
+        "references/architecture-document.md",
+        "references/browser-tests.md",
+        "references/security.md"
+      ]
+    },
+    "mindsdb-migrate-surface-to-tailwind": {
+      "layer": "runbook",
+      "scope": "project",
+      "effects": [
+        "read_local",
+        "write_files",
+        "run_tests",
+        "git_write",
+        "network_read",
+        "network_write",
+        "external_write"
+      ],
+      "requires": [
+        "work-conventions",
+        "publish-pr",
+        "pr-conventions",
+        "create-issue"
+      ],
+      "optional_skills": [],
+      "resources": [
+        "references/mapping.md",
+        "scripts/inventory.mjs"
+      ],
+      "optional_package": true
+    },
+    "mindsdb-track-design-system-metrics": {
+      "layer": "runbook",
+      "scope": "project",
+      "effects": [
+        "read_local",
+        "network_read",
+        "external_write"
+      ],
+      "requires": [
+        "work-conventions"
+      ],
+      "optional_skills": [
+        "analyze-work"
+      ],
+      "resources": [
+        "references/measurement.md",
+        "scripts/scan.mjs"
+      ],
+      "optional_package": true
+    },
+    "plan-epic": {
+      "layer": "orchestration",
+      "scope": "initiative",
+      "effects": [
+        "read_local",
+        "write_files"
+      ],
+      "requires": [
+        "work-conventions"
+      ],
+      "optional_skills": [
+        "shape-initiative",
+        "plan-work",
+        "ship-epic"
+      ],
+      "resources": [
+        "references/epic-record.md"
+      ]
+    },
+    "plan-work": {
+      "layer": "operation",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "write_files",
+        "network_read",
+        "external_write"
+      ],
+      "requires": [
+        "work-conventions"
+      ],
+      "optional_skills": [
+        "analyze-work",
+        "execute-work"
+      ],
+      "resources": [
+        "references/constraints.md"
+      ]
+    },
+    "pr-conventions": {
+      "layer": "reference",
+      "scope": "shared",
+      "effects": [
+        "read_local"
+      ],
+      "requires": [
+        "writing-conventions"
+      ],
+      "optional_skills": [],
+      "resources": [
+        "references/finding-model.md",
+        "references/pr-standard.md"
+      ]
+    },
+    "preserve-work": {
+      "layer": "runbook",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "write_files",
+        "git_write"
+      ],
+      "requires": [],
+      "optional_skills": [],
+      "resources": [
+        "references/wip-context.md"
+      ]
+    },
+    "publish-pr": {
+      "layer": "runbook",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "run_tests",
+        "git_write",
+        "network_read",
+        "network_write",
+        "external_write"
+      ],
+      "requires": [
+        "work-conventions",
+        "pr-conventions"
+      ],
+      "optional_skills": [
+        "rebase-pr"
+      ],
+      "resources": [
+        "references/github-mechanics.md",
+        "references/pr_output_templates.md",
+        "references/update_output_templates.md",
+        "references/visual-evidence.md"
+      ]
+    },
+    "rebase-pr": {
+      "layer": "runbook",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "write_files",
+        "git_write",
+        "run_tests",
+        "network_read",
+        "network_write"
+      ],
+      "requires": [
+        "work-conventions",
+        "publish-pr"
+      ],
+      "optional_skills": [
+        "validate-work",
+        "review-work"
+      ],
+      "resources": []
+    },
+    "review-work": {
+      "layer": "operation",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "run_tests",
+        "network_read"
+      ],
+      "requires": [
+        "work-conventions",
+        "pr-conventions",
+        "publish-pr"
+      ],
+      "optional_skills": [
+        "execute-work",
+        "validate-work",
+        "deliver-work"
+      ],
+      "resources": [
+        "references/review-protocol.md",
+        "references/risk.md"
+      ]
+    },
+    "shape-initiative": {
+      "layer": "orchestration",
+      "scope": "initiative",
+      "effects": [
+        "read_local",
+        "write_files"
+      ],
+      "requires": [
+        "work-conventions"
+      ],
+      "optional_skills": [
+        "plan-epic",
+        "plan-work"
+      ],
+      "resources": [
+        "references/charter.md"
+      ]
+    },
+    "ship-epic": {
+      "layer": "orchestration",
+      "scope": "initiative",
+      "effects": [
+        "read_local",
+        "write_files",
+        "run_tests",
+        "git_write",
+        "network_read",
+        "network_write",
+        "external_write"
+      ],
+      "requires": [
+        "work-conventions",
+        "plan-epic",
+        "analyze-work",
+        "plan-work",
+        "execute-work",
+        "validate-work",
+        "review-work",
+        "deliver-work"
+      ],
+      "optional_skills": [],
+      "resources": []
+    },
+    "validate-work": {
+      "layer": "operation",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "run_tests",
+        "write_files"
+      ],
+      "requires": [
+        "work-conventions"
+      ],
+      "optional_skills": [
+        "execute-work"
+      ],
+      "resources": [
+        "references/evidence.md",
+        "references/rendering.md",
+        "references/retained-objectives.md",
+        "references/verification.md",
+        "references/visual-checks.md",
+        "scripts/check_contrast.py",
+        "scripts/check_spacing.py",
+        "scripts/render_direction.mjs",
+        "scripts/shot_diff.mjs"
+      ]
+    },
+    "work-conventions": {
+      "layer": "reference",
+      "scope": "shared",
+      "effects": [
+        "read_local"
+      ],
+      "requires": [],
+      "optional_skills": [],
+      "resources": [
+        "references/work-record.md"
+      ]
+    },
+    "writing-conventions": {
+      "layer": "reference",
+      "scope": "shared",
+      "effects": [
+        "read_local"
+      ],
+      "requires": [],
+      "optional_skills": [],
+      "resources": [
+        "references/prose.md"
+      ]
+    }
+  },
   "profiles": {
     "core": {
-      "description": "Minimal daily workflows for local Git and pull requests.",
+      "description": "Six work operations with their required contracts and PR mechanics.",
       "skills": [
-        "address-review",
-        "pr-conventions",
+        "analyze-work",
+        "plan-work",
+        "execute-work",
+        "validate-work",
+        "review-work",
+        "deliver-work"
+      ]
+    },
+    "orchestration": {
+      "description": "Shape, plan, and deliver initiatives across work units.",
+      "skills": [
+        "shape-initiative",
+        "plan-epic",
+        "ship-epic"
+      ]
+    },
+    "runbooks": {
+      "description": "GitHub, Linear, and recoverable work-preservation procedures.",
+      "skills": [
         "publish-pr",
         "rebase-pr",
-        "review-pr",
-        "ship-pr",
-        "stash",
-        "trim-comments",
+        "create-issue",
+        "create-project",
+        "preserve-work"
+      ]
+    },
+    "general": {
+      "description": "Seventeen general skills across operations, orchestration, runbooks, and references.",
+      "includes": [
+        "core",
+        "orchestration",
+        "runbooks"
+      ],
+      "skills": [
+        "work-conventions",
+        "pr-conventions",
         "writing-conventions"
       ]
     },
     "linear-ops": {
-      "description": "Focused Linear workflows for creating and polishing issues and projects.",
+      "description": "Create one verified Linear issue or project.",
       "skills": [
         "create-issue",
-        "create-project",
-        "polish-issue",
-        "writing-conventions"
-      ]
-    },
-    "product-delivery": {
-      "description": "Product direction, durable planning, and incremental delivery through the shared feature workflow.",
-      "skills": [
-        "advance-epic",
-        "create-charter",
-        "execute-feature",
-        "plan-epic",
-        "plan-feature",
-        "ship-epic"
-      ]
-    },
-    "design-system-delivery": {
-      "description": "Deliver bounded design-system consolidation work through the shared feature workflow with UI references.",
-      "includes": [
-        "ui"
-      ],
-      "skills": [
-        "execute-feature",
-        "plan-feature"
+        "create-project"
       ]
     },
     "mindsdb": {
-      "description": "Organization-specific skills scoped to MindsDB repositories; not part of the generic registry.",
+      "description": "Optional organization-specific inventory and migration tools.",
       "skills": [
         "mindsdb-migrate-surface-to-tailwind",
         "mindsdb-track-design-system-metrics"
       ]
-    },
-    "quality": {
-      "description": "The TypeScript type-safety objective plus the deterministic check that enforces it.",
-      "skills": [
-        "typescript-types"
-      ]
-    },
-    "ui": {
-      "description": "Functional UI and UX routing, layout, patterns, content, feedback, responsive behavior, and visual-system implementation.",
-      "skills": [
-        "ui-color",
-        "ui-patterns",
-        "ui-spacing"
-      ]
-    },
-    "advisory": {
-      "description": "Broad cross-domain consultation across the maintained reference profiles.",
-      "includes": [
-        "quality",
-        "ui"
-      ],
-      "skills": []
     }
   }
 }

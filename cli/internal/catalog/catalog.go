@@ -15,8 +15,57 @@ type Profile struct {
 }
 
 type Catalog struct {
-	Version  int                `json:"version"`
-	Profiles map[string]Profile `json:"profiles"`
+	Version  int                      `json:"version"`
+	Profiles map[string]Profile       `json:"profiles"`
+	Skills   map[string]SkillMetadata `json:"skills,omitempty"`
+}
+
+type SkillMetadata struct {
+	Layer          string   `json:"layer"`
+	Scope          string   `json:"scope"`
+	Requires       []string `json:"requires"`
+	OptionalSkills []string `json:"optional_skills"`
+}
+
+// ExpandedSkills closes required package dependencies, never optional routes.
+// Catalogs without skill metadata remain usable for independent custom packages.
+func (c Catalog) ExpandedSkills(names []string) ([]string, error) {
+	state := make(map[string]int)
+	var stack []string
+	var visit func(string) error
+	visit = func(name string) error {
+		if state[name] == 1 {
+			return fmt.Errorf("skill dependency cycle: %s", strings.Join(append(stack, name), " -> "))
+		}
+		if state[name] == 2 {
+			return nil
+		}
+		metadata, exists := c.Skills[name]
+		if len(c.Skills) > 0 && !exists {
+			return fmt.Errorf("unknown skill dependency %q", name)
+		}
+		state[name] = 1
+		stack = append(stack, name)
+		for _, dep := range metadata.Requires {
+			if err := visit(dep); err != nil {
+				return err
+			}
+		}
+		stack = stack[:len(stack)-1]
+		state[name] = 2
+		return nil
+	}
+	for _, name := range names {
+		if err := visit(name); err != nil {
+			return nil, err
+		}
+	}
+	result := make([]string, 0, len(state))
+	for name := range state {
+		result = append(result, name)
+	}
+	sort.Strings(result)
+	return result, nil
 }
 
 func Load(path string) (Catalog, error) {
@@ -105,13 +154,22 @@ func (c Catalog) ExpandedSkillNames(profileNames []string) ([]string, error) {
 		result = append(result, name)
 	}
 	sort.Strings(result)
-	return result, nil
+	return c.ExpandedSkills(result)
 }
 
 // Select returns the available skill names included in one or more profiles.
 // Results follow availableNames order so installation output stays stable.
 func (c Catalog) Select(profileNames, availableNames []string) ([]string, error) {
 	expanded, err := c.ExpandedSkillNames(profileNames)
+	if err != nil {
+		return nil, err
+	}
+	return c.SelectSkills(expanded, availableNames)
+}
+
+// SelectSkills also closes dependencies for an interactive package selection.
+func (c Catalog) SelectSkills(names, availableNames []string) ([]string, error) {
+	expanded, err := c.ExpandedSkills(names)
 	if err != nil {
 		return nil, err
 	}
