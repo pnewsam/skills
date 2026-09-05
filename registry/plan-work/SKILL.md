@@ -23,6 +23,6 @@ For an open visual direction, compare concrete rendered alternatives when useful
 
 ## Record and continue
 
-Write the agreed scope, acceptance, approach, requested endpoint, and next action into the selected record; use the template in `work-conventions` only when needed. Tasks are optional implementation aids, not separate lifecycle gates. A small change can be one paragraph plus acceptance.
+Write the problem and rationale, agreed scope, required acceptance, planned verification, approach, requested endpoint, and next action into the selected record. For a new durable document, use `work-conventions/references/artifacts.md` and `work-conventions/references/work-record.md`; retain an existing suitable format. Keep planned proof separate from observed results. Tasks are optional implementation aids, not separate lifecycle gates. A small change can be one paragraph plus acceptance.
 
 A planning-only request returns this plan without code, commits, or publication. When the user requested implementation too, continue to `execute-work`; do not demand a second approval for the established scope. Stop for user input only if the unresolved choice materially changes the intended outcome or consequences.

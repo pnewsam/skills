@@ -1,0 +1,117 @@
+diff --git a/README.md b/README.md
+index 1a942ac..099e26c 100644
+--- a/README.md
++++ b/README.md
+@@ -3 +3,27 @@
+-A small local reporting package.
++Normalize decimal-like amounts into a record with integer `minor` units and
++`currency` set to `USD`. Decimal half cents use half-up rounding: `1.005`
++becomes 101 minor units, or 1.01 USD.
++
++`format_receipt(amount)` normalizes the supplied amount and formats a human
++receipt. `format_export(record)` serializes an already normalized record as
++JSON with deterministic key ordering. Both use the named money fields.
++
++```pycon
++>>> from money import normalize
++>>> from output import format_receipt, format_export
++>>> record = normalize("12.34")
++>>> record
++{'minor': 1234, 'currency': 'USD'}
++>>> format_receipt("12.34")
++'Receipt: 12.34 USD'
++>>> format_export(record)
++'{"currency": "USD", "minor": 1234}'
++>>> half_cent = normalize("1.005")
++>>> half_cent
++{'minor': 101, 'currency': 'USD'}
++>>> format_receipt("1.005")
++'Receipt: 1.01 USD'
++>>> format_export(half_cent)
++'{"currency": "USD", "minor": 101}'
++
++```
+@@ -5,0 +32 @@ Run tests with `python3 -m unittest discover -s tests`.
++Verify these examples with `python3 -m doctest -v README.md`.
+diff --git a/output.py b/output.py
+index dc79693..28c4f09 100644
+--- a/output.py
++++ b/output.py
+@@ -1 +1,5 @@
+-TITLE = "Money report"
++import json
++
++from money import normalize
++
++TITLE = "Export"
+@@ -5,0 +10,12 @@ def heading():
++
++
++def format_receipt(amount):
++    record = normalize(amount)
++    minor = record["minor"]
++    sign = "-" if minor < 0 else ""
++    whole, fraction = divmod(abs(minor), 100)
++    return f"Receipt: {sign}{whole}.{fraction:02d} {record['currency']}"
++
++
++def format_export(record):
++    return json.dumps(record, sort_keys=True)
+diff --git a/tests/test_export.py b/tests/test_export.py
+new file mode 100644
+index 0000000..5b0e22d
+--- /dev/null
++++ b/tests/test_export.py
+@@ -0,0 +1,6 @@
++import unittest
++from output import format_export
++
++class ExportTests(unittest.TestCase):
++    def test_export(self):
++        self.assertEqual(format_export({"minor": 1234, "currency": "USD"}), '{"currency": "USD", "minor": 1234}')
+diff --git a/tests/test_receipt.py b/tests/test_receipt.py
+new file mode 100644
+index 0000000..fab54bb
+--- /dev/null
++++ b/tests/test_receipt.py
+@@ -0,0 +1,17 @@
++import unittest
++from unittest.mock import patch
++from output import format_receipt
++
++class ReceiptTests(unittest.TestCase):
++    def test_receipt(self):
++        self.assertEqual(format_receipt("12.34"), "Receipt: 12.34 USD")
++
++    def test_half_cent_rounds_up(self):
++        self.assertEqual(format_receipt("1.005"), "Receipt: 1.01 USD")
++
++    def test_negative_fraction(self):
++        self.assertEqual(format_receipt("-0.005"), "Receipt: -0.01 USD")
++
++    def test_receipt_prefix_is_independent_of_generic_heading(self):
++        with patch("output.TITLE", "Export"):
++            self.assertEqual(format_receipt("12.34"), "Receipt: 12.34 USD")
+diff --git a/tests/test_reporting.py b/tests/test_reporting.py
+new file mode 100644
+index 0000000..faf496b
+--- /dev/null
++++ b/tests/test_reporting.py
+@@ -0,0 +1,17 @@
++import json
++import unittest
++
++from money import normalize
++from output import format_export, format_receipt
++
++
++class ReportingTests(unittest.TestCase):
++    def test_real_normalization_agrees_across_consumers(self):
++        for amount, minor, display in [("12.34", 1234, "12.34"), ("1.005", 101, "1.01")]:
++            with self.subTest(amount=amount):
++                record = normalize(amount)
++                self.assertEqual(record, {"minor": minor, "currency": "USD"})
++                exported = json.loads(format_export(record))
++                self.assertEqual(exported, record)
++                self.assertEqual(set(exported), {"minor", "currency"})
++                self.assertEqual(format_receipt(amount), f"Receipt: {display} {exported['currency']}")

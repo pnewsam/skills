@@ -7,6 +7,8 @@ description: Coordinate delivery of an initiative across PR-sized work records. 
 
 Apply `work-conventions`. Own coordination across work records. Use the six operations for each unit; do not collapse an epic into one PR or reimplement the operations here.
 
+For work spanning workers, branches, sessions, or integration checkpoints, read `references/coordination.md` for assignment ownership, handoff, replanning, integration, and recovery. Use `work-conventions/references/artifacts.md` to keep durable state consistent; do not introduce a parallel tracker.
+
 ## Establish the run
 
 Read the initiative record and linked work records, current Git/PR state, dependencies, and integration acceptance. Reconcile recorded progress with evidence; a checked box alone is not completion. Use `plan-epic` when decomposition is missing and planning is authorized.
@@ -15,7 +17,7 @@ Resolve run scope: one ready unit, selected units, or the full initiative. Resol
 
 ## Coordinate ready work
 
-Select a unit whose prerequisite conditions actually hold. Detail its plan with `plan-work` when needed, then use `execute-work`, `validate-work`, `review-work`, and `deliver-work` as required by its acceptance and endpoint. Reuse valid work and evidence; skip operations whose result is already established.
+Select a unit whose prerequisite conditions actually hold and which has no conflicting active assignment. Record its owner, execution location, and input candidate before dispatch. Detail its plan with `plan-work` when needed, then use `execute-work`, `validate-work`, `review-work`, and `deliver-work` as required by its acceptance and endpoint. Reuse valid work and evidence; skip operations whose result is already established.
 
 A request for one ready unit ends after that unit reaches its requested boundary and the initiative record is updated. An explicit one-step request performs only that bounded step and records what remains. A full run continues through ready units without asking the user to name the next obvious skill.
 
@@ -27,6 +29,8 @@ After each unit, record candidate identity, proof, endpoint reached, blockers, a
 
 At declared checkpoints, verify the combined outcome against the initiative's acceptance. Individual green PRs do not prove integration. Record the exact combined candidate/environment; do not rerun expensive aggregate checks without an invalidating change or a required delivery checkpoint.
 
-After interruption, refresh external state, compare candidates and evidence, and continue the first ready incomplete unit. Do not duplicate PRs, implementation, or records. Completed historical units remain intact unless evidence shows a discrepancy; record the discrepancy explicitly.
+After interruption, reconcile assignments and actual recoverable work before redispatch; do not infer abandonment from silence. Refresh external state, compare candidates and evidence, and continue the first ready incomplete unit. Do not duplicate PRs, implementation, or records. Completed historical units remain intact unless evidence shows a discrepancy; record the discrepancy explicitly.
+
+Before returning a checkpoint or completion, reconcile current summaries in the epic and affected child records: owner, prerequisite, branch/candidate, status, and next action must agree with the observed result. Preserve superseded values as labeled history, not contradictory current fields.
 
 Report units and endpoints achieved, integration evidence, and remaining conditions. The initiative is complete only at the requested endpoint with required overall acceptance established. Pending merges or deployment may remain separate requested work; never describe them as done because implementation finished.

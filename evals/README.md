@@ -25,3 +25,7 @@ Copy fixtures to temporary repositories; never mutate the fixture source during 
 ## Main reconciliation
 
 The rebase preserves main's retention harnesses, scorecards, fixtures, and the scorer exclusion fix. The current 58 scenario definitions include rebase preservation/concurrency, issue rationale and system review, bounded review loops, existing-PR code publication, and retained TypeScript/collection objectives. These added definitions are not claims of executed model trials. See [the rebase record](results/2026-09-05-rebase-validation.md) for current integration checks; earlier rebuild smoke trials describe the pre-rebase candidate.
+
+## Artifact and coordination exercise
+
+The [five-unit fixture](fixtures/epic-coordination/README.md) exercises interrupted ownership, changed prerequisites, preserved branch work, integration, and handoff across fresh sessions. Keep its evaluator-only file out of executor context. The [execution record](results/2026-09-05-artifact-coordination.md) separates observed behavior, an artifact-consistency defect, its correction, and remaining concurrency/remote-system limits.
