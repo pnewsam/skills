@@ -1,0 +1,4 @@
+interface:
+  display_name: "Writing Conventions"
+  short_description: "Concise writing across work artifacts"
+  default_prompt: "Use $writing-conventions for the requested task, preserving scope and evidence."

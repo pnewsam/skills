@@ -1,7 +1,7 @@
 interface:
-  display_name: "Create Linear Project"
-  short_description: "Create one verified project in Linear."
-  default_prompt: "Use $create-project to create this project in Linear."
+  display_name: "Create Project"
+  short_description: "Create project with clear scope and evidence"
+  default_prompt: "Use $create-project for the requested task, preserving scope and evidence."
 dependencies:
   tools:
     - type: "mcp"

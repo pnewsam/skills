@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pr Conventions"
+  short_description: "Consistent PR content and review findings"
+  default_prompt: "Use $pr-conventions for the requested task, preserving scope and evidence."

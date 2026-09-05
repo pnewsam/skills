@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze Work"
+  short_description: "Analyze work with clear scope and evidence"
+  default_prompt: "Use $analyze-work for the requested task, preserving scope and evidence."

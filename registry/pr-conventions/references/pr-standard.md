@@ -2,6 +2,14 @@
 
 Follow the project's own PR conventions rather than an ad-hoc structure invented per PR. Consistency across PRs is the goal.
 
+## Contents
+
+- Repository template
+- Fallback body
+- Linked issue and diagrams
+- Concise language
+- Commit format and grouping
+
 ## Defer to the repository's template
 
 When the repository defines a PR template — commonly `.github/pull_request_template.md`, `.github/PULL_REQUEST_TEMPLATE/*.md`, or a `docs/` or root-level variant — use it:
@@ -56,8 +64,8 @@ Include a Screenshots section for UI/frontend changes; omit it for backend-only 
 
 When the change relates to a tracker issue, the body must carry a clickable link, not a bare identifier — `ENG-1234` renders as plain text on GitHub and reaches nothing.
 
-- **GitHub Issues (same repo):** `Closes #123` links and auto-closes on merge.
-- **Linear:** `Closes ENG-1234` drives Linear's integration but is not a link, so also include the URL: `[ENG-1234](https://linear.app/<workspace>/issue/ENG-1234)`.
+- **GitHub Issues (same repo):** `Related to #123` links without requesting closure. Use closing syntax only when the task includes closing that issue on merge.
+- **Linear:** include the verified issue URL with neutral relationship wording. Closing keywords or tracker transitions require an agreed closure outcome; association alone does not authorize them.
 - **Other trackers:** include the full issue URL.
 
 Take the identifier from the branch name, commits, existing body, or the user. Resolve its canonical URL — prefer a URL the user gave or one an available tracker integration returns (for Linear, the Linear tools). Never invent a URL; if none resolves, keep the identifier and ask for the workspace or URL.

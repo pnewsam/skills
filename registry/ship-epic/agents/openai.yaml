@@ -1,4 +1,4 @@
 interface:
   display_name: "Ship Epic"
-  short_description: "Run the explicit end-to-end epic workflow."
-  default_prompt: "Use $ship-epic to complete and prepare this epic end to end, stopping on blockers."
+  short_description: "Ship epic with clear scope and evidence"
+  default_prompt: "Use $ship-epic for the requested task, preserving scope and evidence."

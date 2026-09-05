@@ -1,0 +1,4 @@
+interface:
+  display_name: "Execute Work"
+  short_description: "Execute work with clear scope and evidence"
+  default_prompt: "Use $execute-work for the requested task, preserving scope and evidence."

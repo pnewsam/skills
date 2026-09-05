@@ -1,0 +1,4 @@
+interface:
+  display_name: "Validate Work"
+  short_description: "Validate work with clear scope and evidence"
+  default_prompt: "Use $validate-work for the requested task, preserving scope and evidence."

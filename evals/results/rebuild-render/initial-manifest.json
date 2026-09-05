@@ -1,0 +1,26 @@
+{
+  "input": "/private/tmp/registry-render-live/directions.json",
+  "viewport": {
+    "w": 1280,
+    "h": 800
+  },
+  "captureRequested": true,
+  "candidates": [
+    {
+      "id": "compact",
+      "html": "/private/tmp/registry-render-live/compact.html",
+      "sha256": "bf95cad9e36a3fe2e780b1dab2196056e982ab2255028a7161bae80305b705d9",
+      "rendered": true,
+      "screenshot": "/private/tmp/registry-render-live/capture-2/compact.png",
+      "screenshotSha256": "7e42e4b5ea2fd77513450d74327412c6689b2befbacd3adc746286d1ce465560"
+    },
+    {
+      "id": "editorial",
+      "html": "/private/tmp/registry-render-live/editorial.html",
+      "sha256": "26218ec39d7b2c1a366a23e21461dec9f7959fb46d2646c044b6fc10b639d36d",
+      "rendered": true,
+      "screenshot": "/private/tmp/registry-render-live/capture-2/editorial.png",
+      "screenshotSha256": "ac1975cb2aad81026472f6533b582ba38f2d6ec68c0eb9ce42f021b3103867ef"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Publish PR"
-  short_description: "Open a PR, or sync/polish an existing PR's title and body."
-  default_prompt: "Use $publish-pr to take this branch to a pull request, or to update an existing PR's title and body."
+  display_name: "Publish Pr"
+  short_description: "Create or update the requested pull request"
+  default_prompt: "Use $publish-pr to complete the requested action and verify the result."

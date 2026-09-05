@@ -1,3 +1,5 @@
+> Historical pre-rebuild document. Current architecture and retention policy are in README.md, AUTHORING.md, and docs/registry-rebuild.md.
+
 # UI substitute (arm C) — checks that replace the prose
 
 Arm C of the `ui-family` eviction run tests the model plus this thin substitute —

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Track Design-System Metrics"
-  short_description: "Post weekly UI convergence metrics to a Linear issue"
-  default_prompt: "Use $mindsdb-track-design-system-metrics to scan the cowork UI, compute week-over-week convergence deltas, and post the weekly progress comment to ENG-641."
+  display_name: "Mindsdb Track Design System Metrics"
+  short_description: "Mindsdb track design system metrics with clear scope and evidenc"
+  default_prompt: "Use $mindsdb-track-design-system-metrics for the requested task, preserving scope and evidence."

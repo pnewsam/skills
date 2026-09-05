@@ -1,0 +1,4 @@
+interface:
+  display_name: "Preserve Work"
+  short_description: "Preserve work with clear scope and evidence"
+  default_prompt: "Use $preserve-work for the requested task, preserving scope and evidence."

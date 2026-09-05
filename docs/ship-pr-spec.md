@@ -1,3 +1,5 @@
+> Historical design record preserved from main. Current architecture and dispositions are in [registry-rebuild.md](registry-rebuild.md).
+
 # ship-pr — specification
 
 The top-level **runbook** for a single PR unit of work. It drives one PR-sized

@@ -117,47 +117,76 @@ func TestRepositoryCatalogResolvesEveryProfile(t *testing.T) {
 	}
 }
 
-func TestRepositoryCoreAndAdvisoryProfilesStayDistinct(t *testing.T) {
-	repoRoot := filepath.Clean(filepath.Join("..", "..", ".."))
-	registryCatalog, err := Load(filepath.Join(repoRoot, "catalog.json"))
+func TestDependenciesApplyToProfilesAndIndividualSelections(t *testing.T) {
+	c := Catalog{Version: 1,
+		Profiles: map[string]Profile{"core": {Skills: []string{"operation"}}},
+		Skills: map[string]SkillMetadata{
+			"operation": {Requires: []string{"runbook", "reference"}, OptionalSkills: []string{"optional"}},
+			"runbook":   {Requires: []string{"reference"}}, "reference": {}, "optional": {},
+		},
+	}
+	available := []string{"operation", "runbook", "reference", "optional"}
+	want := available[:3]
+	profile, err := c.Select([]string{"core"}, available)
 	if err != nil {
 		t.Fatal(err)
 	}
+	single, err := c.SelectSkills([]string{"operation"}, available)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(profile, want) || !reflect.DeepEqual(single, want) {
+		t.Fatalf("profile %v, individual %v, want %v", profile, single, want)
+	}
+	if _, err := c.SelectSkills([]string{"operation"}, []string{"operation", "runbook"}); err == nil {
+		t.Fatal("missing transitive dependency must fail before install")
+	}
+}
 
-	core, err := registryCatalog.ExpandedSkillNames([]string{"core"})
-	if err != nil {
-		t.Fatal(err)
-	}
-	wantCore := []string{
-		"address-review",
-		"pr-conventions",
-		"publish-pr",
-		"rebase-pr",
-		"review-pr",
-		"ship-pr",
-		"stash",
-		"trim-comments",
-		"writing-conventions",
-	}
-	if !reflect.DeepEqual(core, wantCore) {
-		t.Fatalf("core = %#v, want %#v", core, wantCore)
-	}
-
-	advisory, err := registryCatalog.ExpandedSkillNames([]string{"advisory"})
-	if err != nil {
-		t.Fatal(err)
-	}
-	inAdvisory := make(map[string]bool, len(advisory))
-	for _, name := range advisory {
-		inAdvisory[name] = true
-	}
-	for _, expected := range []string{
-		"typescript-types",
-		"ui-color",
-		"ui-patterns",
+func TestDependencyErrors(t *testing.T) {
+	for name, skills := range map[string]map[string]SkillMetadata{
+		"cycle":   {"a": {Requires: []string{"b"}}, "b": {Requires: []string{"a"}}},
+		"unknown": {"a": {Requires: []string{"missing"}}},
 	} {
-		if !inAdvisory[expected] {
-			t.Errorf("advisory does not include %q", expected)
+		t.Run(name, func(t *testing.T) {
+			if _, err := (Catalog{Skills: skills}).ExpandedSkills([]string{"a"}); err == nil {
+				t.Fatal("expected dependency error")
+			}
+		})
+	}
+}
+
+func TestGeneralProfileExcludesOptionalPackagesAndClosesDependencies(t *testing.T) {
+	c, err := Load(filepath.Join("..", "..", "..", "catalog.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	names, err := c.ExpandedSkillNames([]string{"general"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(names) != 17 {
+		t.Fatalf("general has %d packages, want seventeen general responsibilities", len(names))
+	}
+	selected := map[string]bool{}
+	for _, name := range names {
+		selected[name] = true
+	}
+	for _, name := range names {
+		for _, dependency := range c.Skills[name].Requires {
+			if !selected[dependency] {
+				t.Errorf("%s missing dependency %s", name, dependency)
+			}
+		}
+	}
+	for _, name := range []string{"emil-design-eng", "svg-animations", "ingest-skill", "mindsdb-track-design-system-metrics"} {
+		if selected[name] {
+			t.Errorf("optional package %s leaked into general", name)
+		}
+	}
+	for _, name := range []string{"harden-pr", "advance-epic", "trim-comments", "polish-issue"} {
+		if selected[name] {
+			t.Errorf("retired entry point %s survived", name)
 		}
 	}
 }

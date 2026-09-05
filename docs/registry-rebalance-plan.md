@@ -1,3 +1,5 @@
+> Historical pre-rebuild document. Current architecture and retention policy are in README.md, AUTHORING.md, and docs/registry-rebuild.md.
+
 # Rebalancing the registry around the bitter lesson
 
 A plan to re-weight the skill registry away from hand-encoded method knowledge

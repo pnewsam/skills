@@ -1,3 +1,5 @@
+> Historical pre-rebuild document. Current architecture and retention policy are in README.md, AUTHORING.md, and docs/registry-rebuild.md.
+
 # React substitute (arm C) — checks that replace the prose
 
 The eviction pilot removes ~2,497 lines of react-* prose. Most of what that

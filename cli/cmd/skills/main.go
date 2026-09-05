@@ -302,6 +302,33 @@ func runInstall(cmd *cobra.Command, args []string) error {
 		fmt.Println("No skills selected. Nothing installed.")
 		return nil
 	}
+	// Individual selections need the same dependency closure as profile installs.
+	catalogPath := filepath.Join(filepath.Dir(sourceDir), "catalog.json")
+	if _, statErr := os.Stat(catalogPath); statErr == nil {
+		registryCatalog, err := catalog.Load(catalogPath)
+		if err != nil {
+			return err
+		}
+		var selectedNames, availableNames []string
+		byName := make(map[string]skill.Skill, len(skills))
+		for _, s := range selectedSkills {
+			selectedNames = append(selectedNames, s.Name)
+		}
+		for _, s := range skills {
+			availableNames = append(availableNames, s.Name)
+			byName[s.Name] = s
+		}
+		names, err := registryCatalog.SelectSkills(selectedNames, availableNames)
+		if err != nil {
+			return err
+		}
+		selectedSkills = nil
+		for _, name := range names {
+			selectedSkills = append(selectedSkills, byName[name])
+		}
+	} else if !os.IsNotExist(statErr) {
+		return statErr
+	}
 	if len(targets) == 0 {
 		fmt.Println("No harnesses selected. Nothing installed.")
 		return nil

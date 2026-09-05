@@ -2,3 +2,7 @@ cli/skills-cli
 cli/dist/
 .DS_Store
 **/.DS_Store
+
+# Python validation caches
+__pycache__/
+*.pyc

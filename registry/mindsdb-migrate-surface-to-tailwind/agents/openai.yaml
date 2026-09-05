@@ -1,4 +1,4 @@
 interface:
-  display_name: "Migrate a Cowork Surface to Tailwind"
-  short_description: "Migrate a Cowork surface's inline styles to Tailwind + tokens"
-  default_prompt: "Use $mindsdb-migrate-surface-to-tailwind to migrate <surface> in cowork/ from inline styles to Tailwind: inventory it, do the behavior-preserving conversion and token-adoption passes as separate commits, and open a draft PR against staging under ENG-1017. Ask before the value-changing snap-to-grid pass."
+  display_name: "Mindsdb Migrate Surface To Tailwind"
+  short_description: "Mindsdb migrate surface to tailwind with clear scope and evidenc"
+  default_prompt: "Use $mindsdb-migrate-surface-to-tailwind for the requested task, preserving scope and evidence."

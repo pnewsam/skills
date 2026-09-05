@@ -15,6 +15,16 @@ jobs:
       - name: Validate skill packages
         run: python3 scripts/validate_registry.py
 
+      - name: Test registry integrity checks
+        run: python3 -m unittest discover -s scripts -p 'test_*.py'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Test rendered-artifact helper
+        run: node --test tests/*.test.mjs
+
       - name: Check prose wrapping (non-blocking)
         run: python3 scripts/check_prose_wrap.py
 
@@ -24,4 +34,4 @@ jobs:
 
       - name: Test installer
         working-directory: cli
-        run: go test ./...
+        run: go test -count=1 ./...

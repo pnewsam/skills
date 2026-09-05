@@ -1,0 +1,4 @@
+interface:
+  display_name: "Shape Initiative"
+  short_description: "Shape initiative with clear scope and evidence"
+  default_prompt: "Use $shape-initiative for the requested task, preserving scope and evidence."

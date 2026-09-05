@@ -1,6 +1,6 @@
 # Code-review finding model
 
-How to evaluate and classify a review finding. Apply this wherever a review produces findings, whether a single read-only pass or a hardening loop. `review-pr` and `ship-pr` both consume it so their findings mean the same thing.
+How to evaluate and classify a review finding. Apply this wherever a review produces findings, whether a single read-only pass or a hardening loop. Use it consistently for initial assessment and subsequent review of a changed candidate.
 
 ## Contents
 

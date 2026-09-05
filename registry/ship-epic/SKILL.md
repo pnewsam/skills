@@ -1,151 +1,32 @@
 ---
 name: ship-epic
-description: Complete an epic end-to-end by planning all missing child features, advancing the epic until every feature is complete, validating the completed work, and preparing a pull request. Use when the user asks to run plan-feature until all features are planned, advance-epic until all features are complete, and publish-pr afterward. Orchestrates plan-feature, advance-epic, execute-feature, and publish-pr while preserving context, stopping on blockers, and avoiding duplicate plans or unrelated git changes.
+description: Coordinate delivery of an initiative across PR-sized work records. Advances one ready unit or continues through the requested scope, respecting dependencies, per-unit delivery boundaries, recovery, and integration proof. Absorbs one-step epic advancement; does not infer permission to merge or deploy.
 ---
 
-# Ship Epic
+# Ship epic
 
-## Overview
+Apply `work-conventions`. Own coordination across work records. Use the six operations for each unit; do not collapse an epic into one PR or reimplement the operations here.
 
-Drive one epic from planned initiative to PR-ready branch. This skill is an orchestrator: it does not replace `plan-feature`, `advance-epic`, `execute-feature`, or `publish-pr`; it runs them in the right order until the epic is complete or a blocker requires user input.
+## Establish the run
 
-Use this when the user wants the full sequence:
+Read the initiative record and linked work records, current Git/PR state, dependencies, and integration acceptance. Reconcile recorded progress with evidence; a checked box alone is not completion. Use `plan-epic` when decomposition is missing and planning is authorized.
 
-1. Plan every unplanned child feature.
-2. Advance the epic one feature at a time until all child features are complete.
-3. Validate the completed work.
-4. Prepare a pull request.
+Resolve run scope: one ready unit, selected units, or the full initiative. Resolve delivery endpoints from the request and existing record. An unqualified request to ship an epic prepares independently reviewable PR candidates locally; it does not authorize external publication, merge, deployment, or tracker writes. Carry explicit broader authorization through all child operations.
 
-## Safety Rules
+## Coordinate ready work
 
-- Do not start without an epic plan from `docs/epics/` unless the user explicitly provides another epic source.
-- Do not invent child feature scope. Missing or unclear feature scope must go through `plan-feature`.
-- Do not implement directly. Delegate feature implementation to `advance-epic`, which delegates to `execute-feature`.
-- Do not create duplicate feature plans. Reuse existing `docs/features/` files when they match a child feature.
-- Do not run `publish-pr` until the epic is complete or the user explicitly asks for a partial PR.
-- Stop if the working tree contains unrelated changes and ask what should be included.
-- Stop on any blocker reported by `plan-feature`, `advance-epic`, `execute-feature`, or `publish-pr`.
-- Keep a progress summary after every loop so the run can resume safely if interrupted.
+Select a unit whose prerequisite conditions actually hold. Detail its plan with `plan-work` when needed, then use `execute-work`, `validate-work`, `review-work`, and `deliver-work` as required by its acceptance and endpoint. Reuse valid work and evidence; skip operations whose result is already established.
 
-## Workflow
+A request for one ready unit ends after that unit reaches its requested boundary and the initiative record is updated. An explicit one-step request performs only that bounded step and records what remains. A full run continues through ready units without asking the user to name the next obvious skill.
 
-### 1. Establish Context
+Keep separate branches or checkouts and PRs for independent units. Parallelize only when authorized and when shared files, environments, and dependencies permit safe isolation. If one unit is blocked, continue independent authorized units; report the blocked edge. If none are ready, surface the prerequisite or cycle rather than silently combining units or bypassing the condition.
 
-Inspect repository state:
+After each unit, record candidate identity, proof, endpoint reached, blockers, and next action. Do not add bookkeeping commits unless committing records is in the requested scope. If a prerequisite changes, reassess dependent scope and invalidate affected evidence.
 
-```bash
-git status --short
-ls docs/epics/ 2>/dev/null
-ls docs/features/ 2>/dev/null
-```
+## Integration and resume
 
-If the user did not specify an epic, choose the only active epic if exactly one exists. If multiple plausible epics exist, ask which one to ship.
+At declared checkpoints, verify the combined outcome against the initiative's acceptance. Individual green PRs do not prove integration. Record the exact combined candidate/environment; do not rerun expensive aggregate checks without an invalidating change or a required delivery checkpoint.
 
-Read the selected epic fully. Identify:
+After interruption, refresh external state, compare candidates and evidence, and continue the first ready incomplete unit. Do not duplicate PRs, implementation, or records. Completed historical units remain intact unless evidence shows a discrepancy; record the discrepancy explicitly.
 
-- child features
-- checked vs unchecked items
-- linked feature plans
-- success criteria
-- blockers, dependencies, or non-goals
-
-If no epic exists, stop and recommend `plan-epic`.
-
-### 2. Plan Missing Features
-
-For each child feature in the epic:
-
-1. Check whether it has a corresponding `docs/features/NNN-*.md` plan.
-2. If a complete plan exists, leave it alone.
-3. If no plan exists or the file is only a stub, run `plan-feature` for that child feature.
-4. After planning, update the epic link or progress table if the epic tracks feature plan paths.
-
-Repeat until every child feature has a usable feature plan.
-
-Before moving on, report:
-
-- how many feature plans already existed
-- how many were created
-- any feature scope that was split, merged, or blocked
-
-### 3. Advance the Epic to Completion
-
-Run `advance-epic` repeatedly for the selected epic.
-
-After each completed child feature:
-
-1. Confirm the epic checkbox or progress entry was updated.
-2. Confirm the feature plan reflects completed acceptance criteria.
-3. Run the smallest validation tier recommended by `advance-epic` or
-   `execute-feature`. If the feature needs an aggregate backend, full browser,
-   screenshot, or rehearsal boundary, record that boundary and its due point in
-   the feature plan; do not rerun a prior aggregate merely because a focused
-   assertion changed. A repeat needs a written changed-checkpoint and
-   focused-proof-insufficient reason.
-4. Re-read the epic to find remaining incomplete features.
-
-Stop the loop when:
-
-- all child features are complete
-- a downstream skill reports a blocker
-- validation fails
-- unrelated working-tree changes appear
-- the user changes direction
-
-Do not skip features out of order unless the user explicitly requests it.
-
-### 4. Final Validation
-
-When the epic appears complete:
-
-1. Re-read the epic and all linked feature plans.
-2. Confirm all child feature checkboxes are complete.
-3. Confirm no planned acceptance criteria remain unchecked.
-4. Run the most relevant validation available for the repo:
-   - the acceptance-criteria and regression checks for the final or highest-risk feature
-   - project test/build commands if known
-   - browser tests when the epic touches critical UI flows
-5. If validation fails, stop and report the failure before preparing a PR.
-
-### 5. Prepare the PR
-
-Once the epic is complete and validation has passed, run `publish-pr`.
-
-`publish-pr` owns:
-
-- branch inspection
-- staging decisions
-- commit message
-- commit creation
-- push
-- PR creation
-
-If there are unrelated changes, suspicious files, or generated artifacts, follow `publish-pr` and ask before staging.
-
-### 6. Final Response
-
-Report:
-
-- selected epic
-- feature plans created or reused
-- child features completed
-- validation performed
-- PR status or URL, if created
-- blockers, if any
-- any remaining follow-up work
-
-## Resume Behavior
-
-If this skill is re-run after interruption:
-
-1. Re-read the epic and linked feature plans.
-2. Treat checked features and completed acceptance criteria as authoritative.
-3. Continue from the first incomplete child feature or missing feature plan.
-4. Do not repeat completed work.
-
-## When Not To Use This Skill
-
-- Use `plan-epic` when no epic exists.
-- Use `plan-feature` when only one feature needs planning.
-- Use `advance-epic` when the user wants exactly one child feature advanced.
-- Use `publish-pr` when the work is already complete and only PR preparation remains.
+Report units and endpoints achieved, integration evidence, and remaining conditions. The initiative is complete only at the requested endpoint with required overall acceptance established. Pending merges or deployment may remain separate requested work; never describe them as done because implementation finished.
