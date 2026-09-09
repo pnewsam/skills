@@ -1,17 +1,20 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
+	"github.com/mattn/go-isatty"
 	"github.com/paulnewsam/skills/cli/internal/catalog"
 	"github.com/paulnewsam/skills/cli/internal/harness"
 	"github.com/paulnewsam/skills/cli/internal/installer"
 	"github.com/paulnewsam/skills/cli/internal/skill"
 	"github.com/paulnewsam/skills/cli/internal/tui"
+	"github.com/paulnewsam/skills/cli/internal/updater"
 	"github.com/spf13/cobra"
 )
 
@@ -88,6 +91,13 @@ var setupCmd = &cobra.Command{
 	RunE:  runSetup,
 }
 
+var updateCmd = &cobra.Command{
+	Use:   "update",
+	Short: "Update skills to the latest version (git pull + rebuild)",
+	Long:  "Fast-forward the skills checkout this binary lives in and rebuild it in place, so both the CLI and the skills registry are current.",
+	RunE:  runUpdate,
+}
+
 func init() {
 	for _, cmd := range []*cobra.Command{rootCmd, installCmd} {
 		cmd.Flags().StringSliceVarP(&flagTargets, "target", "t", nil, "Target harness (repeatable)")
@@ -102,11 +112,16 @@ func init() {
 	}
 
 	profilesCmd.Flags().StringVar(&flagSource, "source", "", "Skills source directory")
-	rootCmd.AddCommand(installCmd, profilesCmd, statusCmd, unlinkCmd, setupCmd, dashboardCmd, versionCmd)
+	rootCmd.AddCommand(installCmd, profilesCmd, statusCmd, unlinkCmd, setupCmd, dashboardCmd, versionCmd, updateCmd)
 
-	// Check for updates on every command (non-blocking, best-effort).
+	// Notify (and optionally apply) available updates, best-effort. Skip for the
+	// commands where a prompt would be noise or would recurse.
 	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
-		checkForUpdate()
+		switch cmd.Name() {
+		case "update", "version", "help":
+			return
+		}
+		maybeNotifyUpdate()
 	}
 }
 
@@ -531,28 +546,108 @@ func findAllInPath(name string) []string {
 	return results
 }
 
-// checkForUpdate compares the embedded build commit against the repo's current
-// HEAD. If they differ, it prints a one-line hint. Silently does nothing if
-// the repo can't be found or git isn't available.
-func checkForUpdate() {
-	if buildCommit == "dev" {
-		return // local dev build, skip check
+// runUpdate fast-forwards the checkout and rebuilds the binary in place.
+func runUpdate(cmd *cobra.Command, args []string) error {
+	repoDir := repoRoot()
+	if repoDir == "" {
+		return fmt.Errorf("could not locate the skills git checkout from this binary\nauto-update requires running from a git clone of the skills repo (see: skills setup)")
 	}
+	res, err := updater.Update(repoDir, buildCommit, os.Stdout)
+	if err != nil {
+		return err
+	}
+	if res.Rebuilt {
+		fmt.Printf("Updated %s: %s -> %s\n", res.Branch, res.OldCommit, res.NewCommit)
+		fmt.Println("The new version applies to your next 'skills' command.")
+	}
+	return nil
+}
 
+// maybeNotifyUpdate checks whether the checkout is ahead of the running binary
+// or its upstream, and — interactively — offers to update. It is best-effort
+// and never blocks a command on failure. Set SKILLS_NO_UPDATE_CHECK to disable.
+func maybeNotifyUpdate() {
+	if buildCommit == "dev" || os.Getenv("SKILLS_NO_UPDATE_CHECK") != "" {
+		return
+	}
 	repoDir := repoRoot()
 	if repoDir == "" {
 		return
 	}
 
-	out, err := exec.Command("git", "-C", repoDir, "rev-parse", "--short", "HEAD").Output()
+	// Detect upstream commits without adding network latency to every command:
+	// fetch at most once a day, bounded by a short timeout, best-effort.
+	throttledFetch(repoDir)
+
+	head, err := updater.ShortHead(repoDir)
 	if err != nil {
 		return
 	}
-
-	head := strings.TrimSpace(string(out))
-	if head != buildCommit {
-		fmt.Fprintf(os.Stderr, "Update available: build %s -> HEAD %s  (run: cd %s && make build && skills setup)\n", buildCommit, head, filepath.Join(repoDir, "cli"))
+	behind := 0
+	if _, b, _, err := updater.Divergence(repoDir); err == nil {
+		behind = b
 	}
+	binaryLags := head != buildCommit // source pulled, binary not rebuilt
+
+	if behind == 0 && !binaryLags {
+		return
+	}
+
+	var reason string
+	switch {
+	case behind > 0 && binaryLags:
+		reason = fmt.Sprintf("%d new commit(s) upstream, and the binary is behind the checkout", behind)
+	case behind > 0:
+		reason = fmt.Sprintf("%d new commit(s) upstream", behind)
+	default:
+		reason = fmt.Sprintf("the binary (%s) is behind the checkout (%s)", buildCommit, head)
+	}
+
+	if interactive() {
+		fmt.Fprintf(os.Stderr, "Update available: %s.\nUpdate now? [y/N] ", reason)
+		if readYes() {
+			res, err := updater.Update(repoDir, buildCommit, os.Stderr)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Update failed: %v\n", err)
+			} else if res.Rebuilt {
+				fmt.Fprintf(os.Stderr, "Updated to %s; the new version applies to your next command.\n", res.NewCommit)
+			}
+		}
+		return
+	}
+	fmt.Fprintf(os.Stderr, "Update available: %s. Run: skills update\n", reason)
+}
+
+// throttledFetch runs `git fetch` at most once per day, bounded by a short
+// timeout, recording the attempt with a timestamp file. Best-effort.
+func throttledFetch(repoDir string) {
+	stamp := filepath.Join(filepath.Dir(harness.ConfigPath()), ".last_fetch")
+	if info, err := os.Stat(stamp); err == nil && time.Since(info.ModTime()) < 24*time.Hour {
+		return
+	}
+	_ = os.MkdirAll(filepath.Dir(stamp), 0o755)
+	_ = updater.Fetch(repoDir, 3*time.Second)
+	now := time.Now()
+	if f, err := os.OpenFile(stamp, os.O_CREATE|os.O_WRONLY, 0o644); err == nil {
+		f.Close()
+	}
+	_ = os.Chtimes(stamp, now, now)
+}
+
+func interactive() bool {
+	return isatty.IsTerminal(os.Stdin.Fd()) && isatty.IsTerminal(os.Stderr.Fd())
+}
+
+func readYes() bool {
+	line, err := bufio.NewReader(os.Stdin).ReadString('\n')
+	if err != nil {
+		return false
+	}
+	switch strings.ToLower(strings.TrimSpace(line)) {
+	case "y", "yes":
+		return true
+	}
+	return false
 }
 
 // repoRoot finds the skills repo root by resolving the binary path.

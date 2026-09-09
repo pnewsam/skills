@@ -91,6 +91,23 @@ Symlink the binary to `~/.local/bin/skills` so it can be run from anywhere.
 ./skills-cli setup
 ```
 
+### `skills update`
+
+Bring skills current without a manual reinstall: fast-forward the checkout this
+binary lives in and rebuild the binary in place, so both the CLI and the skills
+registry update together.
+
+```bash
+skills update
+```
+
+Requires `git` and the Go toolchain (as building does). It only fast-forwards —
+if you have local commits or uncommitted changes to tracked files, it stops and
+asks you to reconcile them first (the locally rebuilt binary is exempt). Every
+other command also checks in the background (at most once a day) and, when the
+checkout is behind, offers to run the update; set `SKILLS_NO_UPDATE_CHECK=1` to
+silence that check.
+
 ## Supported harnesses
 
 | Harness | Skills directory |
@@ -124,6 +141,7 @@ internal/
   skill/skill.go          # skill discovery, YAML frontmatter parsing
   harness/harness.go      # harness definitions, config loading
   installer/installer.go  # symlink/copy logic
+  updater/updater.go      # git fast-forward + in-place rebuild (skills update)
   tui/tui.go              # bubbletea multi-select widget
 Makefile
 .goreleaser.yaml          # cross-platform release config
