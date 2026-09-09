@@ -5,30 +5,16 @@ description: Critically assess local changes, an artifact, or an existing PR for
 
 # Review work
 
-Apply `work-conventions` and the finding standard in `pr-conventions/references/finding-model.md`. Review the actual candidate against the intended outcome. A PR is an optional input, not a prerequisite.
+Apply `work-conventions` and the finding standard in `pr-conventions/references/finding-model.md`. Review the actual candidate against its intended outcome; a PR is optional input, not a prerequisite.
 
-## Establish context
+Read the work record, the linked ticket and its rationale, the diff, and the acceptance evidence. Identify the base, head, and any unlanded base or sibling PRs. For a live PR, resolve the target and head with `publish-pr/references/github-mechanics.md` and read existing feedback. Stay read-only except for necessary checks; "review and fix" authorizes only related implementation, and commits, posted reviews, resolution, and merge each need their own authorization.
 
-Read the work record or request, diff and surrounding implementation, acceptance evidence, and repository requirements. Read the linked ticket or issue, including its rationale and the problem behind the work, before judging hunks; disclose inaccessible intent and mismatches with the diff. Identify the candidate's base/head and related local changes. For a live PR, use `publish-pr/references/github-mechanics.md` to resolve the target and current head; read existing feedback, using thread-aware data when replies or resolution matter.
+The defects that matter usually sit outside the changed lines. Read the diff for local correctness, then read outward until you can answer, with evidence: does every real consumer of a changed contract — including in other repositories — still work? Does the change actually meet each of the ticket's acceptance criteria, or does it silently miss one? Does it contradict a stated invariant in the docs, comments, or a locked decision? Is each behavior the change relies on pinned by a test that fails when it regresses, on the same engine production runs — and where it is not, is that missing pin recorded as a finding rather than waved off by proving the code correct today? And once any unlanded stack lands, does the merged result still hold? Scale the pass to dependency reach; a locally correct hunk can still break the system.
 
-An ordinary review stays read-only except for necessary checks and temporary artifacts. A request to review and fix already authorizes related implementation; it does not itself authorize commits, pushes, posted reviews, thread resolution, or merge. Carry separately granted authorization through the task without asking again.
+Give data honesty its own pass, not a glance. For anything that counts, aggregates, buckets time, or filters, ask whether the output is still true at the edges — empty, NULL, capped, future-dated, or mixed-semantics rows. Correct code can still report a dishonest number, and that number is the defect.
 
-For a merge-readiness question, assess both defects and operational risk using `references/risk.md`; high risk alone is not proof of a defect. Read `references/review-protocol.md` for reviewer attribution, coverage, output, and the bounded review-and-fix contract.
+One pass under-finds; a first read rationalizes away defects a fresh look catches. For a consequential change, take a second context-isolated pass before calling the review done — an independent reviewer on a different model family when one is available and authorized (`references/review-protocol.md`).
 
-## Assess and disposition
+Report a finding only when its support survives the finding model, ordered by severity; an empty list is a valid result, and optional improvements do not block. For existing feedback, mark each item supported, fixed, duplicate, outdated, unsubstantiated, or deferred, verifying "fixed" against the current candidate. For merge-readiness, assess operational risk with `references/risk.md`; high risk is not itself a defect.
 
-Read outward from the diff into callers, shared contracts and state, untouched invariants, and migration/data assumptions. Scale this pass to actual dependency reach; a locally correct hunk can still break the system. Account for the full changed-file list and disclose sampled or unreviewed material areas. Continue the planned scope after the first serious finding.
-
-Treat each finding as a hypothesis: trace a concrete failure path, seek counterevidence, and report it only when support survives. Distinguish defects from incomplete evidence, operational risk, and preferences. Use `references/risk.md` when the user asks about merge or rollout risk. Do not inflate severity to force a scope expansion.
-
-Deduplicate by root cause. Include affected location, trigger, consequence, confidence, and verification or repair direction. An empty finding list is a valid result. Do not invent nits to demonstrate effort.
-
-For existing feedback, mark supported, fixed, duplicate, outdated, unsubstantiated, or deferred with a reason. Verify fixed claims against the current candidate, not merely the presence of a commit. Optional improvements do not block the agreed outcome.
-
-For an explicitly requested independent review or a consequential review-and-fix loop, use a fresh reviewer when available and authorized. Supply the intent, raw candidate, relevant constraints, and evidence without the author's proposed verdict. Honor an explicitly requested suitable model; do not claim independence or model diversity that was unavailable. A second model's opinion still needs evidence.
-
-## Return control
-
-Return supported findings and a qualified readiness assessment tied to the candidate. If repairs were requested, continue through `execute-work` and `validate-work`, then reassess affected findings on the new candidate. End when required findings are resolved or explicitly dispositioned and required proof holds; stop unproductive loops at a precise blocker, not at an arbitrary demand for zero comments.
-
-A changed remote head invalidates affected review evidence. Refresh before making a readiness claim or publishing feedback. Use `deliver-work` for explicitly requested posting, replies, resolution, or merge. A review-only request ends with the assessment.
+Return supported findings and a readiness assessment tied to the candidate; self-review uses COMMENT unless policy and explicit authorization permit otherwise. If repairs were requested, continue through `execute-work` and `validate-work`, then reassess; `references/review-protocol.md` bounds the fix loop and independent re-review. A changed remote head invalidates affected evidence. Use `deliver-work` for any posting, reply, resolution, or merge; a review-only request ends with the assessment.
