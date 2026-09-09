@@ -15,3 +15,7 @@ Carry the user's authorized action through the runbook. Immediately before writi
 Perform the intended mutation through the selected path, then read back the result: remote head for push; number/URL, title/body, base/head, and draft state for creation; changed fields for metadata; review identity for a posted review; merged state and merge identity for merge.
 
 After an ambiguous response, inspect actual state before retrying so a successful write is not duplicated. If another author changed the candidate, refresh affected evidence and reconcile before writing. If authorization is rejected, preserve the payload and report the rejection; never change access paths to bypass it. Prefer structured text arguments or CLI body files for multiline content.
+
+## Upsert a durable summary comment
+
+To keep one editable top-level comment across rounds (e.g. a self-review summary), tag it with a stable hidden marker such as `<!-- self-review -->`. Before writing, list the PR's issue comments and match the marker: PATCH that comment when found, otherwise POST once. Read back the comment id and body to confirm. A submitted review is an immutable timeline event and cannot be edited, so it is never the home for the durable summary — use an issue comment for that, and reserve submitted reviews for the round's inline findings.
