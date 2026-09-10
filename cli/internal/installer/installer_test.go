@@ -129,3 +129,54 @@ func TestUnlinkRemovesDanglingOwnedLink(t *testing.T) {
 		t.Fatalf("removed = %d, want 1", removed)
 	}
 }
+
+func TestStaleLinksReportsOnlyOrphanedOwnedLinks(t *testing.T) {
+	sourceRoot := t.TempDir()
+	live := makeSkill(t, sourceRoot, "live")
+	foreign := makeSkill(t, t.TempDir(), "foreign")
+	dest := t.TempDir()
+
+	// Live owned link: target exists → not stale.
+	if err := os.Symlink(live, filepath.Join(dest, "live")); err != nil {
+		t.Fatal(err)
+	}
+	// Owned link whose target was removed from the registry → stale.
+	if err := os.Symlink(filepath.Join(sourceRoot, "retired"), filepath.Join(dest, "retired")); err != nil {
+		t.Fatal(err)
+	}
+	// Dangling link into a foreign directory → not owned, must be ignored.
+	if err := os.RemoveAll(foreign); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(foreign, filepath.Join(dest, "foreign")); err != nil {
+		t.Fatal(err)
+	}
+
+	stale, err := StaleLinks(dest, sourceRoot)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(stale) != 1 || filepath.Base(stale[0]) != "retired" {
+		t.Fatalf("stale = %v, want exactly [retired]", stale)
+	}
+}
+
+func TestRemoveLinksDeletesGivenPaths(t *testing.T) {
+	sourceRoot := t.TempDir()
+	dest := t.TempDir()
+	link := filepath.Join(dest, "retired")
+	if err := os.Symlink(filepath.Join(sourceRoot, "retired"), link); err != nil {
+		t.Fatal(err)
+	}
+
+	removed, err := RemoveLinks([]string{link})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if removed != 1 {
+		t.Fatalf("removed = %d, want 1", removed)
+	}
+	if _, err := os.Lstat(link); !os.IsNotExist(err) {
+		t.Fatalf("link still present after removal: %v", err)
+	}
+}
