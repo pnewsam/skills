@@ -26,6 +26,10 @@ Copy fixtures to temporary repositories; never mutate the fixture source during 
 
 The rebase preserves main's retention harnesses, scorecards, fixtures, and the scorer exclusion fix. The current 58 scenario definitions include rebase preservation/concurrency, issue rationale and system review, bounded review loops, existing-PR code publication, and retained TypeScript/collection objectives. These added definitions are not claims of executed model trials. See [the rebase record](results/2026-09-05-rebase-validation.md) for current integration checks; earlier rebuild smoke trials describe the pre-rebase candidate.
 
+## Review-work quality A/B (variant comparison)
+
+`review_ab_pilot_cases.json` and `review_ab.workflow.js` stage a *variant* A/B for `review-work` — control versus control-plus-a-candidate-addition — distinct from the bitter-lesson skill-vs-bare `family_ab`. It tests two additions surfaced by comparison against well-regarded review skills: a noise-exclusion discipline (#2, precision) and a design/over-engineering pass (#3, coverage). Each arm reviews planted-defect diffs blind; a blind evaluator scores recall (real defects reported via `must_include`) and precision (noise baits wrongly raised via `must_exclude`). The arm deltas in the cases file are the exact prose that would be promoted into the skill if an arm clears its gate; nothing is applied to the live skill until then. Run by passing the cases file contents as the workflow `args` (optionally add `"reps"`). Adopt only per the `gate` block; a null result keeps the current trimmed skill.
+
 ## Artifact and coordination exercise
 
 The [five-unit fixture](fixtures/epic-coordination/README.md) exercises interrupted ownership, changed prerequisites, preserved branch work, integration, and handoff across fresh sessions. Keep its evaluator-only file out of executor context. The [execution record](results/2026-09-05-artifact-coordination.md) separates observed behavior, an artifact-consistency defect, its correction, and remaining concurrency/remote-system limits.
