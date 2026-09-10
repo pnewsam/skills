@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fan-out"
+  short_description: "Parallel subagents on one work unit, reconciled"
+  default_prompt: "Use $fan-out to run parallel subagents for the requested task and reconcile their results."

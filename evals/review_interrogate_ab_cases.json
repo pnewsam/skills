@@ -1,0 +1,95 @@
+{
+  "pilot": "fan-out INTERROGATE A/B: does a multi-model interrogate pass (3 independent reviewers on opus/sonnet/haiku, reconciled by a lead) beat a single-pass review on HARD cases where one pass plausibly misses a synthesis defect or falls for a false-positive trap?",
+  "created": "2026-09-10",
+  "purpose": "review_ab has saturated at 1.0/0 four times, so microcases would null by construction. These four cases are built with single-pass headroom: defects that require synthesizing distant facts (cache key vs args, atomicity vs intent, empty-set division) and one heavy false-positive trap. Interrogate should raise recall via model diversity (a finding one family misses another catches) and hold precision via the lead's refutation step. A null still teaches us single-pass review is at ceiling even here and fan-out's value for review is low — its value would then live in swarm/arena, not interrogate.",
+  "arms": {
+    "control": "One single-pass review on the session model (opus).",
+    "interrogate": "Three independent reviewers on different model families (opus/sonnet/haiku), each blind to the others, reconciled by an opus lead that keeps supported findings, boosts cross-agreed ones, and drops ungrounded/refuted ones."
+  },
+  "protocol": "For each arm x case x rep, produce the review (control: 1 agent; interrogate: 3 diverse-model agents + 1 lead reconcile), then a blind evaluator scores it against anchors. Recall = real-defect anchors reported; false-positives = noise anchors wrongly raised. Runs on review_interrogate_ab.workflow.js. Smoke trial, not a benchmark; deliberately includes a weaker reviewer (haiku) so the lead's refutation is actually exercised.",
+  "metric": "Per arm: mean recall (include-fraction) and mean false-positive count. Interrogate must raise recall without raising false-positives; a weaker-model reviewer that inflates findings should be filtered by the lead, not passed through.",
+  "gate": {
+    "adopt_interrogate_if": "mean recall(interrogate) clearly exceeds control on the recall targets AND false-positives(interrogate) does not exceed control on any target.",
+    "keep_single_pass_if": "null or negative — single-pass review is already at ceiling for cases of this difficulty, so interrogate does not earn its cost for review; fan-out's value then lives in swarm/arena, not interrogate."
+  },
+  "cases": [
+    {
+      "id": "cache-key-omits-currency",
+      "targets": ["synthesis-recall"],
+      "intent": "Add a 60-second in-memory cache to get_price(product_id, currency).",
+      "diff": [
+        "+_cache = {}",
+        "+def get_price(product_id, currency):",
+        "+    now = time.time()",
+        "+    if product_id in _cache and now - _cache[product_id][1] < 60:",
+        "+        return _cache[product_id][0]",
+        "+    price = _fetch_price(product_id, currency)",
+        "+    _cache[product_id] = (price, now)",
+        "+    return price"
+      ],
+      "must_include": [
+        "the cache key is product_id only, but the price depends on currency; a second call with a different currency within the 60s TTL returns the first currency's price — the key must include currency"
+      ],
+      "must_exclude": [
+        "flags the module-level _cache dict as a thread-safety or race defect without a concrete concurrent path in the intent",
+        "flags unbounded cache growth as a blocking or major finding absent any stated size constraint"
+      ]
+    },
+    {
+      "id": "nonatomic-view-count",
+      "targets": ["synthesis-recall"],
+      "intent": "Add increment_view_count(post_id) that atomically increments a post's view counter.",
+      "diff": [
+        "+def increment_view_count(post_id):",
+        "+    post = db.get(Post, post_id)",
+        "+    post.views = post.views + 1",
+        "+    db.save(post)"
+      ],
+      "must_include": [
+        "read-modify-write on post.views is not atomic; concurrent increments lose updates, contradicting the stated atomic requirement — use an atomic UPDATE ... SET views = views + 1"
+      ],
+      "must_exclude": [
+        "flags a missing null-check on post (post_id not found) as a blocking or major defect when the intent does not specify that behavior",
+        "flags db.save naming or ORM choice as a defect"
+      ]
+    },
+    {
+      "id": "avg-rating-empty-division",
+      "targets": ["edge-recall"],
+      "intent": "Add avg_rating(product_id): the average of all submitted 1-5 star ratings for a product.",
+      "diff": [
+        "+def avg_rating(product_id):",
+        "+    ratings = db.query(\"SELECT stars FROM reviews WHERE product_id = %s\", (product_id,))",
+        "+    total = sum(r[0] for r in ratings)",
+        "+    return total / len(ratings)"
+      ],
+      "must_include": [
+        "divides by len(ratings) which is zero for a product with no reviews, raising ZeroDivisionError — handle the empty case (return None or 0)"
+      ],
+      "must_exclude": [
+        "flags the parameterized query as a SQL-injection risk when no user input is interpolated",
+        "flags summing star values as an integer-overflow risk"
+      ]
+    },
+    {
+      "id": "batch-delete-fp-trap",
+      "targets": ["precision"],
+      "intent": "Add batch_delete(ids) that deletes rows in chunks of 500 to avoid an oversized IN clause.",
+      "diff": [
+        "+def batch_delete(ids):",
+        "+    for i in range(0, len(ids), 500):",
+        "+        chunk = ids[i:i+500]",
+        "+        db.execute(\"DELETE FROM items WHERE id = ANY(%s)\", (chunk,))",
+        "+    db.commit()"
+      ],
+      "must_include": [
+        "concludes there is no blocking or major defect; chunked delete with a single final commit is correct for the stated goal"
+      ],
+      "must_exclude": [
+        "flags the single commit after the loop as a partial-delete or atomicity defect without a concrete failure tied to the intent",
+        "flags the ANY(%s) parameterized query as a SQL-injection risk",
+        "demands a batch size other than 500 without a concrete impact"
+      ]
+    }
+  ]
+}

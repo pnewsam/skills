@@ -15,7 +15,8 @@
       ],
       "optional_skills": [
         "plan-work",
-        "plan-epic"
+        "plan-epic",
+        "fan-out"
       ],
       "resources": [
         "references/browser-coverage.md",
@@ -95,7 +96,8 @@
         "validate-work",
         "review-work",
         "publish-pr",
-        "deliver-work"
+        "deliver-work",
+        "fan-out"
       ],
       "resources": [
         "references/architecture-document.md",
@@ -181,7 +183,8 @@
       ],
       "optional_skills": [
         "analyze-work",
-        "execute-work"
+        "execute-work",
+        "fan-out"
       ],
       "resources": [
         "references/constraints.md"
@@ -262,6 +265,21 @@
       ],
       "resources": []
     },
+    "fan-out": {
+      "layer": "runbook",
+      "scope": "shared",
+      "effects": [
+        "read_local",
+        "write_files",
+        "run_tests",
+        "network_read"
+      ],
+      "requires": [
+        "work-conventions"
+      ],
+      "optional_skills": [],
+      "resources": []
+    },
     "review-work": {
       "layer": "operation",
       "scope": "work",
@@ -278,7 +296,8 @@
       "optional_skills": [
         "execute-work",
         "validate-work",
-        "deliver-work"
+        "deliver-work",
+        "fan-out"
       ],
       "resources": [
         "references/review-output.md",
@@ -298,7 +317,8 @@
       ],
       "optional_skills": [
         "plan-epic",
-        "plan-work"
+        "plan-work",
+        "fan-out"
       ],
       "resources": [
         "references/charter.md"
@@ -343,7 +363,8 @@
         "work-conventions"
       ],
       "optional_skills": [
-        "execute-work"
+        "execute-work",
+        "fan-out"
       ],
       "resources": [
         "references/evidence.md",
@@ -410,7 +431,8 @@
         "rebase-pr",
         "create-issue",
         "create-project",
-        "preserve-work"
+        "preserve-work",
+        "fan-out"
       ]
     },
     "general": {
