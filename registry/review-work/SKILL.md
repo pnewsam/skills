@@ -13,7 +13,7 @@ The defects that matter usually sit outside the changed lines. Read the diff for
 
 Give data honesty its own pass, not a glance. For anything that counts, aggregates, buckets time, or filters, ask whether the output is still true at the edges — empty, NULL, capped, future-dated, or mixed-semantics rows. Correct code can still report a dishonest number, and that number is the defect.
 
-One pass under-finds; a first read rationalizes away defects a fresh look catches. For a consequential change, take a second context-isolated pass before calling the review done — an independent reviewer on a different model family when one is available and authorized (`references/review-protocol.md`).
+One pass both under-finds and over-holds; a first read rationalizes away real defects and clings to false ones a fresh look would drop. For a consequential change, take a second context-isolated pass before calling the review done, tasked with refuting the standing findings as much as extending them — an independent reviewer on a different model family when one is available and authorized (`references/review-protocol.md`).
 
 Report a finding only when its support survives the finding model, ordered by severity; an empty list is a valid result, and optional improvements do not block. For existing feedback, mark each item supported, fixed, duplicate, outdated, unsubstantiated, or deferred, verifying "fixed" against the current candidate. For merge-readiness, assess operational risk with `references/risk.md`; high risk is not itself a defect.
 
