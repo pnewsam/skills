@@ -1,6 +1,6 @@
 # Skills
 
-A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. The general set has **17 skills**: six operations, three orchestration skills, five runbooks, and three compact references. Two optional organization packages are kept separately.
+A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. The general set has **18 skills**: six operations, three orchestration skills, six runbooks, and three compact references. Two optional organization packages are kept separately.
 
 The base model supplies general reasoning and technique. Skills earn their place through house contracts, corrective objectives, fragile mechanics, or useful verification; the six operations do not prescribe how to think.
 
@@ -101,11 +101,11 @@ Choose **`general`** for the complete general registry, or **`core`** for the si
 | `core` | Six work operations with their required contracts and PR mechanics. |
 | `orchestration` | Shape, plan, and deliver initiatives across work units. |
 | `runbooks` | GitHub, Linear, and recoverable work-preservation procedures. |
-| `general` | The seventeen general skills, including operations, orchestration, runbooks, and references. |
+| `general` | The eighteen general skills, including operations, orchestration, runbooks, and references. |
 | `linear-ops` | Create one verified Linear issue or project. |
 | `mindsdb` | Optional organization-specific inventory and migration tools. |
 
-Required package dependencies are installed transitively for profiles and individual selections. Optional skill recommendations do not expand installations. `core` includes six operations plus required shared contracts and PR mechanics. `general` includes all seventeen general packages, excluding optional packages.
+Required package dependencies are installed transitively for profiles and individual selections. Optional skill recommendations do not expand installations. `core` includes six operations plus required shared contracts and PR mechanics. `general` includes all eighteen general packages, excluding optional packages.
 
 Optional packages: `mindsdb-migrate-surface-to-tailwind` and `mindsdb-track-design-system-metrics`.
 

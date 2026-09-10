@@ -54,7 +54,7 @@ Project installs (`-p`) and custom directory installs (`-d`) use copies, since t
 
 When `--profile` is present, the selected profiles, included profiles, and required package dependencies are installed. Required dependencies are also included for interactive individual selections. Optional skill recommendations do not expand the selection. Use `-y` to skip prompts without changing the profile selection.
 
-`core` contains the six work operations and required contracts/PR mechanics. `general` contains all seventeen general skills. `orchestration`, `runbooks`, and `linear-ops` provide focused choices. MindsDB packages are available through a separate optional profile.
+`core` contains the six work operations and required contracts/PR mechanics. `general` contains all eighteen general skills. `orchestration`, `runbooks`, and `linear-ops` provide focused choices. MindsDB packages are available through a separate optional profile.
 
 Profiles from the older taxonomy such as `advisory`, `quality`, and `product-delivery` are retired. Inspect `skills status` and the migration map before replacing a client installation. Installing the new profile does not delete old copies or dangling links; preserve local customizations and explicitly remove only entries confirmed retired. The CLI never silently prunes a user's installation.
 
