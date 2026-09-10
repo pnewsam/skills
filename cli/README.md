@@ -56,7 +56,7 @@ When `--profile` is present, the selected profiles, included profiles, and requi
 
 `core` contains the six work operations and required contracts/PR mechanics. `general` contains all eighteen general skills. `orchestration`, `runbooks`, and `linear-ops` provide focused choices. MindsDB packages are available through a separate optional profile.
 
-Profiles from the older taxonomy such as `advisory`, `quality`, and `product-delivery` are retired. Inspect `skills status` and the migration map before replacing a client installation. Installing the new profile does not delete old copies or dangling links; preserve local customizations and explicitly remove only entries confirmed retired. The CLI never silently prunes a user's installation.
+Profiles from the older taxonomy such as `advisory`, `quality`, and `product-delivery` are retired. Inspect `skills status` and the migration map before replacing a client installation. Installing does not delete old copies; preserve local customizations and explicitly remove only entries confirmed retired. After a symlink install, the CLI lists any dangling links it owns — symlinks into the registry whose skill was since deleted — and offers to remove them, but only after you confirm (or pass `-y`). It never silently prunes a user's installation, and never touches symlinks pointing outside the registry.
 
 ### `skills profiles`
 

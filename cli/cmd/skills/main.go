@@ -125,6 +125,12 @@ func init() {
 	}
 }
 
+// target is a resolved install destination and the mode to use for it.
+type target struct {
+	dir  string
+	mode installer.Mode
+}
+
 // findSourceDir resolves the skills source directory.
 func findSourceDir() (string, error) {
 	// 1. --source flag
@@ -215,10 +221,6 @@ func runInstall(cmd *cobra.Command, args []string) error {
 		mode = installer.ModeCopy
 	}
 
-	type target struct {
-		dir  string
-		mode installer.Mode
-	}
 	var targets []target
 
 	switch {
@@ -371,10 +373,65 @@ func runInstall(cmd *cobra.Command, args []string) error {
 		fmt.Println()
 	}
 
+	if err := pruneStaleLinks(targets, sourceDir); err != nil {
+		return err
+	}
+
 	if failures > 0 {
 		return fmt.Errorf("%d skill installation(s) failed", failures)
 	}
 	fmt.Println("Done.")
+	return nil
+}
+
+// pruneStaleLinks finds symlinks in the symlink-mode targets that point at
+// skills no longer in the registry and offers to remove them. Removal is
+// confirmed interactively unless --yes is set; in a non-interactive session
+// without --yes, it reports the orphans and leaves them in place.
+func pruneStaleLinks(targets []target, sourceDir string) error {
+	var stale []string
+	seen := map[string]bool{}
+	for _, t := range targets {
+		if t.mode != installer.ModeLink {
+			continue
+		}
+		links, err := installer.StaleLinks(t.dir, sourceDir)
+		if err != nil {
+			return err
+		}
+		for _, l := range links {
+			if !seen[l] {
+				seen[l] = true
+				stale = append(stale, l)
+			}
+		}
+	}
+	if len(stale) == 0 {
+		return nil
+	}
+
+	fmt.Printf("\nFound %d stale symlink(s) pointing at skills no longer in the registry:\n", len(stale))
+	for _, p := range stale {
+		fmt.Printf("  %s\n", p)
+	}
+
+	if !flagYes {
+		if !interactive() {
+			fmt.Println("Re-run with --yes to remove them, or: skills unlink <harness>")
+			return nil
+		}
+		fmt.Print("Remove them? [y/N] ")
+		if !readYes() {
+			fmt.Println("Left stale symlinks in place.")
+			return nil
+		}
+	}
+
+	removed, err := installer.RemoveLinks(stale)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Removed %d stale symlink(s).\n", removed)
 	return nil
 }
 
