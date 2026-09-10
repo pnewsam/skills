@@ -165,8 +165,8 @@ func TestGeneralProfileExcludesOptionalPackagesAndClosesDependencies(t *testing.
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(names) != 17 {
-		t.Fatalf("general has %d packages, want seventeen general responsibilities", len(names))
+	if len(names) != 18 {
+		t.Fatalf("general has %d packages, want eighteen general responsibilities", len(names))
 	}
 	selected := map[string]bool{}
 	for _, name := range names {

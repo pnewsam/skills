@@ -43,7 +43,7 @@ Preserve unrelated changes; isolate when possible, clarify only when ownership o
 
 `catalog.json` records every active package's layer, scope, possible effects, required dependencies, optional skill routes, and resources. Effects describe possible operations across modes, not permission grants. `requires` are acyclic package dependencies installed transitively. `optional_skills` are conditional recommendations that do not expand an installation. If an optional skill is unavailable, use the ordinary capability or state the specific limitation; do not promise an unavailable delegate.
 
-Profiles compose use cases; the general profile contains the seventeen general skills. Source layout stays flat. A cross-package resource path requires a declared dependency. Profiles and individual selections install required dependencies; optional organization packages remain separate.
+Profiles compose use cases; the general profile contains the eighteen general skills. Source layout stays flat. A cross-package resource path requires a declared dependency. Profiles and individual selections install required dependencies; optional organization packages remain separate.
 
 Preserved external bodies must match their recorded origin commit; update upstream intentionally, never silently rewrite them. Local project rules belong in repository instructions rather than the generic registry.
 
