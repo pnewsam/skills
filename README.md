@@ -1,16 +1,14 @@
 # Skills
 
-A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. The general set has **18 skills**: six operations, three orchestration skills, six runbooks, and three compact references. Two optional organization packages are kept separately.
+A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Eighteen general skills — six operations, three orchestration skills, six runbooks, and three references — plus two optional organization packages.
 
-The base model supplies general reasoning and technique. Skills earn their place through house contracts, corrective objectives, fragile mechanics, or useful verification; the six operations do not prescribe how to think.
+The base model supplies general reasoning and technique; skills earn their place through house contracts, corrective objectives, fragile mechanics, or useful verification. The agent owns the task: operations are capabilities, not mandatory steps or approval gates. Existing issues and feature plans are valid work records, and an initiative coordinates several units.
 
-The agent owns an ordinary task. Operations are capabilities, not mandatory steps or approval gates. Existing issues and feature plans remain valid work records. An initiative coordinates several units, normally several PRs.
-
-Read [the shared work contract](registry/work-conventions/SKILL.md), [authoring rules](AUTHORING.md), and [the complete migration map](docs/registry-rebuild.md). Installation commands are in [cli/README.md](cli/README.md).
+Start with [the shared work contract](registry/work-conventions/SKILL.md) and [authoring rules](AUTHORING.md); [cli/README.md](cli/README.md) covers installation.
 
 ## How a unit of work moves
 
-The forward path shows a typical change. The return arrows show how evidence and feedback lead to another pass.
+The forward path is a typical change; the return arrows show how evidence and feedback drive another pass.
 
 ```mermaid
 flowchart LR
@@ -25,18 +23,16 @@ flowchart LR
     D -.->|New PR feedback| R
 ```
 
-**Enter where the work needs you.** A clear bug fix can begin at Execute; an existing PR can begin at Review. Skip results already established, reuse current evidence, and stop at the endpoint the user requested. Delivery may mean local changes, a commit, an open PR, or an explicitly requested merge; it does not imply all of them.
+**Enter where the work needs you.** A clear bug fix can begin at Execute, an existing PR at Review. Skip results already established, reuse current evidence, and stop at the endpoint the user requested — local changes, a commit, an open PR, or an explicitly requested merge, not all of them by default. One work record carries intent, acceptance, progress, and evidence through the loops; an existing issue or feature plan is enough, and a small task may need only its own context.
 
-One work record carries intent, acceptance, progress, and evidence through these loops. An existing issue or feature plan is enough; a small uninterrupted task may need only the task's context.
+## The skills
 
-## Where each kind of skill fits
-
-| Kind | What it contributes | Example |
+| Layer | What it contributes | Example |
 | --- | --- | --- |
-| **Operation** | A result within one unit of work | Validate the current change against its acceptance criteria |
-| **Runbook** | Specific mechanics an operation or user can invoke directly | Publish a PR or create a Linear issue |
+| **Operation** | A result within one unit of work | Validate a change against its acceptance criteria |
+| **Runbook** | Specific mechanics, callable directly | Publish a PR or create a Linear issue |
 | **Reference** | Shared conventions or focused knowledge | The house standard for PR descriptions |
-| **Orchestration** | Coordination across several units of work | Plan an epic's dependencies and advance its ready units |
+| **Orchestration** | Coordination across several units | Plan an epic and advance its ready units |
 
 ### Operations — one unit of work
 
@@ -57,7 +53,7 @@ One work record carries intent, acceptance, progress, and evidence through these
 | [plan-epic](registry/plan-epic/SKILL.md) | Divide the initiative into work units and dependencies |
 | [ship-epic](registry/ship-epic/SKILL.md) | Advance ready units and verify the combined outcome |
 
-Each child unit uses the operations above. Independent units can advance while another is blocked; the initiative still needs its own integration evidence.
+Each child unit uses the operations above; independent units can advance while another is blocked, and the initiative still needs its own integration evidence.
 
 ### Runbooks — specific procedures
 
@@ -68,6 +64,7 @@ Each child unit uses the operations above. Independent units can advance while a
 | [preserve-work](registry/preserve-work/SKILL.md) | Preserve a recoverable local WIP snapshot |
 | [create-issue](registry/create-issue/SKILL.md) | Create one verified Linear issue |
 | [create-project](registry/create-project/SKILL.md) | Create one verified Linear project |
+| [fan-out](registry/fan-out/SKILL.md) | Run parallel subagents on one unit and reconcile the results |
 
 ### References — shared conventions
 
@@ -77,42 +74,34 @@ Each child unit uses the operations above. Independent units can advance while a
 | [pr-conventions](registry/pr-conventions/SKILL.md) | PR content and review findings |
 | [writing-conventions](registry/writing-conventions/SKILL.md) | Shared prose preferences |
 
-## Planning artifacts and handoffs
+## Planning artifacts
 
-An **epic** records a combined outcome and the units needed to achieve it. A **work record** describes one independently reviewable outcome, normally one PR. A product feature may span several work units. Reuse existing issues and feature plans rather than creating duplicate records.
+An epic records a combined outcome and its child units; a work record describes one reviewable outcome. Reuse existing issues and feature plans rather than duplicating them, omit sections that do not apply, and persist enough before a handoff that a fresh worker can continue without the original conversation.
 
-| Artifact | Default location for new local records | What belongs there |
+| Artifact | Default location for new records | What belongs there |
 | --- | --- | --- |
 | Epic | `docs/epics/<id>-<slug>.md` | Problem, overall acceptance, child links and prerequisites, coordination, decisions, integration |
 | Work unit | `docs/work/<id>-<slug>.md` | Rationale, required acceptance, approach, planned checks, candidate, observed evidence, next action |
 | Existing feature plan | Its current `docs/features/` location | Keep a bounded plan as the work record; link child units when the feature spans PRs |
 | Supporting evidence | Linked from its record | Detailed measurements, reports, or captures |
 
-Use the [epic template](registry/plan-epic/references/epic-record.md), [work template](registry/work-conventions/references/work-record.md), and [artifact conventions](registry/work-conventions/references/artifacts.md) as readable defaults. Keep stable IDs and parent/child links. Omit irrelevant sections; a small uninterrupted task can use task context. Persist enough detail before a handoff that a fresh worker can continue without the original conversation.
+Use the [epic template](registry/plan-epic/references/epic-record.md), [work template](registry/work-conventions/references/work-record.md), and [artifact conventions](registry/work-conventions/references/artifacts.md) as defaults. For larger initiatives the coordinator owns the epic index and assignments while each worker owns its unit; [the coordination protocol](registry/ship-epic/references/coordination.md) covers dispatch, checkpoint, replan, integration, and recovery.
 
-For larger initiatives, the coordinator owns the epic index and assignments; each worker owns its unit's detail and evidence. [The coordination protocol](registry/ship-epic/references/coordination.md) explains how to dispatch, checkpoint, replan, integrate, and recover. Planned checks, isolated unit success, and verified combined behavior are distinct claims.
+## Installation
 
-## Installation profiles
-
-Choose **`general`** for the complete general registry, or **`core`** for the six operations and their required supporting packages. More focused profiles are available below.
+[cli/README.md](cli/README.md) has the commands. Choose **`general`** for the whole registry or **`core`** for the six operations and their required packages; the rest are focused subsets.
 
 | Profile | Purpose |
 | --- | --- |
 | `core` | Six work operations with their required contracts and PR mechanics. |
 | `orchestration` | Shape, plan, and deliver initiatives across work units. |
-| `runbooks` | GitHub, Linear, and recoverable work-preservation procedures. |
-| `general` | The eighteen general skills, including operations, orchestration, runbooks, and references. |
+| `runbooks` | GitHub, Linear, work-preservation, and fan-out procedures. |
+| `general` | The eighteen general skills: operations, orchestration, runbooks, and references. |
 | `linear-ops` | Create one verified Linear issue or project. |
 | `mindsdb` | Optional organization-specific inventory and migration tools. |
 
-Required package dependencies are installed transitively for profiles and individual selections. Optional skill recommendations do not expand installations. `core` includes six operations plus required shared contracts and PR mechanics. `general` includes all eighteen general packages, excluding optional packages.
+Profiles and individual selections install their required dependencies transitively; optional skill recommendations do not expand a selection. The two `mindsdb-*` packages stay optional.
 
-Optional packages: `mindsdb-migrate-surface-to-tailwind` and `mindsdb-track-design-system-metrics`.
+## Layout
 
-## Layout and migration
-
-Active packages live in `registry/<name>/`; conditional references and tools travel with their owner. `catalog.json` is the source for layer, scope, effects, dependencies, resources, profiles, and provenance. `archive/` is historical and is not installable.
-
-Against the reconciled main registry, the rebuild retires fourteen entry points and adds nine, taking the active registry from 24 to 19 packages. Previous archive families and evaluation evidence remain intact. See the migration map before replacing an installed profile. Existing client copies and retired symlinks are not automatically removed; inspect and migrate them explicitly, preserving local customizations. No permanent alias skills are installed.
-
-Historical retention plans and scorecards remain under docs/ and evals/results as evidence of earlier decisions. They are not the current architecture or quality verdict. See [evals/README.md](evals/README.md) for current behavioral evaluation and its limits.
+Active packages live in `registry/<name>/`, with conditional references and tools travelling alongside their owner. `catalog.json` is the source of truth for layer, scope, effects, dependencies, resources, profiles, and provenance. `archive/` is historical and not installable. See [the migration map](docs/registry-rebuild.md) for how the current set was reconciled from earlier families, and [evals/README.md](evals/README.md) for behavioral evaluation and its limits.
