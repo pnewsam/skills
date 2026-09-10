@@ -1,0 +1,75 @@
+{
+  "pilot": "review-work OUTPUT-FORMAT A/B: does re-adding an explicit review-output template (registry/review-work/references/review-output.md, dropped in the 92d0abd units-of-work rebuild) improve the structural conformance and consistency of review output over the current prose-only skill, WITHOUT costing defect recall or precision?",
+  "created": "2026-09-10",
+  "purpose": "The current review-work skill describes the output in prose (review-protocol.md: 'return a verdict, a short reason, the validation run, and findings ordered by severity') but gives no skeleton to fill; the risk sub-mode kept its table template while the findings path lost its shape. This is a PRESENTATION change, so the review_ab recall/precision harness is the wrong instrument for its value — it is the right instrument for its cost. Here we measure conformance: does every review reliably carry a clear verdict token, a reviewer-model attribution line, a validation line, and severity-tagged findings, in a postable shape. Run review_ab in parallel as a no-regression guardrail.",
+  "arms": {
+    "control": "Current review-work skill (registry/review-work) with no delta. Prose-only output guidance.",
+    "template": "Control plus the review-output template delta (candidate re-add). Expected to raise conformance — especially the near-always-missing model-attribution line and consistent severity tagging — with no loss of recall/precision on the review_ab guardrail."
+  },
+  "arm_deltas": {
+    "control": "",
+    "template": "Present your review in exactly this shape. Verdict first, a tight summary, honest validation, then findings ordered by severity. This controls presentation only; what earns a finding is unchanged.\n\n## Code Review\n\n**Verdict: <APPROVE | REQUEST CHANGES | COMMENT>**\n**Model: <exact id of the model that produced this review, e.g. claude-opus-4-8; \"unknown\" if not reliably known>**\n\n<Two to four sentences: what you reviewed (scope), the one reason the verdict holds, and the bottom line. Do not narrate the change back to the author.>\n\n### Validation\n\n- <what you actually ran or inspected, with real results — one line each>\n\nThen findings, most severe first, each as:\n\n**<Blocking | Major | Minor | Nit>:** <problem>. <evidence>. <fix or precise question>.\n\nIf nothing is actionable, write \"No actionable findings.\" and omit the list. The Model line is required and must carry a real identifier, not the placeholder. REQUEST CHANGES needs a Blocking finding (or a Major that makes merge unsafe); Minor and Nit never drive REQUEST CHANGES."
+  },
+  "protocol": "For each arm x case x rep, an answer agent reads registry/review-work/SKILL.md and its references, applies the arm delta (if any), and reviews the case intent+diff. A blind evaluator scores the REVIEW's structural conformance against fixed format anchors (verdict token, model line, validation section, severity-tagged findings, concise summary). Consistency is the across-rep variance of the conformance score per arm. Runs on review_format_ab.workflow.js. Smoke trial, not a statistical benchmark; preserve raw reviews.",
+  "metric": "Per arm: mean conformance (fraction of the 5 format anchors satisfied) and its across-rep spread (lower spread = more consistent). Guardrail: run review_ab.workflow.js with the same two arms; template must not lower include-fraction on any target nor raise exclude-count.",
+  "gate": {
+    "adopt_template_if": "mean conformance(template) is clearly above control (driven especially by the model-attribution line and consistent severity tagging), AND the review_ab guardrail shows no recall drop on any target and no precision drop.",
+    "keep_control_if": "template does not raise conformance, or it regresses recall/precision on the guardrail. A null conformance result keeps the current prose-only skill."
+  },
+  "cases": [
+    {
+      "id": "cal-real-bug",
+      "intent": "Fix: get_page(items, page, size) should return the slice of items for a 1-indexed page number (page 1 is the first page).",
+      "diff": [
+        "+def get_page(items, page, size):",
+        "+    start = page * size",
+        "+    return items[start:start + size]"
+      ]
+    },
+    {
+      "id": "cal-clean",
+      "intent": "Add a helper that returns a user's display name, falling back to the local-part of their email. Assume user.email is always present (schema-required, non-null).",
+      "diff": [
+        "+def display_name(user):",
+        "+    if user.name:",
+        "+        return user.name",
+        "+    return user.email.split(\"@\")[0]"
+      ]
+    },
+    {
+      "id": "noise-sql-injection",
+      "intent": "Add a search endpoint that filters products by a name substring supplied in the q query parameter.",
+      "diff": [
+        "+@app.get(\"/products\")",
+        "+def search(q: str):",
+        "+    sql = f\"SELECT * FROM products WHERE name LIKE '%{q}%'\"",
+        "+    return db.execute(sql).fetchall()"
+      ]
+    },
+    {
+      "id": "design-speculative-abstraction",
+      "intent": "Send a welcome email when a user signs up. This is the only notification the product sends; there is no second channel planned.",
+      "diff": [
+        "+class NotificationStrategy(ABC):",
+        "+    @abstractmethod",
+        "+    def send(self, user, payload): ...",
+        "+",
+        "+class EmailNotificationStrategy(NotificationStrategy):",
+        "+    def send(self, user, payload):",
+        "+        smtp.send(user.email, payload[\"subject\"], payload[\"body\"])",
+        "+",
+        "+class NotificationFactory:",
+        "+    _registry = {}",
+        "+    @classmethod",
+        "+    def register(cls, key, strategy): cls._registry[key] = strategy",
+        "+    @classmethod",
+        "+    def create(cls, key): return cls._registry[key]()",
+        "+",
+        "+NotificationFactory.register(\"email\", EmailNotificationStrategy)",
+        "+",
+        "+def send_welcome(user):",
+        "+    NotificationFactory.create(\"email\").send(user, {\"subject\": \"Welcome\", \"body\": \"...\"})"
+      ]
+    }
+  ]
+}
