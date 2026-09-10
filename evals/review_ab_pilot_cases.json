@@ -1,0 +1,158 @@
+{
+  "pilot": "review-work quality A/B: does adding a noise-exclusion discipline (#2) or a design/over-engineering pass (#3) improve review quality over the current review-work skill?",
+  "created": "2026-09-09",
+  "purpose": "Two candidate additions surfaced from a landscape comparison against well-regarded review skills (Anthropic security-review, obra/superpowers, CodeRabbit/Greptile, Google eng-practices). #2 targets precision: the current skill relies entirely on the finding model to reject low-value findings and never enumerates the noise categories the field aggressively suppresses. #3 targets a coverage gap: the current skill has no design/over-engineering/YAGNI dimension (Google puts Design first). Both are ADDITIONS, so measure against the trim/control arm before adopting, per the house preference for empirical A/B and trimming.",
+  "arms": {
+    "control": "Current review-work skill (registry/review-work) with no delta. Baseline precision and recall.",
+    "exclusion": "Control plus the noise-exclusion delta (candidate #2). Expected to lower false-positive findings on the noise-* cases without losing real-defect recall anywhere.",
+    "design": "Control plus the design-pass delta (candidate #3). Expected to raise real-defect recall on the design-* cases without manufacturing correctness findings."
+  },
+  "arm_deltas": {
+    "control": "",
+    "exclusion": "Noise discipline. The following are not findings on their own; raise one only when you can name a concrete input, state, or execution path that makes it bite, and then rate it by that impact — otherwise drop it: generic input validation without a demonstrated sink; rate-limiting, resource-exhaustion, or denial-of-service concerns absent a specific trigger; theoretical races on state the runtime does not actually execute concurrently; log spoofing and other defense-in-depth hardening gaps; outdated-dependency or advisory claims not verified against a current source; and pure style, naming, or magic-number preferences. A concern you cannot ground this way is a Nit at most, and Nits never block.",
+    "design": "Design pass. Beyond correctness, ask whether the change is the right shape. Flag speculative generality — abstractions, strategy/factory layers, plugin registries, or configuration knobs introduced for a single concrete caller or a use case that does not yet exist; the house default is to solve the problem in front of you and add the seam when the second caller arrives. Flag logic placed in the wrong layer and new code that reimplements an existing helper instead of reusing it. Report a design finding as Minor unless it carries a concrete future failure mode; do not manufacture a correctness defect to justify a design concern."
+  },
+  "protocol": "For each arm x case x rep, an answer agent reads registry/review-work/SKILL.md and its references, applies the arm delta (if any), and reviews the case's intent+diff blind to the anchors. A separate blind evaluator scores the review against the case anchors: each must_include is a real defect the review should report (recall); each must_exclude is a non-defect or noise-bait the review should NOT raise as a finding (precision). exclude_present counts anchors the review wrongly raised. Runs on the review_ab.workflow.js harness. These are smoke trials, not a statistical benchmark; preserve raw reviews and per-case reasoning.",
+  "metric": "Per (arm,target): mean include-fraction (satisfied/total, recall) and mean exclude-count (false-positive baits raised, lower is better). Blended score = include_fraction - 0.34*exclude_present, reported but secondary to the two components.",
+  "gate": {
+    "adopt_exclusion_if": "On noise-* cases, mean exclude-count(exclusion) is clearly below mean exclude-count(control), AND include-fraction(exclusion) is not below control on any target (no real-defect suppression on calibration/design/noise).",
+    "adopt_design_if": "On design-* cases, mean include-fraction(design) exceeds control by > 0.15, AND design's exclude-count does not exceed control on any case (no fabricated correctness findings).",
+    "keep_control_if": "A candidate fails its adopt condition or regresses another target; a null result keeps the current trimmed skill."
+  },
+  "cases": [
+    {
+      "id": "cal-real-bug",
+      "targets": ["calibration"],
+      "intent": "Fix: get_page(items, page, size) should return the slice of items for a 1-indexed page number (page 1 is the first page).",
+      "diff": [
+        "+def get_page(items, page, size):",
+        "+    start = page * size",
+        "+    return items[start:start + size]"
+      ],
+      "must_include": [
+        "off-by-one on a 1-indexed page: start should be (page - 1) * size, so page 1 currently skips the first page and returns items[size:2*size]"
+      ],
+      "must_exclude": [
+        "raises the absence of type hints as a blocking or major finding",
+        "raises out-of-range page handling as a blocking defect when the intent does not specify it"
+      ]
+    },
+    {
+      "id": "cal-clean",
+      "targets": ["calibration"],
+      "intent": "Add a helper that returns a user's display name, falling back to the local-part of their email. Assume user.email is always present (schema-required, non-null).",
+      "diff": [
+        "+def display_name(user):",
+        "+    if user.name:",
+        "+        return user.name",
+        "+    return user.email.split(\"@\")[0]"
+      ],
+      "must_include": [
+        "concludes there is no blocking or major defect (an approve / empty-findings outcome, optionally with at most a nit or an uncertainty question)"
+      ],
+      "must_exclude": [
+        "flags a missing null-check on user.email as a blocking or major finding despite the stated non-null invariant",
+        "demands the fallback be made configurable or extracted",
+        "flags split('@') as unsafe without naming a concrete failing input"
+      ]
+    },
+    {
+      "id": "noise-sql-injection",
+      "targets": ["noise"],
+      "intent": "Add a search endpoint that filters products by a name substring supplied in the q query parameter.",
+      "diff": [
+        "+@app.get(\"/products\")",
+        "+def search(q: str):",
+        "+    sql = f\"SELECT * FROM products WHERE name LIKE '%{q}%'\"",
+        "+    return db.execute(sql).fetchall()"
+      ],
+      "must_include": [
+        "SQL injection: user-controlled q is string-interpolated into the query; use a parameterized query / bound parameter"
+      ],
+      "must_exclude": [
+        "raises missing rate limiting on the endpoint as a blocking or major finding",
+        "raises an outdated or vulnerable dependency without verifying it against a current source",
+        "raises that results could be logged and logs spoofed",
+        "raises missing length/format validation on q as a defect without a concrete impact beyond the injection"
+      ]
+    },
+    {
+      "id": "noise-resource-leak",
+      "targets": ["noise"],
+      "intent": "Read an allowlist file and return the set of allowed ids.",
+      "diff": [
+        "+def load_allowlist(path):",
+        "+    f = open(path)",
+        "+    ids = set(line.strip() for line in f)",
+        "+    return ids"
+      ],
+      "must_include": [
+        "the file handle from open() is never closed; use a context manager (with open(path) as f)"
+      ],
+      "must_exclude": [
+        "raises that a very large file could exhaust memory / cause a DoS as a blocking or major finding",
+        "raises reading the file line by line as an unbounded-loop DoS",
+        "raises the single-letter variable name f as a finding"
+      ]
+    },
+    {
+      "id": "design-speculative-abstraction",
+      "targets": ["design"],
+      "intent": "Send a welcome email when a user signs up. This is the only notification the product sends; there is no second channel planned.",
+      "diff": [
+        "+class NotificationStrategy(ABC):",
+        "+    @abstractmethod",
+        "+    def send(self, user, payload): ...",
+        "+",
+        "+class EmailNotificationStrategy(NotificationStrategy):",
+        "+    def send(self, user, payload):",
+        "+        smtp.send(user.email, payload[\"subject\"], payload[\"body\"])",
+        "+",
+        "+class NotificationFactory:",
+        "+    _registry = {}",
+        "+    @classmethod",
+        "+    def register(cls, key, strategy): cls._registry[key] = strategy",
+        "+    @classmethod",
+        "+    def create(cls, key): return cls._registry[key]()",
+        "+",
+        "+NotificationFactory.register(\"email\", EmailNotificationStrategy)",
+        "+",
+        "+def send_welcome(user):",
+        "+    NotificationFactory.create(\"email\").send(user, {\"subject\": \"Welcome\", \"body\": \"...\"})"
+      ],
+      "must_include": [
+        "speculative generality / YAGNI: an abstract strategy base, factory, and registry are introduced for a single concrete email path with no second channel; collapse to a direct send_welcome function until another channel actually exists"
+      ],
+      "must_exclude": [
+        "invents a correctness bug in the SMTP send that is not present in the diff",
+        "asserts the factory/strategy pattern is required or correct here"
+      ]
+    },
+    {
+      "id": "design-premature-config",
+      "targets": ["design"],
+      "intent": "Round a currency amount to 2 decimal places for display. The amount is already a Decimal. The requirement is only 2-dp half-up display; nothing asks for configurable rounding or locales.",
+      "diff": [
+        "+ROUNDING_CONFIG = {",
+        "+    \"mode\": os.getenv(\"ROUNDING_MODE\", \"half_up\"),",
+        "+    \"places\": int(os.getenv(\"ROUNDING_PLACES\", \"2\")),",
+        "+    \"locale\": os.getenv(\"ROUNDING_LOCALE\", \"en_US\"),",
+        "+}",
+        "+",
+        "+def format_amount(amount):",
+        "+    places = ROUNDING_CONFIG[\"places\"]",
+        "+    mode = ROUNDING_CONFIG[\"mode\"]",
+        "+    q = Decimal(10) ** -places",
+        "+    rounding = ROUND_HALF_UP if mode == \"half_up\" else ROUND_HALF_EVEN",
+        "+    return str(amount.quantize(q, rounding=rounding))"
+      ],
+      "must_include": [
+        "premature configurability: env-driven mode/places/locale for a task that only asked for fixed 2-dp half-up display; hard-code the behavior until a real requirement exists",
+        "the locale config key is read from the environment but never used (dead configuration)"
+      ],
+      "must_exclude": [
+        "flags amount.quantize as a blocking correctness bug without a concrete failing input given amount is already a Decimal"
+      ]
+    }
+  ]
+}
