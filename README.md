@@ -66,8 +66,8 @@ An epic records a combined outcome and its child units; a work record describes 
 
 | Document | Name | Description |
 | --- | --- | --- |
-| `docs/epics/<id>-<slug>.md` | Epic | Problem, overall acceptance, child links and prerequisites, coordination, decisions, integration |
-| `docs/work/<id>-<slug>.md` | Work unit | Rationale, required acceptance, approach, planned checks, candidate, observed evidence, next action |
+| `docs/epics/001-<slug>.md` | Epic | Problem, overall acceptance, child links and prerequisites, coordination, decisions, integration |
+| `docs/work/001-<slug>.md` | Work unit | Rationale, required acceptance, approach, planned checks, candidate, observed evidence, next action |
 | Its current `docs/features/` location | Existing feature plan | Keep a bounded plan as the work record; link child units when the feature spans PRs |
 | Linked from its record | Supporting evidence | Detailed measurements, reports, or captures |
 
