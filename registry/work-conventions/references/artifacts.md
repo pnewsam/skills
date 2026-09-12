@@ -8,12 +8,12 @@ For a new local record, use these defaults unless the project has a convention:
 
 | Artifact | Default | Owns |
 | --- | --- | --- |
-| Initiative / epic | `docs/epics/<id>-<slug>.md` | Overall outcome, unit index, dependency conditions, decisions, integration |
-| Work unit | `docs/work/<id>-<slug>.md` | One reviewable outcome, acceptance, approach, candidate and proof |
+| Initiative / epic | `docs/epics/001-<slug>.md` | Overall outcome, unit index, dependency conditions, decisions, integration |
+| Work unit | `docs/work/001-<slug>.md` | One reviewable outcome, acceptance, approach, candidate and proof |
 | Existing feature plan | Its current `docs/features/` path | Keep as the unit record if bounded; otherwise link its work units |
 | Supporting evidence | A project-appropriate report or artifact linked from its record | Large logs, measurements, diagrams, or captures that would obscure the brief |
 
-Use the next available ID under the project's convention, checking existing and reserved records first. For concurrent creation, let the coordinator allocate IDs or use collision-resistant IDs rather than racing on the next integer. Preserve IDs through title changes. Link each child to its parent and each parent to its children. Do not create a charter, extra feature layer, or report directory solely to satisfy this map.
+Use an existing tracker issue key as the identity when the unit already has one — `ENG-1234-<slug>.md` beats a local index for externally tracked work. Otherwise default to the next available number, zero-padded to three digits, per directory: `docs/epics/002-<slug>.md`, `docs/work/014-<slug>.md`. Check existing and reserved records before claiming the next number; epics and work units number independently. For concurrent creation, let the coordinator allocate numbers rather than racing on the next integer. Preserve IDs through slug or title changes; keep existing records' IDs untouched rather than renumbering. Link each child to its parent and each parent to its children. Do not create a charter, extra feature layer, or report directory solely to satisfy this map.
 
 ## Scale the document
 
