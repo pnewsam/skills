@@ -18,6 +18,12 @@ const ARMS = Object.keys(DELTAS)
 const REPS = CFG.reps || 2
 const DATA = CFG.dataDir
 const SKILLS = CFG.skillsDir
+// Arms that review with no house skill at all: the minimal-agent baseline.
+// Same artifacts, same rules, same output ask — the only variable removed is
+// the skill. The ask is phrased the way any competent reviewer would state it,
+// not in the registry's finding-model vocabulary, so the baseline is neither
+// coached with the skill's content nor handicapped relative to it.
+const BARE = new Set(CFG.bareArms || [])
 
 const MATCH_SCHEMA = {
   type: 'object',
@@ -67,7 +73,28 @@ const MATCH_SCHEMA = {
   required: ['matches'],
 }
 
+const artifactBlock = (id) => `THE CHANGE UNDER REVIEW
+
+Read \`${DATA}/review_inputs.json\` and find the entry whose id is "${id}". It gives the PR title, the intent from its description, and the paths below.
+
+The diff is at \`${DATA}/diffs/${id}.diff\`. A complete snapshot of the repository as it stood at this commit — the code this diff applies to, its tests, its migrations, its callers — is at \`${DATA}/trees/${id}/\`. Read whatever you need from that snapshot: the diff alone will not tell you how the changed code behaves against the schema, its consumers, or the rest of the codebase.
+
+RULES
+
+- Do NOT use \`gh\`, the GitHub API, the network, or any lookup of this pull request, its comments, or its later commits. The snapshot and the diff are all you get.
+- Do NOT read anything under \`${DATA}\` other than \`review_inputs.json\`, this case's diff, and this case's snapshot. Never read \`anchors.json\`, \`cases.json\`, or another case's directory. Those hold the evaluation key.
+- Do NOT read anything under \`${SKILLS}/evals/\`.`
+
+const barePrompt = (id) => `You are reviewing a real pull request, using your own judgment. Do NOT read any skill, guidance, convention, or checklist file — not under \`${SKILLS}/registry/\` or anywhere else.
+
+${artifactBlock(id)}
+
+Review the change and report the problems you find, most serious first, saying what goes wrong and under what conditions. If you find no real problem, say so plainly. Do not invent problems to appear thorough, and do not withhold a real one.
+
+Return only your review.`
+
 const reviewPrompt = (id, arm) => {
+  if (BARE.has(arm)) return barePrompt(id)
   const delta = DELTAS[arm] || ''
   const deltaBlock = delta
     ? `\n\nApply this ADDITIONAL house guidance on top of the skill:\n"""\n${delta}\n"""`
