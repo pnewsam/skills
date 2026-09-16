@@ -34,6 +34,46 @@ class DependencyTests(unittest.TestCase):
             ref.unlink()
             self.assertTrue(any("missing cross-package" in e for e in validate_metadata({"skills": metadata}, registry)))
 
+    def test_relative_markdown_resource_links_resolve_from_document(self):
+        with tempfile.TemporaryDirectory() as folder:
+            registry = Path(folder) / "registry"
+            for name in ("a", "b"):
+                (registry / name).mkdir(parents=True)
+            ref = registry / "b/references/rules.md"
+            ref.parent.mkdir()
+            ref.write_text("Actual rules\n")
+            (registry / "a/SKILL.md").write_text(
+                "Read [the rules](../b/references/rules.md).\n"
+            )
+            (registry / "b/SKILL.md").write_text("# Skill\n")
+            metadata = {
+                name: {
+                    "layer": "reference",
+                    "scope": "shared",
+                    "effects": ["read_local"],
+                    "requires": [],
+                    "optional_skills": [],
+                    "resources": [],
+                }
+                for name in ("a", "b")
+            }
+            metadata["b"]["resources"] = ["references/rules.md"]
+            self.assertTrue(
+                any(
+                    "undeclared linked dependency" in error
+                    for error in validate_metadata({"skills": metadata}, registry)
+                )
+            )
+            metadata["a"]["requires"] = ["b"]
+            self.assertEqual(validate_metadata({"skills": metadata}, registry), [])
+            ref.unlink()
+            self.assertTrue(
+                any(
+                    "missing linked resource" in error
+                    for error in validate_metadata({"skills": metadata}, registry)
+                )
+            )
+
     def test_retired_route_in_supporting_resource(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
