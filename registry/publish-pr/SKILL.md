@@ -33,16 +33,7 @@ Skip duplicate commits. Confirm the commit and destination before push. Read `pu
 
 ### Write the commit and PR text
 
-Read `pr-conventions/SKILL.md` now if you have not already; `pr-conventions/references/pr-standard.md` is the full standard. These are the rules a default PR body gets wrong:
-
-- Use the repository's template. In a monorepo, pick the one nearest the changed files over the root one.
-- Preserve every checkbox and its current state. Delete instructional placeholder prose.
-- Link a tracked issue as a clickable URL. A bare `ENG-1234` links to nothing. Never invent a URL.
-- Write validation as `command — result`, with an explicit `Not run:` line for skipped checks.
-- Describe outcomes and boundaries, not the diff. No per-file walkthroughs.
-- One idea per bullet, one line per bullet. Delete any section with nothing real to say.
-- Include before/after screenshots for UI changes; omit the section for backend-only changes.
-- Title and commit subjects use conventional-commit style: `<type>(<scope>): <imperative summary>`.
+Read `pr-conventions/references/pr-standard.md` before drafting the title, commit subject, or body. It governs the repository template, the fallback body shape, linked-issue links, validation lines, screenshots, and commit format. Do not draft from memory of what a PR body usually looks like.
 
 ## Update existing metadata
 
