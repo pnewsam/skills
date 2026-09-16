@@ -7,8 +7,8 @@ description: House standards for commit messages, PR titles and bodies, and evid
 
 Use the repository's template and conventions when present. These defaults govern content, not authorization or external-system mechanics.
 
-- Read `pr-conventions/references/pr-standard.md` for PR and commit text, factual validation, linked issues, and concise presentation.
-- Read `pr-conventions/references/finding-model.md` for supported findings, severity, confidence, and deduplication.
-- Apply `writing-conventions` to prose.
+- Read the [PR description standard](references/pr-standard.md) for PR and commit text, factual validation, linked issues, and concise presentation.
+- Read the [finding model](references/finding-model.md) for supported findings, severity, confidence, and deduplication.
+- Apply the [writing conventions](../writing-conventions/SKILL.md) to prose.
 
 Do not turn a template into mandatory padding. Preserve material uncertainty, unsupported evidence, and the distinction between local and published results. Use the concrete PR runbook for target resolution, safe mutation, screenshots, and read-back verification.

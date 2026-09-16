@@ -87,7 +87,7 @@ These habits carry most of the concision:
 - **Describe outcomes and boundaries, not the diff.** The files are in the diff; the body says what the change accomplishes and where its edges are. Do not walk through each function, component, or file you touched.
 - **One idea per bullet, one statement per idea.** A bullet is a single line. If it runs to two or three sentences, it is narrating the mechanism — cut it back to the outcome. State each thing once; do not restate the before/after in both the summary and the screenshots.
 
-For sentence-level style — one idea per sentence, active voice, plain words, no clause-chaining — follow the shared `writing-conventions/references/prose.md`. The two habits above are its PR-body-specific application.
+For sentence-level style — one idea per sentence, active voice, plain words, no clause-chaining — follow the shared [prose conventions](../../writing-conventions/references/prose.md). The two habits above are its PR-body-specific application.
 
 A bullet, tightened:
 

@@ -100,6 +100,21 @@ def validate_metadata(catalog: dict, registry: Path) -> list[str]:
                     errors.append(f"{name}: undeclared resource dependency {target}/{relative}")
                 if not (registry / target / relative).is_file():
                     errors.append(f"{name}: missing cross-package resource {target}/{relative}")
+            for linked in re.findall(r"\[[^\]]+\]\(([^)\s]+)\)", content):
+                relative = linked.split("#", 1)[0]
+                if not relative.startswith(("references/", "scripts/", "assets/", "./", "../")):
+                    continue
+                resolved = (doc.parent / relative).resolve()
+                try:
+                    package_relative = resolved.relative_to(registry.resolve())
+                except ValueError:
+                    errors.append(f"{name}: linked resource escapes registry: {linked}")
+                    continue
+                target = package_relative.parts[0]
+                if target not in closure:
+                    errors.append(f"{name}: undeclared linked dependency {linked}")
+                if not resolved.is_file():
+                    errors.append(f"{name}: missing linked resource {linked}")
             for token in re.findall(r"`([a-z][a-z0-9-]*)`", content):
                 if token in retired:
                     errors.append(f"{name}: route to retired skill {token}")

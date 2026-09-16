@@ -1,10 +1,10 @@
 # GitHub delivery actions
 
-Use `publish-pr/references/github-mechanics.md` to resolve one authenticated access path and the exact repository, PR, base/head, and current state. Obtain thread-aware data before replying to or resolving review threads.
+Use [GitHub interaction mechanics](../../publish-pr/references/github-mechanics.md) to resolve one authenticated access path and the exact repository, PR, base/head, and current state. Obtain thread-aware data before replying to or resolving review threads.
 
 ## Review and feedback
 
-Post only the review, comment, reply, or resolutions explicitly requested. Use `pr-conventions/references/finding-model.md` for findings. Confirm that the evidence still applies to the current head. Reply with the verified disposition; resolve only the selected threads whose resolution is supported. Local fixes do not establish that the remote head contains them. Do not post internal review rounds automatically.
+Post only the review, comment, reply, or resolutions explicitly requested. Use the [finding model](../../pr-conventions/references/finding-model.md) for findings. Confirm that the evidence still applies to the current head. Reply with the verified disposition; resolve only the selected threads whose resolution is supported. Local fixes do not establish that the remote head contains them. Do not post internal review rounds automatically.
 
 ## Merge
 
