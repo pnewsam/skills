@@ -5,7 +5,7 @@ description: Prepare a local change for a commit, push, or new GitHub PR, or upd
 
 # Publish PR
 
-Apply `work-conventions` and `pr-conventions`. Own Git/GitHub mechanics and PR metadata, not a separate validation policy. Use `references/github-mechanics.md` for authenticated access, target resolution, and verified writes.
+Apply `work-conventions`. Before drafting any commit message, PR title, or PR body, read `pr-conventions/SKILL.md` and follow it. Own Git/GitHub mechanics and PR metadata, not a separate validation policy. Use `publish-pr/references/github-mechanics.md` for authenticated access, target resolution, and verified writes.
 
 ## Resolve state and endpoint
 
@@ -29,7 +29,20 @@ Preserve unrelated changes and index state. Isolate intended work when necessary
 
 Check validation evidence against the actual candidate and required repository checks; reuse current proof. Run missing required checks within scope. Do not knowingly commit failing work except for explicitly requested preservation. Preview does not run checks that write project reports or caches.
 
-Write factual commit/PR text using the repository template and `pr-conventions`. Skip duplicate commits. Confirm the commit and destination before push. Read `references/visual-evidence.md` when visual evidence helps review; do not claim attachment from a local file or placeholder.
+Skip duplicate commits. Confirm the commit and destination before push. Read `publish-pr/references/visual-evidence.md` when visual evidence helps review; do not claim attachment from a local file or placeholder.
+
+### Write the commit and PR text
+
+Read `pr-conventions/SKILL.md` now if you have not already; `pr-conventions/references/pr-standard.md` is the full standard. These are the rules a default PR body gets wrong:
+
+- Use the repository's template. In a monorepo, pick the one nearest the changed files over the root one.
+- Preserve every checkbox and its current state. Delete instructional placeholder prose.
+- Link a tracked issue as a clickable URL. A bare `ENG-1234` links to nothing. Never invent a URL.
+- Write validation as `command — result`, with an explicit `Not run:` line for skipped checks.
+- Describe outcomes and boundaries, not the diff. No per-file walkthroughs.
+- One idea per bullet, one line per bullet. Delete any section with nothing real to say.
+- Include before/after screenshots for UI changes; omit the section for backend-only changes.
+- Title and commit subjects use conventional-commit style: `<type>(<scope>): <imperative summary>`.
 
 ## Update existing metadata
 
@@ -38,10 +51,10 @@ Read the current title, full body, template, head SHA, commits, and diff before 
 - **Sync:** correct facts and omissions only from the actual candidate and observed validation. Revise an inaccurate title. Leave an already accurate body alone.
 - **Polish:** improve prose while preserving every fact, number, link, identifier, command, result, and checklist state. If facts need correcting, identify that as a sync instead of hiding it inside polish.
 
-Preview returns proposed text. An explicit request to update/apply authorizes editing the title/body only. Refresh the head and editable fields immediately before applying; reconcile concurrent changes rather than overwriting them. Preserve template structure and human content. Use `references/update_output_templates.md` when helpful.
+Preview returns proposed text. An explicit request to update/apply authorizes editing the title/body only. Refresh the head and editable fields immediately before applying; reconcile concurrent changes rather than overwriting them. Preserve template structure and human content. Use `publish-pr/references/update_output_templates.md` when helpful.
 
 ## Publish and verify
 
-Refresh repository/head/base and matching PR state at the boundary. Prefer structured text fields or a temporary UTF-8 body file with `--body-file`. Verify the remote head after push and URL, title/body, head/base, and draft state after creation or update. Use `references/pr_output_templates.md` if an output template helps.
+Refresh repository/head/base and matching PR state at the boundary. Prefer structured text fields or a temporary UTF-8 body file with `--body-file`. Verify the remote head after push and URL, title/body, head/base, and draft state after creation or update. Use `publish-pr/references/pr_output_templates.md` if an output template helps.
 
 After an ambiguous write, inspect actual state before retrying. A permission rejection is not a reason to switch access paths. Return only the boundary reached and remaining conditions; conflicts, pending CI, or unavailable checks do not support a merge-ready claim.

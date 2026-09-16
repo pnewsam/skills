@@ -20,7 +20,9 @@ Separate unrelated work and confirm the destination, branch/base, and existing r
 - Requested rebase onto the integration base: `rebase-pr`.
 - One Linear issue or project: `create-issue` or `create-project`.
 - Local preservation of unfinished work: `preserve-work` when that is the request.
-- Posted review, feedback replies, thread resolution, or merge: `references/github-delivery.md`.
+- Posted review, feedback replies, thread resolution, or merge: `deliver-work/references/github-delivery.md`.
+
+Whichever runbook writes it, every commit message, PR title, PR body, and posted finding follows `pr-conventions`.
 
 Runbooks can also be called directly; this operation is not a required wrapper. Use the concrete endpoint's smallest protocol. Do not route back from a runbook into delivery and create a cycle.
 
