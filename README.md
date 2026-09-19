@@ -1,6 +1,6 @@
 # Skills
 
-A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Eighteen general skills — six operations, three orchestration skills, six runbooks, and three references — plus two optional organization packages.
+A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Nineteen general skills — six operations, three orchestration skills, seven runbooks, and three references — plus two optional organization packages.
 
 The base model supplies general reasoning and technique; skills earn their place through house contracts, corrective objectives, fragile mechanics, or useful verification. The agent owns the task: operations are capabilities, not mandatory steps or approval gates. Existing issues and feature plans are valid work records, and an initiative coordinates several units.
 
@@ -52,6 +52,7 @@ flowchart LR
 | [create-issue](registry/create-issue/SKILL.md) | Runbook | Create one verified Linear issue |
 | [create-project](registry/create-project/SKILL.md) | Runbook | Create one verified Linear project |
 | [fan-out](registry/fan-out/SKILL.md) | Runbook | Run parallel subagents on one unit and reconcile the results |
+| [handoff](registry/handoff/SKILL.md) | Runbook | Summarize the conversation so a fresh agent can resume |
 | [work-conventions](registry/work-conventions/SKILL.md) | Reference | Scope, continuation, records, and evidence |
 | [pr-conventions](registry/pr-conventions/SKILL.md) | Reference | PR content and review findings |
 | [writing-conventions](registry/writing-conventions/SKILL.md) | Reference | Shared prose preferences |
@@ -81,8 +82,8 @@ Use the [epic template](registry/plan-epic/references/epic-record.md), [work tem
 | --- | --- |
 | `core` | Six work operations with their required contracts and PR mechanics. |
 | `orchestration` | Shape, plan, and deliver initiatives across work units. |
-| `runbooks` | GitHub, Linear, work-preservation, and fan-out procedures. |
-| `general` | The eighteen general skills: operations, orchestration, runbooks, and references. |
+| `runbooks` | GitHub, Linear, handoff, work-preservation, and fan-out procedures. |
+| `general` | The nineteen general skills: operations, orchestration, runbooks, and references. |
 | `linear-ops` | Create one verified Linear issue or project. |
 | `mindsdb` | Optional organization-specific inventory and migration tools. |
 

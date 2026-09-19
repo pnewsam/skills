@@ -265,6 +265,16 @@
       ],
       "resources": []
     },
+    "handoff": {
+      "layer": "runbook",
+      "scope": "shared",
+      "effects": [
+        "read_local"
+      ],
+      "requires": [],
+      "optional_skills": [],
+      "resources": []
+    },
     "fan-out": {
       "layer": "runbook",
       "scope": "shared",
@@ -425,13 +435,14 @@
       ]
     },
     "runbooks": {
-      "description": "GitHub, Linear, and recoverable work-preservation procedures.",
+      "description": "GitHub, Linear, handoff, and recoverable work-preservation procedures.",
       "skills": [
         "publish-pr",
         "rebase-pr",
         "create-issue",
         "create-project",
         "preserve-work",
+        "handoff",
         "fan-out"
       ]
     },
@@ -445,7 +456,8 @@
       "skills": [
         "work-conventions",
         "pr-conventions",
-        "writing-conventions"
+        "writing-conventions",
+        "handoff"
       ]
     },
     "linear-ops": {

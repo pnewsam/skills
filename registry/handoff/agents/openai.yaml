@@ -1,0 +1,4 @@
+interface:
+  display_name: "Handoff"
+  short_description: "Summarize the conversation for a fresh agent to resume"
+  default_prompt: "Use $handoff to summarize the conversation so another agent can continue without the full history."
