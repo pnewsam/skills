@@ -70,9 +70,9 @@ When the change relates to a tracker issue, the body must carry a clickable link
 
 Take the identifier from the branch name, commits, existing body, or the user. Resolve its canonical URL — prefer a URL the user gave or one an available tracker integration returns (for Linear, the Linear tools). Never invent a URL; if none resolves, keep the identifier and ask for the workspace or URL.
 
-## Diagrams (optional)
+## Diagrams
 
-Add a small Mermaid diagram only when it conveys the shape of the change faster than prose — a new flow, a state change, a reworked boundary, a data-model relationship. Most PRs need none.
+Ask this of every PR, while writing the body rather than by carrying over a previous body's shape: **does the change reverse, reroute, or re-scope a flow?** A direction of data or control changed, a boundary moved, a lifecycle gained or lost a state, a relationship between records changed. If so, a small Mermaid diagram states it faster than prose can. If not, skip it; most PRs do.
 
 - Keep it to ~5–12 nodes and diagram only what the diff supports.
 - Pick the format for the intent: `sequenceDiagram` for flow, `flowchart` (the safe default) for boundaries/control flow, `stateDiagram-v2` for lifecycle, `erDiagram` for data models.
