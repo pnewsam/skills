@@ -9,6 +9,8 @@ export const meta = {
 // args = the parsed review_ab_pilot_cases.json, optionally with { reps }.
 // Pass it in the Workflow call: args = <contents of evals/review_ab_pilot_cases.json> (add "reps": 3 if desired).
 const CFG = typeof args === 'string' ? JSON.parse(args) : args
+// Pin effort so runs compare across models: defaults differ (Opus 5.5 medium, Opus 5 high).
+const EFFORT = CFG.effort || 'medium'
 const CASES = CFG.cases
 const DELTAS = CFG.arm_deltas
 const ARMS = Object.keys(DELTAS)          // e.g. ['control','exclusion','design']
@@ -92,14 +94,14 @@ const runUnit = async (item) => {
   for (let attempt = 0; attempt < 5; attempt++) {
     const a = await agent(answerPrompt(c, item.arm), {
       label: `rev:${item.arm}:${item.id}#${item.rep}${attempt ? `r${attempt}` : ''}`,
-      phase: 'Review + score',
+      phase: 'Review + score', effort: EFFORT,
     })
     if (a && !isDegenerate(a)) { review = a; break }
   }
   if (!review) return { ...item, score: null, dead: 'degenerate-review' }
   const s = await agent(scorePrompt(c, review), {
     label: `score:${item.arm}:${item.id}#${item.rep}`,
-    phase: 'Review + score',
+    phase: 'Review + score', effort: EFFORT,
     schema: SCORE_SCHEMA,
   })
   if (!s) return { ...item, score: null, dead: 'no-score' }
@@ -160,6 +162,7 @@ const tsv = rows.filter((r) => r.score != null)
   .join('\n')
 
 return {
+  effort: EFFORT,
   overall,
   byTarget,
   perCase,
