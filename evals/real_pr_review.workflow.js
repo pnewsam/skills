@@ -6,12 +6,14 @@ export const meta = {
   ],
 }
 
-// args = { caseIds, dataDir, skillsDir, reps?, arm_deltas? }
+// args = { caseIds, dataDir, skillsDir, reps?, arm_deltas?, effort? }
 // Case data lives OUTSIDE this repo (the subject repos are not public) and is
 // never passed through args: reviewers read `<dataDir>/review_inputs.json` for
 // their own case, the judge reads `<dataDir>/anchors.json`, and this script
 // carries no case content at all.
 const CFG = typeof args === 'string' ? JSON.parse(args) : args
+// Pin effort so runs compare across models: defaults differ (Opus 5.5 medium, Opus 5 high).
+const EFFORT = CFG.effort || 'medium'
 const CASE_IDS = CFG.caseIds
 const DELTAS = CFG.arm_deltas || { control: '' }
 const ARMS = Object.keys(DELTAS)
@@ -145,7 +147,7 @@ const runUnit = async (item) => {
   for (let attempt = 0; attempt < 4; attempt++) {
     const a = await agent(reviewPrompt(item.id, item.arm), {
       label: `rev:${item.arm}:${item.id}#${item.rep}${attempt ? `r${attempt}` : ''}`,
-      phase: 'Review + match',
+      phase: 'Review + match', effort: EFFORT,
     })
     if (a && !isDegenerate(a)) { review = a; break }
   }
@@ -153,7 +155,7 @@ const runUnit = async (item) => {
 
   const m = await agent(matchPrompt(item.id, review), {
     label: `match:${item.arm}:${item.id}#${item.rep}`,
-    phase: 'Review + match',
+    phase: 'Review + match', effort: EFFORT,
     schema: MATCH_SCHEMA,
   })
   if (!m || !m.matches) return { ...item, dead: 'no-match' }
@@ -242,6 +244,7 @@ const anticipatedIds = {}
 for (const r of scored) for (const id of (r.anticipatedIds || [])) anticipatedIds[id] = (anticipatedIds[id] || 0) + 1
 
 return {
+  effort: EFFORT,
   overall,
   perCase,
   anticipatedIds,

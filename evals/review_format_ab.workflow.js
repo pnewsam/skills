@@ -8,6 +8,8 @@ export const meta = {
 
 // args = the parsed review_format_ab_cases.json, optionally with { reps }.
 const CFG = typeof args === 'string' ? JSON.parse(args) : args
+// Pin effort so runs compare across models: defaults differ (Opus 5.5 medium, Opus 5 high).
+const EFFORT = CFG.effort || 'medium'
 const CASES = CFG.cases
 const DELTAS = CFG.arm_deltas
 const ARMS = Object.keys(DELTAS)
@@ -80,14 +82,14 @@ const runUnit = async (item) => {
   for (let attempt = 0; attempt < 5; attempt++) {
     const a = await agent(answerPrompt(c, item.arm), {
       label: `rev:${item.arm}:${item.id}#${item.rep}${attempt ? `r${attempt}` : ''}`,
-      phase: 'Review + score',
+      phase: 'Review + score', effort: EFFORT,
     })
     if (a && !isDegenerate(a)) { review = a; break }
   }
   if (!review) return { ...item, conform: null, dead: 'degenerate-review' }
   const s = await agent(scorePrompt(review), {
     label: `score:${item.arm}:${item.id}#${item.rep}`,
-    phase: 'Review + score',
+    phase: 'Review + score', effort: EFFORT,
     schema: CONFORM_SCHEMA,
   })
   if (!s) return { ...item, conform: null, dead: 'no-score' }
@@ -144,6 +146,7 @@ const tsv = rows.filter((r) => r.conform != null)
   .join('\n')
 
 return {
+  effort: EFFORT,
   overall,
   perCase,
   gate: CFG.gate,

@@ -9,6 +9,8 @@ export const meta = {
 
 // args = { casesFile, promptsFile, substituteNote, reps?, cases: [{id, skill, kind}] }
 const CFG = typeof args === 'string' ? JSON.parse(args) : args
+// Pin effort so runs compare across models: defaults differ (Opus 5.5 medium, Opus 5 high).
+const EFFORT = CFG.effort || 'medium'
 const CASES = CFG.cases
 const REPS = CFG.reps || 3
 const CASESFILE = CFG.casesFile
@@ -65,14 +67,14 @@ const runUnit = (phaseName) => async (item) => {
   for (let attempt = 0; attempt < 5; attempt++) {
     const a = await agent(answerPrompt(item.id, item.skill, item.arm), {
       label: `ans:${item.arm}:${item.id}#${item.rep}${attempt ? `r${attempt}` : ''}`,
-      phase: phaseName,
+      phase: phaseName, effort: EFFORT,
     })
     if (a && !isDegenerate(a)) { answer = a; break }
   }
   if (!answer) return { ...item, score: null, avoid: null, dead: 'degenerate-answer' }
   const s = await agent(scorePrompt(item.id, answer), {
     label: `score:${item.arm}:${item.id}#${item.rep}`,
-    phase: phaseName,
+    phase: phaseName, effort: EFFORT,
     schema: SCORE_SCHEMA,
   })
   if (!s) return { ...item, score: null, avoid: null, dead: 'no-score' }
@@ -114,6 +116,7 @@ const overallA = mean(abRows.filter((r) => r.arm === 'A' && r.score != null).map
 const overallB = mean(abRows.filter((r) => r.arm === 'B' && r.score != null).map((r) => r.score))
 
 return {
+  effort: EFFORT,
   overall: { meanA: overallA, meanB: overallB, gap: overallA - overallB },
   perCase,
   cCases: cCases.map((c) => c.id),

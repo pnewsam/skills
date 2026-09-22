@@ -11,7 +11,7 @@ Apply `work-conventions`. This optional project runbook preserves the specific m
 
 Read `references/mapping.md` for token mappings, preflight-disabled border behavior, specificity, and font-family utility pitfalls. Recheck those assumptions against the current checkout. Run `scripts/inventory.mjs` on the selected surface to separate exact token mappings, possible snapping, and values that must remain arbitrary or dynamic. Remeasure current counts instead of repeating historical progress totals.
 
-Keep one independently reviewable surface outcome. Confirm component forwarding before moving a style prop to className. Preserve unrelated work. An ordinary conversion request authorizes code and verification; it does not automatically create a tracker issue, commit each pass, push, or open a PR.
+Keep one independently reviewable surface outcome. Confirm component forwarding before moving a style prop to className. An ordinary conversion request authorizes code and verification; it does not automatically create a tracker issue, commit each pass, push, or open a PR.
 
 ## Migrate and prove
 
