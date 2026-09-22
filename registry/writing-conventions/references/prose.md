@@ -6,8 +6,6 @@ Sentence-level style for the concise, human-facing technical writing these skill
 
 - **One idea per sentence — do not chain clauses.** A sentence that joins two or three points with em-dashes or semicolons is doing too many jobs. Split it into short declarative sentences.
 - **Active voice, plain words.** "The guard prevents overlap," not "overlap is prevented by the guard." Prefer the plain word over the formal one, but keep genuine technical terms — this is short, direct writing, not a restricted vocabulary that would fight the content.
-- **Length tracks substance, not effort.** Say a thing once, in as few sentences as it needs. Do not pad to look thorough, and do not restate the same point in two places.
-- **Cut hedging and meta-commentary.** Drop "it's worth noting," "as mentioned above," "in order to," and any preamble about the writing itself. State the thing.
 
 A passage, tightened:
 
