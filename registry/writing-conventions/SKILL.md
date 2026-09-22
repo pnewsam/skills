@@ -1,6 +1,6 @@
 ---
 name: writing-conventions
-description: Shared prose conventions for the concise, human-facing technical writing these skills produce — PR titles, bodies, and reviews; Linear issues and projects; planning and charter documents; commit messages. Sentence-level style only — one idea per sentence, active voice, plain words, no hedging — not artifact structure. Use when writing or editing any of those artifacts, or when asked what the writing-style standard is. Referenced by pr-conventions, review-work, create-issue, and create-project.
+description: Shared prose conventions for the concise, human-facing technical writing these skills produce — PR titles, bodies, and reviews; Linear issues and projects; planning and charter documents; commit messages. Sentence-level style only — one idea per sentence, active voice, plain words — not artifact structure. Use when writing or editing any of those artifacts, or when asked what the writing-style standard is. Referenced by pr-conventions, review-work, create-issue, and create-project.
 ---
 
 # Writing conventions
