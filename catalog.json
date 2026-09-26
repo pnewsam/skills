@@ -447,7 +447,7 @@
       ]
     },
     "general": {
-      "description": "Seventeen general skills across operations, orchestration, runbooks, and references.",
+      "description": "Nineteen general skills across operations, orchestration, runbooks, and references.",
       "includes": [
         "core",
         "orchestration",
