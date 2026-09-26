@@ -139,6 +139,11 @@ def frontmatter(text: str) -> tuple[dict[str, str], list[str]]:
             errors.append(f"unsupported frontmatter line: {line!r}")
             continue
         key, value = match.groups()
+        if not value.startswith(("\"", "'")) and re.search(r":\s", value):
+            errors.append(
+                f"frontmatter {key} contains an unquoted ': ' which YAML parsers "
+                "(pi's frontmatter loader) reject; quote the value or rephrase"
+            )
         values[key] = value.strip().strip("\"'")
     return values, errors
 
