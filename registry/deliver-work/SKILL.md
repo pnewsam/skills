@@ -1,6 +1,6 @@
 ---
 name: deliver-work
-description: Bring a work candidate to its requested endpoint: local commit, branch publication, PR creation or update, authorized review response, merge, or another explicit delivery action. Reuses current validation and review evidence, invokes concrete runbooks, verifies external state, and reports any unmet boundary.
+description: "Bring a work candidate to its requested endpoint: local commit, branch publication, PR creation or update, authorized review response, merge, or another explicit delivery action. Reuses current validation and review evidence, invokes concrete runbooks, verifies external state, and reports any unmet boundary."
 ---
 
 # Deliver work

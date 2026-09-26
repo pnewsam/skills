@@ -27,7 +27,7 @@ Retire redundant entry points rather than maintaining permanent aliases. Preserv
 
 ## Package contract
 
-Each active package has `SKILL.md` with name and description frontmatter, matching its directory. The description explains the actual trigger and material boundaries. Include matching `agents/openai.yaml` client metadata without changing existing invocation policy unnecessarily. Automatic discovery stays enabled unless the user asks otherwise.
+Each active package has `SKILL.md` with name and description frontmatter, matching its directory. The description explains the actual trigger and material boundaries. The frontmatter must parse as strict YAML (pi loads it with a real YAML parser): keep `name` and `description` on one line each, and quote the value or rephrase when it contains `: `, as in "to its endpoint: local commit". Include matching `agents/openai.yaml` client metadata without changing existing invocation policy unnecessarily. Automatic discovery stays enabled unless the user asks otherwise.
 
 Use `references/`, `scripts/`, and `assets/` only for actual conditional detail, reusable executable mechanics, or output assets. Link every resource from the entry point at the point it is relevant. Longer references need a short contents section. Resolve helper paths from the installed package, not the user's working directory. Avoid generic command catalogs, redundant safety recitations, and mandatory template padding.
 

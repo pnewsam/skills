@@ -1,7 +1,23 @@
 import tempfile
 import unittest
 from pathlib import Path
-from validate_registry import dependency_closure, validate_metadata
+from validate_registry import dependency_closure, frontmatter, validate_metadata
+
+
+class FrontmatterTests(unittest.TestCase):
+    def test_rejects_unquoted_colon_space_that_breaks_yaml(self):
+        values, errors = frontmatter(
+            "---\nname: demo\ndescription: endpoint: local commit\n---\n"
+        )
+        self.assertEqual(values["description"], "endpoint: local commit")
+        self.assertTrue(any("unquoted ': '" in error for error in errors))
+
+    def test_accepts_quoted_colon_space(self):
+        values, errors = frontmatter(
+            '---\nname: demo\ndescription: "endpoint: local commit"\n---\n'
+        )
+        self.assertEqual(values["description"], "endpoint: local commit")
+        self.assertEqual(errors, [])
 
 
 class DependencyTests(unittest.TestCase):
