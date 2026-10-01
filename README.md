@@ -1,6 +1,6 @@
 # Skills
 
-A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Nineteen general skills — six operations, three orchestration skills, seven runbooks, and three references — plus two optional organization packages.
+A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Nineteen general skills — six operations, three orchestration skills, seven runbooks, and three references — plus three optional organization packages.
 
 The base model supplies general reasoning and technique; skills earn their place through house contracts, corrective objectives, fragile mechanics, or useful verification. The agent owns the task: operations are capabilities, not mandatory steps or approval gates. Existing issues and feature plans are valid work records, and an initiative coordinates several units.
 
@@ -56,6 +56,7 @@ flowchart LR
 | [work-conventions](registry/work-conventions/SKILL.md) | Reference | Scope, continuation, records, and evidence |
 | [pr-conventions](registry/pr-conventions/SKILL.md) | Reference | PR content and review findings |
 | [writing-conventions](registry/writing-conventions/SKILL.md) | Reference | Shared prose preferences |
+| [mindsdb-align-code-mode-ui](registry/mindsdb-align-code-mode-ui/SKILL.md) | Organization | Align one Cowork Code Mode UI element with app patterns and coding-agent prior art |
 | [mindsdb-migrate-surface-to-tailwind](registry/mindsdb-migrate-surface-to-tailwind/SKILL.md) | Organization | Migrate a MindsDB Cowork UI surface to Tailwind and exact design tokens, preserving behavior |
 | [mindsdb-track-design-system-metrics](registry/mindsdb-track-design-system-metrics/SKILL.md) | Organization | Measure reproducible MindsDB UI convergence signals and compare snapshots |
 

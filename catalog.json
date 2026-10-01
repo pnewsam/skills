@@ -105,6 +105,25 @@
         "references/security.md"
       ]
     },
+    "mindsdb-align-code-mode-ui": {
+      "layer": "runbook",
+      "scope": "project",
+      "effects": [
+        "read_local",
+        "network_read",
+        "write_files",
+        "run_tests"
+      ],
+      "requires": [],
+      "optional_skills": [
+        "publish-pr"
+      ],
+      "resources": [
+        "references/capture.md",
+        "references/prior-art.md"
+      ],
+      "optional_package": true
+    },
     "mindsdb-migrate-surface-to-tailwind": {
       "layer": "runbook",
       "scope": "project",
@@ -470,6 +489,7 @@
     "mindsdb": {
       "description": "Optional organization-specific inventory and migration tools.",
       "skills": [
+        "mindsdb-align-code-mode-ui",
         "mindsdb-migrate-surface-to-tailwind",
         "mindsdb-track-design-system-metrics"
       ]

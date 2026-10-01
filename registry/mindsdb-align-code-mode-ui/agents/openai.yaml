@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mindsdb Align Code Mode UI"
+  short_description: "Align one Code Mode UI element with app patterns and prior art"
+  default_prompt: "Use $mindsdb-align-code-mode-ui for the requested task, preserving scope and evidence."
