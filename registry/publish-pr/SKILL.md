@@ -19,13 +19,13 @@ Choose the action from the user's request and current state:
 - **Open PR:** publish plus create or reuse the matching PR; default to draft unless requested otherwise.
 - **Update metadata:** preview or apply a factual sync or prose-only polish to an existing PR.
 
-An existing PR changes creation into reuse; it does not turn an authorized code commit/push into a metadata-only action. Carry prior authorization; do not ask again for an already requested endpoint. Metadata-only requests never authorize code or Git mutations. Do not assign people, request reviews, add labels, merge, or deploy by default.
+An existing PR changes creation into reuse; it does not turn an authorized code commit/push into a metadata-only action. Metadata-only requests never authorize code or Git mutations. Do not assign people, request reviews, add labels, merge, or deploy by default.
 
 ## Prepare a code candidate
 
 Read repository instructions, branch, status, committed diff against the verified base, staged/unstaged changes, and intended untracked files. Fetch current base state when preparing publication, compare divergence, and identify overlap before claiming integration readiness. A feature-branch upstream is not the PR base.
 
-Preserve unrelated changes and index state. Isolate intended work when necessary. Do not commit on a protected base branch; follow the user's/repository's branch convention. Stage explicit related paths or hunks and inspect the staged diff. Exclude credentials, dependency directories, and incidental build artifacts. Do not rewrite history or broadly clean the checkout for convenience. Use `rebase-pr` only when rebase is requested.
+Do not commit on a protected base branch; follow the user's/repository's branch convention. Stage explicit related paths or hunks and inspect the staged diff. Exclude credentials, dependency directories, and incidental build artifacts. Do not rewrite history or broadly clean the checkout for convenience. Use `rebase-pr` only when rebase is requested.
 
 Check validation evidence against the actual candidate and required repository checks; reuse current proof. Run missing required checks within scope. Do not knowingly commit failing work except for explicitly requested preservation. Preview does not run checks that write project reports or caches.
 
@@ -48,4 +48,4 @@ Preview returns proposed text. An explicit request to update/apply authorizes ed
 
 Refresh repository/head/base and matching PR state at the boundary. Prefer structured text fields or a temporary UTF-8 body file with `--body-file`. Verify the remote head after push and URL, title/body, head/base, and draft state after creation or update. Use the [PR output templates](references/pr_output_templates.md) if an output template helps.
 
-After an ambiguous write, inspect actual state before retrying. A permission rejection is not a reason to switch access paths. Return only the boundary reached and remaining conditions; conflicts, pending CI, or unavailable checks do not support a merge-ready claim.
+Return only the boundary reached and remaining conditions; conflicts, pending CI, or unavailable checks do not support a merge-ready claim.

@@ -21,7 +21,7 @@ Read `references/retained-objectives.md` for TypeScript safety or large collecti
 
 Map each required criterion and invariant to its strongest practical evidence. Rerun a plan-named analyzer using the recorded baseline method and guardrails when it is the acceptance measure. Inspect actual repository commands and required CI checks; do not invent commands or install tools simply to fill a report. Run focused checks first, then relevant regression or integration boundaries. A passing smoke test cannot substitute for missing required acceptance proof.
 
-Reuse prior evidence only when its candidate and relevant assumptions remain valid. Changes to configuration, dependencies, base, runtime, or requirements can invalidate results even when source files did not change. Record why a broader repeat is necessary. Runtime or browser startup is appropriate when needed and authorized; use the documented environment rather than requiring the user to start it automatically.
+Record why a broader repeat is necessary. Runtime or browser startup is appropriate when needed and authorized; use the documented environment rather than requiring the user to start it automatically.
 
 Distinguish a reproduced baseline failure, an introduced regression, a flaky result, and unavailable evidence. A rerun that happens to pass does not erase a flake. Do not edit implementation or tests, weaken thresholds, or convert an unavailable check into a pass.
 

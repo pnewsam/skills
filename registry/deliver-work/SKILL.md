@@ -30,6 +30,6 @@ For a different external system, use its available connector or project runbook 
 
 ## Verify completion
 
-Read back the actual result. Record the commit/PR/artifact identity, endpoint reached, remaining CI or review conditions, and next action. After an ambiguous write, inspect state before retrying. Pending CI supports a conditional result, not a merged or verified claim.
+Record the actual commit/PR/artifact identity, endpoint reached, remaining CI or review conditions, and next action. Pending CI supports a conditional result, not a merged or verified claim.
 
-Record published and merged separately. Update external work records only when requested. If delivery changes the candidate, refresh affected evidence before claiming that the delivered candidate is the reviewed and validated one.
+Update external work records only when requested. If delivery changes the candidate, refresh affected evidence before claiming that the delivered candidate is the reviewed and validated one.
