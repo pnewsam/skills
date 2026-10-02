@@ -11,17 +11,9 @@ How to evaluate and classify a review finding. Apply this wherever a review prod
 
 ## Verify before reporting
 
-Treat every candidate finding as a hypothesis, not a conclusion. Before it earns a place in the review, try to disprove it.
+Treat every candidate finding as a hypothesis. Keep it only if you can name the concrete input, state, or execution path that triggers it and no other mechanism already prevents it. Read the smallest additional context that settles the question. Check whether the issue is pre-existing or intentional; use `git blame` when intent is genuinely ambiguous.
 
-For each candidate:
-
-1. Try to prove the changed code is actually correct.
-2. Read the smallest additional context that resolves the question — callers, implementations, tests, schemas, configuration, or repository guidance.
-3. Name the concrete input, state, or execution path that triggers the problem.
-4. Check whether another mechanism already prevents the failure.
-5. Check whether the issue is pre-existing or intentionally changed by the PR. Use `git blame` or history when the intent is genuinely ambiguous.
-
-Then classify the candidate:
+Classify the candidate:
 
 - **Confirmed** — a concrete failure mode supported by the evidence. Only Confirmed candidates are defect findings.
 - **Uncertain** — a material concern remains, but the available evidence cannot establish a defect. Report it as a precise question or an evidence limitation. It never drives a change request on its own.
