@@ -23,3 +23,9 @@ The user's screenshots of these products outrank anything you infer about them.
 | vercel/ai-elements | shadcn-based AI SDK components: conversation, prompt input, tool, reasoning, plan, task, terminal, file tree, confirmation, checkpoint. Docs at elements.ai-sdk.dev. `vercel/chatbot` shows them composed in an app | `packages/elements/src/` |
 | assistant-ui/assistant-ui | Headless thread, composer, message, and action-bar primitives, plus styled components such as approval cards, code diffs, agent plans, and tool rows. Docs at assistant-ui.com | `packages/react/src/primitives/` (headless), `packages/ui/src/components/react/assistant-ui/elements/` (styled) |
 | zed-industries/zed (Rust/GPUI) | Native agent panel and diff UX; borrow the patterns, not the code | `crates/agent_ui/src/` |
+
+## Secondary references
+
+Use these for visual polish once the primary and open-source references settle the structure. Never let them override the in-app pattern or that consensus.
+
+- **Beautiful UI (beautifului.dev):** a gallery of copy-paste components for agent interfaces, built by the Turbo design studio. It covers loading and thinking states, streaming text, approval cards, tool chips, task rows, the prompt bar, diff tables, and code blocks. No source repo is linked, so cite the page and its rendered components.
