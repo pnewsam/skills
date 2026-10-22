@@ -38,7 +38,7 @@ Reply in the thread on each addressed item, after the push, so the SHA you cite 
 gh api repos/<owner>/<repo>/pulls/<n>/comments/<databaseId>/replies -f body='Fixed in abc1234. …'
 ```
 
-Answer points from a review body in a single PR comment. Then run a `publish-pr` factual sync of the description. Fixes often make its behavior notes, validation lines, or screenshots stale. Leave an accurate body alone. Do not append a changelog of review rounds. When the fix changes rendered UI, recapture its screenshots with `mindsdb-capture-pr-screenshots` in MindsDB Cowork, or flag them as stale.
+Answer points from a review body in a single PR comment. Then run a `publish-pr` factual sync of the description. Fixes often make its behavior notes, validation lines, or screenshots stale. Leave an accurate body alone. Do not append a changelog of review rounds. When the fix changes rendered UI, recapture its screenshots with `capture-pr-screenshots`, or flag them as stale.
 
 ## Return
 

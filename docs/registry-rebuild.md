@@ -66,7 +66,7 @@ A transcript audit of 2026-09-28 to 2026-10-22 (about 200 sessions) drove these 
 | Change | Reason |
 | --- | --- |
 | Restore `address-pr-review` as one runbook | 57 "address the review" requests across 39 sessions; the review-work / execute-work / deliver-work split fired a skill in 1 of them. Reuses deliver-work thread discipline and publish-pr factual sync; drops the old per-step approval gates. |
-| Add `mindsdb-capture-pr-screenshots` | 61 screenshot requests across 37 sessions, each rebuilding a capture harness; images saved to inconsistent locations. Absorbs align-code-mode-ui's capture reference. |
+| Add generic `capture-pr-screenshots` with a MindsDB Cowork reference | 61 screenshot requests across 37 sessions, each rebuilding a capture harness; images saved to inconsistent locations. Absorbs publish-pr's visual-evidence guide and align-code-mode-ui's capture reference. |
 | Delete `mindsdb-migrate-surface-to-tailwind`, `mindsdb-track-design-system-metrics` | No use in the audit window; recover from git history for a future push. |
 | Reword validate-work's trigger and add manual QA | 22 QA requests across 16 sessions fired it zero times; most asked for steps the user runs by hand. |
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Capture PR Screenshots"
+  short_description: "Capture before/after UI screenshots for a PR"
+  default_prompt: "Use $capture-pr-screenshots to capture before/after screenshots for this PR."

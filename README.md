@@ -33,7 +33,7 @@ flowchart LR
 | **Runbook** | Specific mechanics, callable directly | Publish a PR or create a Linear issue |
 | **Reference** | Shared conventions or focused knowledge | The house standard for PR descriptions |
 | **Orchestration** | Coordination across several units | Plan an epic and advance its ready units |
-| **Organization** | Optional, org-specific tooling | Capture before/after screenshots of a MindsDB Cowork PR |
+| **Organization** | Optional, org-specific tooling | Align a MindsDB Code Mode UI element with prior art |
 
 | Skill | Kind | What it contributes |
 | --- | --- | --- |
@@ -48,6 +48,7 @@ flowchart LR
 | [ship-epic](registry/ship-epic/SKILL.md) | Orchestration | Advance ready units and verify the combined outcome |
 | [publish-pr](registry/publish-pr/SKILL.md) | Runbook | Commit, push, create or update a PR |
 | [address-pr-review](registry/address-pr-review/SKILL.md) | Runbook | Fix, push, and reply to review feedback on a PR |
+| [capture-pr-screenshots](registry/capture-pr-screenshots/SKILL.md) | Runbook | Capture before/after UI screenshots for a PR in both themes |
 | [rebase-pr](registry/rebase-pr/SKILL.md) | Runbook | Reconcile a branch with its moving integration base |
 | [preserve-work](registry/preserve-work/SKILL.md) | Runbook | Preserve a recoverable local WIP snapshot |
 | [create-issue](registry/create-issue/SKILL.md) | Runbook | Create one verified Linear issue |
@@ -58,9 +59,8 @@ flowchart LR
 | [pr-conventions](registry/pr-conventions/SKILL.md) | Reference | PR content and review findings |
 | [writing-conventions](registry/writing-conventions/SKILL.md) | Reference | Shared prose preferences |
 | [mindsdb-align-code-mode-ui](registry/mindsdb-align-code-mode-ui/SKILL.md) | Organization | Align one Cowork Code Mode UI element with app patterns and coding-agent prior art |
-| [mindsdb-capture-pr-screenshots](registry/mindsdb-capture-pr-screenshots/SKILL.md) | Organization | Capture before/after Cowork screenshots for a PR in both themes |
 
-An orchestration kind and its child units use the operations above; independent units can advance while another is blocked, and the initiative still needs its own integration evidence. The two organization packages stay optional and installable on demand.
+An orchestration kind and its child units use the operations above; independent units can advance while another is blocked, and the initiative still needs its own integration evidence. The organization package stays optional and installable on demand.
 
 ## Planning artifacts
 
@@ -83,12 +83,12 @@ Use the [epic template](registry/plan-epic/references/epic-record.md), [work tem
 | --- | --- |
 | `core` | Six work operations with their required contracts and PR mechanics. |
 | `orchestration` | Shape, plan, and deliver initiatives across work units. |
-| `runbooks` | GitHub review responses, PR publication, Linear, handoff, work-preservation, and fan-out procedures. |
-| `general` | The twenty general skills: operations, orchestration, runbooks, and references. |
+| `runbooks` | GitHub review responses, PR publication and screenshots, Linear, handoff, work-preservation, and fan-out procedures. |
+| `general` | The twenty-one general skills: operations, orchestration, runbooks, and references. |
 | `linear-ops` | Create one verified Linear issue or project. |
-| `mindsdb` | Optional MindsDB Cowork UI alignment and PR screenshot tools. |
+| `mindsdb` | Optional MindsDB Cowork Code Mode UI alignment. |
 
-Profiles and individual selections install their required dependencies transitively; optional skill recommendations do not expand a selection. The two `mindsdb-*` packages stay optional.
+Profiles and individual selections install their required dependencies transitively; optional skill recommendations do not expand a selection. The `mindsdb-*` package stays optional.
 
 ## Layout
 

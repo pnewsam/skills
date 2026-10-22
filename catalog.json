@@ -115,30 +115,13 @@
         "run_tests"
       ],
       "requires": [
-        "mindsdb-capture-pr-screenshots"
+        "capture-pr-screenshots"
       ],
       "optional_skills": [
         "publish-pr"
       ],
       "resources": [
         "references/prior-art.md"
-      ],
-      "optional_package": true
-    },
-    "mindsdb-capture-pr-screenshots": {
-      "layer": "runbook",
-      "scope": "project",
-      "effects": [
-        "read_local",
-        "write_files",
-        "run_tests"
-      ],
-      "requires": [],
-      "optional_skills": [
-        "publish-pr"
-      ],
-      "resources": [
-        "scripts/capture.mjs"
       ],
       "optional_package": true
     },
@@ -227,13 +210,13 @@
         "pr-conventions"
       ],
       "optional_skills": [
-        "rebase-pr"
+        "rebase-pr",
+        "capture-pr-screenshots"
       ],
       "resources": [
         "references/github-mechanics.md",
         "references/pr_output_templates.md",
-        "references/update_output_templates.md",
-        "references/visual-evidence.md"
+        "references/update_output_templates.md"
       ]
     },
     "address-pr-review": {
@@ -256,9 +239,26 @@
       "optional_skills": [
         "execute-work",
         "validate-work",
-        "mindsdb-capture-pr-screenshots"
+        "capture-pr-screenshots"
       ],
       "resources": []
+    },
+    "capture-pr-screenshots": {
+      "layer": "runbook",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "write_files",
+        "run_tests"
+      ],
+      "requires": [],
+      "optional_skills": [
+        "publish-pr"
+      ],
+      "resources": [
+        "references/mindsdb-cowork.md",
+        "scripts/capture.mjs"
+      ]
     },
     "rebase-pr": {
       "layer": "runbook",
@@ -451,10 +451,11 @@
       ]
     },
     "runbooks": {
-      "description": "GitHub review responses, PR publication, Linear, handoff, and recoverable work-preservation procedures.",
+      "description": "GitHub review responses, PR publication and screenshots, Linear, handoff, and recoverable work-preservation procedures.",
       "skills": [
         "publish-pr",
         "address-pr-review",
+        "capture-pr-screenshots",
         "rebase-pr",
         "create-issue",
         "create-project",
@@ -464,7 +465,7 @@
       ]
     },
     "general": {
-      "description": "Twenty general skills across operations, orchestration, runbooks, and references.",
+      "description": "Twenty-one general skills across operations, orchestration, runbooks, and references.",
       "includes": [
         "core",
         "orchestration",
@@ -485,10 +486,9 @@
       ]
     },
     "mindsdb": {
-      "description": "Optional MindsDB Cowork UI alignment and PR screenshot tools.",
+      "description": "Optional MindsDB Cowork Code Mode UI alignment.",
       "skills": [
-        "mindsdb-align-code-mode-ui",
-        "mindsdb-capture-pr-screenshots"
+        "mindsdb-align-code-mode-ui"
       ]
     }
   }

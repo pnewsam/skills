@@ -3,11 +3,12 @@
 // paste-ready table. Usage: node capture.mjs <spec.json>
 //
 // spec = {
-//   "repo": "/path/to/cowork",            // resolves its own Playwright install
+//   "repo": "/path/to/app",               // resolves its own Playwright install
 //   "baseUrl": "http://127.0.0.1:5199",
 //   "out": "~/Desktop/pr-1234-screenshots",
 //   "label": "before" | "after",
-//   "themes": ["light", "dark"],          // default both
+//   "themes": ["light", "dark"],          // default both; sets prefers-color-scheme
+//   "theme": { "localStorageKey": "app.theme", "queryParam": "theme" },  // optional app hooks
 //   "viewport": { "width": 1280, "height": 900 },
 //   "shots": [{ "name": "composer-running", "path": "/?codeFixture=running",
 //               "selector": ".code-composer", "hover": "...", "click": "...",
@@ -42,13 +43,14 @@ async function launch() {
     return await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
   } catch (error) {
     if (!/Executable doesn't exist/.test(String(error))) throw error;
-    const cache = join(homedir(), 'Library/Caches/ms-playwright');
+    const cache = process.env.PLAYWRIGHT_BROWSERS_PATH
+      ?? join(homedir(), process.platform === 'darwin' ? 'Library/Caches/ms-playwright' : '.cache/ms-playwright');
     const shells = existsSync(cache)
       ? readdirSync(cache).filter((d) => d.startsWith('chromium_headless_shell-')).sort().reverse()
       : [];
     for (const dir of shells) {
       for (const sub of readdirSync(join(cache, dir))) {
-        const exe = join(cache, dir, sub, 'chrome-headless-shell');
+        const exe = join(cache, dir, sub, process.platform === 'win32' ? 'chrome-headless-shell.exe' : 'chrome-headless-shell');
         if (existsSync(exe)) return chromium.launch({ executablePath: exe });
       }
     }
@@ -64,14 +66,16 @@ try {
       deviceScaleFactor: 2,
       colorScheme: theme,
     });
-    // The app reads anton.theme; visual fixtures read ?theme=. Set both.
-    await context.addInitScript((t) => {
-      try { localStorage.setItem('anton.theme', t); } catch {}
-    }, theme);
+    const key = spec.theme?.localStorageKey;
+    if (key) {
+      await context.addInitScript(([k, t]) => {
+        try { localStorage.setItem(k, t); } catch {}
+      }, [key, theme]);
+    }
     for (const shot of spec.shots) {
       const page = await context.newPage();
       const url = new URL(shot.path, spec.baseUrl);
-      url.searchParams.set('theme', theme);
+      if (spec.theme?.queryParam) url.searchParams.set(spec.theme.queryParam, theme);
       await page.goto(url.href, { waitUntil: 'networkidle' });
       // An auth redirect still yields a clean-looking page; refuse to save it.
       if (new URL(page.url()).origin !== url.origin) {
@@ -81,6 +85,9 @@ try {
       if (shot.click) await page.click(shot.click);
       if (shot.hover) await page.hover(shot.hover);
       await page.waitForTimeout(shot.delay ?? 300);
+      // A dev-server error overlay can sit over a fully rendered page.
+      const overlay = await page.locator('vite-error-overlay, nextjs-portal, #webpack-dev-server-client-overlay').count();
+      if (overlay) throw new Error(`${shot.name}: dev-server error overlay at ${url.href}; fix the server error first`);
       const file = join(out, `${label}-${shot.name}-${theme}.png`);
       const target = shot.selector ? page.locator(shot.selector).first() : page;
       if (shot.selector && (await target.count()) === 0) {
