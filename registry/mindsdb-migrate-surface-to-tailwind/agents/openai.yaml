@@ -1,4 +1,0 @@
-interface:
-  display_name: "Mindsdb Migrate Surface To Tailwind"
-  short_description: "Mindsdb migrate surface to tailwind with clear scope and evidenc"
-  default_prompt: "Use $mindsdb-migrate-surface-to-tailwind for the requested task, preserving scope and evidence."

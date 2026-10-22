@@ -114,58 +114,31 @@
         "write_files",
         "run_tests"
       ],
-      "requires": [],
+      "requires": [
+        "mindsdb-capture-pr-screenshots"
+      ],
       "optional_skills": [
         "publish-pr"
       ],
       "resources": [
-        "references/capture.md",
         "references/prior-art.md"
       ],
       "optional_package": true
     },
-    "mindsdb-migrate-surface-to-tailwind": {
+    "mindsdb-capture-pr-screenshots": {
       "layer": "runbook",
       "scope": "project",
       "effects": [
         "read_local",
         "write_files",
-        "run_tests",
-        "git_write",
-        "network_read",
-        "network_write",
-        "external_write"
+        "run_tests"
       ],
-      "requires": [
-        "work-conventions",
-        "publish-pr",
-        "pr-conventions",
-        "create-issue"
-      ],
-      "optional_skills": [],
-      "resources": [
-        "references/mapping.md",
-        "scripts/inventory.mjs"
-      ],
-      "optional_package": true
-    },
-    "mindsdb-track-design-system-metrics": {
-      "layer": "runbook",
-      "scope": "project",
-      "effects": [
-        "read_local",
-        "network_read",
-        "external_write"
-      ],
-      "requires": [
-        "work-conventions"
-      ],
+      "requires": [],
       "optional_skills": [
-        "analyze-work"
+        "publish-pr"
       ],
       "resources": [
-        "references/measurement.md",
-        "scripts/scan.mjs"
+        "scripts/capture.mjs"
       ],
       "optional_package": true
     },
@@ -262,6 +235,30 @@
         "references/update_output_templates.md",
         "references/visual-evidence.md"
       ]
+    },
+    "address-pr-review": {
+      "layer": "runbook",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "write_files",
+        "git_write",
+        "run_tests",
+        "network_read",
+        "network_write"
+      ],
+      "requires": [
+        "work-conventions",
+        "publish-pr",
+        "deliver-work",
+        "pr-conventions"
+      ],
+      "optional_skills": [
+        "execute-work",
+        "validate-work",
+        "mindsdb-capture-pr-screenshots"
+      ],
+      "resources": []
     },
     "rebase-pr": {
       "layer": "runbook",
@@ -454,9 +451,10 @@
       ]
     },
     "runbooks": {
-      "description": "GitHub, Linear, handoff, and recoverable work-preservation procedures.",
+      "description": "GitHub review responses, PR publication, Linear, handoff, and recoverable work-preservation procedures.",
       "skills": [
         "publish-pr",
+        "address-pr-review",
         "rebase-pr",
         "create-issue",
         "create-project",
@@ -466,7 +464,7 @@
       ]
     },
     "general": {
-      "description": "Nineteen general skills across operations, orchestration, runbooks, and references.",
+      "description": "Twenty general skills across operations, orchestration, runbooks, and references.",
       "includes": [
         "core",
         "orchestration",
@@ -487,11 +485,10 @@
       ]
     },
     "mindsdb": {
-      "description": "Optional organization-specific inventory and migration tools.",
+      "description": "Optional MindsDB Cowork UI alignment and PR screenshot tools.",
       "skills": [
         "mindsdb-align-code-mode-ui",
-        "mindsdb-migrate-surface-to-tailwind",
-        "mindsdb-track-design-system-metrics"
+        "mindsdb-capture-pr-screenshots"
       ]
     }
   }
