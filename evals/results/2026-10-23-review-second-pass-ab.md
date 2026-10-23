@@ -38,3 +38,21 @@ Main beat pr66 on 3 rounds, pr66 beat main on 2, and 7 tied. 18 anchors were mis
 ## Limits
 
 Two reps over 12 rounds from four PRs. These are the calibration rounds, so they are not held out, though #66 was not written from their misses. Arm pr66 bundles #66's finding-model compression with the opt-in change. A null here does not show the second pass is useless on larger or contested changes, where #66 still calls for it. Only #66's review changes were tested; its work-conventions change was not.
+
+## Follow-up: reviewer effort
+
+The large drop from September prompted one more arm. It used #66's single-pass text with the reviewer at `effort: high`, while the judge stayed at `medium` via the new `judgeEffort` option. The baseline is the pr66 arm above: same text and judge setting, reviewer at `medium`.
+
+| Single pass | medium | high |
+| --- | --- | --- |
+| Anchors found | 22/68 (0.324) | 31/68 (0.456) |
+| Rep 1 / rep 2 | 11, 11 | 15, 16 |
+| Rounds won | 0 | 5 (7 ties) |
+| Distinct anchors ever found | 13 | 17 (a superset) |
+| Grounded unanchored per review | 1.25 | 1.83 |
+| Ungrounded per review | 0.08 | 0.08 |
+
+Every rep at `high` beat every rep at `medium`, and `high` lost no round. It found every anchor `medium` found plus four more, with no added noise. A single `high` pass also beat `medium` with the default second pass (31 vs 25) using two thirds of the reviewer runs. That puts it close to the September calibration (35/68), so the drop was mostly effort. Effort is the lever for review recall on this set; a second pass is not.
+
+Limits: the two runs ran separately with a stochastic judge on the same settings. Rounds split 5–0 with 7 ties, a one-sided sign-test p of about 0.03. Total tokens per agent were similar across runs (about 61k vs 57k), so the extra thinking cost is modest.
+
