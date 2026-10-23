@@ -6,7 +6,9 @@ export const meta = {
   ],
 }
 
-// args = { caseIds, dataDir, skillsDir, reps?, arm_deltas?, effort? }
+// args = { caseIds, dataDir, skillsDir, reps?, arm_deltas?, effort?, judgeEffort?, armSkills?, secondPass? }
+// armSkills maps an arm to its own skills snapshot; secondPass marks arms whose
+// review gets a harness-run second, context-isolated pass.
 // Case data lives OUTSIDE this repo (the subject repos are not public) and is
 // never passed through args: reviewers read `<dataDir>/review_inputs.json` for
 // their own case, the judge reads `<dataDir>/anchors.json`, and this script
@@ -14,12 +16,19 @@ export const meta = {
 const CFG = typeof args === 'string' ? JSON.parse(args) : args
 // Pin effort so runs compare across models: defaults differ (Opus 5.5 medium, Opus 5 high).
 const EFFORT = CFG.effort || 'medium'
+// The judge can be pinned separately, so a reviewer-effort A/B does not also change the judge.
+const JUDGE_EFFORT = CFG.judgeEffort || EFFORT
 const CASE_IDS = CFG.caseIds
 const DELTAS = CFG.arm_deltas || { control: '' }
 const ARMS = Object.keys(DELTAS)
 const REPS = CFG.reps || 2
 const DATA = CFG.dataDir
 const SKILLS = CFG.skillsDir
+// Per-arm skill snapshots, and arms whose skill calls for a second context-isolated
+// pass. Workflow agents cannot spawn subagents, so the harness runs that pass.
+const ARM_SKILLS = CFG.armSkills || {}
+const SECOND = CFG.secondPass || {}
+const skillsFor = (arm) => ARM_SKILLS[arm] || SKILLS
 
 const MATCH_SCHEMA = {
   type: 'object',
@@ -74,7 +83,7 @@ const reviewPrompt = (id, arm) => {
   const deltaBlock = delta
     ? `\n\nApply this ADDITIONAL house guidance on top of the skill:\n"""\n${delta}\n"""`
     : ''
-  return `You are reviewing a real pull request. First read \`${SKILLS}/registry/review-work/SKILL.md\` and the references it points to (\`references/review-protocol.md\`, \`references/risk.md\`, and \`${SKILLS}/registry/pr-conventions/references/finding-model.md\`) and internalize them.${deltaBlock}
+  return `You are reviewing a real pull request. First read \`${skillsFor(arm)}/registry/review-work/SKILL.md\` and the references it points to (\`references/review-protocol.md\`, \`references/risk.md\`, and \`${skillsFor(arm)}/registry/pr-conventions/references/finding-model.md\`) and internalize them.${deltaBlock}
 
 THE CHANGE UNDER REVIEW
 
@@ -86,12 +95,25 @@ RULES
 
 - Do NOT use \`gh\`, the GitHub API, the network, or any lookup of this pull request, its comments, or its later commits. The snapshot and the diff are all you get.
 - Do NOT read anything under \`${DATA}\` other than \`review_inputs.json\`, this case's diff, and this case's snapshot. Never read \`anchors.json\`, \`cases.json\`, or another case's directory. Those hold the evaluation key.
-- Do NOT read anything under \`${SKILLS}/evals/\`.
+- Do NOT read anything under \`${skillsFor(arm)}/evals/\`.
 
 Review the change on its own content and report your findings exactly as the skill and finding model direct: each supported finding with its severity, the concrete failing input, state, or execution path that makes it bite, and why it matters, ordered by severity. If there is no supported blocking or major defect, say so plainly. Do not invent findings to appear thorough, and do not withhold a real defect.
 
 Return only your review.`
 }
+
+const secondPassPrompt = (id, arm, first) => `You are the SECOND, context-isolated reviewer of a real pull request. First read \`${skillsFor(arm)}/registry/review-work/SKILL.md\`, \`${skillsFor(arm)}/registry/review-work/references/review-protocol.md\`, and \`${skillsFor(arm)}/registry/pr-conventions/references/finding-model.md\`.
+
+Read \`${DATA}/review_inputs.json\` and find the entry whose id is "${id}". The diff is at \`${DATA}/diffs/${id}.diff\` and a snapshot of the repository at this commit is at \`${DATA}/trees/${id}/\`.
+
+The same RULES apply as for the first reviewer: no \`gh\`, GitHub API, network, or lookup of this pull request; do not read anything under \`${DATA}\` except \`review_inputs.json\`, this case's diff, and this case's snapshot; never read \`anchors.json\` or \`cases.json\`; do not read anything under \`${skillsFor(arm)}/evals/\`.
+
+A first reviewer produced the review below. Do two jobs, refutation first. (1) Re-ground every standing finding against the actual code and drop any whose support does not hold. (2) Surface supported defects the first pass missed. Remove findings as readily as you add them.
+
+Return only the final review, in the same format the skill and finding model direct: each supported finding with its severity, the concrete failing input, state, or execution path, and why it matters, ordered by severity. If there is no supported blocking or major defect, say so plainly.
+
+FIRST REVIEW:
+${first}`
 
 // Anchors from LATER rounds of the same PR. A review that reports one of these
 // found a defect before the human reviewer did; per-round recall alone scores
@@ -153,9 +175,22 @@ const runUnit = async (item) => {
   }
   if (!review) return { ...item, dead: 'degenerate-review' }
 
+  if (SECOND[item.arm]) {
+    let final = null
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const b = await agent(secondPassPrompt(item.id, item.arm, review), {
+        label: `rev2:${item.arm}:${item.id}#${item.rep}${attempt ? `r${attempt}` : ''}`,
+        phase: 'Review + match', effort: EFFORT,
+      })
+      if (b && !isDegenerate(b)) { final = b; break }
+    }
+    if (!final) return { ...item, dead: 'degenerate-second-pass' }
+    review = final
+  }
+
   const m = await agent(matchPrompt(item.id, review), {
     label: `match:${item.arm}:${item.id}#${item.rep}`,
-    phase: 'Review + match', effort: EFFORT,
+    phase: 'Review + match', effort: JUDGE_EFFORT,
     schema: MATCH_SCHEMA,
   })
   if (!m || !m.matches) return { ...item, dead: 'no-match' }
@@ -245,6 +280,8 @@ for (const r of scored) for (const id of (r.anticipatedIds || [])) anticipatedId
 
 return {
   effort: EFFORT,
+  judgeEffort: JUDGE_EFFORT,
+  secondPass: SECOND,
   overall,
   perCase,
   anticipatedIds,
