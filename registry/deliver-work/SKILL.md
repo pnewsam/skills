@@ -18,6 +18,7 @@ Separate unrelated work and confirm the destination, branch/base, and existing r
 - Local commit, push, or new PR: `publish-pr`.
 - Existing PR title/body synchronization or polish: the metadata mode of `publish-pr`.
 - Requested rebase onto the integration base: `rebase-pr`.
+- An open PR that needs review feedback addressed, a rebase, a CI fix, or a description sync: `reconcile-work`.
 - One Linear issue or project: `create-issue` or `create-project`.
 - Local preservation of unfinished work: `preserve-work` when that is the request.
 - Posted review, feedback replies, thread resolution, or merge: [GitHub delivery](references/github-delivery.md).

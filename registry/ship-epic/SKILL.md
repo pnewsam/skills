@@ -5,7 +5,7 @@ description: Coordinate delivery of an initiative across PR-sized work records. 
 
 # Ship epic
 
-Apply `work-conventions`. Own coordination across work records. Use the six operations for each unit; do not collapse an epic into one PR or reimplement the operations here.
+Apply `work-conventions`. Own coordination across work records. Use the work operations for each unit; do not collapse an epic into one PR or reimplement the operations here.
 
 For work spanning workers, branches, sessions, or integration checkpoints, read `references/coordination.md` for assignment ownership, handoff, replanning, integration, and recovery. Use `work-conventions/references/artifacts.md` to keep durable state consistent; do not introduce a parallel tracker.
 

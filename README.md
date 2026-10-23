@@ -1,6 +1,6 @@
 # Skills
 
-A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Nineteen general skills — six operations, three orchestration skills, seven runbooks, and three references — plus three optional organization packages.
+A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Twenty general skills — seven operations, three orchestration skills, seven runbooks, and three references — plus three optional organization packages.
 
 The base model supplies general reasoning and technique; skills earn their place through house contracts, corrective objectives, fragile mechanics, or useful verification. The agent owns the task: operations are capabilities, not mandatory steps or approval gates. Existing issues and feature plans are valid work records, and an initiative coordinates several units.
 
@@ -43,6 +43,7 @@ flowchart LR
 | [validate-work](registry/validate-work/SKILL.md) | Operation | Which requirements does this candidate demonstrably meet? |
 | [review-work](registry/review-work/SKILL.md) | Operation | What defects, scope gaps, or delivery risks remain? |
 | [deliver-work](registry/deliver-work/SKILL.md) | Operation | Has the work reached the requested endpoint? |
+| [reconcile-work](registry/reconcile-work/SKILL.md) | Operation | Is the open PR still merge-ready after what changed around it? |
 | [shape-initiative](registry/shape-initiative/SKILL.md) | Orchestration | Clarify direction and strategic intent |
 | [plan-epic](registry/plan-epic/SKILL.md) | Orchestration | Divide the initiative into work units and dependencies |
 | [ship-epic](registry/ship-epic/SKILL.md) | Orchestration | Advance ready units and verify the combined outcome |
@@ -75,14 +76,14 @@ Use the [epic template](registry/plan-epic/references/epic-record.md), [work tem
 
 ## Installation
 
-[cli/README.md](cli/README.md) has the commands. Choose **`general`** for the whole registry or **`core`** for the six operations and their required packages; the rest are focused subsets.
+[cli/README.md](cli/README.md) has the commands. Choose **`general`** for the whole registry or **`core`** for the seven operations and their required packages; the rest are focused subsets.
 
 | Profile | Purpose |
 | --- | --- |
-| `core` | Six work operations with their required contracts and PR mechanics. |
+| `core` | Seven work operations with their required contracts and PR mechanics. |
 | `orchestration` | Shape, plan, and deliver initiatives across work units. |
 | `runbooks` | GitHub, Linear, handoff, work-preservation, and fan-out procedures. |
-| `general` | The nineteen general skills: operations, orchestration, runbooks, and references. |
+| `general` | The twenty general skills: operations, orchestration, runbooks, and references. |
 | `linear-ops` | Create one verified Linear issue or project. |
 | `mindsdb` | Optional MindsDB Cowork Code Mode UI alignment. |
 

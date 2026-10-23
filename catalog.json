@@ -79,6 +79,31 @@
         "references/github-delivery.md"
       ]
     },
+    "reconcile-work": {
+      "layer": "operation",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "write_files",
+        "git_write",
+        "run_tests",
+        "network_read",
+        "network_write"
+      ],
+      "requires": [
+        "work-conventions",
+        "pr-conventions",
+        "publish-pr"
+      ],
+      "optional_skills": [
+        "execute-work",
+        "validate-work",
+        "review-work",
+        "deliver-work",
+        "rebase-pr"
+      ],
+      "resources": []
+    },
     "execute-work": {
       "layer": "operation",
       "scope": "work",
@@ -393,14 +418,15 @@
   },
   "profiles": {
     "core": {
-      "description": "Six work operations with their required contracts and PR mechanics.",
+      "description": "Seven work operations with their required contracts and PR mechanics.",
       "skills": [
         "analyze-work",
         "plan-work",
         "execute-work",
         "validate-work",
         "review-work",
-        "deliver-work"
+        "deliver-work",
+        "reconcile-work"
       ]
     },
     "orchestration": {
@@ -424,7 +450,7 @@
       ]
     },
     "general": {
-      "description": "Nineteen general skills across operations, orchestration, runbooks, and references.",
+      "description": "Twenty general skills across operations, orchestration, runbooks, and references.",
       "includes": [
         "core",
         "orchestration",

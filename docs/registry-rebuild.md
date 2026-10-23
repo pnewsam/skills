@@ -70,3 +70,6 @@ A transcript audit of 2026-09-28 to 2026-10-22 (about 200 sessions) drove these 
 | Delete `mindsdb-migrate-surface-to-tailwind`, `mindsdb-track-design-system-metrics` | No use in the audit window; recover from git history for a future push. |
 | Reword validate-work's trigger and add manual QA | 22 QA requests across 16 sessions fired it zero times; most asked for steps the user runs by hand. |
 
+## 2026-10 reconcile-work
+
+Add `reconcile-work`, a seventh operation for an open PR after publication. The audit found 181 prompts across 91 sessions about reviews, rebases, conflicts, CI, description drift, and merges on open PRs. The six operations ended at delivery, so no step owned bringing a PR back to merge-ready. It routes to execute-work, rebase-pr, publish-pr, and deliver-work rather than duplicating them, and takes over the live-PR review paragraph from execute-work.
