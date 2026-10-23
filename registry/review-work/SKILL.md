@@ -1,6 +1,6 @@
 ---
 name: review-work
-description: Critically assess local changes, an artifact, or an existing PR for supported defects, scope gaps, and delivery risk. Includes review feedback triage and independent re-review when requested. Read-only by default; repairs go through execute-work and external reviews or replies through authorized delivery.
+description: Critically assess local changes, an artifact, or an existing PR for supported defects, scope gaps, and delivery risk. Includes independent re-review, and triage of review feedback when only an assessment is wanted. Read-only by default; repairs go through execute-work and external reviews or replies through authorized delivery.
 ---
 
 # Review work

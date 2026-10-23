@@ -114,58 +114,14 @@
         "write_files",
         "run_tests"
       ],
-      "requires": [],
+      "requires": [
+        "validate-work"
+      ],
       "optional_skills": [
         "publish-pr"
       ],
       "resources": [
-        "references/capture.md",
         "references/prior-art.md"
-      ],
-      "optional_package": true
-    },
-    "mindsdb-migrate-surface-to-tailwind": {
-      "layer": "runbook",
-      "scope": "project",
-      "effects": [
-        "read_local",
-        "write_files",
-        "run_tests",
-        "git_write",
-        "network_read",
-        "network_write",
-        "external_write"
-      ],
-      "requires": [
-        "work-conventions",
-        "publish-pr",
-        "pr-conventions",
-        "create-issue"
-      ],
-      "optional_skills": [],
-      "resources": [
-        "references/mapping.md",
-        "scripts/inventory.mjs"
-      ],
-      "optional_package": true
-    },
-    "mindsdb-track-design-system-metrics": {
-      "layer": "runbook",
-      "scope": "project",
-      "effects": [
-        "read_local",
-        "network_read",
-        "external_write"
-      ],
-      "requires": [
-        "work-conventions"
-      ],
-      "optional_skills": [
-        "analyze-work"
-      ],
-      "resources": [
-        "references/measurement.md",
-        "scripts/scan.mjs"
       ],
       "optional_package": true
     },
@@ -254,13 +210,13 @@
         "pr-conventions"
       ],
       "optional_skills": [
-        "rebase-pr"
+        "rebase-pr",
+        "validate-work"
       ],
       "resources": [
         "references/github-mechanics.md",
         "references/pr_output_templates.md",
-        "references/update_output_templates.md",
-        "references/visual-evidence.md"
+        "references/update_output_templates.md"
       ]
     },
     "rebase-pr": {
@@ -397,10 +353,12 @@
       ],
       "resources": [
         "references/evidence.md",
+        "references/mindsdb-cowork.md",
         "references/rendering.md",
         "references/retained-objectives.md",
         "references/verification.md",
-        "references/visual-checks.md",
+        "references/visual-evidence.md",
+        "scripts/capture.mjs",
         "scripts/check_contrast.py",
         "scripts/check_spacing.py",
         "scripts/render_direction.mjs",
@@ -487,11 +445,9 @@
       ]
     },
     "mindsdb": {
-      "description": "Optional organization-specific inventory and migration tools.",
+      "description": "Optional MindsDB Cowork Code Mode UI alignment.",
       "skills": [
-        "mindsdb-align-code-mode-ui",
-        "mindsdb-migrate-surface-to-tailwind",
-        "mindsdb-track-design-system-metrics"
+        "mindsdb-align-code-mode-ui"
       ]
     }
   }

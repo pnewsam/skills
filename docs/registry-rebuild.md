@@ -58,3 +58,15 @@ Client installs were not refreshed or pruned. Existing copies may be stale and s
 ## Evidence
 
 The [rebase validation record](../evals/results/2026-09-05-rebase-validation.md) distinguishes current integration checks from the earlier candidate's smoke comparisons. Historical results are not rewritten into proof for the new operations. A clean rebase or structurally valid registry is not a general model-quality result.
+
+## 2026-10 usage-audit changes
+
+A transcript audit of 2026-09-28 to 2026-10-22 (about 200 sessions) drove these changes.
+
+| Change | Reason |
+| --- | --- |
+| execute-work triggers on live PR reviews and carries them through push, replies, and a PR description sync; deliver-work gains the thread-fetch and reply commands | 57 "address the review" requests across 39 sessions fired a skill in 1 of them. The split was sound; the trigger wording and the end-to-end path were missing. |
+| validate-work owns screenshot capture: `scripts/capture.mjs`, `references/visual-evidence.md`, and a MindsDB Cowork reference | 61 screenshot requests across 37 sessions each rebuilt a capture harness, and images landed in inconsistent locations. Absorbs publish-pr's visual-evidence guide and align-code-mode-ui's capture reference. |
+| Delete `mindsdb-migrate-surface-to-tailwind`, `mindsdb-track-design-system-metrics` | No use in the audit window; recover from git history for a future push. |
+| Reword validate-work's trigger and add manual QA | 22 QA requests across 16 sessions fired it zero times; most asked for steps the user runs by hand. |
+

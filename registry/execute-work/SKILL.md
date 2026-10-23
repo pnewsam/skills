@@ -1,6 +1,6 @@
 ---
 name: execute-work
-description: Implement one agreed work outcome, including necessary tests and documentation, or perform one bounded step when requested. Also fixes in-scope review findings. Accepts issues, feature plans, or clear requests; verifies changes and preserves unrelated work. Commits and publication follow the requested delivery boundary.
+description: Implement one agreed work outcome, including necessary tests and documentation, or perform one bounded step when requested. Also addresses review feedback, including a review on a live PR (fix, push, reply on each thread). Accepts issues, feature plans, or clear requests; verifies changes and preserves unrelated work. Commits and publication follow the requested delivery boundary.
 ---
 
 # Execute work
@@ -24,6 +24,8 @@ When the work record names an analyzer or measurement method, rerun that method 
 Run immediate, relevant checks while implementing. Use `validate-work` for the complete acceptance assessment and reuse valid intermediate results. Never weaken required checks or mark required acceptance complete to bypass a failure. Separate confirmed pre-existing failures from introduced regressions and record their effect on confidence.
 
 For review feedback, verify each claim against the current candidate and intended scope. Fix supported in-scope defects; explain duplicate, outdated, unsubstantiated, or out-of-scope findings. Do not broaden the feature to satisfy a reviewer's preferences. Return the changed candidate to `review-work` when the request calls for a review-and-fix loop.
+
+When the feedback is a review on a live PR, fetch its unresolved threads as `deliver-work` describes and work in the PR's head branch. A request to address the review authorizes one push to that branch and a reply on each addressed thread. It does not authorize resolving threads, merging, or force-pushing. After the push, reply with each disposition and its fixing SHA. Then run a `publish-pr` factual sync, because fixes often make the description, validation lines, or screenshots stale. Recapture stale screenshots with `validate-work`.
 
 ## Record and return control
 

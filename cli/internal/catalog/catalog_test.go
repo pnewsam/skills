@@ -179,7 +179,7 @@ func TestGeneralProfileExcludesOptionalPackagesAndClosesDependencies(t *testing.
 			}
 		}
 	}
-	for _, name := range []string{"emil-design-eng", "svg-animations", "ingest-skill", "mindsdb-track-design-system-metrics"} {
+	for _, name := range []string{"emil-design-eng", "svg-animations", "ingest-skill", "mindsdb-align-code-mode-ui"} {
 		if selected[name] {
 			t.Errorf("optional package %s leaked into general", name)
 		}
