@@ -11,7 +11,7 @@ Skills must improve task outcomes, consistency, or efficiency enough to justify 
 | Reference | Compact conventions, requirements, or decision guidance | External actions or an encyclopedia |
 | Orchestration | Dependencies, progress, recovery, and proof across several units | Implementation mechanics within a single PR |
 
-The six operations are analyze-work, plan-work, execute-work, validate-work, review-work, and deliver-work. Their shared contract is `registry/work-conventions/SKILL.md`. The agent owns the task and continues through authorized operations without a seventh lifecycle wrapper. Runbooks remain directly callable. Routing is a capability, not a separate layer.
+The seven operations are analyze-work, plan-work, execute-work, validate-work, review-work, publish-work, and reconcile-work. Publish-work makes work visible for response; reconcile-work carries an open PR to merge as events around it change. Platform specifics such as GitHub and Linear live in references and scripts inside the operation that uses them, not in separate runbooks. Their shared contract is `registry/work-conventions/SKILL.md`. The agent owns the task and continues through authorized operations without a seventh lifecycle wrapper. Runbooks remain directly callable. Routing is a capability, not a separate layer.
 
 One unit normally produces one PR and may span multiple commits and sessions. Reuse an issue or feature plan as its record; do not impose a new file hierarchy. Separate implemented, validated, reviewed, published, merged, and deployed using actual evidence. Initiative records coordinate multiple units and integration criteria.
 
@@ -31,7 +31,7 @@ Each active package has `SKILL.md` with name and description frontmatter, matchi
 
 Use `references/`, `scripts/`, and `assets/` only for actual conditional detail, reusable executable mechanics, or output assets. Link every resource from the entry point at the point it is relevant. Longer references need a short contents section. Resolve helper paths from the installed package, not the user's working directory. Avoid generic command catalogs, redundant safety recitations, and mandatory template padding.
 
-Workflow instructions need a result, scope/effects, meaningful decisions, recovery, evidence, and return contract. Use as many sections as clarity requires; neither three phases nor six operations is a mandatory sequence. Detailed steps are justified by fragile mechanics, not habit.
+Workflow instructions need a result, scope/effects, meaningful decisions, recovery, evidence, and return contract. Use as many sections as clarity requires; neither three phases nor seven operations is a mandatory sequence. Detailed steps are justified by fragile mechanics, not habit.
 
 ## Authorization and continuation
 

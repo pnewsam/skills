@@ -1,4 +1,0 @@
-interface:
-  display_name: "Rebase Pr"
-  short_description: "Reconcile a PR with its current integration base"
-  default_prompt: "Use $rebase-pr to complete the requested action and verify the result."

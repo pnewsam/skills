@@ -25,35 +25,7 @@
         "references/security.md"
       ]
     },
-    "create-issue": {
-      "layer": "runbook",
-      "scope": "work",
-      "effects": [
-        "read_local",
-        "network_read",
-        "external_write"
-      ],
-      "requires": [
-        "writing-conventions"
-      ],
-      "optional_skills": [],
-      "resources": []
-    },
-    "create-project": {
-      "layer": "runbook",
-      "scope": "work",
-      "effects": [
-        "read_local",
-        "network_read",
-        "external_write"
-      ],
-      "requires": [
-        "writing-conventions"
-      ],
-      "optional_skills": [],
-      "resources": []
-    },
-    "deliver-work": {
+    "publish-work": {
       "layer": "operation",
       "scope": "work",
       "effects": [
@@ -61,22 +33,51 @@
         "git_write",
         "network_read",
         "network_write",
-        "external_write"
+        "external_write",
+        "run_tests"
       ],
       "requires": [
         "work-conventions",
-        "publish-pr"
+        "pr-conventions"
       ],
       "optional_skills": [
         "validate-work",
         "review-work",
-        "create-issue",
-        "create-project",
-        "preserve-work",
-        "rebase-pr"
+        "reconcile-work",
+        "preserve-work"
       ],
       "resources": [
-        "references/github-delivery.md"
+        "references/github-mechanics.md",
+        "references/pr_output_templates.md",
+        "references/pull-request.md",
+        "references/update_output_templates.md"
+      ]
+    },
+    "reconcile-work": {
+      "layer": "operation",
+      "scope": "work",
+      "effects": [
+        "read_local",
+        "write_files",
+        "git_write",
+        "run_tests",
+        "network_read",
+        "network_write"
+      ],
+      "requires": [
+        "work-conventions",
+        "pr-conventions",
+        "publish-work"
+      ],
+      "optional_skills": [
+        "execute-work",
+        "validate-work",
+        "review-work"
+      ],
+      "resources": [
+        "references/github-threads.md",
+        "references/merge.md",
+        "references/rebase.md"
       ]
     },
     "execute-work": {
@@ -95,8 +96,7 @@
         "plan-work",
         "validate-work",
         "review-work",
-        "publish-pr",
-        "deliver-work",
+        "publish-work",
         "fan-out"
       ],
       "resources": [
@@ -118,7 +118,7 @@
         "validate-work"
       ],
       "optional_skills": [
-        "publish-pr"
+        "publish-work"
       ],
       "resources": [
         "references/prior-art.md"
@@ -130,10 +130,13 @@
       "scope": "initiative",
       "effects": [
         "read_local",
-        "write_files"
+        "write_files",
+        "network_read",
+        "external_write"
       ],
       "requires": [
-        "work-conventions"
+        "work-conventions",
+        "writing-conventions"
       ],
       "optional_skills": [
         "shape-initiative",
@@ -141,7 +144,8 @@
         "ship-epic"
       ],
       "resources": [
-        "references/epic-record.md"
+        "references/epic-record.md",
+        "references/linear-project.md"
       ]
     },
     "plan-work": {
@@ -154,7 +158,8 @@
         "external_write"
       ],
       "requires": [
-        "work-conventions"
+        "work-conventions",
+        "writing-conventions"
       ],
       "optional_skills": [
         "analyze-work",
@@ -162,7 +167,8 @@
         "fan-out"
       ],
       "resources": [
-        "references/constraints.md"
+        "references/constraints.md",
+        "references/linear-issue.md"
       ]
     },
     "pr-conventions": {
@@ -193,52 +199,6 @@
       "resources": [
         "references/wip-context.md"
       ]
-    },
-    "publish-pr": {
-      "layer": "runbook",
-      "scope": "work",
-      "effects": [
-        "read_local",
-        "run_tests",
-        "git_write",
-        "network_read",
-        "network_write",
-        "external_write"
-      ],
-      "requires": [
-        "work-conventions",
-        "pr-conventions"
-      ],
-      "optional_skills": [
-        "rebase-pr",
-        "validate-work"
-      ],
-      "resources": [
-        "references/github-mechanics.md",
-        "references/pr_output_templates.md",
-        "references/update_output_templates.md"
-      ]
-    },
-    "rebase-pr": {
-      "layer": "runbook",
-      "scope": "work",
-      "effects": [
-        "read_local",
-        "write_files",
-        "git_write",
-        "run_tests",
-        "network_read",
-        "network_write"
-      ],
-      "requires": [
-        "work-conventions",
-        "publish-pr"
-      ],
-      "optional_skills": [
-        "validate-work",
-        "review-work"
-      ],
-      "resources": []
     },
     "handoff": {
       "layer": "runbook",
@@ -276,12 +236,11 @@
       "requires": [
         "work-conventions",
         "pr-conventions",
-        "publish-pr"
+        "publish-work"
       ],
       "optional_skills": [
         "execute-work",
         "validate-work",
-        "deliver-work",
         "fan-out"
       ],
       "resources": [
@@ -329,7 +288,7 @@
         "execute-work",
         "validate-work",
         "review-work",
-        "deliver-work"
+        "publish-work"
       ],
       "optional_skills": [],
       "resources": [
@@ -393,14 +352,15 @@
   },
   "profiles": {
     "core": {
-      "description": "Six work operations with their required contracts and PR mechanics.",
+      "description": "Seven work operations with their required contracts and PR mechanics.",
       "skills": [
         "analyze-work",
         "plan-work",
         "execute-work",
         "validate-work",
         "review-work",
-        "deliver-work"
+        "publish-work",
+        "reconcile-work"
       ]
     },
     "orchestration": {
@@ -412,19 +372,15 @@
       ]
     },
     "runbooks": {
-      "description": "GitHub, Linear, handoff, and recoverable work-preservation procedures.",
+      "description": "Handoff, recoverable work preservation, and parallel fan-out.",
       "skills": [
-        "publish-pr",
-        "rebase-pr",
-        "create-issue",
-        "create-project",
         "preserve-work",
         "handoff",
         "fan-out"
       ]
     },
     "general": {
-      "description": "Nineteen general skills across operations, orchestration, runbooks, and references.",
+      "description": "Twenty general skills across operations, orchestration, runbooks, and references.",
       "includes": [
         "core",
         "orchestration",
@@ -435,13 +391,6 @@
         "pr-conventions",
         "writing-conventions",
         "handoff"
-      ]
-    },
-    "linear-ops": {
-      "description": "Create one verified Linear issue or project.",
-      "skills": [
-        "create-issue",
-        "create-project"
       ]
     },
     "mindsdb": {

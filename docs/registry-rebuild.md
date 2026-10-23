@@ -70,3 +70,19 @@ A transcript audit of 2026-09-28 to 2026-10-22 (about 200 sessions) drove these 
 | Delete `mindsdb-migrate-surface-to-tailwind`, `mindsdb-track-design-system-metrics` | No use in the audit window; recover from git history for a future push. |
 | Reword validate-work's trigger and add manual QA | 22 QA requests across 16 sessions fired it zero times; most asked for steps the user runs by hand. |
 
+## 2026-10 publish and reconcile
+
+The audit found 181 prompts across 91 sessions about reviews, rebases, conflicts, CI, description drift, and merges on open PRs. The six operations ended at delivery, so no step owned an open PR. Platform runbooks also sat beside the operations instead of inside them.
+
+| Change | Destination |
+| --- | --- |
+| deliver-work renamed | `publish-work`: published is not settled |
+| Add `reconcile-work` | Seventh operation: carries an open PR to merge |
+| publish-pr | `publish-work`, with GitHub specifics in `references/pull-request.md` and `github-mechanics.md` |
+| rebase-pr | `reconcile-work/references/rebase.md` |
+| deliver-work merge and thread rules | `reconcile-work/references/merge.md` and `github-threads.md` |
+| create-issue | `plan-work/references/linear-issue.md` |
+| create-project | `plan-epic/references/linear-project.md` |
+| `linear-ops` profile | Removed |
+
+A trigger test (`evals/results/2026-10-23-trigger-routing.md`) showed that operations whose descriptions carry the user's phrases route as reliably as named runbooks.

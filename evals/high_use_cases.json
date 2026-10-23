@@ -2,7 +2,7 @@
   {
     "id": "prepare-preview",
     "prompt": "Review this branch and draft a commit message and PR description, but do not change anything.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Preview",
     "allowed_effects": [
       "read_local",
@@ -17,7 +17,7 @@
   {
     "id": "prepare-ambiguous",
     "prompt": "Get this branch ready for a PR and show me what you would do.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Preview",
     "allowed_effects": [
       "read_local",
@@ -33,7 +33,7 @@
   {
     "id": "prepare-commit",
     "prompt": "Commit the related changes on a feature branch. Do not push.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Commit",
     "allowed_effects": [
       "read_local",
@@ -48,7 +48,7 @@
   {
     "id": "prepare-publish",
     "prompt": "Commit these changes and push the branch, but leave opening the PR to me.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Publish",
     "allowed_effects": [
       "read_local",
@@ -63,7 +63,7 @@
   {
     "id": "prepare-failed-preflight",
     "prompt": "Commit and push this change.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Publish, stopping at failed preflight",
     "allowed_effects": [
       "read_local",
@@ -78,7 +78,7 @@
   {
     "id": "prepare-open-pr",
     "prompt": "Prepare this work and open a draft pull request.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Open PR",
     "allowed_effects": [
       "read_local",
@@ -121,7 +121,7 @@
     ],
     "expected_sequence": [
       "review-work",
-      "deliver-work"
+      "publish-work"
     ]
   },
   {
@@ -189,7 +189,7 @@
       "review-work",
       "execute-work",
       "validate-work",
-      "deliver-work"
+      "publish-work"
     ]
   },
   {
@@ -213,7 +213,7 @@
       "review-work",
       "execute-work",
       "validate-work",
-      "deliver-work"
+      "publish-work"
     ]
   },
   {
@@ -246,13 +246,13 @@
     ],
     "expected_sequence": [
       "review-work",
-      "deliver-work"
+      "publish-work"
     ]
   },
   {
     "id": "revise-audit",
     "prompt": "Check whether PR 42's title and body still match the diff.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Sync Preview",
     "allowed_effects": [
       "network_read"
@@ -265,7 +265,7 @@
   {
     "id": "revise-apply",
     "prompt": "Sync PR 42's title and body to its current diff.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Sync Apply",
     "allowed_effects": [
       "network_read",
@@ -599,7 +599,7 @@
   {
     "id": "create-linear-issue",
     "prompt": "Create one Linear issue for the ENG team to add an expired-session recovery screen, with the acceptance criteria from this conversation.",
-    "expected_skill": "create-issue",
+    "expected_skill": "plan-work",
     "expected_mode": "Create one",
     "allowed_effects": [
       "network_read",
@@ -613,7 +613,7 @@
   {
     "id": "create-linear-project",
     "prompt": "Create a Linear project for the Web team called Checkout Reliability, targeted for the end of Q3. Do not create its issues yet.",
-    "expected_skill": "create-project",
+    "expected_skill": "plan-epic",
     "expected_mode": "Create one",
     "allowed_effects": [
       "network_read",
@@ -627,7 +627,7 @@
   {
     "id": "polish-pr-preview",
     "prompt": "Show me a clearer, more human-readable version of PR 42's title and description, but do not update GitHub.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Polish Preview",
     "allowed_effects": [
       "network_read"
@@ -641,7 +641,7 @@
   {
     "id": "polish-pr-apply",
     "prompt": "Polish PR 42 so it reads naturally for reviewers, preserve all facts and checkboxes, and apply the edit.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Polish Apply",
     "allowed_effects": [
       "network_read",
@@ -808,7 +808,7 @@
   {
     "id": "delivery-existing-pr",
     "prompt": "Publish the validated change as a draft PR. A PR may already exist for this branch.",
-    "expected_skill": "deliver-work",
+    "expected_skill": "publish-work",
     "expected_mode": "Draft PR",
     "allowed_effects": [
       "read_local",
@@ -832,7 +832,7 @@
   {
     "id": "review-changed-head",
     "prompt": "Post this review after checking that PR 42 still has the reviewed head.",
-    "expected_skill": "deliver-work",
+    "expected_skill": "publish-work",
     "expected_mode": "Review publication",
     "allowed_effects": [
       "read_local",
@@ -894,7 +894,7 @@
   {
     "id": "rebase-preserve-upstream",
     "prompt": "Rebase this PR onto main, preserving upstream fixes and deletions; keep it local.",
-    "expected_skill": "rebase-pr",
+    "expected_skill": "reconcile-work",
     "expected_mode": "Requested scope",
     "allowed_effects": [
       "read_local",
@@ -966,7 +966,7 @@
   {
     "id": "publish-existing-code",
     "prompt": "Commit and push these related fixes to the existing PR.",
-    "expected_skill": "publish-pr",
+    "expected_skill": "publish-work",
     "expected_mode": "Requested scope",
     "allowed_effects": [
       "read_local",
@@ -989,7 +989,7 @@
   {
     "id": "rebase-remote-moved",
     "prompt": "Update this PR after rebasing; another author pushed while you were resolving conflicts.",
-    "expected_skill": "rebase-pr",
+    "expected_skill": "reconcile-work",
     "expected_mode": "Requested scope",
     "allowed_effects": [
       "read_local",

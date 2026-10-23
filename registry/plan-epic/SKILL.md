@@ -1,6 +1,6 @@
 ---
 name: plan-epic
-description: Decompose an agreed initiative into independently reviewable work units, normally one PR each, with dependencies, sequencing, integration evidence, and an overall outcome. Creates or updates one initiative record; no mandatory charter or fixed duration. Does not implement or publish.
+description: Decompose an agreed initiative into independently reviewable work units, normally one PR each, with dependencies, sequencing, integration evidence, and an overall outcome. Creates or updates one initiative record, and records it as a tracker project when asked. Use to plan an epic or when asked to create a Linear project. Does not implement or publish.
 ---
 
 # Plan epic
@@ -21,6 +21,6 @@ Plan independent units so they can be selected by readiness and value. Do not pr
 
 ## Record and continue
 
-Read `work-conventions/references/artifacts.md` for identity, links, and record ownership. Use `references/epic-record.md` when no suitable record exists. Prefer `docs/epics/` for a new local record, preserving existing IDs, completed history, and evidence. Creating external projects or issues is a separate requested effect, handled through the relevant runbooks.
+Read `work-conventions/references/artifacts.md` for identity, links, and record ownership. Use `references/epic-record.md` when no suitable record exists. Prefer `docs/epics/` for a new local record, preserving existing IDs, completed history, and evidence. Creating an external project or issues is a separate requested effect. For a Linear project, follow [Linear project](references/linear-project.md); file child issues through `plan-work`.
 
 Write enough child scope to begin; use `plan-work` just before executing a child when details depend on earlier results. Do not require fully detailed plans for every child before any work starts. Return the dependency graph, next ready unit, and integration proof. Continue to `ship-epic` when the user requested execution; a planning-only request ends here.

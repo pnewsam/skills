@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reconcile Work"
+  short_description: "Bring an open PR back to merge-ready"
+  default_prompt: "Use $reconcile-work to bring this PR back to merge-ready and verify the result."

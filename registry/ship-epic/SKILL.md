@@ -5,7 +5,7 @@ description: Coordinate delivery of an initiative across PR-sized work records. 
 
 # Ship epic
 
-Apply `work-conventions`. Own coordination across work records. Use the six operations for each unit; do not collapse an epic into one PR or reimplement the operations here.
+Apply `work-conventions`. Own coordination across work records. Use the work operations for each unit; do not collapse an epic into one PR or reimplement the operations here.
 
 For work spanning workers, branches, sessions, or integration checkpoints, read `references/coordination.md` for assignment ownership, handoff, replanning, integration, and recovery. Use `work-conventions/references/artifacts.md` to keep durable state consistent; do not introduce a parallel tracker.
 
@@ -17,7 +17,7 @@ Resolve run scope: one ready unit, selected units, or the full initiative. Resol
 
 ## Coordinate ready work
 
-Select a unit whose prerequisite conditions actually hold and which has no conflicting active assignment. Record its owner, execution location, and input candidate before dispatch. Detail its plan with `plan-work` when needed, then use `execute-work`, `validate-work`, `review-work`, and `deliver-work` as required by its acceptance and endpoint. Reuse valid work and evidence; skip operations whose result is already established.
+Select a unit whose prerequisite conditions actually hold and which has no conflicting active assignment. Record its owner, execution location, and input candidate before dispatch. Detail its plan with `plan-work` when needed, then use `execute-work`, `validate-work`, `review-work`, and `publish-work` as required by its acceptance and endpoint. Reuse valid work and evidence; skip operations whose result is already established.
 
 A request for one ready unit ends after that unit reaches its requested boundary and the initiative record is updated. An explicit one-step request performs only that bounded step and records what remains. A full run continues through ready units without asking the user to name the next obvious skill.
 

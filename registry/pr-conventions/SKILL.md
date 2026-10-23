@@ -1,6 +1,6 @@
 ---
 name: pr-conventions
-description: House standards for commit messages, PR titles and bodies, and evidence-backed review findings. Read before writing or editing any commit message, PR title, or PR body, and before reporting review findings. GitHub mechanics live in publish-pr; this skill defines content only.
+description: House standards for commit messages, PR titles and bodies, and evidence-backed review findings. Read before writing or editing any commit message, PR title, or PR body, and before reporting review findings. GitHub mechanics live in publish-work; this skill defines content only.
 ---
 
 # PR conventions

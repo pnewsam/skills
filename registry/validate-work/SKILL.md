@@ -33,4 +33,4 @@ When the user will test by hand, give a numbered checklist they can run without 
 
 For each required criterion report pass, fail, or unverified with method, result, candidate, and material limitations. State coverage gaps and the effect of pre-existing failures. Use `references/evidence.md` if a structured report helps; otherwise keep the result compact. Update the selected local record when in scope; never write a second report by default or mutate a tracker without authorization.
 
-Return to execution for necessary repairs when the user requested completion, or to review/delivery when proof is sufficient. Validation alone never commits, publishes, merges, or claims deployment readiness beyond the verified scope.
+Return to execution for necessary repairs when the user requested completion, or to review or publication when proof is sufficient. Validation alone never commits, publishes, merges, or claims deployment readiness beyond the verified scope.
