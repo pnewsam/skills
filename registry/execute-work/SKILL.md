@@ -9,7 +9,7 @@ Apply `work-conventions`. Complete the agreed work unit by default, not just its
 
 ## Establish the candidate
 
-Read the selected record, repository instructions, branch, status, staged and unstaged diff, and relevant implementation. Include intended untracked files in the candidate. Preserve unrelated changes; isolate them rather than stopping just because they exist. Follow user/repository branch conventions and create an isolated branch or checkout when needed for safe work.
+Read the selected record, repository instructions, branch, status, staged and unstaged diff, and relevant implementation. Include intended untracked files in the candidate. Follow user/repository branch conventions and create an isolated branch or checkout when needed for safe work.
 
 Verify that the work is not already implemented. If it is, establish the required evidence and update progress without inventing edits or duplicate commits. When resuming, compare recorded evidence with current state rather than trusting checkboxes alone.
 

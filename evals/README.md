@@ -6,6 +6,8 @@
 
 Actual trials run in fresh disposable repositories. Record prompt, fixture/base, selected resources, actions, questions, effects, candidate identity, check results, and completion claims. Tests/configuration and known failing states need truthful failure reporting. External state may be simulated, but label it and never claim live publication was tested.
 
+Every `*.workflow.js` harness that takes `args` pins reasoning effort for all of its agents. Pass `"effort"` to override the `medium` default. Record the effort with any result, since the same effort name means different amounts of thinking on different models.
+
 ## Rebuild evaluation
 
 Exercise a small bug without a plan, unrelated dirty state, configuration-only and test-only validation, missing required evidence, a changed PR head, duplicate PR prevention, interruption/resume, blocked prerequisites with independent ready work, and rendered design synthesis. Prefer outcome assertions to wording/heading matching.

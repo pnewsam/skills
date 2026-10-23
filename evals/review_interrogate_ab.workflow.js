@@ -10,6 +10,8 @@ export const meta = {
 
 // args = { cases, reps?, models? }
 const CFG = typeof args === 'string' ? JSON.parse(args) : args
+// Pin effort so runs compare across models: defaults differ (Opus 5.5 medium, Opus 5 high).
+const EFFORT = CFG.effort || 'medium'
 const CASES = CFG.cases
 const REPS = CFG.reps || 3
 const MODELS = CFG.models || ['opus', 'sonnet', 'haiku'] // interrogate reviewer families
@@ -109,17 +111,17 @@ const runUnit = async (item) => {
   let review = null
   let modelsUsed = []
   if (item.arm === 'control') {
-    review = await oneReview(c, { label: `rev:control:${c.id}#${item.rep}`, phase: 'Review' })
+    review = await oneReview(c, { label: `rev:control:${c.id}#${item.rep}`, phase: 'Review', effort: EFFORT })
     modelsUsed = ['session']
   } else {
     const revs = await parallel(MODELS.map((m) => () =>
-      oneReview(c, { label: `rev:interrogate:${c.id}#${item.rep}:${m}`, phase: 'Review', model: m })
+      oneReview(c, { label: `rev:interrogate:${c.id}#${item.rep}:${m}`, phase: 'Review', effort: EFFORT, model: m })
         .then((r) => (r ? { m, r } : null))))
     const good = revs.filter(Boolean)
     modelsUsed = good.map((x) => x.m)
     if (good.length >= 2) {
       review = await agent(reconcilePrompt(c, good.map((x) => x.r)), {
-        label: `reconcile:${c.id}#${item.rep}`, phase: 'Reconcile', model: 'opus',
+        label: `reconcile:${c.id}#${item.rep}`, phase: 'Reconcile', effort: EFFORT, model: 'opus',
       })
     } else if (good.length === 1) {
       review = good[0].r // degraded: only one reviewer survived
@@ -127,7 +129,7 @@ const runUnit = async (item) => {
   }
   if (!review || isDegenerate(review)) return { ...item, score: null, dead: 'no-review', modelsUsed }
   const s = await agent(scorePrompt(c, review), {
-    label: `score:${item.arm}:${c.id}#${item.rep}`, phase: 'Score', schema: SCORE_SCHEMA,
+    label: `score:${item.arm}:${c.id}#${item.rep}`, phase: 'Score', effort: EFFORT, schema: SCORE_SCHEMA,
   })
   if (!s) return { ...item, score: null, dead: 'no-score', modelsUsed }
   const { score, incFrac, avoid } = calcScore(s)
@@ -175,6 +177,7 @@ const tsv = rows.filter((r) => r.score != null)
   .join('\n')
 
 return {
+  effort: EFFORT,
   overall,
   perCase,
   gate: CFG.gate,

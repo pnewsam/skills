@@ -9,7 +9,7 @@ Apply `work-conventions` and `publish-pr/references/github-mechanics.md`. The re
 
 ## Resolve and preserve
 
-Read the requested branch/PR, actual base, current local and remote head, approvals, repository instructions, and dirty/index state. Fetch the base; never assume staging or main. Preserve unrelated work through isolation or an agreed preservation method. Do not implicitly stash, reset, clean, or overwrite it.
+Read the requested branch/PR, actual base, current local and remote head, approvals, repository instructions, and dirty/index state. Fetch the base; never assume staging or main. Do not implicitly stash, reset, clean, or overwrite unrelated work.
 
 Preview inspects and proposes without rewriting. A rebase request authorizes the local rewrite and conflict resolution. Publication follows the requested endpoint and established authorization: updating an existing PR may include the lease-protected push; a local-only request stops locally. Honor explicit ask-before-push constraints. Explain approval invalidation when it is material and not already accepted. Do not post reviews or merge automatically.
 
