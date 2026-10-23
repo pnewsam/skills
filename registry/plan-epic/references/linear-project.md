@@ -1,8 +1,3 @@
----
-name: create-project
-description: Create exactly one project in Linear, resolving its team or teams and optional lead, status, dates, priority, summary, and description from live workspace data before writing. Use when the user asks to add, open, start, or create a Linear project. Checks for duplicates, performs one create operation, verifies the live project, and does not create child issues, milestones, documents, or supporting workspace records.
----
-
 # Create Linear Project
 
 ## Outcome
@@ -34,7 +29,7 @@ Read live Linear data before writing:
 
 If multiple teams, users, or statuses match, stop and ask which one. If a likely duplicate exists, return it and stop unless the user explicitly asks for a separate project.
 
-Draft a concise project brief from known facts, in the shared sentence-level style — one idea per sentence, active voice, plain words (see `writing-conventions/references/prose.md`). Prefer this compact description when no user or repository template is supplied:
+Draft a concise project brief from known facts, in the shared sentence-level style — one idea per sentence, active voice, plain words (see [prose conventions](../../writing-conventions/references/prose.md)). Prefer this compact description when no user or repository template is supplied:
 
 ```markdown
 ## Outcome

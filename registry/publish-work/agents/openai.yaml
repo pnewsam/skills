@@ -1,0 +1,4 @@
+interface:
+  display_name: "Publish Work"
+  short_description: "Commit, push, open or update a PR, or post a review"
+  default_prompt: "Use $publish-work for the requested endpoint and verify the result."

@@ -29,4 +29,4 @@ For review feedback, verify each claim against the current candidate and intende
 
 Record implemented acceptance, relevant evidence, candidate identity, and remaining work. An explicit one-step request ends after that bounded step and verification. Otherwise complete the unit and continue to any already requested review or delivery.
 
-Do not auto-commit once per task. Use `publish-pr` when the user requests local commits or PR preparation; use `deliver-work` for the requested delivery boundary. Failed required verification blocks a completion claim and ordinary delivery; preserving a known failing state requires a specific preservation request.
+Do not auto-commit once per task. Use `publish-work` when the user requests commits, a push, or a PR. Failed required verification blocks a completion claim and ordinary delivery; preserving a known failing state requires a specific preservation request.

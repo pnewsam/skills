@@ -1,11 +1,6 @@
----
-name: rebase-pr
-description: Rebase a PR branch onto its verified integration base, resolve conflicts by intent, and reconcile work already present upstream. Preserve recovery history, validate the resulting candidate, and publish with an explicit expected-head lease only when the requested endpoint includes updating the PR.
----
+# Rebase onto a moved base
 
-# Rebase PR
-
-Apply `work-conventions` and `publish-pr/references/github-mechanics.md`. The result is a reconciled candidate, not merely a conflict-free Git operation.
+Use [GitHub mechanics](../../publish-work/references/github-mechanics.md) for the PR's state. The result is a reconciled candidate, not merely a conflict-free Git operation.
 
 ## Resolve and preserve
 

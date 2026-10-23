@@ -1,8 +1,3 @@
----
-name: create-issue
-description: Create exactly one issue in Linear, resolving the target team and optional project, status, priority, assignee, labels, cycle, due date, estimate, or parent from live workspace data before writing. Use when the user asks to open, file, add, or create a Linear issue or ticket. Checks for duplicates, performs one create operation, verifies the live issue, and does not create supporting labels, projects, or additional issues.
----
-
 # Create Linear Issue
 
 ## Outcome
@@ -34,7 +29,7 @@ Read live Linear data before writing:
 
 If multiple teams, projects, users, or statuses match, stop and ask which one. If a likely duplicate exists, return it and stop unless the user explicitly asks for a separate issue.
 
-Draft an actionable description from known facts, in the shared sentence-level style — one idea per sentence, active voice, plain words (see `writing-conventions/references/prose.md`). Prefer this compact shape when no user or repository template is supplied:
+Draft an actionable description from known facts, in the shared sentence-level style — one idea per sentence, active voice, plain words (see [prose conventions](../../writing-conventions/references/prose.md)). Prefer this compact shape when no user or repository template is supplied:
 
 ```markdown
 ## Outcome

@@ -47,4 +47,4 @@ State the limitation when fonts, authentication, runtime, or a baseline capture 
 
 ## Clean up
 
-Getting the images into a PR is publication; `publish-pr` owns it. Stop only the servers you started. Remove the worktrees, temporary fixtures, and exports you added, and keep them out of commits unless the user wants a fixture kept.
+Getting the images into a PR is publication; `publish-work` owns it. Stop only the servers you started. Remove the worktrees, temporary fixtures, and exports you added, and keep them out of commits unless the user wants a fixture kept.

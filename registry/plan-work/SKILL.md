@@ -1,6 +1,6 @@
 ---
 name: plan-work
-description: Define one independently reviewable outcome with scope, acceptance, constraints, and verification. Use for a feature, bug fix, dependency, configuration, documentation, or maintenance change. Reuse an existing issue or plan; no charter or epic required. Planning alone does not implement or publish.
+description: Define one independently reviewable outcome with scope, acceptance, constraints, and verification, and record it as a tracker issue when asked. Use for a feature, bug fix, dependency, configuration, documentation, or maintenance change, or when asked to file, open, or create an issue or ticket. Reuse an existing issue or plan; no charter or epic required. Planning alone does not implement or publish.
 ---
 
 # Plan work
@@ -23,6 +23,6 @@ For an open visual direction, compare concrete rendered alternatives when useful
 
 ## Record and continue
 
-Write the problem and rationale, agreed scope, required acceptance, planned verification, approach, requested endpoint, and next action into the selected record. For a new durable document, use `work-conventions/references/artifacts.md` and `work-conventions/references/work-record.md`; retain an existing suitable format. Keep planned proof separate from observed results. Tasks are optional implementation aids, not separate lifecycle gates. A small change can be one paragraph plus acceptance.
+Write the problem and rationale, agreed scope, required acceptance, planned verification, approach, requested endpoint, and next action into the selected record. For a new durable document, use `work-conventions/references/artifacts.md` and `work-conventions/references/work-record.md`; retain an existing suitable format. Keep planned proof separate from observed results. To file the outcome as a Linear issue, follow [Linear issue](references/linear-issue.md); for another tracker, use its connector with the same read-before-write, create-once, and verify contract. Tasks are optional implementation aids, not separate lifecycle gates. A small change can be one paragraph plus acceptance.
 
 A planning-only request returns this plan without code, commits, or publication. When the user requested implementation too, continue to `execute-work`; do not demand a second approval for the established scope. Stop for user input only if the unresolved choice materially changes the intended outcome or consequences.

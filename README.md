@@ -1,6 +1,6 @@
 # Skills
 
-A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Twenty general skills — seven operations, three orchestration skills, seven runbooks, and three references — plus three optional organization packages.
+A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Sixteen general skills — seven operations, three orchestration skills, three runbooks, and three references — plus one optional organization package. Platform specifics such as GitHub and Linear live in references inside the operations that use them.
 
 The base model supplies general reasoning and technique; skills earn their place through house contracts, corrective objectives, fragile mechanics, or useful verification. The agent owns the task: operations are capabilities, not mandatory steps or approval gates. Existing issues and feature plans are valid work records, and an initiative coordinates several units.
 
@@ -16,21 +16,23 @@ flowchart LR
     P --> E["Execute<br/>Make the change"]
     E --> V["Validate<br/>Check the evidence"]
     V --> R["Review<br/>Challenge the result"]
-    R --> D["Deliver<br/>Reach the requested endpoint"]
+    R --> D["Publish<br/>Commit, push, open the PR"]
+    D --> C["Reconcile<br/>Keep the open PR merge-ready"]
+    C --> M(["Merged"])
     V -->|Checks fail| E
     R -->|Repairs needed| E
     R -.->|Scope needs rethinking| P
-    D -.->|New PR feedback| R
+    C -->|Review, rebase, or CI fixes| E
 ```
 
-**Enter where the work needs you.** A clear bug fix can begin at Execute, an existing PR at Review. Skip results already established, reuse current evidence, and stop at the endpoint the user requested — local changes, a commit, an open PR, or an explicitly requested merge, not all of them by default. One work record carries intent, acceptance, progress, and evidence through the loops; an existing issue or feature plan is enough, and a small task may need only its own context.
+**Enter where the work needs you.** A clear bug fix can begin at Execute, an existing PR at Review. Skip results already established, reuse current evidence, and stop at the endpoint the user requested — local changes, a commit, an open PR, or an explicitly requested merge, not all of them by default. Published is not settled: an open PR stays with Reconcile until it merges. One work record carries intent, acceptance, progress, and evidence through the loops; an existing issue or feature plan is enough, and a small task may need only its own context.
 
 ## The skills
 
 | Kind | What it contributes | Example |
 | --- | --- | --- |
 | **Operation** | A result within one unit of work | Validate a change against its acceptance criteria |
-| **Runbook** | Specific mechanics, callable directly | Publish a PR or create a Linear issue |
+| **Runbook** | Specific mechanics, callable directly | Preserve unfinished work on a WIP branch |
 | **Reference** | Shared conventions or focused knowledge | The house standard for PR descriptions |
 | **Orchestration** | Coordination across several units | Plan an epic and advance its ready units |
 | **Organization** | Optional, org-specific tooling | Align a MindsDB Code Mode UI element with prior art |
@@ -42,16 +44,12 @@ flowchart LR
 | [execute-work](registry/execute-work/SKILL.md) | Operation | What change satisfies that outcome? |
 | [validate-work](registry/validate-work/SKILL.md) | Operation | Which requirements does this candidate demonstrably meet? |
 | [review-work](registry/review-work/SKILL.md) | Operation | What defects, scope gaps, or delivery risks remain? |
-| [deliver-work](registry/deliver-work/SKILL.md) | Operation | Has the work reached the requested endpoint? |
+| [publish-work](registry/publish-work/SKILL.md) | Operation | Is the work out for others to see and respond to? |
 | [reconcile-work](registry/reconcile-work/SKILL.md) | Operation | Is the open PR still merge-ready after what changed around it? |
 | [shape-initiative](registry/shape-initiative/SKILL.md) | Orchestration | Clarify direction and strategic intent |
 | [plan-epic](registry/plan-epic/SKILL.md) | Orchestration | Divide the initiative into work units and dependencies |
 | [ship-epic](registry/ship-epic/SKILL.md) | Orchestration | Advance ready units and verify the combined outcome |
-| [publish-pr](registry/publish-pr/SKILL.md) | Runbook | Commit, push, create or update a PR |
-| [rebase-pr](registry/rebase-pr/SKILL.md) | Runbook | Reconcile a branch with its moving integration base |
 | [preserve-work](registry/preserve-work/SKILL.md) | Runbook | Preserve a recoverable local WIP snapshot |
-| [create-issue](registry/create-issue/SKILL.md) | Runbook | Create one verified Linear issue |
-| [create-project](registry/create-project/SKILL.md) | Runbook | Create one verified Linear project |
 | [fan-out](registry/fan-out/SKILL.md) | Runbook | Run parallel subagents on one unit and reconcile the results |
 | [handoff](registry/handoff/SKILL.md) | Runbook | Summarize the conversation so a fresh agent can resume |
 | [work-conventions](registry/work-conventions/SKILL.md) | Reference | Scope, continuation, records, and evidence |
@@ -82,9 +80,8 @@ Use the [epic template](registry/plan-epic/references/epic-record.md), [work tem
 | --- | --- |
 | `core` | Seven work operations with their required contracts and PR mechanics. |
 | `orchestration` | Shape, plan, and deliver initiatives across work units. |
-| `runbooks` | GitHub, Linear, handoff, work-preservation, and fan-out procedures. |
-| `general` | The twenty general skills: operations, orchestration, runbooks, and references. |
-| `linear-ops` | Create one verified Linear issue or project. |
+| `runbooks` | Handoff, recoverable work preservation, and parallel fan-out. |
+| `general` | The sixteen general skills: operations, orchestration, runbooks, and references. |
 | `mindsdb` | Optional MindsDB Cowork Code Mode UI alignment. |
 
 Profiles and individual selections install their required dependencies transitively; optional skill recommendations do not expand a selection. The `mindsdb-*` package stays optional.

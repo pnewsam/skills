@@ -1,4 +1,0 @@
-interface:
-  display_name: "Publish Pr"
-  short_description: "Create or update the requested pull request"
-  default_prompt: "Use $publish-pr to complete the requested action and verify the result."
