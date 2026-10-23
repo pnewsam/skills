@@ -1,7 +1,9 @@
 # Score trigger results: share of runs whose first registry skill is an expected owner.
-import json, sys, collections
+import json, os, sys, collections
 base = sys.argv[1]
-rows = [json.loads(l) for l in open(f'{base}/results.jsonl')]
+rows = [json.loads(l) for l in open(f"{base}/{os.environ.get('RESULTS', 'results.jsonl')}")]
+prompts = json.load(open(f"{base}/{os.environ.get('PROMPTS', 'prompts.json')}"))
+for r in rows: r['split'] = prompts[r['i']].get('split', 'all')
 exp = json.load(open(f'{base}/expect.json'))
 arms = sorted({r['arm'] for r in rows}); cats = list(exp)
 hit = collections.defaultdict(lambda: [0, 0]); dist = collections.defaultdict(collections.Counter)
@@ -17,3 +19,13 @@ print('TOTAL'.ljust(9), *[f"{t[0]}/{t[1]}".center(9) for t in tot.values()])
 print('\nwhat fired (first registry skill):')
 for c in cats:
     for a in arms: print(f'  {c:8} {a}: ' + ', '.join(f'{s} {n}' for s, n in dist[(a, c)].most_common()))
+
+splits = sorted({r['split'] for r in rows})
+if len(splits) > 1:
+    print('\nby split:')
+    for sp in splits:
+        cells = []
+        for a in arms:
+            rs = [r for r in rows if r['arm'] == a and r['split'] == sp]
+            cells.append(f"{sum(r['first'] in exp[r['cat']][a] for r in rs)}/{len(rs)}".center(9))
+        print(sp.ljust(9), *cells)
