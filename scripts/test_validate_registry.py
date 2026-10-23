@@ -1,7 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
-from validate_registry import dependency_closure, frontmatter, validate_metadata
+from validate_registry import dependency_closure, frontmatter, frontmatter_key_errors, validate_metadata
 
 
 class FrontmatterTests(unittest.TestCase):
@@ -18,6 +18,14 @@ class FrontmatterTests(unittest.TestCase):
         )
         self.assertEqual(values["description"], "endpoint: local commit")
         self.assertEqual(errors, [])
+
+    def test_accepts_documented_effort_level(self):
+        self.assertEqual(frontmatter_key_errors({"name": "d", "description": "x", "effort": "high"}), [])
+
+    def test_rejects_unknown_effort_level_and_keys(self):
+        errors = frontmatter_key_errors({"name": "d", "description": "x", "effort": "hgh", "model": "opus"})
+        self.assertTrue(any("unsupported frontmatter keys: model" in e for e in errors))
+        self.assertTrue(any("effort 'hgh'" in e for e in errors))
 
 
 class DependencyTests(unittest.TestCase):
