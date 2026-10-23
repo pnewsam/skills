@@ -121,6 +121,23 @@ def validate_metadata(catalog: dict, registry: Path) -> list[str]:
     return errors
 
 
+# Claude Code's documented SKILL.md effort levels. Set one only with measured
+# evidence that the skill does better at that level than the session default.
+EFFORT_LEVELS = {"low", "medium", "high", "xhigh", "max"}
+
+
+def frontmatter_key_errors(metadata: dict[str, str]) -> list[str]:
+    errors = []
+    extra_keys = sorted(set(metadata) - {"name", "description", "effort"})
+    if extra_keys:
+        errors.append(f"unsupported frontmatter keys: {', '.join(extra_keys)}")
+    if "effort" in metadata and metadata["effort"] not in EFFORT_LEVELS:
+        errors.append(
+            f"effort {metadata['effort']!r} is not one of {', '.join(sorted(EFFORT_LEVELS))}"
+        )
+    return errors
+
+
 def frontmatter(text: str) -> tuple[dict[str, str], list[str]]:
     errors: list[str] = []
     if not text.startswith("---\n"):
@@ -158,9 +175,7 @@ def validate_skill(
     metadata, frontmatter_errors = frontmatter(text)
     errors.extend(frontmatter_errors)
 
-    extra_keys = sorted(set(metadata) - {"name", "description"})
-    if extra_keys:
-        errors.append(f"unsupported frontmatter keys: {', '.join(extra_keys)}")
+    errors.extend(frontmatter_key_errors(metadata))
     if metadata.get("name") != skill_dir.name:
         errors.append(
             f"name {metadata.get('name')!r} does not match directory {skill_dir.name!r}"

@@ -1,6 +1,7 @@
 ---
 name: review-work
 description: Critically assess local changes, an artifact, or an existing PR for supported defects, scope gaps, and delivery risk. Includes independent re-review, and triage of review feedback when only an assessment is wanted; reconcile-work addresses it. Read-only by default; repairs go through execute-work and posted reviews through publish-work.
+effort: high
 ---
 
 # Review work
