@@ -6,7 +6,7 @@ export const meta = {
   ],
 }
 
-// args = { caseIds, dataDir, skillsDir, reps?, arm_deltas?, effort?, armSkills?, secondPass? }
+// args = { caseIds, dataDir, skillsDir, reps?, arm_deltas?, effort?, judgeEffort?, armSkills?, secondPass? }
 // armSkills maps an arm to its own skills snapshot; secondPass marks arms whose
 // review gets a harness-run second, context-isolated pass.
 // Case data lives OUTSIDE this repo (the subject repos are not public) and is
@@ -16,6 +16,8 @@ export const meta = {
 const CFG = typeof args === 'string' ? JSON.parse(args) : args
 // Pin effort so runs compare across models: defaults differ (Opus 5.5 medium, Opus 5 high).
 const EFFORT = CFG.effort || 'medium'
+// The judge can be pinned separately, so a reviewer-effort A/B does not also change the judge.
+const JUDGE_EFFORT = CFG.judgeEffort || EFFORT
 const CASE_IDS = CFG.caseIds
 const DELTAS = CFG.arm_deltas || { control: '' }
 const ARMS = Object.keys(DELTAS)
@@ -188,7 +190,7 @@ const runUnit = async (item) => {
 
   const m = await agent(matchPrompt(item.id, review), {
     label: `match:${item.arm}:${item.id}#${item.rep}`,
-    phase: 'Review + match', effort: EFFORT,
+    phase: 'Review + match', effort: JUDGE_EFFORT,
     schema: MATCH_SCHEMA,
   })
   if (!m || !m.matches) return { ...item, dead: 'no-match' }
@@ -278,6 +280,7 @@ for (const r of scored) for (const id of (r.anticipatedIds || [])) anticipatedId
 
 return {
   effort: EFFORT,
+  judgeEffort: JUDGE_EFFORT,
   secondPass: SECOND,
   overall,
   perCase,
