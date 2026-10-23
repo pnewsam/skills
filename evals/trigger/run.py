@@ -1,11 +1,13 @@
 # Trigger test: which registry skill does a fresh session pick for each prompt?
 # Usage: python3 run.py <trigdir> <reps> <arms...>
+# Env: PROMPTS (default prompts.json), RESULTS (default results.jsonl),
+#      FIXTURE (a git repo to copy as each arm's workspace instead of an empty one).
 import json, os, shutil, subprocess, sys, threading, time
 from concurrent.futures import ThreadPoolExecutor
 base, reps, arms = sys.argv[1], int(sys.argv[2]), sys.argv[3:]
-prompts = json.load(open(f'{base}/prompts.json'))
+prompts = json.load(open(f"{base}/{os.environ.get('PROMPTS', 'prompts.json')}"))
 REFS = {'pr-conventions', 'writing-conventions', 'work-conventions'}
-out = open(f'{base}/results.jsonl', 'a'); lock = threading.Lock()
+out = open(f"{base}/{os.environ.get('RESULTS', 'results.jsonl')}", 'a'); lock = threading.Lock()
 
 def one(arm, i, rep):
     cwd = f'{base}/repos/{arm}'
@@ -36,9 +38,13 @@ def one(arm, i, rep):
 
 for arm in arms:
     repo = f'{base}/repos/{arm}'
-    shutil.rmtree(repo, ignore_errors=True); os.makedirs(f'{repo}/.claude')
+    shutil.rmtree(repo, ignore_errors=True)
+    if os.environ.get('FIXTURE'):
+        shutil.copytree(os.environ['FIXTURE'], repo, symlinks=True)
+    else:
+        os.makedirs(repo); subprocess.run(['git', 'init', '-q'], cwd=repo)
+    os.makedirs(f'{repo}/.claude', exist_ok=True)
     shutil.copytree(f'{base}/arms/{arm}/registry', f'{repo}/.claude/skills')
-    subprocess.run(['git', 'init', '-q'], cwd=repo)
     jobs = [(arm, i, r) for r in range(reps) for i in range(len(prompts))]
     with ThreadPoolExecutor(4) as ex: list(ex.map(lambda j: one(*j), jobs))
     print(arm, 'done', flush=True)

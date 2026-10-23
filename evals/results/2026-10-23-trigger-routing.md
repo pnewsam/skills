@@ -40,3 +40,18 @@ Every miss loaded no skill; the session went straight to Bash. No run picked a w
 ## Limits
 
 Three reps per prompt, so arm differences under about five hits are noise. B through E are not separable at this size; only A vs the rest is clear. Prompts lacked their conversations, which likely depresses routing for terse follow-ups. Routing is not outcome quality.
+
+## Follow-up: realistic repo state
+
+The weakest categories (manual QA, PR description edits, terse PR requests) mostly missed because the empty test repo gave the session nothing to act on: it inspected git, found nothing, and stopped. A rerun used a fixture repo with a pushed fix branch (`evals/trigger/build_fixture.sh`) and added held-out prompts from the same transcripts, none used to write any description.
+
+| Category | A | E |
+| --- | --- | --- |
+| Manual QA (6 prompts) | 0/18 | 18/18 |
+| Open or update a PR (7) | 18/21 | 20/21 |
+| PR description edits (3) | 8/9 | 8/9 |
+| Dev prompts | 15/24 | 23/24 |
+| Held-out prompts | 11/24 | 23/24 |
+
+The shipped registry routes these requests reliably once the repo has state, so no description change is needed. The manual-QA gain comes from the #72 wording; the old registry fired on none of them even with state. Real sessions routed PR requests to publish-pr only 31% of the time, against 86% here. The likely cause is that mid-session requests often follow an already loaded skill, which a fresh session cannot reproduce.
+
