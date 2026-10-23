@@ -1,4 +1,0 @@
-interface:
-  display_name: "Address PR Review"
-  short_description: "Fix, push, and reply to review feedback on a PR"
-  default_prompt: "Use $address-pr-review to address the review on this PR and verify the result."

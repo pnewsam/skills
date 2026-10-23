@@ -47,8 +47,6 @@ flowchart LR
 | [plan-epic](registry/plan-epic/SKILL.md) | Orchestration | Divide the initiative into work units and dependencies |
 | [ship-epic](registry/ship-epic/SKILL.md) | Orchestration | Advance ready units and verify the combined outcome |
 | [publish-pr](registry/publish-pr/SKILL.md) | Runbook | Commit, push, create or update a PR |
-| [address-pr-review](registry/address-pr-review/SKILL.md) | Runbook | Fix, push, and reply to review feedback on a PR |
-| [capture-pr-screenshots](registry/capture-pr-screenshots/SKILL.md) | Runbook | Capture before/after UI screenshots for a PR in both themes |
 | [rebase-pr](registry/rebase-pr/SKILL.md) | Runbook | Reconcile a branch with its moving integration base |
 | [preserve-work](registry/preserve-work/SKILL.md) | Runbook | Preserve a recoverable local WIP snapshot |
 | [create-issue](registry/create-issue/SKILL.md) | Runbook | Create one verified Linear issue |
@@ -83,8 +81,8 @@ Use the [epic template](registry/plan-epic/references/epic-record.md), [work tem
 | --- | --- |
 | `core` | Six work operations with their required contracts and PR mechanics. |
 | `orchestration` | Shape, plan, and deliver initiatives across work units. |
-| `runbooks` | GitHub review responses, PR publication and screenshots, Linear, handoff, work-preservation, and fan-out procedures. |
-| `general` | The twenty-one general skills: operations, orchestration, runbooks, and references. |
+| `runbooks` | GitHub, Linear, handoff, work-preservation, and fan-out procedures. |
+| `general` | The nineteen general skills: operations, orchestration, runbooks, and references. |
 | `linear-ops` | Create one verified Linear issue or project. |
 | `mindsdb` | Optional MindsDB Cowork Code Mode UI alignment. |
 

@@ -115,7 +115,7 @@
         "run_tests"
       ],
       "requires": [
-        "capture-pr-screenshots"
+        "validate-work"
       ],
       "optional_skills": [
         "publish-pr"
@@ -211,53 +211,12 @@
       ],
       "optional_skills": [
         "rebase-pr",
-        "capture-pr-screenshots"
+        "validate-work"
       ],
       "resources": [
         "references/github-mechanics.md",
         "references/pr_output_templates.md",
         "references/update_output_templates.md"
-      ]
-    },
-    "address-pr-review": {
-      "layer": "runbook",
-      "scope": "work",
-      "effects": [
-        "read_local",
-        "write_files",
-        "git_write",
-        "run_tests",
-        "network_read",
-        "network_write"
-      ],
-      "requires": [
-        "work-conventions",
-        "publish-pr",
-        "deliver-work",
-        "pr-conventions"
-      ],
-      "optional_skills": [
-        "execute-work",
-        "validate-work",
-        "capture-pr-screenshots"
-      ],
-      "resources": []
-    },
-    "capture-pr-screenshots": {
-      "layer": "runbook",
-      "scope": "work",
-      "effects": [
-        "read_local",
-        "write_files",
-        "run_tests"
-      ],
-      "requires": [],
-      "optional_skills": [
-        "publish-pr"
-      ],
-      "resources": [
-        "references/mindsdb-cowork.md",
-        "scripts/capture.mjs"
       ]
     },
     "rebase-pr": {
@@ -394,10 +353,12 @@
       ],
       "resources": [
         "references/evidence.md",
+        "references/mindsdb-cowork.md",
         "references/rendering.md",
         "references/retained-objectives.md",
         "references/verification.md",
-        "references/visual-checks.md",
+        "references/visual-evidence.md",
+        "scripts/capture.mjs",
         "scripts/check_contrast.py",
         "scripts/check_spacing.py",
         "scripts/render_direction.mjs",
@@ -451,11 +412,9 @@
       ]
     },
     "runbooks": {
-      "description": "GitHub review responses, PR publication and screenshots, Linear, handoff, and recoverable work-preservation procedures.",
+      "description": "GitHub, Linear, handoff, and recoverable work-preservation procedures.",
       "skills": [
         "publish-pr",
-        "address-pr-review",
-        "capture-pr-screenshots",
         "rebase-pr",
         "create-issue",
         "create-project",
@@ -465,7 +424,7 @@
       ]
     },
     "general": {
-      "description": "Twenty-one general skills across operations, orchestration, runbooks, and references.",
+      "description": "Nineteen general skills across operations, orchestration, runbooks, and references.",
       "includes": [
         "core",
         "orchestration",

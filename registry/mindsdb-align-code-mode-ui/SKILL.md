@@ -17,7 +17,7 @@ Claude and Codex are the primary references, but their apps are closed. Use thei
 
 ## Decide and change
 
-Follow the in-app pattern when a sound one exists. Otherwise follow the consensus of the references. If the two conflict, name the conflict and recommend one. Tie the fix to the critique. Implement the smallest change, reuse primitives rather than writing bespoke CSS, and update colocated tests. Take before and after screenshots of the rendered UI with `capture-pr-screenshots` and its Cowork reference, including hover, focus, empty, and dark states where relevant. Look at each image before using it.
+Follow the in-app pattern when a sound one exists. Otherwise follow the consensus of the references. If the two conflict, name the conflict and recommend one. Tie the fix to the critique. Implement the smallest change, reuse primitives rather than writing bespoke CSS, and update colocated tests. Take before and after screenshots of the rendered UI with `validate-work`'s visual evidence guidance, including hover, focus, empty, and dark states where relevant. Look at each image before using it.
 
 ## Return
 

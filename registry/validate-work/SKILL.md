@@ -1,6 +1,6 @@
 ---
 name: validate-work
-description: Verify a change against its acceptance criteria and relevant regressions, from a targeted check to a complete assessment, or write a manual QA plan for the user to follow. Use when asked to test, QA, or verify a change or PR, check that a fix works locally or on staging, or explain how to test it by hand. Reports evidence and limitations; does not fix code or publish.
+description: Verify a change against its acceptance criteria and relevant regressions, from a targeted check to a complete assessment, write a manual QA plan for the user, or capture before/after screenshots. Use when asked to test, QA, or verify a change or PR, check that a fix works locally or on staging, explain how to test it by hand, or get screenshots or screens of a UI change. Reports evidence and limitations; does not fix code or publish.
 ---
 
 # Validate work
@@ -13,7 +13,7 @@ Resolve the requested scope: a targeted check, selected completed criteria, or t
 
 Identify the evidence-backed base and head, staged and unstaged changes, and intended untracked files. Do not assume a branch name or inspect only the last commit. Exclude unrelated work from the candidate but account for its presence when interpreting results.
 
-Consider every changed surface. Do not filter out configuration, manifests, lockfiles, test-only changes, schemas, infrastructure, generated artifacts, or documentation merely by extension. Determine what each can affect. Read `references/verification.md` to select proof by surface. Read `references/visual-checks.md` only for visual evidence; optional helpers are `scripts/check_contrast.py`, `scripts/check_spacing.py`, and `scripts/shot_diff.mjs`.
+Consider every changed surface. Do not filter out configuration, manifests, lockfiles, test-only changes, schemas, infrastructure, generated artifacts, or documentation merely by extension. Determine what each can affect. Read `references/verification.md` to select proof by surface. Read `references/visual-evidence.md` for screenshots or any visual evidence, and `references/mindsdb-cowork.md` for MindsDB Cowork. Capture with `scripts/capture.mjs`; optional checkers are `scripts/shot_diff.mjs`, `scripts/check_contrast.py`, and `scripts/check_spacing.py`.
 
 Read `references/retained-objectives.md` for TypeScript safety or large collection views. For static HTML capture, `scripts/render_direction.mjs` and `references/rendering.md` provide optional evidence mechanics; they do not prescribe a design workflow.
 
