@@ -9,7 +9,7 @@ Apply `work-conventions`. Resolve the requested endpoint from the user and work 
 
 ## Establish readiness
 
-Identify the exact candidate and inspect current validation/review evidence and required repository checks. Reuse valid proof. If necessary evidence is missing or stale, continue through `validate-work` or `review-work` within the authorized task. Do not knowingly publish failures without an informed explicit override, and never bypass platform protections.
+Identify the exact candidate and inspect current validation/review evidence and required repository checks. Reuse valid proof. If necessary evidence is missing or stale, continue through `validate-work` or `review-work` within the authorized task. Do not knowingly publish failures without an informed explicit override, and never bypass platform protections. A PR for a user-visible UI change needs before/after evidence from `validate-work`, or a stated reason it has none.
 
 Separate unrelated work and confirm the destination, branch/base, and existing remote object. Do not prepare one giant PR from several independent work records just because they share an epic.
 

@@ -6,7 +6,7 @@
 - Render the state
 - Capture before and after
 - Helpers and limits
-- Attach and clean up
+- Clean up
 
 For a project with its own render paths, read its reference first:
 
@@ -45,8 +45,6 @@ Look at every image. A blank, unstyled, wrong-theme, or notice-page frame is a f
 
 State the limitation when fonts, authentication, runtime, or a baseline capture are unavailable, and never claim an unrun comparison passed. A static render is a limited substitute that cannot prove the real app's behavior.
 
-## Attach and clean up
+## Clean up
 
-The CLI cannot upload images to GitHub; the user drags them in. Add the table to the PR body only when a PR update is authorized (`publish-pr`), and never claim an image is attached while it is still a local file. Upload elsewhere only with authorized visibility. Never use a throwaway branch as an image host, because the embeds break when the branch is deleted.
-
-Stop only the servers you started. Remove the worktrees, temporary fixtures, and exports you added, and keep them out of commits unless the user wants a fixture kept.
+Getting the images into a PR is publication; `publish-pr` owns it. Stop only the servers you started. Remove the worktrees, temporary fixtures, and exports you added, and keep them out of commits unless the user wants a fixture kept.

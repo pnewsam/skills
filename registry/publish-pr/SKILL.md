@@ -29,7 +29,7 @@ Preserve unrelated changes and index state. Isolate intended work when necessary
 
 Check validation evidence against the actual candidate and required repository checks; reuse current proof. Run missing required checks within scope. Do not knowingly commit failing work except for explicitly requested preservation. Preview does not run checks that write project reports or caches.
 
-Skip duplicate commits. Confirm the commit and destination before push. Use `validate-work` to capture visual evidence when it helps review; do not claim attachment from a local file or placeholder.
+Skip duplicate commits. Confirm the commit and destination before push. Use `validate-work` to capture visual evidence when it helps review. The CLI cannot upload images to GitHub, so give the user the local folder and its `screenshots.md` table to drag images into. Add the table to the body only when a PR update is authorized, and never claim an image is attached while it is still a local file or placeholder. Upload elsewhere only with authorized visibility, and never use a throwaway branch as an image host.
 
 ### Write the commit and PR text
 
