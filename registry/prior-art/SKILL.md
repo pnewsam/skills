@@ -1,6 +1,6 @@
 ---
 name: prior-art
-description: Research how competitors and open-source peers solve a product, UI, architecture, protocol, or engineering problem, or find where our product falls behind them and what it would take to catch up. Use when asked for prior art, competitor references, how other apps handle something, a competitive gap analysis, or to bring a feature or UI element up to what competitors or the category standard do. Includes curated reference sets for coding agents and AI coworker apps; a project can keep its own.
+description: Research how competitors and open-source peers solve a product, UI, architecture, protocol, or engineering problem, or find where our product falls behind them and what it would take to catch up. Use when asked for prior art, competitor references, how other apps handle something, a competitive gap analysis, or to align a feature or UI element with what a competitor does or bring it up to the category standard. Includes curated reference sets for coding agents and AI coworker apps; a project can keep its own.
 ---
 
 # Prior art
