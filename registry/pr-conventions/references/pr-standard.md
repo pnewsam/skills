@@ -18,7 +18,7 @@ When the repository defines a PR template — commonly `.github/pull_request_tem
 - Fill each section from the diff and actual validation; delete instructional placeholder prose (e.g. "Please include a summary of...") once real content replaces it.
 - Preserve every checkbox and its current state. Do not toggle a checkbox on inference.
 
-In a monorepo, prefer the template nearest the changed files (e.g. `cowork/.github/pull_request_template.md` for changes under `cowork/`) over one at the repository root.
+In a monorepo, prefer the template nearest the changed files (e.g. `web/.github/pull_request_template.md` for changes under `web/`) over one at the repository root.
 
 ## Fallback body shape
 

@@ -1,6 +1,6 @@
 # Skills
 
-A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Sixteen general skills — seven operations, three orchestration skills, three runbooks, and three references — plus one optional organization package. Platform specifics such as GitHub and Linear live in references inside the operations that use them.
+A registry built around **one unit of work: one independently reviewable outcome, normally one PR**. Seventeen general skills: seven operations, three orchestration skills, three runbooks, and four references. Platform specifics such as GitHub and Linear live in references inside the operations that use them.
 
 The base model supplies general reasoning and technique; skills earn their place through house contracts, corrective objectives, fragile mechanics, or useful verification. The agent owns the task: operations are capabilities, not mandatory steps or approval gates. Existing issues and feature plans are valid work records, and an initiative coordinates several units.
 
@@ -35,7 +35,6 @@ flowchart LR
 | **Runbook** | Specific mechanics, callable directly | Preserve unfinished work on a WIP branch |
 | **Reference** | Shared conventions or focused knowledge | The house standard for PR descriptions |
 | **Orchestration** | Coordination across several units | Plan an epic and advance its ready units |
-| **Organization** | Optional, org-specific tooling | Align a MindsDB Code Mode UI element with prior art |
 
 | Skill | Kind | What it contributes |
 | --- | --- | --- |
@@ -55,10 +54,9 @@ flowchart LR
 | [work-conventions](registry/work-conventions/SKILL.md) | Reference | Scope, continuation, records, and evidence |
 | [pr-conventions](registry/pr-conventions/SKILL.md) | Reference | PR content and review findings |
 | [writing-conventions](registry/writing-conventions/SKILL.md) | Reference | Shared prose preferences |
-| [mindsdb-align-code-mode-ui](registry/mindsdb-align-code-mode-ui/SKILL.md) | Organization | Align one Cowork Code Mode UI element with app patterns and coding-agent prior art |
-| [prior-art](registry/prior-art/SKILL.md) | Reference | How competitors and open-source peers solve a problem; reference sets for Cowork and coding agents |
+| [prior-art](registry/prior-art/SKILL.md) | Reference | How competitors and open-source peers solve a problem, and where we fall behind them |
 
-An orchestration kind and its child units use the operations above; independent units can advance while another is blocked, and the initiative still needs its own integration evidence. The organization packages stay optional and installable on demand.
+An orchestration kind and its child units use the operations above; independent units can advance while another is blocked, and the initiative still needs its own integration evidence.
 
 ## Planning artifacts
 
@@ -82,10 +80,9 @@ Use the [epic template](registry/plan-epic/references/epic-record.md), [work tem
 | `core` | Seven work operations with their required contracts and PR mechanics. |
 | `orchestration` | Shape, plan, and deliver initiatives across work units. |
 | `runbooks` | Handoff, recoverable work preservation, and parallel fan-out. |
-| `general` | The sixteen general skills: operations, orchestration, runbooks, and references. |
-| `mindsdb` | Optional MindsDB Cowork Code Mode UI alignment and prior-art references. |
+| `general` | The seventeen general skills: operations, orchestration, runbooks, and references. |
 
-Profiles and individual selections install their required dependencies transitively; optional skill recommendations do not expand a selection. The `mindsdb-*` packages stay optional.
+Profiles and individual selections install their required dependencies transitively; optional skill recommendations do not expand a selection.
 
 ## Layout
 

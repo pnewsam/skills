@@ -1,6 +1,6 @@
 # Coding agents
 
-Claude Code, Codex, Cursor, and open-source peers, with UI and engine paths. For MindsDB Cowork, this is the reference set for Code Mode, where Claude Code and Codex are the primary references and Codex is currently the only engine.
+Claude Code, Codex, Cursor, and open-source peers, with UI and engine paths.
 
 ## Closed
 

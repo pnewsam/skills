@@ -8,9 +8,7 @@
 - Helpers and limits
 - Clean up
 
-For a project with its own render paths, read its reference first:
-
-- MindsDB Cowork: [mindsdb-cowork.md](mindsdb-cowork.md)
+Before rendering, look in the project for its own render-path notes, such as a fixtures or visual-testing doc, and follow them first.
 
 ## Output
 
