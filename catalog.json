@@ -105,25 +105,6 @@
         "references/security.md"
       ]
     },
-    "mindsdb-align-code-mode-ui": {
-      "layer": "runbook",
-      "scope": "project",
-      "effects": [
-        "read_local",
-        "network_read",
-        "write_files",
-        "run_tests"
-      ],
-      "requires": [
-        "validate-work",
-        "prior-art"
-      ],
-      "optional_skills": [
-        "publish-work"
-      ],
-      "resources": [],
-      "optional_package": true
-    },
     "prior-art": {
       "layer": "reference",
       "scope": "shared",
@@ -134,10 +115,9 @@
       "requires": [],
       "optional_skills": [],
       "resources": [
-        "references/coding-agents.md",
-        "references/cowork.md"
-      ],
-      "optional_package": true
+        "references/ai-coworkers.md",
+        "references/coding-agents.md"
+      ]
     },
     "plan-epic": {
       "layer": "orchestration",
@@ -326,7 +306,6 @@
       ],
       "resources": [
         "references/evidence.md",
-        "references/mindsdb-cowork.md",
         "references/performance-evidence.md",
         "references/rendering.md",
         "references/retained-objectives.md",
@@ -395,7 +374,7 @@
       ]
     },
     "general": {
-      "description": "Twenty general skills across operations, orchestration, runbooks, and references.",
+      "description": "Seventeen general skills across operations, orchestration, runbooks, and references.",
       "includes": [
         "core",
         "orchestration",
@@ -405,13 +384,7 @@
         "work-conventions",
         "pr-conventions",
         "writing-conventions",
-        "handoff"
-      ]
-    },
-    "mindsdb": {
-      "description": "Optional MindsDB Cowork Code Mode UI alignment and prior-art references.",
-      "skills": [
-        "mindsdb-align-code-mode-ui",
+        "handoff",
         "prior-art"
       ]
     }

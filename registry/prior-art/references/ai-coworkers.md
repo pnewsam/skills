@@ -1,21 +1,21 @@
-# MindsDB Cowork
+# AI coworker apps
 
-Competitors and open-source peers for MindsHub Cowork, MindsDB's AI coworker app: an Electron and web React client over a local FastAPI sidecar (`mindsdb/cowork`, `mindsdb/cowork-server`). Product facts and repo paths checked 2026-11-04.
+Closed products and open-source peers for AI coworker apps: desktop and web agents that do knowledge work through chat, tasks, schedules, skills, and connectors. Product facts and repo paths checked 2026-11-04.
 
 ## Pick references by surface
 
-| Cowork surface | Start with |
+| Surface | Start with |
 | --- | --- |
 | Chat, tasks, and projects | Claude Cowork, ChatGPT, Eigent, LibreChat, LobeHub |
 | Scheduled and background work | Claude Cowork scheduled tasks, goose scheduler, OpenClaw cron, LibreChat schedules, Open WebUI automations |
 | Skills, plugins, and extensions | Claude Cowork plugins, goose recipes and MCP extensions, OpenClaw skills, Kortix skills and marketplace |
-| Connectors and enterprise data, including Minds | Copilot Cowork, Onyx connectors and permission sync, Kortix connectors, AnythingLLM collectors |
+| Connectors and enterprise data | Copilot Cowork, Onyx connectors and permission sync, Kortix connectors, AnythingLLM collectors |
 | Artifacts and live apps | Claude artifacts, LibreChat artifacts |
 | Permissions, sandboxing, and governance | Copilot Cowork (tenant-level), Eigent permission policy, Codex sandbox, Kortix sandboxes |
 | Sharing and multiplayer | Perplexity Projects, Kortix CompanyOS, Open WebUI channels |
 | Desktop shell and sidecar server | Eigent, goose, LobeHub desktop |
 | Chat UI components | The component libraries in [coding agents](coding-agents.md#agent-ui-component-libraries) |
-| Code Mode | [Coding agents](coding-agents.md) |
+| Coding mode | [Coding agents](coding-agents.md) |
 
 ## Closed
 
@@ -29,7 +29,7 @@ Competitors and open-source peers for MindsHub Cowork, MindsDB's AI coworker app
 
 | Repo | Best for | UI | Engine |
 | --- | --- | --- | --- |
-| eigent-ai/eigent | Self-described open-source Cowork desktop: Electron shell over a Python multi-agent backend, like Cowork's sidecar | `src/components/`, `src/pages/`, `electron/main/` | `backend/app/agent/`, `backend/app/agent/toolkit/`, `backend/app/permission_policy/` |
+| eigent-ai/eigent | Self-described open-source Cowork desktop: Electron shell over a Python multi-agent sidecar | `src/components/`, `src/pages/`, `electron/main/` | `backend/app/agent/`, `backend/app/agent/toolkit/`, `backend/app/permission_policy/` |
 | aaif-goose/goose (Rust, Electron UI) | Desktop agent with MCP extensions, shareable recipes, a scheduler, and ACP | `ui/desktop/src/components/` | `crates/goose/src/agents/`, `crates/goose/src/recipe/`, `crates/goose/src/scheduler/`, `crates/goose-mcp/src/` |
 | openclaw/openclaw | Personal agent reachable from chat channels and devices: gateway, cron, skills, extensions | `ui/src/`, `apps/macos/` | `src/gateway/`, `src/agents/`, `src/channels/`, `src/cron/`, `skills/`, `extensions/` |
 | kortix-ai/CompanyOS (formerly Suna) | Multiplayer company agents with connectors, skills, a marketplace, and sandboxes | `apps/web/src/` | `apps/api/src/connectors/`, `apps/api/src/skills/`, `apps/api/src/sandbox-proxy/` |
@@ -41,5 +41,5 @@ Competitors and open-source peers for MindsHub Cowork, MindsDB's AI coworker app
 
 ## Protocols
 
-- **MCP** is the common extension and connector protocol: goose, LibreChat, Open WebUI, Kortix, and Zed all speak it. Check how they configure, scope, and permission servers before designing a Cowork connector or extension surface.
+- **MCP** is the common extension and connector protocol: goose, LibreChat, Open WebUI, Kortix, and Zed all speak it. Check how they configure, scope, and permission servers before designing a connector or extension surface.
 - **ACP (Agent Client Protocol)** drives an agent from a separate UI: goose's `acp` module and OpenHands' ACP service use it, as do the coding agents noted in [coding agents](coding-agents.md). Check it before designing a bespoke agent-to-UI protocol.

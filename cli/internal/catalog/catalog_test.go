@@ -165,8 +165,8 @@ func TestGeneralProfileExcludesOptionalPackagesAndClosesDependencies(t *testing.
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(names) != 16 {
-		t.Fatalf("general has %d packages, want sixteen general responsibilities", len(names))
+	if len(names) != 17 {
+		t.Fatalf("general has %d packages, want seventeen general responsibilities", len(names))
 	}
 	selected := map[string]bool{}
 	for _, name := range names {
@@ -179,12 +179,12 @@ func TestGeneralProfileExcludesOptionalPackagesAndClosesDependencies(t *testing.
 			}
 		}
 	}
-	for _, name := range []string{"emil-design-eng", "svg-animations", "ingest-skill", "mindsdb-align-code-mode-ui"} {
+	for _, name := range []string{"emil-design-eng", "svg-animations", "ingest-skill"} {
 		if selected[name] {
 			t.Errorf("optional package %s leaked into general", name)
 		}
 	}
-	for _, name := range []string{"harden-pr", "advance-epic", "trim-comments", "polish-issue", "deliver-work", "publish-pr", "rebase-pr", "create-issue", "create-project"} {
+	for _, name := range []string{"harden-pr", "advance-epic", "trim-comments", "polish-issue", "deliver-work", "publish-pr", "rebase-pr", "create-issue", "create-project", "mindsdb-align-code-mode-ui"} {
 		if selected[name] {
 			t.Errorf("retired entry point %s survived", name)
 		}
