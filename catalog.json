@@ -327,6 +327,7 @@
       "resources": [
         "references/evidence.md",
         "references/mindsdb-cowork.md",
+        "references/performance-evidence.md",
         "references/rendering.md",
         "references/retained-objectives.md",
         "references/verification.md",
