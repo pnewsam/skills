@@ -115,13 +115,27 @@
         "run_tests"
       ],
       "requires": [
-        "validate-work"
+        "validate-work",
+        "prior-art"
       ],
       "optional_skills": [
         "publish-work"
       ],
+      "resources": [],
+      "optional_package": true
+    },
+    "prior-art": {
+      "layer": "reference",
+      "scope": "shared",
+      "effects": [
+        "read_local",
+        "network_read"
+      ],
+      "requires": [],
+      "optional_skills": [],
       "resources": [
-        "references/prior-art.md"
+        "references/coding-agents.md",
+        "references/cowork.md"
       ],
       "optional_package": true
     },
@@ -394,9 +408,10 @@
       ]
     },
     "mindsdb": {
-      "description": "Optional MindsDB Cowork Code Mode UI alignment.",
+      "description": "Optional MindsDB Cowork Code Mode UI alignment and prior-art references.",
       "skills": [
-        "mindsdb-align-code-mode-ui"
+        "mindsdb-align-code-mode-ui",
+        "prior-art"
       ]
     }
   }

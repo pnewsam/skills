@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prior Art"
+  short_description: "How competitors and open-source peers solve a problem"
+  default_prompt: "Use $prior-art for the requested task, preserving scope and evidence."
