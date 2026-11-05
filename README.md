@@ -56,8 +56,9 @@ flowchart LR
 | [pr-conventions](registry/pr-conventions/SKILL.md) | Reference | PR content and review findings |
 | [writing-conventions](registry/writing-conventions/SKILL.md) | Reference | Shared prose preferences |
 | [mindsdb-align-code-mode-ui](registry/mindsdb-align-code-mode-ui/SKILL.md) | Organization | Align one Cowork Code Mode UI element with app patterns and coding-agent prior art |
+| [prior-art](registry/prior-art/SKILL.md) | Reference | How competitors and open-source peers solve a problem; reference sets for Cowork and coding agents |
 
-An orchestration kind and its child units use the operations above; independent units can advance while another is blocked, and the initiative still needs its own integration evidence. The organization package stays optional and installable on demand.
+An orchestration kind and its child units use the operations above; independent units can advance while another is blocked, and the initiative still needs its own integration evidence. The organization packages stay optional and installable on demand.
 
 ## Planning artifacts
 
@@ -82,9 +83,9 @@ Use the [epic template](registry/plan-epic/references/epic-record.md), [work tem
 | `orchestration` | Shape, plan, and deliver initiatives across work units. |
 | `runbooks` | Handoff, recoverable work preservation, and parallel fan-out. |
 | `general` | The sixteen general skills: operations, orchestration, runbooks, and references. |
-| `mindsdb` | Optional MindsDB Cowork Code Mode UI alignment. |
+| `mindsdb` | Optional MindsDB Cowork Code Mode UI alignment and prior-art references. |
 
-Profiles and individual selections install their required dependencies transitively; optional skill recommendations do not expand a selection. The `mindsdb-*` package stays optional.
+Profiles and individual selections install their required dependencies transitively; optional skill recommendations do not expand a selection. The `mindsdb-*` packages stay optional.
 
 ## Layout
 

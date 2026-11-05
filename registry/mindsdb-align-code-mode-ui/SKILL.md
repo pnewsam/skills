@@ -13,7 +13,7 @@ Match the screenshot to its component in `cowork/src/renderer/cowork/code/` and 
 
 ## Check prior art
 
-Claude and Codex are the primary references, but their apps are closed. Use their docs, changelogs, and screenshots, and never invent their internals. For implementation detail, read the equivalent component in two or three open-source apps or component libraries from [references/prior-art.md](references/prior-art.md). Compare structure, hierarchy, spacing, states, and affordances. Record where the references agree and where they differ, with links.
+Claude and Codex are the primary references. Follow [prior art](../prior-art/SKILL.md) with its [coding-agents](../prior-art/references/coding-agents.md) reference set. Read the equivalent component in two or three of them and compare structure, hierarchy, spacing, states, and affordances.
 
 ## Decide and change
 

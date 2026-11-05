@@ -86,3 +86,9 @@ The audit found 181 prompts across 91 sessions about reviews, rebases, conflicts
 | `linear-ops` profile | Removed |
 
 A trigger test (`evals/results/2026-10-23-trigger-routing.md`) showed that operations whose descriptions carry the user's phrases route as reliably as named runbooks.
+
+## 2026-11 prior art
+
+| Change | Reason |
+| --- | --- |
+| Extract `mindsdb-align-code-mode-ui/references/prior-art.md` into a `prior-art` reference package with per-context reference sets, `cowork.md` and `coding-agents.md`; the align skill requires it | Competitor research is useful for product, architecture, and engineering decisions, not only Code Mode UI alignment. A general method with swappable reference sets lets new contexts add a file instead of a skill. The sets add AI coworker apps, engine paths alongside UI paths, and fix a stale opencode path. It stays optional in the `mindsdb` profile while its only reference sets are MindsDB-specific. |
