@@ -5,28 +5,16 @@ description: Implement one agreed work outcome, including necessary tests and do
 
 # Execute work
 
-Apply `work-conventions`. Complete the agreed work unit by default, not just its first checkbox. Honor an explicit one-step request. A fix request with clear acceptance needs no separate planning ceremony; use `plan-work` only to resolve missing scope.
+Apply `work-conventions`. Complete the agreed unit, not just its first checkbox, unless one step was requested. A fix with clear acceptance needs no planning ceremony; use `plan-work` only to resolve missing scope.
 
-## Establish the candidate
+Follow user and repository branch conventions, and create an isolated branch or checkout when safe work needs one. Check whether the work is already implemented. When resuming, compare recorded evidence with current state rather than trusting checkboxes.
 
-Read the selected record, repository instructions, branch, status, staged and unstaged diff, and relevant implementation. Include intended untracked files in the candidate. Follow user/repository branch conventions and create an isolated branch or checkout when needed for safe work.
+Read `references/security.md` for vulnerability or sensitive-boundary changes, `references/browser-tests.md` for browser-test implementation or repair, and `references/architecture-document.md` when architecture documentation is the requested artifact.
 
-Verify that the work is not already implemented. If it is, establish the required evidence and update progress without inventing edits or duplicate commits. When resuming, compare recorded evidence with current state rather than trusting checkboxes alone.
+When the work record names an analyzer or measurement method, rerun it after the change and record comparable before/after evidence with the target and any exclusions. A code test alone does not establish a measured improvement.
 
-## Implement and verify
+Never weaken a required check or mark acceptance complete to get past a failure. Separate confirmed pre-existing failures from introduced regressions. Use `validate-work` for the complete acceptance assessment.
 
-Make the smallest coherent change that satisfies all required acceptance. Add or update necessary tests and documentation in the same unit. Include configuration, dependency, build, migration, and test changes when they are the outcome; do not limit implementation to application source.
+For review feedback, verify each claim against the current candidate. Fix supported in-scope defects and explain the rest, without broadening the feature to satisfy a preference. Feedback on an open PR belongs to `reconcile-work`, which calls this operation for the fixes.
 
-Use repository conventions and applicable constraints from the record. Read `references/security.md` for vulnerability or sensitive-boundary changes, `references/browser-tests.md` for browser-test implementation or repair, and `references/architecture-document.md` when architecture documentation is the requested artifact. Do not load these for unrelated work.
-
-When the work record names an analyzer or measurement method, rerun that method after the change and record comparable before/after evidence with the target and any exclusions. A code test alone does not establish a measured improvement.
-
-Run immediate, relevant checks while implementing. Use `validate-work` for the complete acceptance assessment and reuse valid intermediate results. Never weaken required checks or mark required acceptance complete to bypass a failure. Separate confirmed pre-existing failures from introduced regressions and record their effect on confidence.
-
-For review feedback, verify each claim against the current candidate and intended scope. Fix supported in-scope defects; explain duplicate, outdated, unsubstantiated, or out-of-scope findings. Do not broaden the feature to satisfy a reviewer's preferences. Return the changed candidate to `review-work` when the request calls for a review-and-fix loop. Feedback on an open PR belongs to `reconcile-work`, which calls this operation for the fixes.
-
-## Record and return control
-
-Record implemented acceptance, relevant evidence, candidate identity, and remaining work. An explicit one-step request ends after that bounded step and verification. Otherwise complete the unit and continue to any already requested review or delivery.
-
-Do not auto-commit once per task. Use `publish-work` when the user requests commits, a push, or a PR. Failed required verification blocks a completion claim and ordinary delivery; preserving a known failing state requires a specific preservation request.
+Record implemented acceptance, evidence, candidate identity, and remaining work. Do not auto-commit per task; use `publish-work` when the user requests commits, a push, or a PR.
