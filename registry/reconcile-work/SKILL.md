@@ -5,27 +5,17 @@ description: Carry an open PR from published to merged by reconciling it with wh
 
 # Reconcile work
 
-Apply `work-conventions`. The candidate is a published PR, and something outside it changed: a reviewer commented, the base branch moved, CI failed, or the description no longer matches the code. Bring the PR back into agreement with each change and keep it merge-ready. This repeats as new events arrive, and ends with a merge when the user asks for one.
+Apply `work-conventions`. The candidate is a published PR, and something around it changed: review comments, a moved base, failing CI, or a stale description. Bring the PR back into agreement with each change and keep it merge-ready. Merge only when asked.
 
-## Read what changed
+Resolve the PR, head, base, review state, CI, and mergeability with [GitHub mechanics](../publish-work/references/github-mechanics.md), and fetch unresolved threads as [review threads](references/github-threads.md) describes. Work in the PR's head branch, never in a checkout with unrelated changes.
 
-Resolve the PR, head, base, review decision, CI state, and mergeability with [GitHub mechanics](../publish-work/references/github-mechanics.md). Fetch unresolved review threads as [review threads](references/github-threads.md) describes. Check whether sibling or stacked PRs landed. Work in the PR's head branch, reusing its worktree when one exists, and never in a checkout with unrelated changes.
+- **Review feedback:** verify each claim against the current head and give every item a disposition. Fix supported in-scope defects through `execute-work`, and answer unsupported claims with evidence. Do not broaden the PR to satisfy a preference. Ask the user only when a comment needs a product decision.
+- **Base moved or conflicts:** follow [rebase](references/rebase.md).
+- **Failing CI:** reproduce it, fix it when the PR caused it, and report pre-existing or flaky failures separately.
+- **Stale description:** sync it through `publish-work`, and recapture stale screenshots with `validate-work`.
 
-## Reconcile each change
+A request to address a review authorizes commits, one push to the PR's head branch, and a reply on each addressed thread. A requested rebase authorizes its lease-guarded push. Neither authorizes resolving threads, merging, or re-requesting review. If the user says to hold pushes, hold them for the rest of the session. Pushing can dismiss an approval, so batch fixes into one push.
 
-- **Review feedback:** verify each claim against the current head, not the commit the reviewer saw. Give every item a disposition. Fix supported in-scope defects through `execute-work`, and answer unsupported claims with evidence. Do not broaden the PR to satisfy a preference. Ask the user only when a comment needs a product decision.
-- **Base moved or conflicts:** rebase as [rebase](references/rebase.md) describes: resolve conflicts by intent, keep a recovery ref, and push with an expected-head lease.
-- **Failing CI:** reproduce the failure. Fix it when the PR caused it. Report a pre-existing or flaky failure separately, as `validate-work` distinguishes them.
-- **Stale description:** run a factual sync through `publish-work`. Recapture stale screenshots with `validate-work`.
+After the push, reply on each thread with its disposition and the fixing SHA, sync the description, and read back the remote head, CI, and mergeability. Merge only against the verified head, as [merge](references/merge.md) describes.
 
-## Authorization
-
-A request to address a review authorizes commits, one push to the PR's head branch, and a reply on each addressed thread. A requested rebase authorizes its lease-guarded push. Neither authorizes resolving threads, merging, or re-requesting review. If the user says to hold pushes, hold them for the rest of the session. Pushing can dismiss an existing approval, so batch fixes into one push.
-
-## Verify and settle
-
-After the push, reply on each thread with its disposition and the fixing SHA. Then sync the description, because fixes often make its behavior notes, validation lines, or screenshots stale. Read back the remote head, CI state, and mergeability.
-
-Merge only when asked, and only against the verified head, as [merge](references/merge.md) describes. Merged is the settled state; record it separately from published.
-
-Return each item with its disposition and commit, the pushed head SHA, the checks run, and whether the description changed. List any item waiting on the user. State whether the PR is merge-ready or merged, and if neither, what blocks it.
+Report each item's disposition and commit, the pushed head, the checks run, whether the description changed, anything waiting on the user, and whether the PR is merge-ready, merged, or blocked.
