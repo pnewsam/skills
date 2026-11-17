@@ -11,7 +11,7 @@ Apply `work-conventions`. Produce enough clarity to execute one work unit withou
 
 Inspect the relevant implementation and existing records to avoid duplicate work. Resolve material uncertainties with `analyze-work` when needed. Accept equivalent user-supplied evidence. A charter or parent epic is useful context when available, never a prerequisite for a bounded product change.
 
-Define one independently reviewable result, explicit non-goals, and required acceptance conditions. Distinguish optional improvements. Split unrelated outcomes; do not split a regression test from its necessary fix merely to produce more tasks or commits. If an existing feature plan contains several independent PR-sized outcomes, propose their boundaries and preserve existing IDs, completed work, and evidence.
+Define one independently reviewable result, explicit non-goals, and required acceptance conditions. Name the platforms and entry points each condition covers when more than one reaches the changed behavior. Distinguish optional improvements. Split unrelated outcomes; do not split a regression test from its necessary fix merely to produce more tasks or commits. If an existing feature plan contains several independent PR-sized outcomes, propose their boundaries and preserve existing IDs, completed work, and evidence.
 
 ## Choose an approach and proof
 

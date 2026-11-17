@@ -19,7 +19,7 @@ Read `references/retained-objectives.md` for TypeScript safety or large collecti
 
 ## Gather evidence
 
-Map each required criterion and invariant to its strongest practical evidence. Rerun a plan-named analyzer using the recorded baseline method and guardrails when it is the acceptance measure. Inspect actual repository commands and required CI checks; do not invent commands or install tools simply to fill a report. Run focused checks first, then relevant regression or integration boundaries. A passing smoke test cannot substitute for missing required acceptance proof.
+Map each required criterion and invariant to its strongest practical evidence, on every platform and entry point it names or that shares the changed path; one left unexercised is unverified. Rerun a plan-named analyzer using the recorded baseline method and guardrails when it is the acceptance measure. Inspect actual repository commands and required CI checks; do not invent commands or install tools simply to fill a report. Run focused checks first, then relevant regression or integration boundaries. A passing smoke test cannot substitute for missing required acceptance proof.
 
 Record why a broader repeat is necessary. Runtime or browser startup is appropriate when needed and authorized; use the documented environment rather than requiring the user to start it automatically.
 
